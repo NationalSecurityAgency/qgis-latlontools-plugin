@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/plugins/latlontools" >
+        <file>copyicon.png</file>
+        <file>zoomicon.png</file>
+        <file>settings.png</file>
+    </qresource>
+</RCC>

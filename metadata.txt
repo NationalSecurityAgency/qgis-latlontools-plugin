@@ -1,0 +1,34 @@
+
+[general]
+name=Lat Lon Tools
+qgisMinimumVersion=2.0
+description=Tools to capture and zoom to a specified location.
+version=0.3
+author=C Hamilton
+email=adenaculture@gmail.com
+
+about=When working with Google Earth, Google Maps or other of the on-line mapping tools, coordinates are specified in the format of 'Latitude, Longitude'. This plugin has two tools. The first captures coordinates to the clipboard of a point that is clicked on, using the standard Google Map format or a format specified in "Settings". The second tool takes the same format or a DMS format and zooms to the point and highlights the location. There are similar QGIS plugins, but they do not follow the Google Map convention. Lat Lon Tools makes it possibly to copy and paste between QGIS, Google Earth, and other on-line maps. Both tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In the settings the user can choose the delimiter used between coordinates with presets for comma, space, and tab. Other allows the user to specify his own delimiter string. The user can also choose whether the output format is in decimal degrees, DMS coordinates or in the native CRS.
+
+tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
+repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
+# End of mandatory metadata
+
+# Recommended items:
+
+# Uncomment the following line and add your changelog:
+changelog=
+    0.3 - Added a settings dialog box and the ability to input DMS, and output decimal degrees, DMS, or native CRS with a comman, tab, space or other characters as a delimiter.
+    0.2 - First release with the ability to zoom to a lat, and lon as well to grab the coordinates
+
+# Tags are comma separated with spaces allowed
+tags=coordinate,latitude,longitude,epsg:4326,dms
+
+homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
+category=Plugins
+icon=copyicon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
