@@ -19,5 +19,5 @@ deploy: compile
 	cp -vf $(EXTRAS) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
 
 clean:
-	rm $(UI_FILES) $(RESOURCE_FILES)
+	rm $(RESOURCE_FILES)
 
