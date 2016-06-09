@@ -2,29 +2,36 @@ import sys, math, re, string
 from qgis.core import *
 
 class LatLon():
+    '''LatLon is a class of useful functions to do conversions handle
+    other coordinate functions.'''
     def __init__(self):
+        '''Initialize the coordinates to (0,0) with a precision of 2'''
         self.lat = 0.0
         self.lon = 0.0
         self.precision = 2
         self.valid = True
         
     def setCoord(self, lat, lon):
+        '''Set the coordinate to the LatLon class. It also sets a flag
+        to indicate whether it was valid.'''
         try:
             self.lat = float(lat)
             if self.lat > 90.0 or self.lat < -90.0:
                 self.valid = False
                 return
-            # Normalize the Longitude
+            # Normalize the Longitude between -180 and 180 degrees
             self.lon = LatLon.normalizeLongitude(float(lon))
             self.valid = True
         except:
             self.valid = False
+        return self.valid
             
     def isValid(self):
         return self.valid
         
     @staticmethod
     def normalizeLongitude(num):
+        '''Normalize the Longitude between -180 and 180 degrees'''
         num += 180.0
         num = math.fmod(num, 360.0)
         if num < 0:
@@ -34,9 +41,11 @@ class LatLon():
         return num
 
     def setPrecision(self, precision):
+        '''Set the precision for string representation of the coordinate.'''
         self.precision = precision
         
     def convertDD2DMS(self, coord, islat, isdms):
+        '''Convert decimal degrees to DMS'''
         if islat:
             if coord < 0:
                 unit = 'S'
@@ -76,12 +85,14 @@ class LatLon():
         return(s)
         
     def getDMS(self, delimiter=', '):
+        '''Return a DMS formated string.'''
         if self.valid:
             return self.convertDD2DMS(self.lat, True, True) + str(delimiter) + self.convertDD2DMS(self.lon, False, True)
         else:
             return None
 
     def getDDMMSS(self, delimiter=', '):
+        '''Return a DDMMSS formatted string.'''
         if self.valid:
             return self.convertDD2DMS(self.lat, True, False) + str(delimiter) + self.convertDD2DMS(self.lon, False, False)
         else:
@@ -89,6 +100,7 @@ class LatLon():
          
     @staticmethod
     def parseDMS(str, hemisphere):
+        '''Parse a DMS formatted string.'''
         str = re.sub("[^\d.]+", " ", str).strip()
         parts = re.split('[\s]+', str)
         dmslen = len(parts)
@@ -114,6 +126,9 @@ class LatLon():
     
     @staticmethod
     def parseDMSStringSingle(str):
+        '''Parse a single coordinate either DMS or decimal degrees.
+        It simply returns the value but doesn't maintain any knowledge
+        as to whether it is latitude or longitude'''
         str = str.strip().upper()
         try:
             if re.search("[NSEW\xb0]", str) == None:
@@ -129,6 +144,9 @@ class LatLon():
     
     @staticmethod
     def parseDMSString(str):
+        '''Parses a pair of coordinates that are in the order of
+        "latitude, longitude". The string can be in DMS or decimal
+        degree notation.'''
         str = str.strip().upper()
         try: 
             if re.search("[NSEW\xb0]", str) == None:
@@ -149,107 +167,3 @@ class LatLon():
             raise ValueError('Invalid Coordinates')
             
         return lat, lon
-        
-    @staticmethod
-    def getEllipseCoords(lat, lon, sma, smi, azi):
-        TPI = math.pi * 2.0
-        PI_2 = math.pi / 2.0
-        DG2NM = 60.0 # Degrees on the Earth's Surface to NM
-    
-        c = []
-        cnt = 0
-        # If either the semi major or minor axis are tiny,
-        # create a very small ellipse instead (0.0005 NB = 3 ft).
-        # Do not let sma/smi go through with Zero values!!
-        if smi < 0.0005: smi = 0.0005
-        if sma < 0.0005: sma = 0.0005
-        center_lat = math.radians(lat)
-        center_lon = math.radians(lon)
-        sma = math.radians(sma / DG2NM)
-        smi = math.radians(smi / DG2NM)
-        azi = math.radians(azi)
-        size = 512
-        angle = 18.0 * smi / sma
-        if angle < 1.0:
-            minimum = angle
-        else:
-            minimum = 1.0
-            
-        # maxang = math.pi / 6 * min(1.0, 18.0 * smi/sma)
-        maxang = math.pi / 6 * minimum
-        while azi < 0:
-            azi += TPI
-        while azi > math.pi:
-            azi -= math.pi
-        slat = math.sin(center_lat)
-        clat = math.cos(center_lat)
-        ab = sma * smi
-        a2 = sma * sma
-        b2 = smi * smi
-        
-        delta = ab * math.pi / 30.0
-        o = azi
-        while True:
-            sino = math.sin(o - azi)
-            coso = math.cos(o - azi)
-            
-            if o > math.pi and o < TPI:
-                sgn = -1.0
-                azinc = TPI - o
-            else:
-                sgn = 1.0
-                azinc = o
-            
-            rad = ab / math.sqrt(a2 * sino * sino + b2 * coso * coso)
-            sinr = math.sin(rad)
-            cosr = math.cos(rad)
-            
-            acos_val = cosr * slat + sinr * clat * math.cos(azinc)
-            
-            if acos_val > 1.0:
-                acos_val = 1.0
-            elif acos_val < -1.0:
-                acos_val = -1.0
-                
-            tmplat = math.acos(acos_val)
-            
-            acos_val = (cosr - slat * math.cos(tmplat)) / (clat * math.sin(tmplat))
-            
-            if acos_val > 1.0:
-                acos_val = 1.0
-            elif acos_val < -1.0:
-                acos_val = -1.0
-            
-            tmplon = math.acos(acos_val)
-            tmplat = math.degrees(PI_2 - tmplat)
-            tmplon = math.degrees(center_lon + sgn * tmplon)
-            
-            # Check for wrapping over north pole
-            if (azinc == 0.0) and (center_lat + rad > PI_2):
-                tmplat = math.degrees(math.pi - (center_lat + rad))
-                tmplon = math.degrees(center_lon + math.pi)
-                
-            if (azinc == math.pi) and (center_lat - rad < -1.0*PI_2):
-                tmplat = math.degrees(-1.0 * math.pi - (center_lat - rad))
-                tmplon = math.degrees(center_lon + math.pi)
-            
-            # Check for wrapping over the date line
-            if tmplon < -180.0:
-                tmplon += 360.0
-            if tmplon > 180.0:
-                tmplon -= 360.0
-            
-            c.append( QgsPoint(tmplon, tmplat) )
-            cnt += 1
-            delo = delta / (rad * rad)
-            if maxang < delo:
-                delo = maxang
-            o += delo
-            
-            if (o >= TPI + azi + delo / 2.0) or (cnt >= size):
-                break
-        
-        if c[cnt-1].x() != c[0].x() or c[cnt-1].y() != c[0].y():
-            c[cnt-1].set(c[0].x(), c[0].y())
-        
-        return c

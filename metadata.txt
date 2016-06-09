@@ -1,11 +1,11 @@
 [general]
 name=Lat Lon Tools
-qgisMinimumVersion=2.0
+qgisMinimumVersion=2.4
 description=Tools to capture and zoom to a specified location.
 version=0.3
 author=C Hamilton
 email=adenaculture@gmail.com
-about=When working with Google Earth, Google Maps or other of the on-line mapping tools, coordinates are specified in the format of 'Latitude, Longitude'. This plugin has two tools. The first captures coordinates to the clipboard of a point that is clicked on, using the standard Google Map format or a format specified in "Settings". The second tool takes the same format or a DMS format and zooms to the point and highlights the location. There are similar QGIS plugins, but they do not follow the Google Map convention. Lat Lon Tools makes it possibly to copy and paste between QGIS, Google Earth, and other on-line maps. Both tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In the settings the user can choose the delimiter used between coordinates with presets for comma, space, and tab. Other allows the user to specify his own delimiter string. The user can also choose whether the output format is in decimal degrees, DMS coordinates or in the native CRS.
+about=When working with Google Earth, Google Maps or other of the on-line mapping tools, coordinates are specified in the format of 'Latitude, Longitude'. This plugin has two tools. The first captures the coordinates of a point that is clicked on to the clipboard, using the standard Google Map format or a format specified in "Settings". The second tool takes the same format or a DMS format and zooms to the point and highlights the location. There are similar QGIS plugins, but they do not follow the Google Map convention. Lat Lon Tools makes it possibly to copy and paste between QGIS, Google Earth, and other on-line maps. Both tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In the settings the user can choose the delimiter used between coordinates with presets for comma, space, and tab. Other allows the user to specify his own delimiter string. The user can also choose whether the output format is in decimal degrees, DMS coordinates or in the native CRS.
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin

@@ -12,6 +12,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 
 class SettingsWidget(QtGui.QDialog, FORM_CLASS):
+    '''Settings Dialog box.'''
     def __init__(self, iface, parent):
         super(SettingsWidget, self).__init__(parent)
         self.setupUi(self)
@@ -19,12 +20,15 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.loadSettings()
         
     def loadSettings(self):
+        '''Load the user selected settings. The settings are retained even when
+        the user quits QGIS.'''
         settings = QSettings()
         self.outputFormat = settings.value('/LatLonTools/OutputFormat', 'decimal')
         self.delimiter = settings.value('/LatLonTools/Delimiter', ', ')
         self.dmsPrecision =  int(settings.value('/LatLonTools/DMSPrecision', 0))
         
     def accept(self):
+        '''Accept the settings and save them for next time.'''
         settings = QSettings()
         if self.dd.isChecked():
             settings.setValue('/LatLonTools/OutputFormat', 'decimal')
@@ -49,6 +53,9 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.close()
         
     def showEvent(self, e):
+        '''The user has selected the settings dialog box so we need to
+        read the settings and update the dialog box with the previously
+        selected settings.'''
         self.loadSettings()
         if self.outputFormat == 'decimal':
             self.dd.setChecked(True)
