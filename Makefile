@@ -1,7 +1,7 @@
 PLUGINNAME = latlontools
-PY_FILES = latLonTools.py __init__.py zoomToLatLon.py settings.py LatLon.py
-EXTRAS = zoomicon.png copyicon.png settings.png metadata.txt
-UI_FILES = zoomToLatLon.ui latLonSettings.ui
+PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py multizoom.py
+EXTRAS = zoomicon.png multizoom.png copyicon.png settings.png metadata.txt
+UI_FILES = zoomToLatLon.ui multiZoomDialog.ui latLonSettings.ui
 RESOURCE_FILES = resources.py
 
 default: compile

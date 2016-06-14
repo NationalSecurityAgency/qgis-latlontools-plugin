@@ -16,15 +16,12 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
 
-    def __init__(self, iface, parent):
+    def __init__(self, lltools, iface, parent):
         super(ZoomToLatLon, self).__init__(parent)
+        self.lltools = lltools
         self.iface = iface
-        self.canvas = iface.mapCanvas()
         self.setupUi(self)
         self.coordTxt.returnPressed.connect(self.zoomToPressed)
-        
-        self.crossRb = QgsRubberBand(self.canvas, QGis.Line)
-        self.crossRb.setColor(Qt.red)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
@@ -43,38 +40,4 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
         except:
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
-        #print "Lat ", lat, " Lon ", lon
-        canvasCrs = self.canvas.mapRenderer().destinationCrs()
-        epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
-        transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
-        x, y = transform4326.transform(float(lon), float(lat))
-            
-        rect = QgsRectangle(x,y,x,y)
-        self.canvas.setExtent(rect)
-
-        pt = QgsPoint(x,y)
-        self.highlight(pt)
-        self.canvas.refresh()
-        
-    def highlight(self, point):
-        currExt = self.canvas.extent()
-        
-        leftPt = QgsPoint(currExt.xMinimum(),point.y())
-        rightPt = QgsPoint(currExt.xMaximum(),point.y())
-        
-        topPt = QgsPoint(point.x(),currExt.yMaximum())
-        bottomPt = QgsPoint(point.x(),currExt.yMinimum())
-        
-        horizLine = QgsGeometry.fromPolyline( [ leftPt , rightPt ] )
-        vertLine = QgsGeometry.fromPolyline( [ topPt , bottomPt ] )
-        
-        self.crossRb.reset(QGis.Line)
-        self.crossRb.addGeometry(horizLine, None)
-        self.crossRb.addGeometry(vertLine, None)
-        
-        QTimer.singleShot(700, self.resetRubberbands)
-        
-    def resetRubberbands(self):
-        self.crossRb.reset()
-
-
+        self.lltools.zoomToLatLon(lat,lon)
