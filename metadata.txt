@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=2.4
 description=Tools to capture and zoom to coordinates using standard decimal or DMS (latitude,longitude) notation.
-version=0.4
+version=0.4.1
 author=C Hamilton
 email=adenaculture@gmail.com
 about=When working with Google Earth, Google Maps or other of the on-line mapping tools, coordinates are specified in the format of 'Latitude, Longitude'. Lat Lon Tools uses the standard Google Map format or a format as specified in "Settings". The plugin has three tools. The first captures coordinates to the clipboard when the user clicks on the map. The second takes decimal or DMS formatted coordinates, zooms to the point and highlights the location. The 3rd creates a list of points for rapid zooming. Lat Lon Tools makes it possibly to copy and paste between QGIS, Google Earth, and other on-line maps. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In the settings the user can choose the delimiter used between coordinates. The user can also choose whether the output format is in decimal degrees, DMS coordinates or in the native CRS.
@@ -15,6 +15,7 @@ icon=copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.4.1 - Fixed GUIs to be font and machine independent.
     0.4 - Added a multi location zoom to capability and reorganized the code.
     0.3 - Added a settings dialog box and the ability to input DMS, and output decimal degrees, DMS, or native CRS with a comma, tab, space or other characters as a delimiter.
     0.2 - First release with the ability to zoom to a lat, and lon as well to grab the coordinates

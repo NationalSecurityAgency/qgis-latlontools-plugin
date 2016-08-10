@@ -17,9 +17,11 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         super(SettingsWidget, self).__init__(parent)
         self.setupUi(self)
         self.iface = iface
-        self.loadSettings()
+        self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Native CRS'])
+        self.delimComboBox.addItems(['Comma', 'Tab', 'Space', 'Other'])
+        self.readSettings()
         
-    def loadSettings(self):
+    def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
         the user quits QGIS.'''
         settings = QSettings()
@@ -30,51 +32,53 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
     def accept(self):
         '''Accept the settings and save them for next time.'''
         settings = QSettings()
-        if self.dd.isChecked():
+        coord = self.coordComboBox.currentIndex()
+        if coord == 0:
             settings.setValue('/LatLonTools/OutputFormat', 'decimal')
-        elif self.dms.isChecked():
+        elif coord == 1:
             settings.setValue('/LatLonTools/OutputFormat', 'dms')
-        elif self.ddmmss.isChecked():
+        elif coord ==2:
             settings.setValue('/LatLonTools/OutputFormat', 'ddmmss')
         else:
             settings.setValue('/LatLonTools/OutputFormat', 'native')
             
-        if self.commaDelim.isChecked():
+        delim = self.delimComboBox.currentIndex()
+        if delim == 0:
             settings.setValue('/LatLonTools/Delimiter', ', ')
-        elif self.spaceDelim.isChecked():
+        elif delim == 1:
             settings.setValue('/LatLonTools/Delimiter', ' ')
-        elif self.tabDelim.isChecked():
+        elif delim == 2:
             settings.setValue('/LatLonTools/Delimiter', '\t')
         else:
             settings.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
             
         settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
-        self.loadSettings()
+        self.readSettings()
         self.close()
         
     def showEvent(self, e):
         '''The user has selected the settings dialog box so we need to
         read the settings and update the dialog box with the previously
         selected settings.'''
-        self.loadSettings()
+        self.readSettings()
         if self.outputFormat == 'decimal':
-            self.dd.setChecked(True)
+            self.coordComboBox.setCurrentIndex(0)
         elif self.outputFormat == 'dms':
-            self.dms.setChecked(True)
+            self.coordComboBox.setCurrentIndex(1)
         elif self.outputFormat == 'ddmmss':
-            self.ddmmss.setChecked(True)
+            self.coordComboBox.setCurrentIndex(2)
         else:
-            self.nativeFormat.setChecked(True)
+            self.coordComboBox.setCurrentIndex(3)
         
         self.otherTxt.setText("")
         if self.delimiter == ', ':
-            self.commaDelim.setChecked(True)
+            self.delimComboBox.setCurrentIndex(0)
         elif self.delimiter == ' ':
-            self.spaceDelim.setChecked(True)
+            self.delimComboBox.setCurrentIndex(1)
         elif self.delimiter == '\t':
-            self.tabDelim.setChecked(True)
+            self.delimComboBox.setCurrentIndex(2)
         else:
-            self.otherDelim.setChecked(True)
+            self.delimComboBox.setCurrentIndex(3)
             self.otherTxt.setText(self.delimiter)
             
         self.precisionSpinBox.setValue(self.dmsPrecision)
