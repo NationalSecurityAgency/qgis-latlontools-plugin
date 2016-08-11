@@ -23,7 +23,7 @@ class LatLonTools:
     def initGui(self):
         '''Initialize Lot Lon Tools GUI.'''
         # Initialize the Settings Dialog box
-        self.settingsDialog = SettingsWidget(self.iface, self.iface.mainWindow())
+        self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
         self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         
@@ -64,6 +64,9 @@ class LatLonTools:
         self.settingsAction.triggered.connect(self.settings)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
         
+        # Set the label on the zoom to dialog box to the correct coordinate order
+        self.updateZoomToLabel()
+        
     def unsetTool(self, tool):
         '''Uncheck the Copy Lat Lon tool'''
         try:
@@ -99,6 +102,10 @@ class LatLonTools:
     def settings(self):
         '''Show the settings dialog box'''
         self.settingsDialog.show()
+        
+    def updateZoomToLabel(self):
+        self.zoomToDialog.setLabel(self.settingsDialog.coordOrder)
+            
  
     def zoomToLatLon(self, lat, lon):
         canvasCrs = self.canvas.mapRenderer().destinationCrs()
