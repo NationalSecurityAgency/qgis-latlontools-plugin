@@ -90,11 +90,25 @@ class LatLon():
             return self.convertDD2DMS(self.lat, True, True) + str(delimiter) + self.convertDD2DMS(self.lon, False, True)
         else:
             return None
+        
+    def getDMSLonLatOrder(self, delimiter=', '):
+        '''Return a DMS formated string.'''
+        if self.valid:
+            return self.convertDD2DMS(self.lon, False, True) + str(delimiter) + self.convertDD2DMS(self.lat, True, True)
+        else:
+            return None
 
     def getDDMMSS(self, delimiter=', '):
         '''Return a DDMMSS formatted string.'''
         if self.valid:
             return self.convertDD2DMS(self.lat, True, False) + str(delimiter) + self.convertDD2DMS(self.lon, False, False)
+        else:
+            return None
+
+    def getDDMMSSLonLatOrder(self, delimiter=', '):
+        '''Return a DDMMSS formatted string.'''
+        if self.valid:
+            return self.convertDD2DMS(self.lon, False, False) + str(delimiter) + self.convertDD2DMS(self.lat, True, False)
         else:
             return None
          
@@ -143,26 +157,42 @@ class LatLon():
         return coord
     
     @staticmethod
-    def parseDMSString(str):
+    def parseDMSString(str, order=0):
         '''Parses a pair of coordinates that are in the order of
         "latitude, longitude". The string can be in DMS or decimal
-        degree notation.'''
-        str = str.strip().upper()
+        degree notation. If order is 0 then then decimal coordinates are assumed to
+        be in Lat Lon order otherwise they are in Lon Lat order. For DMS coordinates
+        it does not matter the order.'''
+        str = str.strip().upper() # Make it all upper case 
         try: 
             if re.search("[NSEW\xb0]", str) == None:
                 # There were no annotated dms coordinates so assume decimal degrees
                 coords = re.split('[\s,;:]+', str, 1)
                 if len(coords) != 2:
                     raise ValueError('Invalid Coordinates')
-                lat = float(coords[0])
-                lon = float(coords[1])
+                if order == 0:
+                    lat = float(coords[0])
+                    lon = float(coords[1])
+                else:
+                    lon = float(coords[0])
+                    lat = float(coords[1])
             else:   
                 # We should have a DMS coordinate
                 m = re.findall('(.+)\s*([NS])[\s,;:]+(.+)\s*([EW])', str)
                 if len(m) != 1 or len(m[0]) != 4:
-                    raise ValueError('Invalid DMS Coordinate')
-                lat = LatLon.parseDMS(m[0][0], m[0][1])
-                lon = LatLon.parseDMS(m[0][2], m[0][3])
+                    # This is either invalid or the coordinates are ordered by lon lat
+                    m = re.findall('(.+)\s*([EW])[\s,;:]+(.+)\s*([NS])', str)
+                    if len(m) != 1 or len(m[0]) != 4:
+                        # Now we know it is invalid
+                        raise ValueError('Invalid DMS Coordinate')
+                    else:
+                        # The coordinates were in lon, lat order
+                        lon = LatLon.parseDMS(m[0][0], m[0][1])
+                        lat = LatLon.parseDMS(m[0][2], m[0][3])
+                else:
+                    # The coordinates are in lat, lon order
+                    lat = LatLon.parseDMS(m[0][0], m[0][1])
+                    lon = LatLon.parseDMS(m[0][2], m[0][3])
         except:
             raise ValueError('Invalid Coordinates')
             

@@ -18,9 +18,10 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
 
     def __init__(self, lltools, iface, parent):
         super(ZoomToLatLon, self).__init__(parent)
-        self.lltools = lltools
-        self.iface = iface
         self.setupUi(self)
+        self.lltools = lltools
+        self.settings = lltools.settingsDialog
+        self.iface = iface
         self.coordTxt.returnPressed.connect(self.zoomToPressed)
 
     def closeEvent(self, event):
@@ -32,11 +33,18 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
             float(s)
             return True
         except ValueError:
-            return False    
+            return False
+    
+    def setLabel(self, order):
+        self.coordTxt.setText("")
+        if order == 0:
+            self.label.setText('Enter Latitude, Longitude (Y, X)')
+        else:
+            self.label.setText('Enter Longitude, Latitude (X, Y)')
 
     def zoomToPressed(self):
         try:
-            lat, lon = LatLon.parseDMSString(self.coordTxt.text())
+            lat, lon = LatLon.parseDMSString(self.coordTxt.text(), self.settings.coordOrder)
         except:
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return

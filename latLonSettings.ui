@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>240</width>
-    <height>209</height>
+    <height>249</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,6 +75,16 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Coordiante Order</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="coordOrderComboBox"/>
    </item>
    <item>
     <spacer name="verticalSpacer">

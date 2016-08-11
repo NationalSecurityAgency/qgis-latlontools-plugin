@@ -13,12 +13,14 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 class SettingsWidget(QtGui.QDialog, FORM_CLASS):
     '''Settings Dialog box.'''
-    def __init__(self, iface, parent):
+    def __init__(self, lltools, iface, parent):
         super(SettingsWidget, self).__init__(parent)
         self.setupUi(self)
+        self.lltools = lltools
         self.iface = iface
         self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Native CRS'])
         self.delimComboBox.addItems(['Comma', 'Tab', 'Space', 'Other'])
+        self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.readSettings()
         
     def readSettings(self):
@@ -28,6 +30,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.outputFormat = settings.value('/LatLonTools/OutputFormat', 'decimal')
         self.delimiter = settings.value('/LatLonTools/Delimiter', ', ')
         self.dmsPrecision =  int(settings.value('/LatLonTools/DMSPrecision', 0))
+        self.coordOrder = int(settings.value('/LatLonTools/CoordOrder', 0))
         
     def accept(self):
         '''Accept the settings and save them for next time.'''
@@ -53,7 +56,16 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
             settings.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
             
         settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
+        
+        order = self.coordOrderComboBox.currentIndex()
+        if order == 0:
+            settings.setValue('/LatLonTools/CoordOrder', 0)
+        else:
+            settings.setValue('/LatLonTools/CoordOrder', 1)
+        
         self.readSettings()
+        self.lltools.updateZoomToLabel()
+        # Close the dialog box
         self.close()
         
     def showEvent(self, e):

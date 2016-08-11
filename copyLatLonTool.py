@@ -20,12 +20,15 @@ class CopyLatLonTool(QgsMapTool):
         '''When activated set the cursor to a crosshair.'''
         self.canvas.setCursor(Qt.CrossCursor)
         
-    def formatCoord(self, pt, delimiter, outputFormat):
+    def formatCoord(self, pt, delimiter, outputFormat, order):
         '''Format the coordinate according to the settings from
         the settings dialog.'''
         if outputFormat == 'native':
             # Formatin in the native CRS
-            msg = str(pt.y()) + delimiter + str(pt.x())
+            if order == 0:
+                msg = str(pt.y()) + delimiter + str(pt.x())
+            else:
+                msg = str(pt.x()) + delimiter + str(pt.y())
         else:
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapRenderer().destinationCrs()
@@ -36,11 +39,20 @@ class CopyLatLonTool(QgsMapTool):
             self.latlon.setPrecision(self.settings.dmsPrecision)
             if self.latlon.isValid():
                 if outputFormat == 'dms':
-                    msg = self.latlon.getDMS(delimiter)
+                    if order == 0:
+                        msg = self.latlon.getDMS(delimiter)
+                    else:
+                        msg = self.latlon.getDMSLonLatOrder(delimiter)
                 elif outputFormat == 'ddmmss':
-                    msg = self.latlon.getDDMMSS(delimiter)
-                else:
-                    msg = str(self.latlon.lat)+ delimiter +str(self.latlon.lon)
+                    if order == 0:
+                        msg = self.latlon.getDDMMSS(delimiter)
+                    else:
+                        msg = self.latlon.getDDMMSSLonLatOrder(delimiter)
+                else: # decimal degrees
+                    if order == 0:
+                        msg = str(self.latlon.lat)+ delimiter +str(self.latlon.lon)
+                    else:
+                        msg = str(self.latlon.lon)+ delimiter +str(self.latlon.lat)
             else:
                 msg = None
         return msg
@@ -49,23 +61,26 @@ class CopyLatLonTool(QgsMapTool):
         '''Capture the coordinate as the user moves the mouse over
         the canvas. Show it in the status bar.'''
         outputFormat = self.settings.outputFormat
+        order = self.settings.coordOrder
         pt = self.toMapCoordinates(event.pos())
-        msg = self.formatCoord(pt, ', ', outputFormat)
+        msg = self.formatCoord(pt, ', ', outputFormat, order)
         if outputFormat == 'native' or msg == None:
             self.iface.mainWindow().statusBar().showMessage("")
         elif outputFormat == 'dms' or outputFormat == 'ddmmss':
             self.iface.mainWindow().statusBar().showMessage("DMS: " + msg)
         else:
-            self.iface.mainWindow().statusBar().showMessage("Lat Lon: " + msg)
-
+            if order == 0:
+                self.iface.mainWindow().statusBar().showMessage("Lat Lon: " + msg)
+            else: 
+                self.iface.mainWindow().statusBar().showMessage("Lon Lat: " + msg)
 
     def canvasReleaseEvent(self, event):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
         pt = self.toMapCoordinates(event.pos())
         msg = self.formatCoord(pt, self.settings.delimiter,
-            self.settings.outputFormat)
+            self.settings.outputFormat, self.settings.coordOrder)
         if msg != None:
             clipboard = QApplication.clipboard()
             clipboard.setText(msg)
-            self.iface.messageBar().pushMessage("", "Coordinate %s copied to the clipboard" % msg, level=QgsMessageBar.INFO, duration=3)
+            self.iface.messageBar().pushMessage("", "Coordinate '%s' copied to the clipboard" % msg, level=QgsMessageBar.INFO, duration=3)
