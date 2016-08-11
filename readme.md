@@ -1,4 +1,4 @@
-#Lat Lon Tools Plugin
+# Lat Lon Tools Plugin
 
 When working with Google Earth, Google Maps or other on-line mapping tools coordinates are specified in the order of 'Latitude, Longitude', but the similar existing QGIS plugins specify the coordinates in the reverse order or require separate fields for latitude and longitude. This makes it so that you cannot just copy and paste between QGIS and Google Maps. This plugin fixes this problem and adds some additional functionality. Lat Lon Tools has three tools.
 
@@ -15,17 +15,16 @@ When working with Google Earth, Google Maps or other on-line mapping tools coord
 
 Because Lat Lon Tools follow the Google Map convention, it makes it possible to copy and paste between QGIS, Google Map, Google Earth, and other on-line maps. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In the settings the user can choose the delimiter used between coordinates with presets for comma, space, and tab. *Other* allows the user to specify a delimited string which can be more than one character. The user can also choose whether the output format is in decimal degrees, DMS coordinates or in the native CRS.
 
-##Settings
-This is the settings dialog box.
+## Settings
+This shows the settings dialog box.
 
 ![Settings](doc/settings.jpg)
 
-There are 4 capture methods. This shows the format of each.
+There are 4 capture formats that can be selected from the drop down menu. The formats of each are as follows.
 
 * **Decimal Degrees** - "42.20391297, -86.023854202"
 * **DMS** - "36&deg; 47' 24.27" N, 99&deg; 22' 9.39" W"
-
 * **DDMMSS** - "400210.53N, 1050824.96 W"
 * **Native CRS** - This captures the coordinates in the Native CRS
 
-Note that in the DMS formats, the number of digits after the decimal is set by **DMS Second Precision**. The Delimiter is what separates the two coordinates.
+Note that in the DMS formats, the number of digits after the decimal is set by **DMS Second Precision**. The Delimiter is what separates the two coordinates. In the drop down menu you can specify a comma which is really a comma followed by a space. Additional delimiters are a tab, space, and other. If **Other** is selected, then the contents of **Other Delimiter** will be used.
