@@ -94,3 +94,8 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
             self.otherTxt.setText(self.delimiter)
             
         self.precisionSpinBox.setValue(self.dmsPrecision)
+        
+        if self.coordOrder == 0:
+            self.coordOrderComboBox.setCurrentIndex(0)
+        else:
+            self.coordOrderComboBox.setCurrentIndex(1)
