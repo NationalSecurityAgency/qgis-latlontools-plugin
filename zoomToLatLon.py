@@ -38,9 +38,9 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
     def setLabel(self, order):
         self.coordTxt.setText("")
         if order == 0:
-            self.label.setText('Enter Latitude, Longitude (Y, X)')
+            self.label.setText("Enter 'Latitude, Longitude'")
         else:
-            self.label.setText('Enter Longitude, Latitude (X, Y)')
+            self.label.setText("Enter 'Longitude, Latitude'")
 
     def zoomToPressed(self):
         try:
