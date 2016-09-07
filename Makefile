@@ -1,5 +1,5 @@
 PLUGINNAME = latlontools
-PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py multizoom.py
+PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py multizoom.py mgrs.py
 EXTRAS = zoomicon.png multizoom.png copyicon.png settings.png metadata.txt
 UI_FILES = zoomToLatLon.ui multiZoomDialog.ui latLonSettings.ui
 RESOURCE_FILES = resources.py

@@ -4,6 +4,7 @@ from qgis.core import *
 from qgis.gui import *
 
 from LatLon import LatLon
+import mgrs
 
 class CopyLatLonTool(QgsMapTool):
     '''Class to interact with the map canvas to capture the coordinate
@@ -29,6 +30,16 @@ class CopyLatLonTool(QgsMapTool):
                 msg = str(pt.y()) + delimiter + str(pt.x())
             else:
                 msg = str(pt.x()) + delimiter + str(pt.y())
+        elif outputFormat == 'mgrs':
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapRenderer().destinationCrs()
+            epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
+            transform = QgsCoordinateTransform(canvasCRS, epsg4326)
+            pt4326 = transform.transform(pt.x(), pt.y())
+            try:
+                msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
+            except:
+                msg = None
         else:
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapRenderer().destinationCrs()
@@ -68,6 +79,8 @@ class CopyLatLonTool(QgsMapTool):
             self.iface.mainWindow().statusBar().showMessage("")
         elif outputFormat == 'dms' or outputFormat == 'ddmmss':
             self.iface.mainWindow().statusBar().showMessage("DMS: " + msg)
+        elif outputFormat == 'mgrs':
+            self.iface.mainWindow().statusBar().showMessage("MGRS Coordinate: " + msg)
         else:
             if order == 0:
                 self.iface.mainWindow().statusBar().showMessage("Lat Lon: " + msg)

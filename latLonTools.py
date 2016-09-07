@@ -63,10 +63,7 @@ class LatLonTools:
                     self.iface.mainWindow())
         self.settingsAction.triggered.connect(self.settings)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
-        
-        # Set the label on the zoom to dialog box to the correct coordinate order
-        self.updateZoomToLabel()
-        
+                
     def unsetTool(self, tool):
         '''Uncheck the Copy Lat Lon tool'''
         try:
@@ -103,8 +100,9 @@ class LatLonTools:
         '''Show the settings dialog box'''
         self.settingsDialog.show()
         
-    def updateZoomToLabel(self):
-        self.zoomToDialog.setLabel(self.settingsDialog.coordOrder)
+    def settingsChanged(self):
+        # Settings may have changed so we need to make sure the zoomToDialog window is configured properly
+        self.zoomToDialog.configure()
             
  
     def zoomToLatLon(self, lat, lon):

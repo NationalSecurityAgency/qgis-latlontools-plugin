@@ -7,6 +7,7 @@ from qgis.core import *
 from qgis.gui import *
 from LatLon import LatLon
 
+import mgrs
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'zoomToLatLon.ui'))
@@ -23,6 +24,7 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
         self.settings = lltools.settingsDialog
         self.iface = iface
         self.coordTxt.returnPressed.connect(self.zoomToPressed)
+        self.configure()
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
@@ -35,16 +37,25 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
         except ValueError:
             return False
     
-    def setLabel(self, order):
+    def configure(self):
         self.coordTxt.setText("")
-        if order == 0:
-            self.label.setText("Enter 'Latitude, Longitude'")
+        
+        if self.settings.zoomToCoordType == 1:
+            # This is an MGRS coordinate
+            self.label.setText("Enter MGRS Coordinate")
         else:
-            self.label.setText("Enter 'Longitude, Latitude'")
+            if self.settings.zoomToCoordOrder == 0:
+                self.label.setText("Enter 'Latitude, Longitude'")
+            else:
+                self.label.setText("Enter 'Longitude, Latitude'")
 
     def zoomToPressed(self):
         try:
-            lat, lon = LatLon.parseDMSString(self.coordTxt.text(), self.settings.coordOrder)
+            if self.settings.zoomToCoordType == 1:
+                # This is an MGRS coordinate
+                lat, lon = mgrs.toWgs(str(self.coordTxt.text()))
+            else:
+                lat, lon = LatLon.parseDMSString(self.coordTxt.text(), self.settings.coordOrder)
         except:
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return

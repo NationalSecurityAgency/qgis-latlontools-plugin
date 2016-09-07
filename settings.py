@@ -18,9 +18,12 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.lltools = lltools
         self.iface = iface
-        self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Native CRS'])
+        self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Native CRS', 'MGRS'])
         self.delimComboBox.addItems(['Comma', 'Tab', 'Space', 'Other'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
+        self.zoomToCoordTypeComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS'])
+        self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
+        self.zoomToCoordTypeComboBox.activated.connect(self.comboBoxChanged)
         self.readSettings()
         
     def readSettings(self):
@@ -31,19 +34,28 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.delimiter = settings.value('/LatLonTools/Delimiter', ', ')
         self.dmsPrecision =  int(settings.value('/LatLonTools/DMSPrecision', 0))
         self.coordOrder = int(settings.value('/LatLonTools/CoordOrder', 0))
+        self.zoomToCoordOrder = int(settings.value('/LatLonTools/ZoomToCoordOrder', 0))
+        self.zoomToCoordType = int(settings.value('/LatLonTools/ZoomToCoordType', 0))
+        self.setEnabled()
         
     def accept(self):
         '''Accept the settings and save them for next time.'''
         settings = QSettings()
+        zoomToType = int(self.zoomToCoordTypeComboBox.currentIndex())
+        settings.setValue('/LatLonTools/ZoomToCoordType', zoomToType)
+        zoomToOrder = int(self.zoomToCoordOrderComboBox.currentIndex())
+        settings.setValue('/LatLonTools/ZoomToCoordOrder', zoomToOrder)
         coord = self.coordComboBox.currentIndex()
         if coord == 0:
             settings.setValue('/LatLonTools/OutputFormat', 'decimal')
         elif coord == 1:
             settings.setValue('/LatLonTools/OutputFormat', 'dms')
-        elif coord ==2:
+        elif coord == 2:
             settings.setValue('/LatLonTools/OutputFormat', 'ddmmss')
-        else:
+        elif coord == 3:
             settings.setValue('/LatLonTools/OutputFormat', 'native')
+        else:
+            settings.setValue('/LatLonTools/OutputFormat', 'mgrs')
             
         delim = self.delimComboBox.currentIndex()
         if delim == 0:
@@ -57,30 +69,39 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
             
         settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
         
-        order = self.coordOrderComboBox.currentIndex()
-        if order == 0:
-            settings.setValue('/LatLonTools/CoordOrder', 0)
-        else:
-            settings.setValue('/LatLonTools/CoordOrder', 1)
+        order = int(self.coordOrderComboBox.currentIndex())
+        settings.setValue('/LatLonTools/CoordOrder', order)
         
         self.readSettings()
-        self.lltools.updateZoomToLabel()
-        # Close the dialog box
+        self.lltools.settingsChanged()
         self.close()
+        
+    def comboBoxChanged(self):
+        self.zoomToCoordType = int(self.zoomToCoordTypeComboBox.currentIndex())
+        self.setEnabled()
+        
+    def setEnabled(self):
+        self.zoomToCoordOrderComboBox.setEnabled(self.zoomToCoordType == 0)
         
     def showEvent(self, e):
         '''The user has selected the settings dialog box so we need to
         read the settings and update the dialog box with the previously
         selected settings.'''
         self.readSettings()
+        
+        self.zoomToCoordTypeComboBox.setCurrentIndex(self.zoomToCoordType)
+        self.zoomToCoordOrderComboBox.setCurrentIndex(self.zoomToCoordOrder)
+        
         if self.outputFormat == 'decimal':
             self.coordComboBox.setCurrentIndex(0)
         elif self.outputFormat == 'dms':
             self.coordComboBox.setCurrentIndex(1)
         elif self.outputFormat == 'ddmmss':
             self.coordComboBox.setCurrentIndex(2)
-        else:
+        elif self.outputFormat == 'native':
             self.coordComboBox.setCurrentIndex(3)
+        else:
+            self.coordComboBox.setCurrentIndex(4)
         
         self.otherTxt.setText("")
         if self.delimiter == ', ':
@@ -95,7 +116,5 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
             
         self.precisionSpinBox.setValue(self.dmsPrecision)
         
-        if self.coordOrder == 0:
-            self.coordOrderComboBox.setCurrentIndex(0)
-        else:
-            self.coordOrderComboBox.setCurrentIndex(1)
+        self.coordOrderComboBox.setCurrentIndex(self.coordOrder)
+        self.setEnabled()
