@@ -8,7 +8,7 @@ from qgis.gui import *
 
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'latLonSettings.ui'))
+    os.path.dirname(__file__), 'ui/latLonSettings.ui'))
 
 
 class SettingsWidget(QtGui.QDialog, FORM_CLASS):
@@ -19,7 +19,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.lltools = lltools
         self.iface = iface
         self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Native CRS', 'MGRS'])
-        self.delimComboBox.addItems(['Comma', 'Tab', 'Space', 'Other'])
+        self.delimComboBox.addItems(['Comma', 'Space', 'Tab', 'Other'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.zoomToCoordTypeComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS'])
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])

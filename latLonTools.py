@@ -4,13 +4,14 @@ from qgis.core import *
 from qgis.gui import *
 
 # Initialize Qt resources from file resources.py
-import resources
+# import resources
 
 from zoomToLatLon import ZoomToLatLon
 from multizoom import MultiZoomWidget
 from copyLatLonTool import CopyLatLonTool
 from settings import SettingsWidget
 import os.path
+import webbrowser
 
 
 class LatLonTools:
@@ -28,41 +29,42 @@ class LatLonTools:
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         
         # Add Interface for Coordinate Capturing
-        icon = QIcon(":/plugins/latlontools/copyicon.png")
-        self.copyAction = QAction(icon, "Copy Latitude, Longitude",
-            self.iface.mainWindow())
+        icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
+        self.copyAction = QAction(icon, "Copy Latitude, Longitude", self.iface.mainWindow())
         self.copyAction.triggered.connect(self.setTool)
         self.copyAction.setCheckable(True)
         self.iface.addToolBarIcon(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
 
         # Add Interface for Zoom to Coordinate
-        zoomicon = QIcon(':/plugins/latlontools/zoomicon.png')
-        self.zoomToAction = QAction(zoomicon, "Zoom To Latitude, Longitude", 
-                    self.iface.mainWindow())
+        zoomicon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
+        self.zoomToAction = QAction(zoomicon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
         self.zoomToAction.triggered.connect(self.zoomTo)
         self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
         self.canvas.mapToolSet.connect(self.unsetTool)
 
-        self.zoomToDialog = ZoomToLatLon(self, self.iface,
-                    self.iface.mainWindow())
+        self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
         self.zoomToDialog.hide()
         
         # Add Interface for Multi point zoom
-        zoomicon = QIcon(':/plugins/latlontools/multizoom.png')
-        self.multiZoomToAction = QAction(zoomicon, "Multi-location Zoom", 
-                    self.iface.mainWindow())
+        zoomicon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
+        self.multiZoomToAction = QAction(zoomicon, "Multi-location Zoom", self.iface.mainWindow())
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
         self.iface.addPluginToMenu('Lat Lon Tools', self.multiZoomToAction)
         
         
         # Initialize the Settings Dialog Box
-        settingsicon = QIcon(':/plugins/latlontools/settings.png')
-        self.settingsAction = QAction(settingsicon, "Settings", 
-                    self.iface.mainWindow())
+        settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
+        self.settingsAction = QAction(settingsicon, "Settings", self.iface.mainWindow())
         self.settingsAction.triggered.connect(self.settings)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
+        
+        # Help
+        helpicon = QIcon(os.path.dirname(__file__) + '/images/help.png')
+        self.helpAction = QAction(helpicon, "Lat Lon Tools Help", self.iface.mainWindow())
+        self.helpAction.triggered.connect(self.help)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
                 
     def unsetTool(self, tool):
         '''Uncheck the Copy Lat Lon tool'''
@@ -80,6 +82,7 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
         self.iface.removeDockWidget(self.zoomToDialog)
         self.zoomToDialog = None
 
@@ -99,6 +102,10 @@ class LatLonTools:
     def settings(self):
         '''Show the settings dialog box'''
         self.settingsDialog.show()
+        
+    def help(self):
+        '''Display a help page'''
+        webbrowser.open("https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme")
         
     def settingsChanged(self):
         # Settings may have changed so we need to make sure the zoomToDialog window is configured properly

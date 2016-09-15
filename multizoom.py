@@ -9,7 +9,7 @@ from qgis.gui import *
 from LatLon import LatLon
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'multiZoomDialog.ui'))
+    os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
 
 
 class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):

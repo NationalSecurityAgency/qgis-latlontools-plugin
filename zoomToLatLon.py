@@ -10,7 +10,7 @@ from LatLon import LatLon
 import mgrs
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'zoomToLatLon.ui'))
+    os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
 
 
 class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
@@ -53,7 +53,7 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
         try:
             if self.settings.zoomToCoordType == 1:
                 # This is an MGRS coordinate
-                lat, lon = mgrs.toWgs(str(self.coordTxt.text()))
+                lat, lon = mgrs.toWgs(unicode(self.coordTxt.text()))
             else:
                 lat, lon = LatLon.parseDMSString(self.coordTxt.text(), self.settings.coordOrder)
         except:
