@@ -1,5 +1,6 @@
 import os
 import re
+import mapProviders
 
 from PyQt4 import QtGui, uic
 from PyQt4.QtCore import *
@@ -24,6 +25,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.zoomToCoordTypeComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS'])
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.zoomToCoordTypeComboBox.activated.connect(self.comboBoxChanged)
+        self.mapProviderComboBox.addItems(mapProviders.mapProviderNames())
         self.readSettings()
         
     def readSettings(self):
@@ -36,15 +38,16 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.coordOrder = int(settings.value('/LatLonTools/CoordOrder', 0))
         self.zoomToCoordOrder = int(settings.value('/LatLonTools/ZoomToCoordOrder', 0))
         self.zoomToCoordType = int(settings.value('/LatLonTools/ZoomToCoordType', 0))
+        self.showPlacemark = int(settings.value('/LatLonTools/ShowPlacemark', Qt.Checked))
+        self.mapProvider = int(settings.value('/LatLonTools/MapProvider', 0))
+        self.mapZoom = int(settings.value('/LatLonTools/MapZoom', 13))
         self.setEnabled()
         
     def accept(self):
         '''Accept the settings and save them for next time.'''
         settings = QSettings()
-        zoomToType = int(self.zoomToCoordTypeComboBox.currentIndex())
-        settings.setValue('/LatLonTools/ZoomToCoordType', zoomToType)
-        zoomToOrder = int(self.zoomToCoordOrderComboBox.currentIndex())
-        settings.setValue('/LatLonTools/ZoomToCoordOrder', zoomToOrder)
+        settings.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToCoordTypeComboBox.currentIndex()))
+        settings.setValue('/LatLonTools/ZoomToCoordOrder', int(self.zoomToCoordOrderComboBox.currentIndex()))
         coord = self.coordComboBox.currentIndex()
         if coord == 0:
             settings.setValue('/LatLonTools/OutputFormat', 'decimal')
@@ -69,8 +72,11 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
             
         settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
         
-        order = int(self.coordOrderComboBox.currentIndex())
-        settings.setValue('/LatLonTools/CoordOrder', order)
+        settings.setValue('/LatLonTools/CoordOrder', int(self.coordOrderComboBox.currentIndex()))
+        
+        settings.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
+        settings.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
+        settings.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
         self.readSettings()
         self.lltools.settingsChanged()
@@ -117,4 +123,18 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.precisionSpinBox.setValue(self.dmsPrecision)
         
         self.coordOrderComboBox.setCurrentIndex(self.coordOrder)
+        self.showPlacemarkCheckBox.setCheckState(self.showPlacemark)
+        self.mapProviderComboBox.setCurrentIndex(self.mapProvider)
+        self.zoomSpinBox.setValue(self.mapZoom)
         self.setEnabled()
+
+    def getMapProviderString(self, lat, lon):
+        if self.showPlacemark:
+            ms = mapProviders.MAP_PROVIDERS[self.mapProvider][2]
+        else:
+            ms = mapProviders.MAP_PROVIDERS[self.mapProvider][1]
+        ms = ms.replace('@LAT@', str(lat))
+        ms = ms.replace('@LON@', str(lon))
+        ms = ms.replace('@Z@', str(self.mapZoom))
+        return ms
+        

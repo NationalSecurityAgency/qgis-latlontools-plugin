@@ -2,19 +2,20 @@
 name=Lat Lon Tools
 qgisMinimumVersion=2.4
 description=Tools to capture and zoom to coordinates using standard decimal or DMS (latitude,longitude) notation.
-version=0.5
+version=0.6
 author=C Hamilton
 email=adenaculture@gmail.com
-about=When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. Lat Lon Tools uses the standard Google Map format or a format as specified in "Settings". The plugin has three tools. The first captures coordinates to the clipboard when the user clicks on the map. The second takes decimal, DMS, or MGRS formatted coordinates, zooms to the point and highlights the location. The 3rd creates a list of points for rapid zooming. Lat Lon Tools makes it possibly to seamlessly copy and paste between QGIS, Google Earth, and other on-line maps. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In Settings the user can choose the delimiter used between coordinates. The user can choose whether the capture format is in decimal degrees, DMS coordinates, native CRS, or MGRS coordinates. The user can also specify the coordinate order of 'Longitude, Latitude' in Settings.
+about=Lat Lon Tools is a suite of tools that makes it easy to interact with other on-line mapping tools. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. Lat Lon Tools uses the standard Google Map format or a user specified format. The plugin has four tools. 1) Capture coordinates to the clipboard when the user clicks on the map. 2) Launch and display an external map based on the coordinate clicked on in QGIS. 3) Zoom to and highlight a point on the map using decimal degrees, DMS, or MGRS formatted coordinates. 4) Create a list of points for rapid zooming. Lat Lon Tools makes it possible to seamlessly copy and paste between QGIS, Google Earth, and other on-line maps. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. The user can specify the delimiter used between coordinates and whether the capture format is in decimal degrees, DMS coordinates, native CRS, or MGRS coordinates. The user can also specify the coordinate order of 'Longitude, Latitude'.
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=qgis,coordinate,latitude,longitude,epsg:4326,4326,dms,zoom,move to,mgrs
+tags=qgis,coordinate,latitude,longitude,epsg:4326,4326,dms,zoom,move to,mgrs,osm,google,bing
 category=Plugins
 icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.6 - Added external map support and created local help files.
     0.5 - Separated coordinate capture and zoom to settings and added MGRS support.
     0.4.2 - Added the ability to select the input and capture order of the coordinates.
     0.4.1 - Fixed GUIs to be font and machine independent.

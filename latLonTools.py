@@ -9,6 +9,7 @@ from qgis.gui import *
 from zoomToLatLon import ZoomToLatLon
 from multizoom import MultiZoomWidget
 from copyLatLonTool import CopyLatLonTool
+from showOnMapTool import ShowOnMapTool
 from settings import SettingsWidget
 import os.path
 import webbrowser
@@ -27,6 +28,7 @@ class LatLonTools:
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
         self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
+        self.showMapTool = ShowOnMapTool(self.settingsDialog, self.iface)
         
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
@@ -35,6 +37,14 @@ class LatLonTools:
         self.copyAction.setCheckable(True)
         self.iface.addToolBarIcon(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
+        
+        # Add Interface for External Map
+        icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
+        self.externMapAction = QAction(icon, "Show in External Map", self.iface.mainWindow())
+        self.externMapAction.triggered.connect(self.setShowMapTool)
+        self.externMapAction.setCheckable(True)
+        self.iface.addToolBarIcon(self.externMapAction)
+        self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
 
         # Add Interface for Zoom to Coordinate
         zoomicon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
@@ -71,14 +81,19 @@ class LatLonTools:
         try:
             if not isinstance(tool, CopyLatLonTool):
                 self.copyAction.setChecked(False)
+            if not isinstance(tool, ShowOnMapTool):
+                self.externMapAction.setChecked(False)
         except:
             pass
 
     def unload(self):
         '''Unload LatLonTools from the QGIS interface'''
         self.canvas.unsetMapTool(self.mapTool)
+        self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
         self.iface.removeToolBarIcon(self.copyAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
+        self.iface.removeToolBarIcon(self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
@@ -90,6 +105,11 @@ class LatLonTools:
         '''Set the focus of the copy coordinate tool and check it'''
         self.copyAction.setChecked(True)
         self.canvas.setMapTool(self.mapTool)
+
+    def setShowMapTool(self):
+        '''Set the focus of the copy coordinate tool and check it'''
+        self.externMapAction.setChecked(True)
+        self.canvas.setMapTool(self.showMapTool)
 
     def zoomTo(self):
         '''Show the zoom to docked widget.'''
@@ -105,7 +125,8 @@ class LatLonTools:
         
     def help(self):
         '''Display a help page'''
-        webbrowser.open("https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme")
+        url = QUrl.fromLocalFile(os.path.dirname(__file__) + "/index.html").toString()
+        webbrowser.open(url, new=2)
         
     def settingsChanged(self):
         # Settings may have changed so we need to make sure the zoomToDialog window is configured properly
