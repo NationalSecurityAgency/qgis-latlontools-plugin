@@ -1,20 +1,21 @@
 [general]
 name=Lat Lon Tools
 qgisMinimumVersion=2.4
-description=Tools to capture and zoom to coordinates using standard decimal or DMS (latitude,longitude) notation.
-version=0.6
+description=Tools to capture and zoom to coordinates using standard decimal, DMS, and MGRS notation. Provides external map support.
+version=0.6.1
 author=C Hamilton
 email=adenaculture@gmail.com
 about=Lat Lon Tools is a suite of tools that makes it easy to interact with other on-line mapping tools. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. Lat Lon Tools uses the standard Google Map format or a user specified format. The plugin has four tools. 1) Capture coordinates to the clipboard when the user clicks on the map. 2) Launch and display an external map based on the coordinate clicked on in QGIS. 3) Zoom to and highlight a point on the map using decimal degrees, DMS, or MGRS formatted coordinates. 4) Create a list of points for rapid zooming. Lat Lon Tools makes it possible to seamlessly copy and paste between QGIS, Google Earth, and other on-line maps. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. The user can specify the delimiter used between coordinates and whether the capture format is in decimal degrees, DMS coordinates, native CRS, or MGRS coordinates. The user can also specify the coordinate order of 'Longitude, Latitude'.
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=qgis,coordinate,latitude,longitude,epsg:4326,4326,dms,zoom,move to,mgrs,osm,google,bing
+tags=qgis,coordinate,latitude,longitude,epsg:4326,4326,dms,zoom,move to,mgrs,osm,google,bing,openstreetmap
 category=Plugins
 icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.6.1 - Made the "zoom to" marker persistent
     0.6 - Added external map support and created local help files.
     0.5 - Separated coordinate capture and zoom to settings and added MGRS support.
     0.4.2 - Added the ability to select the input and capture order of the coordinates.
