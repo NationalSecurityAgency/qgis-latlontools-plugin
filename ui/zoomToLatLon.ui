@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>312</width>
-    <height>79</height>
+    <height>101</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -28,11 +28,38 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Enter Latitude, Longitude</string>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>5</number>
       </property>
-     </widget>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Enter Latitude, Longitude</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="zoomToolButton">
+        <property name="toolTip">
+         <string>Zoom To</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="clearToolButton">
+        <property name="toolTip">
+         <string>Clear Marker</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QLineEdit" name="coordTxt"/>

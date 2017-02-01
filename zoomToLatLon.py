@@ -1,7 +1,8 @@
 import os
 import re
 
-from PyQt4 import QtGui, uic
+from PyQt4 import uic
+from PyQt4.QtGui import QDockWidget, QIcon
 from PyQt4.QtCore import *
 from qgis.core import *
 from qgis.gui import *
@@ -13,13 +14,19 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
 
 
-class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
+class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
 
     def __init__(self, lltools, iface, parent):
         super(ZoomToLatLon, self).__init__(parent)
         self.setupUi(self)
+        self.canvas = iface.mapCanvas()
+        self.marker = None
+        self.zoomToolButton.setIcon(QIcon(':/images/themes/default/mActionZoomIn.svg'))
+        self.clearToolButton.setIcon(QIcon(':/images/themes/default/mIconClear.svg'))
+        self.zoomToolButton.clicked.connect(self.zoomToPressed)
+        self.clearToolButton.clicked.connect(self.removeMarker)
         self.lltools = lltools
         self.settings = lltools.settingsDialog
         self.iface = iface
@@ -27,6 +34,7 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
         self.configure()
 
     def closeEvent(self, event):
+        self.removeMarker()
         self.closingPlugin.emit()
         event.accept()
         
@@ -59,4 +67,16 @@ class ZoomToLatLon(QtGui.QDockWidget, FORM_CLASS):
         except:
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
-        self.lltools.zoomToLatLon(lat,lon)
+        pt = self.lltools.zoomToLatLon(lat,lon)
+        if self.marker is None:
+            self.marker = QgsVertexMarker(self.canvas)
+        self.marker.setCenter(pt)
+        self.marker.setIconSize(18)
+        self.marker.setPenWidth(2)
+        self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+
+
+    def removeMarker(self):
+        if self.marker is not None:
+            self.canvas.scene().removeItem(self.marker)
+            self.marker = None

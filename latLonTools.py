@@ -88,6 +88,7 @@ class LatLonTools:
 
     def unload(self):
         '''Unload LatLonTools from the QGIS interface'''
+        self.zoomToDialog.removeMarker()
         self.canvas.unsetMapTool(self.mapTool)
         self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
@@ -145,6 +146,7 @@ class LatLonTools:
         pt = QgsPoint(x,y)
         self.highlight(pt)
         self.canvas.refresh()
+        return pt
         
     def highlight(self, point):
         currExt = self.canvas.extent()
