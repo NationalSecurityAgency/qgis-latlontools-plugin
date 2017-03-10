@@ -197,3 +197,233 @@ class LatLon():
             raise ValueError('Invalid Coordinates')
             
         return lat, lon
+    
+    @staticmethod
+    def distanceTo(lat1, lon1, lat2, lon2, R=6371000.0):
+        '''Compute the distance between two points. The average earth
+           radius is 6371000 meters. The returned distance is in the same
+           units as R which by default is meters'''
+        phi1 = math.radians(lat1)
+        lambda1 = math.radians(lon1)
+        phi2 = math.radians(lat2)
+        lambda2 = math.radians(lon2)
+        deltaphi = phi2 - phi1
+        deltalambda = lambda2 - lambda1
+        a = (math.sin(deltaphi/2.0) * math.sin(deltaphi/2.0)
+              + math.cos(phi1) * math.cos(phi2)
+              * math.sin(deltalambda/2.0) * math.sin(deltalambda/2.0))
+        c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0-a))
+        d = R * c
+        return d
+    
+    @staticmethod
+    def intermediatePointTo(lat1, lon1, lat2, lon2, fraction):
+        '''Return the fractional point between [lat1, lon1] and [lat2, lon2]
+           Coordinates are in degrees and fraction is between 0 and 1'''
+        phi1 = math.radians(lat1)
+        lambda1 = math.radians(lon1)
+        phi2 = math.radians(lat2)
+        lambda2 = math.radians(lon2)
+        sinphi1 = math.sin(phi1)
+        cosphi1 = math.cos(phi1)
+        sinlambda1 = math.sin(lambda1)
+        coslambda1 = math.cos(lambda1)
+        sinphi2 = math.sin(phi2)
+        cosphi2 = math.cos(phi2)
+        sinlambda2 = math.sin(lambda2)
+        coslambda2 = math.cos(lambda2)
+
+        # distance between points
+        deltaphi = phi2 - phi1
+        deltalambda = lambda2 - lambda1
+        a = math.sin(deltaphi/2.0) * math.sin(deltaphi/2.0) + math.cos(phi1) * math.cos(phi2) * math.sin(deltalambda/2.0) * math.sin(deltalambda/2.0)
+        delta = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0-a))
+
+        A = math.sin((1.0-fraction)*delta) / math.sin(delta)
+        B = math.sin(fraction*delta) / math.sin(delta)
+
+        x = A * cosphi1 * coslambda1 + B * cosphi2 * coslambda2
+        y = A * cosphi1 * sinlambda1 + B * cosphi2 * sinlambda2
+        z = A * sinphi1 + B * sinphi2
+
+        phi3 = math.atan2(z, math.sqrt(x*x + y*y))
+        lambda3 = math.atan2(y, x)
+
+        # Returns lat, lon and normalize lon from -180 to 180 degrees
+        return math.degrees(phi3), ((math.degrees(lambda3)+540.0)%360.0 - 180.0)
+    
+    @staticmethod
+    def getPointsOnLine(lat1, lon1, lat2, lon2, minSegLength=1000.0, maxNodes=500):
+        '''Get points along a great circle line between the two coordinates.
+           minSegLength is the minimum segment length in meters before a new
+           node point is created. maxNodes is the maximum number of points on
+           the line to create.'''
+        dist = LatLon.distanceTo(lat1, lon1, lat2, lon2)
+        numPoints = int(dist / minSegLength)
+        if numPoints > maxNodes:
+            numPoints = maxNodes
+        pts = [QgsPoint(lon1, lat1)]
+        f = 1.0 / (numPoints - 1.0)
+        i = 1
+        while i < numPoints-1:
+            newlat, newlon = LatLon.intermediatePointTo(lat1, lon1, lat2, lon2, f * i)
+            pts.append(QgsPoint(newlon, newlat))
+            i += 1
+        pts.append(QgsPoint(lon2, lat2))
+        return pts
+        
+
+    # distance s is in meters
+    @staticmethod
+    def destinationPointVincenty(lat, lon, brng, s):
+        a = 6378137.0
+        b = 6356752.3142
+        f = 1.0/298.257223563
+        alpha1 = math.radians(brng)
+        sinAlpha1 = math.sin(alpha1)
+        cosAlpha1 = math.cos(alpha1)
+        tanU1 = (1.0 - f) * math.tan(math.radians(lat))
+        cosU1 = 1.0 / math.sqrt(1.0 + tanU1*tanU1)
+        sinU1 = tanU1 * cosU1
+        sigma1 = math.atan2(tanU1, cosAlpha1)
+        sinAlpha = cosU1 * sinAlpha1
+        cosSqAlpha = 1.0 - sinAlpha*sinAlpha
+        uSq = cosSqAlpha * (a*a - b*b) / (b*b)
+        A = 1.0 + uSq / 16384.0 * (4096.0+uSq*(-768.0+uSq*(320.0-175.0*uSq)))
+        B = uSq / 1024.0 * (256.0+uSq*(-128.0+uSq*(74.0-47.0*uSq)))
+        
+        sigma = s / (b*A)
+        sigmaP = 2.0 * math.pi
+        
+        while math.fabs(sigma-sigmaP) > 1e-12:
+            cos2SigmaM = math.cos(2.0 * sigma1 + sigma)
+            sinSigma = math.sin(sigma)
+            cosSigma = math.cos(sigma)
+            deltaSigma = B * sinSigma * (cos2SigmaM+B/4.0*(cosSigma*(-1.0+2.0*cos2SigmaM*cos2SigmaM) - B/6.0*cos2SigmaM*(-3.0+4.0*sinSigma*sinSigma)*(-3.0+4.0*cos2SigmaM*cos2SigmaM)))
+            sigmaP = sigma
+            sigma = s / (b*A) + deltaSigma
+        
+        tmp = sinU1 * sinSigma - cosU1*cosSigma*cosAlpha1
+        lat2 = math.atan2(sinU1*cosSigma + cosU1*sinSigma*cosAlpha1,
+            (1.0 - f)*math.sqrt(sinAlpha*sinAlpha + tmp*tmp))
+        
+        lambdav = math.atan2(sinSigma*sinAlpha1, cosU1*cosSigma - sinU1*sinSigma*cosAlpha1)
+        C = f / 16.0 * cosSqAlpha*(4.0+f*(4.0-3.0*cosSqAlpha))
+        L = lambdav - (1.0-C) * f * sinAlpha * (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(-1.0+2.0*cos2SigmaM*cos2SigmaM)))
+        
+        return math.degrees(lat2), lon + math.degrees(L)
+    
+    # bearing is in degrees and distances are in meters
+    @staticmethod
+    def getLineCoords(lat, lon, bearing, distance, maxSegments, minLength):
+        pts = []
+        seglen = distance / maxSegments
+        if seglen < minLength:
+            seglen = minLength
+        pts.append(QgsPoint(lon, lat))
+        pdist = seglen
+        while pdist < distance:
+            newlat, newlon = LatLon.destinationPointVincenty(lat, lon, bearing, pdist)
+            pts.append(QgsPoint(newlon, newlat))
+            pdist += seglen
+            
+        newlat, newlon = LatLon.destinationPointVincenty(lat, lon, bearing, distance)
+        pts.append(QgsPoint(newlon, newlat))
+        return pts
+    
+    @staticmethod
+    def getEllipseCoords(lat, lon, sma, smi, azi):
+        TPI = math.pi * 2.0
+        PI_2 = math.pi / 2.0
+        DG2NM = 60.0 # Degrees on the Earth's Surface to NM
+    
+        c = []
+        cnt = 0
+        # If either the semi major or minor axis are tiny,
+        # create a very small ellipse instead (0.0005 NB = 3 ft).
+        # Do not let sma/smi go through with Zero values!!
+        if smi < 0.0005: smi = 0.0005
+        if sma < 0.0005: sma = 0.0005
+        center_lat = math.radians(lat)
+        center_lon = math.radians(lon)
+        sma = math.radians(sma / DG2NM)
+        smi = math.radians(smi / DG2NM)
+        azi = math.radians(azi)
+        size = 512
+        angle = 18.0 * smi / sma
+        if angle < 1.0:
+            minimum = angle
+        else:
+            minimum = 1.0
+            
+        # maxang = math.pi / 6 * min(1.0, 18.0 * smi/sma)
+        maxang = math.pi / 6 * minimum
+        while azi < 0:
+            azi += TPI
+        while azi > math.pi:
+            azi -= math.pi
+        slat = math.sin(center_lat)
+        clat = math.cos(center_lat)
+        ab = sma * smi
+        a2 = sma * sma
+        b2 = smi * smi
+        
+        delta = ab * math.pi / 30.0
+        o = azi
+        while True:
+            sino = math.sin(o - azi)
+            coso = math.cos(o - azi)
+            
+            if o > math.pi and o < TPI:
+                sgn = -1.0
+                azinc = TPI - o
+            else:
+                sgn = 1.0
+                azinc = o
+            
+            rad = ab / math.sqrt(a2 * sino * sino + b2 * coso * coso)
+            sinr = math.sin(rad)
+            cosr = math.cos(rad)
+            
+            acos_val = cosr * slat + sinr * clat * math.cos(azinc)
+            
+            if acos_val > 1.0:
+                acos_val = 1.0
+            elif acos_val < -1.0:
+                acos_val = -1.0
+                
+            tmplat = math.acos(acos_val)
+            
+            acos_val = (cosr - slat * math.cos(tmplat)) / (clat * math.sin(tmplat))
+            
+            if acos_val > 1.0:
+                acos_val = 1.0
+            elif acos_val < -1.0:
+                acos_val = -1.0
+            
+            tmplon = math.acos(acos_val)
+            tmplat = math.degrees(PI_2 - tmplat)
+            tmplon = math.degrees(center_lon + sgn * tmplon)
+            
+            # Check for wrapping over north pole
+            '''if (azinc == 0.0) and (center_lat + rad > PI_2):
+                tmplat = math.degrees(math.pi - (center_lat + rad))
+                tmplon = math.degrees(center_lon + math.pi)
+                
+            if (azinc == math.pi) and (center_lat - rad < -1.0*PI_2):
+                tmplat = math.degrees(-1.0 * math.pi - (center_lat - rad))
+                tmplon = math.degrees(center_lon + math.pi)'''
+                       
+            c.append( QgsPoint(tmplon, tmplat) )
+            cnt += 1
+            delo = delta / (rad * rad)
+            if maxang < delo:
+                delo = maxang
+            o += delo
+            
+            if (o >= TPI + azi + delo / 2.0) or (cnt >= size):
+                break
+        
+        if c[cnt-1].x() != c[0].x() or c[cnt-1].y() != c[0].y():
+            c[cnt-1].set(c[0].x(), c[0].y())
+        return c
