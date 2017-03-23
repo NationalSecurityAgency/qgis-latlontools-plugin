@@ -19,7 +19,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.lltools = lltools
         self.iface = iface
-        self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Native CRS', 'MGRS'])
+        self.coordComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'Project CRS', 'MGRS'])
         self.delimComboBox.addItems(['Comma', 'Space', 'Tab', 'Other'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.zoomToCoordTypeComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS'])
@@ -39,6 +39,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.zoomToCoordOrder = int(settings.value('/LatLonTools/ZoomToCoordOrder', 0))
         self.zoomToCoordType = int(settings.value('/LatLonTools/ZoomToCoordType', 0))
         self.showPlacemark = int(settings.value('/LatLonTools/ShowPlacemark', Qt.Checked))
+        self.persistentMarker = int(settings.value('/LatLonTools/PersistentMarker', Qt.Checked))
         self.mapProvider = int(settings.value('/LatLonTools/MapProvider', 0))
         self.mapZoom = int(settings.value('/LatLonTools/MapZoom', 13))
         self.setEnabled()
@@ -75,6 +76,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         settings.setValue('/LatLonTools/CoordOrder', int(self.coordOrderComboBox.currentIndex()))
         
         settings.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
+        settings.setValue('/LatLonTools/PersistentMarker', self.persistentMarkerCheckBox.checkState())
         settings.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
         settings.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
@@ -124,6 +126,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         
         self.coordOrderComboBox.setCurrentIndex(self.coordOrder)
         self.showPlacemarkCheckBox.setCheckState(self.showPlacemark)
+        self.persistentMarkerCheckBox.setCheckState(self.persistentMarker)
         self.mapProviderComboBox.setCurrentIndex(self.mapProvider)
         self.zoomSpinBox.setValue(self.mapZoom)
         self.setEnabled()

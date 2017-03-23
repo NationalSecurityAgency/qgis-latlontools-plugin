@@ -68,12 +68,15 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
         pt = self.lltools.zoomToLatLon(lat,lon)
-        if self.marker is None:
-            self.marker = QgsVertexMarker(self.canvas)
-        self.marker.setCenter(pt)
-        self.marker.setIconSize(18)
-        self.marker.setPenWidth(2)
-        self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+        if self.settings.persistentMarker:
+            if self.marker is None:
+                self.marker = QgsVertexMarker(self.canvas)
+            self.marker.setCenter(pt)
+            self.marker.setIconSize(18)
+            self.marker.setPenWidth(2)
+            self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+        elif self.marker is not None:
+            self.removeMarker();
 
 
     def removeMarker(self):
