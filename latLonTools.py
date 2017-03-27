@@ -37,6 +37,17 @@ class LatLonTools:
         self.copyAction.setCheckable(True)
         self.iface.addToolBarIcon(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
+
+        # Add Interface for Zoom to Coordinate
+        zoomicon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
+        self.zoomToAction = QAction(zoomicon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
+        self.zoomToAction.triggered.connect(self.showZoomToDialog)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
+        self.canvas.mapToolSet.connect(self.unsetTool)
+
+        self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
+        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
+        self.zoomToDialog.hide()
         
         # Add Interface for External Map
         icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
@@ -45,17 +56,6 @@ class LatLonTools:
         self.externMapAction.setCheckable(True)
         self.iface.addToolBarIcon(self.externMapAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
-
-        # Add Interface for Zoom to Coordinate
-        zoomicon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
-        self.zoomToAction = QAction(zoomicon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
-        self.zoomToAction.triggered.connect(self.zoomTo)
-        self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
-        self.canvas.mapToolSet.connect(self.unsetTool)
-
-        self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
-        self.zoomToDialog.hide()
         
         # Add Interface for Multi point zoom
         zoomicon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
@@ -72,7 +72,7 @@ class LatLonTools:
         
         # Help
         helpicon = QIcon(os.path.dirname(__file__) + '/images/help.png')
-        self.helpAction = QAction(helpicon, "Lat Lon Tools Help", self.iface.mainWindow())
+        self.helpAction = QAction(helpicon, "Help", self.iface.mainWindow())
         self.helpAction.triggered.connect(self.help)
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
                 
@@ -112,7 +112,7 @@ class LatLonTools:
         self.externMapAction.setChecked(True)
         self.canvas.setMapTool(self.showMapTool)
 
-    def zoomTo(self):
+    def showZoomToDialog(self):
         '''Show the zoom to docked widget.'''
         self.zoomToDialog.show()
 
@@ -134,11 +134,10 @@ class LatLonTools:
         self.zoomToDialog.configure()
             
  
-    def zoomToLatLon(self, lat, lon):
+    def zoomTo(self, srcCrs, lat, lon):
         canvasCrs = self.canvas.mapRenderer().destinationCrs()
-        epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
-        transform4326 = QgsCoordinateTransform(epsg4326, canvasCrs)
-        x, y = transform4326.transform(float(lon), float(lat))
+        transform = QgsCoordinateTransform(srcCrs, canvasCrs)
+        x, y = transform.transform(float(lon), float(lat))
             
         rect = QgsRectangle(x,y,x,y)
         self.canvas.setExtent(rect)

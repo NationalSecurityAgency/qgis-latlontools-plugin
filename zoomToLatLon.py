@@ -9,6 +9,7 @@ from qgis.gui import *
 from LatLon import LatLon
 
 import mgrs
+import traceback
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -48,26 +49,70 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
     def configure(self):
         self.coordTxt.setText("")
         
-        if self.settings.zoomToCoordType == 1:
+        if self.settings.zoomToProjIsMGRS():
             # This is an MGRS coordinate
             self.label.setText("Enter MGRS Coordinate")
-        else:
+        elif self.settings.zoomToProjIsWgs84():
             if self.settings.zoomToCoordOrder == 0:
                 self.label.setText("Enter 'Latitude, Longitude'")
             else:
                 self.label.setText("Enter 'Longitude, Latitude'")
+        elif self.settings.zoomToProjIsProjectCRS():
+            crsID = self.canvas.mapRenderer().destinationCrs().authid()
+            if self.settings.zoomToCoordOrder == 0:
+                self.label.setText("Enter {} Y,X".format(crsID))
+            else:
+                self.label.setText("Enter {} X,Y".format(crsID))
+        else: # Default to custom CRS
+            crsID = self.settings.zoomToCustomCRSID()
+            if self.settings.zoomToCoordOrder == 0:
+                self.label.setText("Enter {} Y,X".format(crsID))
+            else:
+                self.label.setText("Enter {} X,Y".format(crsID))
 
     def zoomToPressed(self):
         try:
-            if self.settings.zoomToCoordType == 1:
+            text = self.coordTxt.text()
+            if self.settings.zoomToProjIsWgs84():
+                if re.search('POINT\(', text) == None:
+                    lat, lon = LatLon.parseDMSString(text, self.settings.coordOrder)
+                else:
+                    m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
+                    if len(m) != 1:
+                        raise ValueError('Invalid Coordinates')
+                    lon = float(m[0][0])
+                    lat = float(m[0][1])
+                srcCrs = self.settings.epsg4326
+            elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
-                lat, lon = mgrs.toWgs(unicode(self.coordTxt.text()))
-            else:
-                lat, lon = LatLon.parseDMSString(self.coordTxt.text(), self.settings.coordOrder)
+                lat, lon = mgrs.toWgs(unicode(text))
+                srcCrs = self.settings.epsg4326
+            else: # Is either the project or custom CRS
+                if re.search('POINT\(', text) == None:
+                    coords = re.split('[\s,;:]+', text, 1)
+                    if len(coords) < 2:
+                        raise ValueError('Invalid Coordinates')
+                    if self.settings.coordOrder == self.settings.OrderYX:
+                        lat = float(coords[0])
+                        lon = float(coords[1])
+                    else:
+                        lon = float(coords[0])
+                        lat = float(coords[1])
+                else:
+                    m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
+                    if len(m) != 1:
+                        raise ValueError('Invalid Coordinates')
+                    lon = float(m[0][0])
+                    lat = float(m[0][1])
+                if self.settings.zoomToProjIsProjectCRS():
+                    srcCrs = self.canvas.mapRenderer().destinationCrs()
+                else:
+                    srcCrs = self.settings.zoomToCustomCRS()    
         except:
+            traceback.print_exc()
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
-        pt = self.lltools.zoomToLatLon(lat,lon)
+        pt = self.lltools.zoomTo(srcCrs, lat, lon)
         if self.settings.persistentMarker:
             if self.marker is None:
                 self.marker = QgsVertexMarker(self.canvas)

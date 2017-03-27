@@ -21,79 +21,134 @@ class CopyLatLonTool(QgsMapTool):
         '''When activated set the cursor to a crosshair.'''
         self.canvas.setCursor(Qt.CrossCursor)
         
-    def formatCoord(self, pt, delimiter, outputFormat, order):
-        '''Format the coordinate according to the settings from
+    def formatCoord(self, pt, delimiter):
+        '''Format the coordinate string according to the settings from
         the settings dialog.'''
-        if outputFormat == 'native':
-            # Formatin in the native CRS
-            if order == 0:
-                msg = str(pt.y()) + delimiter + str(pt.x())
-            else:
-                msg = str(pt.x()) + delimiter + str(pt.y())
-        elif outputFormat == 'mgrs':
+        if self.settings.captureProjIsWgs84(): # ProjectionTypeWgs84
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapRenderer().destinationCrs()
-            epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
-            transform = QgsCoordinateTransform(canvasCRS, epsg4326)
-            pt4326 = transform.transform(pt.x(), pt.y())
+            if canvasCRS == self.settings.epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                pt4326 = transform.transform(pt.x(), pt.y())
+            self.latlon.setCoord(pt4326.y(), pt4326.x())
+            self.latlon.setPrecision(self.settings.dmsPrecision)
+            if self.latlon.isValid():
+                if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS: # DMS
+                    if self.settings.coordOrder == self.settings.OrderYX:
+                        msg = self.latlon.getDMS(delimiter)
+                    else:
+                        msg = self.latlon.getDMSLonLatOrder(delimiter)
+                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS: # DDMMSS
+                    if self.settings.coordOrder == self.settings.OrderYX:
+                        msg = self.latlon.getDDMMSS(delimiter)
+                    else:
+                        msg = self.latlon.getDDMMSSLonLatOrder(delimiter)
+                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT: # WKT
+                    msg = 'POINT({} {})'.format(self.latlon.lon, self.latlon.lat)
+                else: # decimal degrees
+                    if self.settings.coordOrder == self.settings.OrderYX:
+                        msg = '{}{}{}'.format(self.latlon.lat,delimiter,self.latlon.lon)
+                    else:
+                        msg = '{}{}{}'.format(self.latlon.lon,delimiter,self.latlon.lat)
+            else:
+                msg = None
+        elif self.settings.captureProjIsProjectCRS():
+            # Projection in the project CRS
+            if self.settings.otherNumberFormat == 0: # Numerical
+                if self.settings.coordOrder == self.settings.OrderYX:
+                    msg = '{}{}{}'.format(pt.y(),delimiter,pt.x())
+                else:
+                    msg = '{}{}{}'.format(pt.x(),delimiter,pt.y())
+            else:
+                msg = 'POINT({} {})'.format(pt.x(), pt.y())
+        elif self.settings.captureProjIsCustomCRS():
+            # Projection is a custom CRS
+            canvasCRS = self.canvas.mapRenderer().destinationCrs()
+            customCRS = self.settings.captureCustomCRS()
+            transform = QgsCoordinateTransform(canvasCRS, customCRS)
+            pt = transform.transform(pt.x(), pt.y())
+            if self.settings.otherNumberFormat == 0: # Numerical
+                if self.settings.coordOrder == self.settings.OrderYX:
+                    msg = '{}{}{}'.format(pt.y(),delimiter,pt.x())
+                else:
+                    msg = '{}{}{}'.format(pt.x(),delimiter,pt.y())
+            else:
+                msg = 'POINT({} {})'.format(pt.x(), pt.y())
+        elif self.settings.captureProjIsMGRS():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapRenderer().destinationCrs()
+            if canvasCRS == self.settings.epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                pt4326 = transform.transform(pt.x(), pt.y())
             try:
                 msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
             except:
                 msg = None
-        else:
-            # Make sure the coordinate is transformed to EPSG:4326
-            canvasCRS = self.canvas.mapRenderer().destinationCrs()
-            epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
-            transform = QgsCoordinateTransform(canvasCRS, epsg4326)
-            pt4326 = transform.transform(pt.x(), pt.y())
-            self.latlon.setCoord(pt4326.y(), pt4326.x())
-            self.latlon.setPrecision(self.settings.dmsPrecision)
-            if self.latlon.isValid():
-                if outputFormat == 'dms':
-                    if order == 0:
-                        msg = self.latlon.getDMS(delimiter)
-                    else:
-                        msg = self.latlon.getDMSLonLatOrder(delimiter)
-                elif outputFormat == 'ddmmss':
-                    if order == 0:
-                        msg = self.latlon.getDDMMSS(delimiter)
-                    else:
-                        msg = self.latlon.getDDMMSSLonLatOrder(delimiter)
-                else: # decimal degrees
-                    if order == 0:
-                        msg = str(self.latlon.lat)+ delimiter +str(self.latlon.lon)
-                    else:
-                        msg = str(self.latlon.lon)+ delimiter +str(self.latlon.lat)
-            else:
-                msg = None
+
         return msg
         
     def canvasMoveEvent(self, event):
         '''Capture the coordinate as the user moves the mouse over
         the canvas. Show it in the status bar.'''
-        outputFormat = self.settings.outputFormat
-        order = self.settings.coordOrder
-        pt = self.toMapCoordinates(event.pos())
-        msg = self.formatCoord(pt, ', ', outputFormat, order)
-        if outputFormat == 'native' or msg == None:
+        try:
+            pt = self.toMapCoordinates(event.pos())
+            msg = self.formatCoord(pt, ', ')
+            formatString = self.coordFormatString()
+            if msg == None:
+                self.iface.mainWindow().statusBar().showMessage("")
+            else:
+                self.iface.mainWindow().statusBar().showMessage("{} - {}".format(msg,formatString))
+        except:
             self.iface.mainWindow().statusBar().showMessage("")
-        elif outputFormat == 'dms' or outputFormat == 'ddmmss':
-            self.iface.mainWindow().statusBar().showMessage("DMS: " + msg)
-        elif outputFormat == 'mgrs':
-            self.iface.mainWindow().statusBar().showMessage("MGRS Coordinate: " + msg)
-        else:
-            if order == 0:
-                self.iface.mainWindow().statusBar().showMessage("Lat Lon: " + msg)
-            else: 
-                self.iface.mainWindow().statusBar().showMessage("Lon Lat: " + msg)
 
+    def coordFormatString(self):
+        if self.settings.captureProjIsWgs84():
+            if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDecimal:
+                if self.settings.coordOrder == self.settings.OrderYX:
+                    s = 'Lat Lon'
+                else:
+                    s = 'Lon Lat'
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:
+                s = 'WKT'
+            else:
+                s = 'DMS'
+        elif self.settings.captureProjIsProjectCRS():
+            crsID = self.canvas.mapRenderer().destinationCrs().authid()
+            if self.settings.otherNumberFormat == 0: # Numerical
+                if self.settings.coordOrder == self.settings.OrderYX:
+                    s = '{} - Y,X'.format(crsID)
+                else:
+                    s = '{} - X,Y'.format(crsID)
+            else: # WKT
+                s = 'WKT'
+        elif self.settings.captureProjIsMGRS():
+            s = 'MGRS'
+        elif self.settings.captureProjIsCustomCRS():
+            if self.settings.otherNumberFormat == 0: # Numerical
+                if self.settings.coordOrder == self.settings.OrderYX:
+                    s = '{} - Y,X'.format(self.settings.captureCustomCRSID())
+                else:
+                    s = '{} - X,Y'.format(self.settings.captureCustomCRSID())
+            else: # WKT
+                s = 'WKT'
+        else: # Should never happen
+            s = ''
+        return s
+        
     def canvasReleaseEvent(self, event):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
-        pt = self.toMapCoordinates(event.pos())
-        msg = self.formatCoord(pt, self.settings.delimiter,
-            self.settings.outputFormat, self.settings.coordOrder)
-        if msg != None:
-            clipboard = QApplication.clipboard()
-            clipboard.setText(msg)
-            self.iface.messageBar().pushMessage("", "Coordinate '%s' copied to the clipboard" % msg, level=QgsMessageBar.INFO, duration=3)
+        try:
+            pt = self.toMapCoordinates(event.pos())
+            msg = self.formatCoord(pt, self.settings.delimiter)
+            formatString = self.coordFormatString()
+            if msg != None:
+                clipboard = QApplication.clipboard()
+                clipboard.setText(msg)
+                self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=QgsMessageBar.INFO, duration=4)
+        except Exception as e:
+            self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=QgsMessageBar.WARNING, duration=4)

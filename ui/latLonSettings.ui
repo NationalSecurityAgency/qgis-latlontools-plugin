@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>423</width>
-    <height>330</height>
+    <width>427</width>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Lat Lon Settings</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -27,17 +30,57 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Select the Corrdinate Capture Format</string>
+          <string>Coordinate Capture Projection</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="coordComboBox"/>
+        <widget class="QComboBox" name="captureProjectionComboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Custom CRS</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QgsProjectionSelectionWidget" name="captureProjectionSelectionWidget"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>WGS 84 (Latitude &amp; Longitude) Number Format</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="wgs84NumberFormatComboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Other CRS Number Format</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="otherNumberFormatComboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Coordinate Order (Not applicable to MGRS and WKT)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="coordOrderComboBox"/>
        </item>
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Coordinate Capture Delimiter</string>
+          <string>Coordinate Capture Delimiter (Not applicable to MGRS and WKT)</string>
          </property>
         </widget>
        </item>
@@ -77,16 +120,6 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Coordinate Capture Order</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="coordOrderComboBox"/>
-       </item>
-       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -114,7 +147,17 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="zoomToCoordTypeComboBox"/>
+        <widget class="QComboBox" name="zoomToProjectionComboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>Custom CRS</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QgsProjectionSelectionWidget" name="zoomToProjectionSelectionWidget"/>
        </item>
        <item>
         <widget class="QLabel" name="label_6">
@@ -133,6 +176,19 @@
          </property>
          <property name="checked">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="plainText">
+          <string>Supported 'Zoom to' input formats:
+
+WGS 84 - Decimal, DMS, &amp; WKT degrees
+
+MGRS - Only MGRS coordinates
+
+Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
          </property>
         </widget>
        </item>
@@ -246,12 +302,19 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsProjectionSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>qgis.gui</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

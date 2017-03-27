@@ -106,4 +106,4 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         '''An item has been click on so zoom to it'''
         selectedRow = self.resultsTable.currentRow()
         # Call the the parent's zoom to function
-        self.lltools.zoomToLatLon(self.lats[selectedRow],self.lons[selectedRow])
+        self.lltools.zoomTo(self.settings.epsg4326, self.lats[selectedRow],self.lons[selectedRow])
