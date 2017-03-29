@@ -1,5 +1,5 @@
 PLUGINNAME = latlontools
-PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py multizoom.py mgrs.py showOnMapTool.py mapProviders.py
+PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py multizoom.py mgrs.py showOnMapTool.py mapProviders.py tomgrs.py mgrstogeom.py
 EXTRAS = metadata.txt
 
 deploy:

@@ -11,6 +11,8 @@ from multizoom import MultiZoomWidget
 from copyLatLonTool import CopyLatLonTool
 from showOnMapTool import ShowOnMapTool
 from settings import SettingsWidget
+from tomgrs import ToMGRSWidget
+from mgrstogeom import MGRStoLayerWidget
 import os.path
 import webbrowser
 
@@ -29,6 +31,8 @@ class LatLonTools:
         self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         self.showMapTool = ShowOnMapTool(self.settingsDialog, self.iface)
+        self.toMGRSDialog = ToMGRSWidget(self.iface, self.iface.mainWindow())
+        self.MGRStoLayerDialog = MGRStoLayerWidget(self.iface, self.iface.mainWindow())
         
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
@@ -39,8 +43,8 @@ class LatLonTools:
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
 
         # Add Interface for Zoom to Coordinate
-        zoomicon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
-        self.zoomToAction = QAction(zoomicon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
+        icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
+        self.zoomToAction = QAction(icon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
         self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
         self.canvas.mapToolSet.connect(self.unsetTool)
@@ -58,11 +62,20 @@ class LatLonTools:
         self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
         
         # Add Interface for Multi point zoom
-        zoomicon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
-        self.multiZoomToAction = QAction(zoomicon, "Multi-location Zoom", self.iface.mainWindow())
+        icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
+        self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
         self.iface.addPluginToMenu('Lat Lon Tools', self.multiZoomToAction)
         
+        # Add To MGRS conversion
+        icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
+        icon2 = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
+        menu = QMenu()
+        menu.addAction(icon, "MGRS to Geometry", self.MGRStoLayer)
+        menu.addAction(icon2, "Geometry to MGRS", self.toMGRS)
+        self.toMGRSAction = QAction(icon2, "MGRS Conversions", self.iface.mainWindow())
+        self.toMGRSAction.setMenu(menu)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.toMGRSAction)
         
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
@@ -97,6 +110,7 @@ class LatLonTools:
         self.iface.removeToolBarIcon(self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.toMGRSAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
         self.iface.removeDockWidget(self.zoomToDialog)
@@ -119,6 +133,14 @@ class LatLonTools:
     def multiZoomTo(self):
         '''Display the Multi-zoom to dialog box'''
         self.multiZoomDialog.show()
+
+    def toMGRS(self):
+        '''Display the to MGRS  dialog box'''
+        self.toMGRSDialog.show()
+
+    def MGRStoLayer(self):
+        '''Display the to MGRS  dialog box'''
+        self.MGRStoLayerDialog.show()
     
     def settings(self):
         '''Show the settings dialog box'''
@@ -135,7 +157,7 @@ class LatLonTools:
             
  
     def zoomTo(self, srcCrs, lat, lon):
-        canvasCrs = self.canvas.mapRenderer().destinationCrs()
+        canvasCrs = self.canvas.mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(srcCrs, canvasCrs)
         x, y = transform.transform(float(lon), float(lat))
             
