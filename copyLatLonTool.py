@@ -26,7 +26,7 @@ class CopyLatLonTool(QgsMapTool):
         the settings dialog.'''
         if self.settings.captureProjIsWgs84(): # ProjectionTypeWgs84
             # Make sure the coordinate is transformed to EPSG:4326
-            canvasCRS = self.canvas.mapRenderer().destinationCrs()
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
             if canvasCRS == self.settings.epsg4326:
                 pt4326 = pt
             else:
@@ -65,7 +65,7 @@ class CopyLatLonTool(QgsMapTool):
                 msg = 'POINT({} {})'.format(pt.x(), pt.y())
         elif self.settings.captureProjIsCustomCRS():
             # Projection is a custom CRS
-            canvasCRS = self.canvas.mapRenderer().destinationCrs()
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
             customCRS = self.settings.captureCustomCRS()
             transform = QgsCoordinateTransform(canvasCRS, customCRS)
             pt = transform.transform(pt.x(), pt.y())
@@ -78,7 +78,7 @@ class CopyLatLonTool(QgsMapTool):
                 msg = 'POINT({} {})'.format(pt.x(), pt.y())
         elif self.settings.captureProjIsMGRS():
             # Make sure the coordinate is transformed to EPSG:4326
-            canvasCRS = self.canvas.mapRenderer().destinationCrs()
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
             if canvasCRS == self.settings.epsg4326:
                 pt4326 = pt
             else:
@@ -117,7 +117,7 @@ class CopyLatLonTool(QgsMapTool):
             else:
                 s = 'DMS'
         elif self.settings.captureProjIsProjectCRS():
-            crsID = self.canvas.mapRenderer().destinationCrs().authid()
+            crsID = self.canvas.mapSettings().destinationCrs().authid()
             if self.settings.otherNumberFormat == 0: # Numerical
                 if self.settings.coordOrder == self.settings.OrderYX:
                     s = '{} - Y,X'.format(crsID)

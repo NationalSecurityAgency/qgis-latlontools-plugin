@@ -58,7 +58,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             else:
                 self.label.setText("Enter 'Longitude, Latitude'")
         elif self.settings.zoomToProjIsProjectCRS():
-            crsID = self.canvas.mapRenderer().destinationCrs().authid()
+            crsID = self.canvas.mapSettings().destinationCrs().authid()
             if self.settings.zoomToCoordOrder == 0:
                 self.label.setText("Enter {} Y,X".format(crsID))
             else:
@@ -105,7 +105,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                     lon = float(m[0][0])
                     lat = float(m[0][1])
                 if self.settings.zoomToProjIsProjectCRS():
-                    srcCrs = self.canvas.mapRenderer().destinationCrs()
+                    srcCrs = self.canvas.mapSettings().destinationCrs()
                 else:
                     srcCrs = self.settings.zoomToCustomCRS()    
         except:
