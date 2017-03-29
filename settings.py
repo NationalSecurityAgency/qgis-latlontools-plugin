@@ -211,7 +211,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         if self.captureProjection == self.ProjectionTypeWgs84:
             return True
         elif self.captureProjection == self.ProjectionTypeProjectCRS:
-            if self.canvas.mapRenderer().destinationCrs() == self.epsg4326:
+            if self.canvas.mapSettings().destinationCrs() == self.epsg4326:
                 return True
         elif self.captureProjection == self.ProjectionTypeCustomCRS:
             if self.captureCustomCRS() == self.epsg4326:
@@ -237,7 +237,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
             return True
         if self.zoomToProjection == self.ProjectionTypeProjectCRS:
-            if self.canvas.mapRenderer().destinationCrs() == self.epsg4326:
+            if self.canvas.mapSettings().destinationCrs() == self.epsg4326:
                 return True
         return False
         

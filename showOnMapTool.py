@@ -22,7 +22,7 @@ class ShowOnMapTool(QgsMapTool):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
         pt = self.toMapCoordinates(event.pos())
-        canvasCRS = self.canvas.mapRenderer().destinationCrs()
+        canvasCRS = self.canvas.mapSettings().destinationCrs()
         epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
         transform = QgsCoordinateTransform(canvasCRS, epsg4326)
         pt4326 = transform.transform(pt.x(), pt.y())
