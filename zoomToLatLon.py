@@ -9,7 +9,7 @@ from qgis.gui import *
 from LatLon import LatLon
 
 import mgrs
-import traceback
+#import traceback
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -85,7 +85,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 srcCrs = self.settings.epsg4326
             elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
-                lat, lon = mgrs.toWgs(unicode(text))
+                text = re.sub(r'\s+', '', unicode(text)) # Remove all white space
+                lat, lon = mgrs.toWgs(text)
                 srcCrs = self.settings.epsg4326
             else: # Is either the project or custom CRS
                 if re.search('POINT\(', text) == None:
@@ -109,7 +110,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 else:
                     srcCrs = self.settings.zoomToCustomCRS()    
         except:
-            traceback.print_exc()
+            #traceback.print_exc()
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
         pt = self.lltools.zoomTo(srcCrs, lat, lon)
