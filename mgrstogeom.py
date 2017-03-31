@@ -55,7 +55,8 @@ class MGRStoLayerWidget(QtGui.QDialog, FORM_CLASS):
             num_features += 1
             m = feature[fieldIndex]
             try:
-                lat, lon = mgrs.toWgs(unicode(m))
+                m = re.sub(r'\s+', '', unicode(m)) # Remove all white space
+                lat, lon = mgrs.toWgs(m)
             except:
                 #traceback.print_exc()
                 num_bad += 1
