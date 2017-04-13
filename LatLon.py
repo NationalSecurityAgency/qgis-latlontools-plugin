@@ -126,12 +126,18 @@ class LatLon():
             dms = parts[0]
             if hemisphere == 'N' or hemisphere == 'S':
                 dms = '0' + dms
-            if len(dms) >= 7:
+            try:
+                # Find the length up to the first decimal
+                l = dms.find('.')
+            except:
+                # There was no decimal
+                l = len(dms)
+            if l >= 7:
                 deg = float(dms[0:3]) + float(dms[3:5]) / 60.0 + float(dms[5:]) / 3600.0
-            elif len(dms) == 5:
-                deg = float(dms[0:3]) + float(dms[3:5]) / 60.0
+            elif l == 5:
+                deg = float(dms[0:3]) + float(dms[3:]) / 60.0
             else:
-                deg = float(dms[0:3])
+                deg = float(dms)
         else:
             raise ValueError('Invalid DMS Coordinate')
         if hemisphere == 'S' or hemisphere == 'W':
@@ -165,9 +171,11 @@ class LatLon():
         it does not matter the order.'''
         str = str.strip().upper() # Make it all upper case 
         try: 
-            if re.search("[NSEW\xb0]", str) == None:
+            if re.search("[NSEW]", str) == None:
                 # There were no annotated dms coordinates so assume decimal degrees
-                coords = re.split('[\s,;:]+', str, 1)
+                # Remove any characters that are not digits and decimal
+                str = re.sub("[^\d.+-]+", " ", str).strip()
+                coords = re.split('\s+', str, 1)
                 if len(coords) != 2:
                     raise ValueError('Invalid Coordinates')
                 if order == 0:
@@ -176,23 +184,43 @@ class LatLon():
                 else:
                     lon = float(coords[0])
                     lat = float(coords[1])
-            else:   
+            else:
                 # We should have a DMS coordinate
-                m = re.findall('(.+)\s*([NS])[\s,;:]+(.+)\s*([EW])', str)
-                if len(m) != 1 or len(m[0]) != 4:
-                    # This is either invalid or the coordinates are ordered by lon lat
-                    m = re.findall('(.+)\s*([EW])[\s,;:]+(.+)\s*([NS])', str)
+                if re.search('[NSEW]\s*\d+.+[NSEW]\s*\d+', str) == None:
+                    # We assume that the cardinal directions occur after the digits
+                    m = re.findall('(.+)\s*([NS])[\s,;:]*(.+)\s*([EW])', str)
                     if len(m) != 1 or len(m[0]) != 4:
-                        # Now we know it is invalid
-                        raise ValueError('Invalid DMS Coordinate')
+                        # This is either invalid or the coordinates are ordered by lon lat
+                        m = re.findall('(.+)\s*([EW])[\s,;:]*(.+)\s*([NS])', str)
+                        if len(m) != 1 or len(m[0]) != 4:
+                            # Now we know it is invalid
+                            raise ValueError('Invalid DMS Coordinate')
+                        else:
+                            # The coordinates were in lon, lat order
+                            lon = LatLon.parseDMS(m[0][0], m[0][1])
+                            lat = LatLon.parseDMS(m[0][2], m[0][3])
                     else:
-                        # The coordinates were in lon, lat order
-                        lon = LatLon.parseDMS(m[0][0], m[0][1])
-                        lat = LatLon.parseDMS(m[0][2], m[0][3])
+                        # The coordinates are in lat, lon order
+                        lat = LatLon.parseDMS(m[0][0], m[0][1])
+                        lon = LatLon.parseDMS(m[0][2], m[0][3])
                 else:
-                    # The coordinates are in lat, lon order
-                    lat = LatLon.parseDMS(m[0][0], m[0][1])
-                    lon = LatLon.parseDMS(m[0][2], m[0][3])
+                    # The cardinal directions occur at the beginning of the digits
+                    m = re.findall('([NS])\s*(\d+.*?)[\s,;:]*([EW])(.+)', str)
+                    if len(m) != 1 or len(m[0]) != 4:
+                        # This is either invalid or the coordinates are ordered by lon lat
+                        m = re.findall('([EW])\s*(\d+.*?)[\s,;:]*([NS])(.+)', str)
+                        if len(m) != 1 or len(m[0]) != 4:
+                            # Now we know it is invalid
+                            raise ValueError('Invalid DMS Coordinate')
+                        else:
+                            # The coordinates were in lon, lat order
+                            lon = LatLon.parseDMS(m[0][1], m[0][0])
+                            lat = LatLon.parseDMS(m[0][3], m[0][2])
+                    else:
+                        # The coordinates are in lat, lon order
+                        lat = LatLon.parseDMS(m[0][1], m[0][0])
+                        lon = LatLon.parseDMS(m[0][3], m[0][2])
+        
         except:
             raise ValueError('Invalid Coordinates')
             
