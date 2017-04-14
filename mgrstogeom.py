@@ -1,4 +1,5 @@
 import os
+import re
 
 from PyQt4 import QtGui, uic
 from PyQt4.QtCore import *
