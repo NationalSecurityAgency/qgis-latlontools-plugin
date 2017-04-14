@@ -182,7 +182,7 @@
        <item>
         <widget class="QPlainTextEdit" name="plainTextEdit">
          <property name="plainText">
-          <string>Supported 'Zoom to' input formats:
+          <string>Supported 'Zoom to' formats (See help for more details):
 
 WGS 84 - Decimal, DMS, &amp; WKT degrees
 
