@@ -126,11 +126,10 @@ class LatLon():
             dms = parts[0]
             if hemisphere == 'N' or hemisphere == 'S':
                 dms = '0' + dms
-            try:
-                # Find the length up to the first decimal
-                l = dms.find('.')
-            except:
-                # There was no decimal
+            # Find the length up to the first decimal
+            l = dms.find('.')
+            if l == -1:
+                # No decimal point found so just return the length of the string
                 l = len(dms)
             if l >= 7:
                 deg = float(dms[0:3]) + float(dms[3:5]) / 60.0 + float(dms[5:]) / 3600.0
@@ -151,13 +150,22 @@ class LatLon():
         as to whether it is latitude or longitude'''
         str = str.strip().upper()
         try:
-            if re.search("[NSEW\xb0]", str) == None:
+            if re.search("[NSEW]", str) == None:
                 coord = float(str)
             else:
-                m = re.findall('(.+)\s*([NSEW])', str)
-                if len(m) != 1 or len(m[0]) != 2:
-                    raise ValueError('Invalid DMS Coordinate')
-                coord = LatLon.parseDMS(m[0][0], m[0][1])
+                # We should have a DMS coordinate
+                if re.search('[NSEW]\s*\d+', str) == None:
+                    # We assume that the cardinal directions occur after the digits
+                    m = re.findall('(.+)\s*([NSEW])', str)
+                    if len(m) != 1 or len(m[0]) != 2:
+                        raise ValueError('Invalid DMS Coordinate')
+                    coord = LatLon.parseDMS(m[0][0], m[0][1])
+                else:
+                    # The cardinal directions occur at the beginning of the digits
+                    m = re.findall('([NSEW])\s*(.+)', str)
+                    if len(m) != 1 or len(m[0]) != 2:
+                        raise ValueError('Invalid DMS Coordinate')
+                    coord = LatLon.parseDMS(m[0][1], m[0][0])
         except:
             raise ValueError('Invalid Coordinates')
         return coord
