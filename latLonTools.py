@@ -102,6 +102,7 @@ class LatLonTools:
     def unload(self):
         '''Unload LatLonTools from the QGIS interface'''
         self.zoomToDialog.removeMarker()
+        self.multiZoomDialog.removeMarkers()
         self.canvas.unsetMapTool(self.mapTool)
         self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
