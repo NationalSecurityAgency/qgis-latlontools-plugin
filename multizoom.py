@@ -22,14 +22,15 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         self.canvas = self.iface.mapCanvas()
         self.lltools = lltools
         
-        self.doneButton.clicked.connect(self.closeDialog)
-        self.browseButton.clicked.connect(self.browseDialog)
+        self.doneButton.clicked.connect(self.closeEvent)
+        self.openButton.clicked.connect(self.openDialog)
         self.saveButton.clicked.connect(self.saveDialog)
         self.addButton.clicked.connect(self.addSingleCoord)
         self.removeButton.clicked.connect(self.removeTableRow)
-        self.coordTxt.returnPressed.connect(self.addSingleCoord)
+        self.addLineEdit.returnPressed.connect(self.addSingleCoord)
         self.clearAllButton.clicked.connect(self.clearAll)
         self.createLayerButton.clicked.connect(self.createLayer)
+        self.showAllCheckBox.stateChanged.connect(self.showAllChange)
         self.dirname = ''
         self.numcoord = 0
         self.maxResults = 1000
@@ -43,19 +44,41 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         self.resultsTable.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.llitems=[]
 
-    def closeEvent(self, event):
-        self.closeDialog()
-        
-    def closeDialog(self):
+    def closeEvent(self, e):
+        '''Called when the dialog box is being closed. We want to clear selected features and remove
+           all the markers.'''
         self.resultsTable.clearSelection()
         self.removeMarkers()
         self.hide()
+        
+    def showEvent(self, e):
+        '''The dialog box is going to be displayed so we need to check to
+           see if markers need to be displayed.'''
+        self.showAllChange()
+        self.setEnabled()
         
     def clearAll(self):
         self.removeMarkers()
         self.llitems=[]
         self.resultsTable.setRowCount(0)
         self.numcoord = 0
+        
+    def showAllChange(self):
+        selectedRow = self.resultsTable.currentRow()
+        if not self.showAllCheckBox.checkState():
+            for id, item in enumerate(self.llitems):
+                if item.marker is not None and id != selectedRow:
+                    self.canvas.scene().removeItem(item.marker)
+                    item.marker = None
+        else:
+            for item in self.llitems:
+                if item.marker is None:
+                    item.marker = QgsVertexMarker(self.canvas)
+                    pt = self.canvasPoint(item.lat, item.lon)
+                    item.marker.setCenter(pt)
+                    item.marker.setIconSize(18)
+                    item.marker.setPenWidth(2)
+                    item.marker.setIconType(QgsVertexMarker.ICON_CROSS)
         
     def removeMarkers(self):
         if self.numcoord == 0:
@@ -65,7 +88,14 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
                 self.canvas.scene().removeItem(item.marker)
                 item.marker = None
         
-    def browseDialog(self):
+    def removeMarker(self, row):
+        if row >= len(self.llitems):
+            return
+        if self.llitems[row].marker is not None:
+            self.canvas.scene().removeItem(self.llitems[row].marker)
+            self.llitems[row].marker = None
+        
+    def openDialog(self):
         filename = QFileDialog.getOpenFileName(None, "Input Lat,Lon File", 
                 self.dirname, "Lat,Lon File (*.csv *.txt)")
         if filename:
@@ -115,6 +145,7 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         row = int(self.resultsTable.currentRow())
         if row < 0:
             return
+        self.removeMarker(row)
         self.resultsTable.removeRow(row)
         del self.llitems[row]
         self.resultsTable.clearSelection()
@@ -123,7 +154,7 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
     
     def addSingleCoord(self):
         '''Add a coordinate that was pasted into the coordinate text box.'''
-        parts = [x.strip() for x in self.coordTxt.text().split(',')]
+        parts = [x.strip() for x in self.addLineEdit.text().split(',')]
         label = ''
         try:
             if len(parts) == 2:
@@ -137,11 +168,11 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
                 self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
                 return
         except:
-            if self.coordTxt.text():
+            if self.addLineEdit.text():
                 self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
             return
         self.addCoord(lat, lon, label)
-        self.coordTxt.clear()
+        self.addLineEdit.clear()
         
     def addCoord(self, lat, lon, label):
         '''Add a coordinate to the list.'''
@@ -159,23 +190,35 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         self.resultsTable.setItem(self.numcoord, 2, item)
         self.resultsTable.blockSignals(False)
         self.numcoord += 1
+        if self.showAllCheckBox.checkState():
+            self.showAllChange()
         
     def itemClicked(self, row, col):
         '''An item has been click on so zoom to it'''
-        self.removeMarkers()
+        if not self.showAllCheckBox.checkState():
+            self.removeMarkers()
         selectedRow = self.resultsTable.currentRow()
         # Call the the parent's zoom to function
         pt = self.lltools.zoomTo(self.settings.epsg4326, self.llitems[selectedRow].lat,self.llitems[selectedRow].lon)
-        if self.llitems[selectedRow].marker == None:
-            self.llitems[selectedRow].marker = QgsVertexMarker(self.canvas)
-        self.llitems[selectedRow].marker.setCenter(pt)
-        self.llitems[selectedRow].marker.setIconSize(18)
-        self.llitems[selectedRow].marker.setPenWidth(2)
-        self.llitems[selectedRow].marker.setIconType(QgsVertexMarker.ICON_CROSS)
+        if not self.showAllCheckBox.checkState():
+            if self.llitems[selectedRow].marker == None:
+                self.llitems[selectedRow].marker = QgsVertexMarker(self.canvas)
+            self.llitems[selectedRow].marker.setCenter(pt)
+            self.llitems[selectedRow].marker.setIconSize(18)
+            self.llitems[selectedRow].marker.setPenWidth(2)
+            self.llitems[selectedRow].marker.setIconType(QgsVertexMarker.ICON_CROSS)
+        
+    def canvasPoint(self, lat, lon):
+        canvasCrs = self.canvas.mapSettings().destinationCrs()
+        transform = QgsCoordinateTransform(self.settings.epsg4326, canvasCrs)
+        x, y = transform.transform(float(lon), float(lat))
+        pt = QgsPoint(x,y)
+        return pt
+
         
     def cellChanged(self, row, col):
         if col == 0:
-            self.llitems[row].label = self.resultsTable.item(row, col)
+            self.llitems[row].label = self.resultsTable.item(row, col).text()
             
     def createLayer(self):
         '''Create a memory layer from the zoom to locations'''
