@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>455</height>
+    <width>651</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,43 +16,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="4" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="openButton">
-         <property name="text">
-          <string>Open Location List</string>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="saveButton">
-         <property name="text">
-          <string>Save Location List</string>
-         </property>
-         <property name="autoDefault">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
      <item row="1" column="0">
       <widget class="QLineEdit" name="addLineEdit"/>
      </item>
@@ -76,28 +39,18 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QPushButton" name="doneButton">
-       <property name="text">
-        <string>Done</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="1">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
-        <number>10</number>
+        <number>8</number>
        </property>
        <property name="topMargin">
         <number>3</number>
        </property>
        <item>
-        <widget class="QPushButton" name="removeButton">
+        <widget class="QPushButton" name="openButton">
          <property name="text">
-          <string>Remove Location</string>
+          <string>Open Location List</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
@@ -105,9 +58,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="clearAllButton">
+        <widget class="QPushButton" name="saveButton">
          <property name="text">
-          <string>Clear All</string>
+          <string>Save Location List</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
@@ -125,7 +78,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -134,6 +87,42 @@
         <widget class="QPushButton" name="createLayerButton">
          <property name="text">
           <string>Create Layer</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeButton">
+         <property name="text">
+          <string>Remove Location</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearAllButton">
+         <property name="text">
+          <string>Clear All</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
@@ -159,6 +148,16 @@
       <widget class="QCheckBox" name="showAllCheckBox">
        <property name="text">
         <string>Display markes for all locations</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="doneButton">
+       <property name="text">
+        <string>Done</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

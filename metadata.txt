@@ -6,7 +6,7 @@ version=0.8.1
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
-    Lat Lon Tools is a suite of tools that makes it easy to interact with other on-line mapping tools. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools. 
+    Lat Lon Tools is a suite of tools that makes it easy to capture and zoom to coordinates and interact with other on-line mapping tools. It also adds MGRS support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools. 
     1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map.
     2) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, and can format the coordinates in decimal, DMS, or WKT POINT notation.
     3) Launch and display an external map based on the coordinate clicked on.
@@ -22,7 +22,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
-    0.8.1 - Reworked Multi-Zoom to use persistent markers, save, & create memory layer
+    0.8.1 - Reworked Multi-Zoom to use persistent markers, save locations, & create memory layer
     0.8 - Added MGRS conversion routines.
     0.7 - Added support for any projection and WKT POINT coordinates.
     0.6.1 - Made the "zoom to" marker persistent
