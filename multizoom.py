@@ -55,7 +55,7 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         '''The dialog box is going to be displayed so we need to check to
            see if markers need to be displayed.'''
         self.showAllChange()
-        self.setEnabled()
+        self.setEnabled(True)
         
     def clearAll(self):
         self.removeMarkers()
