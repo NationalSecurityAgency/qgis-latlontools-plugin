@@ -28,7 +28,6 @@ class LatLonTools:
         '''Initialize Lot Lon Tools GUI.'''
         # Initialize the Settings Dialog box
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
-        self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         self.showMapTool = ShowOnMapTool(self.settingsDialog, self.iface)
         self.toMGRSDialog = ToMGRSWidget(self.iface, self.iface.mainWindow())
@@ -66,6 +65,10 @@ class LatLonTools:
         self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
         self.iface.addPluginToMenu('Lat Lon Tools', self.multiZoomToAction)
+
+        self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
+        self.multiZoomDialog.hide()
+        self.multiZoomDialog.setFloating(True)
         
         # Add To MGRS conversion
         icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
@@ -115,7 +118,9 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
         self.iface.removeDockWidget(self.zoomToDialog)
+        self.iface.removeDockWidget(self.multiZoomDialog)
         self.zoomToDialog = None
+        self.multiZoomDialog = None
 
     def setTool(self):
         '''Set the focus of the copy coordinate tool and check it'''

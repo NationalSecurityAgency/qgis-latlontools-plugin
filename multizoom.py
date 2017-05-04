@@ -2,7 +2,6 @@ import os
 import re
 
 from PyQt4 import QtGui, uic
-from PyQt4.QtGui import QFileDialog, QHeaderView
 from PyQt4.QtCore import *
 from qgis.core import *
 from qgis.gui import *
@@ -12,7 +11,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
 
 
-class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
+class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
     '''Multizoom Dialog box.'''
     def __init__(self, lltools, settings, parent):
         super(MultiZoomWidget, self).__init__(parent)
@@ -37,7 +36,7 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
         self.resultsTable.setColumnCount(3)
         self.resultsTable.setSortingEnabled(False)
         self.resultsTable.setHorizontalHeaderLabels(['Label','Latitude','Longitude'])
-        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.resultsTable.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
         self.resultsTable.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
@@ -96,14 +95,14 @@ class MultiZoomWidget(QtGui.QDialog, FORM_CLASS):
             self.llitems[row].marker = None
         
     def openDialog(self):
-        filename = QFileDialog.getOpenFileName(None, "Input Lat,Lon File", 
+        filename = QtGui.QFileDialog.getOpenFileName(None, "Input Lat,Lon File", 
                 self.dirname, "Lat,Lon File (*.csv *.txt)")
         if filename:
             self.dirname = os.path.dirname(filename)
             self.readFile(filename)
         
     def saveDialog(self):
-        filename = QFileDialog.getSaveFileName(None, "Save Lat,Lon File", 
+        filename = QtGui.QFileDialog.getSaveFileName(None, "Save Lat,Lon File", 
                 self.dirname, "Lat,Lon File (*.csv)")
         if filename:
             self.dirname = os.path.dirname(filename)
