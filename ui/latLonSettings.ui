@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>427</width>
+    <width>445</width>
     <height>490</height>
    </rect>
   </property>
@@ -281,6 +281,43 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
        </item>
        <item>
         <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="multizoom">
+      <attribute name="title">
+       <string>Multi-zoom</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Custom .qml point vector style for Multi-zoom create layer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="qmlLineEdit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="qmlBrowseButton">
+         <property name="text">
+          <string>Open QGIS Point Vector Style</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>

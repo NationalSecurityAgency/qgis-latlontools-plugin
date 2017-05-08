@@ -21,6 +21,7 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas = self.iface.mapCanvas()
         self.lltools = lltools
         
+        self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
         self.doneButton.clicked.connect(self.closeEvent)
         self.openButton.clicked.connect(self.openDialog)
         self.saveButton.clicked.connect(self.saveDialog)
@@ -237,6 +238,18 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
             provider.addFeatures([feature])
         
         ptLayer.updateExtents()
+        
+        if self.markerStyleComboBox.currentIndex() == 1:
+            label = QgsPalLayerSettings()
+            label.readFromLayer(ptLayer)
+            label.enabled = True
+            label.fieldName = 'label'
+            label.placement= QgsPalLayerSettings.AroundPoint
+            label.setDataDefinedProperty(QgsPalLayerSettings.Size,True,True,'9','')
+            label.writeToLayer(ptLayer)
+        elif self.markerStyleComboBox.currentIndex() == 2 and os.path.isfile(self.settings.customQMLFile()):
+            ptLayer.loadNamedStyle(self.settings.customQMLFile())
+            
         QgsMapLayerRegistry.instance().addMapLayer(ptLayer)
         
 class LatLonItem():

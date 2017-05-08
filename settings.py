@@ -53,6 +53,10 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         ### EXTERNAL MAP ###
         self.mapProviderComboBox.addItems(mapProviders.mapProviderNames())
         
+        ### MULTI-ZOOM ###
+        self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
+        
+        
         self.readSettings()
 
         
@@ -91,6 +95,9 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.mapProviderComboBox.setCurrentIndex(0)
         self.zoomSpinBox.setValue(13)
         
+        ### Multi-zoom Settings ###
+        self.qmlLineEdit.setText('')
+        
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
         the user quits QGIS.'''
@@ -113,6 +120,12 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.showPlacemark = int(settings.value('/LatLonTools/ShowPlacemark', Qt.Checked))
         self.mapProvider = int(settings.value('/LatLonTools/MapProvider', 0))
         self.mapZoom = int(settings.value('/LatLonTools/MapZoom', 13))
+        
+        ### MULTI-ZOOM CUSTOM QML STYLE ###
+        self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
+        if not os.path.isfile(self.qmlStyle):
+            self.qmlStyle = ''
+        self.qmlLineEdit.setText(self.qmlStyle)
         
         self.setEnabled()
         
@@ -148,10 +161,23 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         settings.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
         settings.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
+        ### MULTI-ZOOM CUSTOM QML STYLE ###
+        settings.setValue('/LatLonTools/QmlStyle', self.qmlStyle)
+        
         self.readSettings()
         self.lltools.settingsChanged()
         self.close()
         
+    def qmlOpenDialog(self):
+        filename = QtGui.QFileDialog.getOpenFileName(None, "Input QML Style File", 
+                self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")
+        if filename:
+            self.qmlStyle = filename
+            self.qmlLineEdit.setText(filename)
+            
+    def customQMLFile(self):
+        return self.qmlLineEdit.text()
+    
     def setEnabled(self):
         captureProjection = int(self.captureProjectionComboBox.currentIndex())
         self.captureProjectionSelectionWidget.setEnabled(captureProjection == self.ProjectionTypeCustomCRS)
