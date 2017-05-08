@@ -95,15 +95,15 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
             self.llitems[row].marker = None
         
     def openDialog(self):
-        filename = QtGui.QFileDialog.getOpenFileName(None, "Input Lat,Lon File", 
-                self.dirname, "Lat,Lon File (*.csv *.txt)")
+        filename = QtGui.QFileDialog.getOpenFileName(None, "Input File", 
+                self.dirname, "Text, CSV (*.txt *.csv);;All files (*.*)")
         if filename:
             self.dirname = os.path.dirname(filename)
             self.readFile(filename)
         
     def saveDialog(self):
-        filename = QtGui.QFileDialog.getSaveFileName(None, "Save Lat,Lon File", 
-                self.dirname, "Lat,Lon File (*.csv)")
+        filename = QtGui.QFileDialog.getSaveFileName(None, "Save File", 
+                self.dirname, "Text CSV (*.csv)")
         if filename:
             self.dirname = os.path.dirname(filename)
             self.saveFile(filename)
