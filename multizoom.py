@@ -1,17 +1,20 @@
 import os
 import re
 
-from PyQt4 import QtGui, uic
-from PyQt4.QtCore import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtGui import QIcon, QDockWidget, QHeaderView, QAbstractItemView, QFileDialog, QTableWidgetItem
+from PyQt4.uic import loadUiType
+from PyQt4.QtCore import Qt, QVariant
+from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
+    QgsField, QgsFeature, QgsPoint, QgsGeometry, 
+    QgsPalLayerSettings, QgsMapLayerRegistry )
+from qgis.gui import QgsVertexMarker, QgsMessageBar
 from LatLon import LatLon
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
+FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
 
 
-class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
+class MultiZoomWidget(QDockWidget, FORM_CLASS):
     '''Multizoom Dialog box.'''
     def __init__(self, lltools, settings, parent):
         super(MultiZoomWidget, self).__init__(parent)
@@ -21,8 +24,15 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas = self.iface.mapCanvas()
         self.lltools = lltools
         
+        self.addButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/check.png"))
+        self.openButton.setIcon(QIcon(':/images/themes/default/mActionFileOpen.svg'))
+        self.saveButton.setIcon(QIcon(':/images/themes/default/mActionFileSave.svg'))
+        self.removeButton.setIcon(QIcon(':/images/themes/default/mActionDeleteSelected.svg'))
+        self.clearAllButton.setIcon(QIcon(':/images/themes/default/mActionDeselectAll.svg'))
+        self.createLayerButton.setIcon(QIcon(':/images/themes/default/mActionNewVectorLayer.svg'))
+        self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
+        
         self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
-        self.doneButton.clicked.connect(self.closeEvent)
         self.openButton.clicked.connect(self.openDialog)
         self.saveButton.clicked.connect(self.saveDialog)
         self.addButton.clicked.connect(self.addSingleCoord)
@@ -30,6 +40,7 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
         self.addLineEdit.returnPressed.connect(self.addSingleCoord)
         self.clearAllButton.clicked.connect(self.clearAll)
         self.createLayerButton.clicked.connect(self.createLayer)
+        self.optionsButton.clicked.connect(self.showSettings)
         self.showAllCheckBox.stateChanged.connect(self.showAllChange)
         self.dirname = ''
         self.numcoord = 0
@@ -37,11 +48,11 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
         self.resultsTable.setColumnCount(3)
         self.resultsTable.setSortingEnabled(False)
         self.resultsTable.setHorizontalHeaderLabels(['Label','Latitude','Longitude'])
-        self.resultsTable.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
-        self.resultsTable.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
-        self.resultsTable.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.resultsTable.setSelectionMode(QAbstractItemView.SingleSelection)
         self.llitems=[]
 
     def closeEvent(self, e):
@@ -62,6 +73,9 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
         self.llitems=[]
         self.resultsTable.setRowCount(0)
         self.numcoord = 0
+        
+    def showSettings(self):
+        self.settings.showTab(3)
         
     def showAllChange(self):
         selectedRow = self.resultsTable.currentRow()
@@ -96,14 +110,14 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
             self.llitems[row].marker = None
         
     def openDialog(self):
-        filename = QtGui.QFileDialog.getOpenFileName(None, "Input File", 
+        filename = QFileDialog.getOpenFileName(None, "Input File", 
                 self.dirname, "Text, CSV (*.txt *.csv);;All files (*.*)")
         if filename:
             self.dirname = os.path.dirname(filename)
             self.readFile(filename)
         
     def saveDialog(self):
-        filename = QtGui.QFileDialog.getSaveFileName(None, "Save File", 
+        filename = QFileDialog.getSaveFileName(None, "Save File", 
                 self.dirname, "Text CSV (*.csv)")
         if filename:
             self.dirname = os.path.dirname(filename)
@@ -181,11 +195,11 @@ class MultiZoomWidget(QtGui.QDockWidget, FORM_CLASS):
         self.resultsTable.insertRow(self.numcoord)
         self.llitems.append(LatLonItem(lat, lon, label))
         self.resultsTable.blockSignals(True)
-        self.resultsTable.setItem(self.numcoord, 0, QtGui.QTableWidgetItem(label))
-        item = QtGui.QTableWidgetItem(str(lat))
+        self.resultsTable.setItem(self.numcoord, 0, QTableWidgetItem(label))
+        item = QTableWidgetItem(str(lat))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
         self.resultsTable.setItem(self.numcoord, 1, item)
-        item = QtGui.QTableWidgetItem(str(lon))
+        item = QTableWidgetItem(str(lon))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
         self.resultsTable.setItem(self.numcoord, 2, item)
         self.resultsTable.blockSignals(False)
