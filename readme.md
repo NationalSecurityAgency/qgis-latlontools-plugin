@@ -17,9 +17,21 @@
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
 
 * <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, and Bing Maps are supported. The desired map can be configured in **Settings**.
-* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"label,latitude,longitude"** or **"latitude,longitude"**. The user can also paste or type in a coordinate in the ***Add zoom-to location*** box and add it to the list. ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"label,latitude,longitude"**. When the user clicks on a list location, QGIS centers the map on the location and highlights it. Double clicking on a **Label** cell allows the text to be edited. ***Create Layer*** creates a memory layer out of the zoom-to locations. ***Remove Location*** removes the selected location. ***Clear All*** removes all of the list entries.
+* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste or type in a coordinate in the ***Add location*** box and add it to the list.  When the user clicks on a list location, QGIS centers the map on the location and highlights it. Double clicking on a **Label** cell allows the text to be edited. The following are additional functions.
+    * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"label,latitude,longitude"** or **"latitude,longitude"**.
+    * <img src="doc/save.png" alt="Save"> ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"label,latitude,longitude"**.
+    * <img src="doc/delete.png" alt="Delete"> ***Delete Selected Location*** removes the selected location. 
+    * <img src="doc/deleteall.png" alt="Clear All"> ***Clear All Locations*** removes all of the list entries.
+    * <img src="doc/newlayer.png" alt="New"> ***Create Vector Layer From Location List*** creates a memory layer out of the zoom-to locations. 
+    * <img src="doc/settings.png" alt="Settings"> ***Show Style Settings*** chooses a QGIS .qml file to be used to style the layer created from the create layer button.
 
-<div style="text-align:center"><img src="doc/multizoom.jpg" alt="Multi-location Zoom"></div>
+    <div style="text-align:center"><img src="doc/multizoom.jpg" alt="Multi-location Zoom"></div>
+    
+    * The ***Show all markers*** displays markers of all locations.
+    * ***Layer style*** determins whether the ***Create Vector Layer Fron Location List*** styles the newly created points layer or not. The options are:
+        * ***Default*** - No style is applied.
+        * ***Label*** - The newly created layer will have labels next to the points.
+        * ***Custom*** - The user can create a QGIS .qml file that contains style infomation on how to style the new layer. If this is configured, then this will apply this style to the new layer.
 
 * ***MGRS Conversions***
     * <img src="images/mgrs2point.png" alt="MGRS to Geometry"> ***MGRS to Geometry*** - This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the layer to a new point vector layer where each record is converted to WGS84 (EPSG:4326) geometry.
@@ -106,3 +118,9 @@ Here you can ***Select an External Map Provider***. The options are:
 
 * **Show placemark** - When checked the external map shows a placemark at the location clicked on in the QGIS map. If this is not checked then the external map centers itself around clicked location, but will not display the placemark.
 * **Map Zoom Level** - This is the desired default zoom level in the external map when it is launched.
+
+### Multi-zoom Settings
+
+![Multi-zoom Settings](doc/settings4.jpg)
+
+Here the user can specify a .qml style file that contains styling used by the ***Multi-zoom***, ***Create Vector Layer From Location List*** when ***Custom*** style is selected. 

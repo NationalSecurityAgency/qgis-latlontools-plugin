@@ -22,6 +22,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.8.3 - Multi-zoom is now dockable, uses icons, and can style the memory layer
     0.8.2 - Bug fix.
     0.8.1 - Reworked Multi-Zoom to use persistent markers, save locations, & create memory layer
     0.8 - Added MGRS conversion routines.
