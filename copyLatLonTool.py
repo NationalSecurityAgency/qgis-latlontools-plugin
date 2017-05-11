@@ -1,7 +1,7 @@
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtCore import Qt
+from PyQt4.QtGui import QApplication
+from qgis.core import QgsCoordinateTransform
+from qgis.gui import QgsMapTool, QgsMessageBar
 
 from LatLon import LatLon
 import mgrs

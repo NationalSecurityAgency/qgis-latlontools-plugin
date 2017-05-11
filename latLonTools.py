@@ -1,7 +1,7 @@
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtCore import Qt, QTimer, QUrl
+from PyQt4.QtGui import QIcon, QAction, QMenu
+from qgis.core import QGis, QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry
+from qgis.gui import QgsRubberBand
 
 # Initialize Qt resources from file resources.py
 # import resources
@@ -13,7 +13,7 @@ from showOnMapTool import ShowOnMapTool
 from settings import SettingsWidget
 from tomgrs import ToMGRSWidget
 from mgrstogeom import MGRStoLayerWidget
-import os.path
+import os
 import webbrowser
 
 

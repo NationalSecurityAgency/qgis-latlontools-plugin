@@ -1,5 +1,5 @@
 import sys, math, re, string
-from qgis.core import *
+from qgis.core import QgsPoint
 
 class LatLon():
     '''LatLon is a class of useful functions to do conversions handle

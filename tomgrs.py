@@ -1,17 +1,18 @@
 import os
 
-from PyQt4 import QtGui, uic
-from PyQt4.QtCore import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtGui import QDialog
+from PyQt4.uic import loadUiType
+from PyQt4.QtCore import QVariant
+from qgis.core import QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsMapLayerRegistry
+from qgis.gui import QgsMapLayerProxyModel, QgsMessageBar
 
 import mgrs
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
+FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/tomgrs.ui'))
 
 
-class ToMGRSWidget(QtGui.QDialog, FORM_CLASS):
+class ToMGRSWidget(QDialog, FORM_CLASS):
     '''ToMGRS Dialog box.'''
     def __init__(self, iface, parent):
         super(ToMGRSWidget, self).__init__(parent)

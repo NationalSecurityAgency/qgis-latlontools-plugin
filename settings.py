@@ -1,19 +1,18 @@
 import os
-import re
 import mapProviders
 
-from PyQt4 import QtGui, uic
-from PyQt4.QtCore import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.uic import loadUiType
+from PyQt4.QtGui import QDialog, QDialogButtonBox, QFileDialog
+from PyQt4.QtCore import QSettings, Qt
+from qgis.core import QgsCoordinateReferenceSystem
 
 
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
+FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/latLonSettings.ui'))
 
 
-class SettingsWidget(QtGui.QDialog, FORM_CLASS):
+class SettingsWidget(QDialog, FORM_CLASS):
     '''Settings Dialog box.'''
     Wgs84TypeDecimal = 0
     Wgs84TypeDMS = 1
@@ -33,7 +32,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.canvas = iface.mapCanvas()
         self.epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
         
-        self.buttonBox.button(QtGui.QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
+        self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
         
         ### CAPTURE SETTINGS ###
         self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)','MGRS', 'Project CRS', 'Custom CRS'])
@@ -169,7 +168,7 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         self.close()
         
     def qmlOpenDialog(self):
-        filename = QtGui.QFileDialog.getOpenFileName(None, "Input QML Style File", 
+        filename = QFileDialog.getOpenFileName(None, "Input QML Style File", 
                 self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")
         if filename:
             self.qmlStyle = filename
@@ -185,6 +184,10 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
         zoomToProjection = int(self.zoomToProjectionComboBox.currentIndex())
         self.zoomToCoordOrderComboBox.setEnabled(zoomToProjection != self.ProjectionTypeMGRS)
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
+        
+    def showTab(self, tab):
+        self.tabWidget.setCurrentIndex(tab)
+        self.show()
         
     def showEvent(self, e):
         '''The user has selected the settings dialog box so we need to
@@ -264,6 +267,9 @@ class SettingsWidget(QtGui.QDialog, FORM_CLASS):
             return True
         if self.zoomToProjection == self.ProjectionTypeProjectCRS:
             if self.canvas.mapSettings().destinationCrs() == self.epsg4326:
+                return True
+        if self.zoomToProjection == self.ProjectionTypeCustomCRS:
+            if self.zoomToCustomCRS() == self.epsg4326:
                 return True
         return False
         

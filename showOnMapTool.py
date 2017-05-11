@@ -1,7 +1,7 @@
-from PyQt4.QtCore import *
+from PyQt4.QtCore import Qt, QUrl
 from PyQt4.QtGui import *
-from qgis.core import *
-from qgis.gui import *
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.gui import QgsMapTool, QgsMessageBar
 import webbrowser
 
 class ShowOnMapTool(QgsMapTool):

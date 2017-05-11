@@ -1,17 +1,16 @@
 import os
 import re
 
-from PyQt4 import uic
+from PyQt4.uic import loadUiType
 from PyQt4.QtGui import QDockWidget, QIcon
-from PyQt4.QtCore import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtCore import pyqtSignal
+from qgis.gui import QgsMessageBar, QgsVertexMarker
 from LatLon import LatLon
 
 import mgrs
 #import traceback
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
+FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
 
 

@@ -1,19 +1,20 @@
 import os
 import re
 
-from PyQt4 import QtGui, uic
-from PyQt4.QtCore import *
-from qgis.core import *
-from qgis.gui import *
+from PyQt4.QtGui import QDialog
+from PyQt4.uic import loadUiType
+from PyQt4.QtCore import QVariant
+from qgis.core import QgsVectorLayer, QgsFeature, QgsGeometry, QgsPoint, QgsMapLayerRegistry
+from qgis.gui import QgsMapLayerProxyModel, QgsMessageBar
 #import traceback
 
 import mgrs
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
+FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/mgrstolayer.ui'))
 
 
-class MGRStoLayerWidget(QtGui.QDialog, FORM_CLASS):
+class MGRStoLayerWidget(QDialog, FORM_CLASS):
     '''Convert an MGRS field to a point geometry layer.'''
     def __init__(self, iface, parent):
         super(MGRStoLayerWidget, self).__init__(parent)
