@@ -133,7 +133,7 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Add location ('lat,lon' or 'label,lat,lon')</string>
+       <string>Add location ('lat,lon or lat,lon,label)</string>
       </property>
      </widget>
     </item>
@@ -158,38 +158,11 @@
      <widget class="QTableWidget" name="resultsTable"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QCheckBox" name="showAllCheckBox">
-        <property name="text">
-         <string>Show all markers</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Layer style</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="markerStyleComboBox"/>
-      </item>
-     </layout>
+     <widget class="QCheckBox" name="showAllCheckBox">
+      <property name="text">
+       <string>Show all markers</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

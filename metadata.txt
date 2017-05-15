@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=2.4
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support and MGRS conversion routines.
-version=0.8.3
+version=0.8.4
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -22,6 +22,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.8.4 - Changed order of multi-zoom locations
     0.8.3 - Multi-zoom is now dockable, uses icons, and can style the memory layer
     0.8.2 - Bug fix.
     0.8.1 - Reworked Multi-Zoom to use persistent markers, save locations, & create memory layer

@@ -23,6 +23,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.iface = lltools.iface
         self.canvas = self.iface.mapCanvas()
         self.lltools = lltools
+        self.llitems=[]
         
         self.addButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/check.png"))
         self.openButton.setIcon(QIcon(':/images/themes/default/mActionFileOpen.svg'))
@@ -32,7 +33,6 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.createLayerButton.setIcon(QIcon(':/images/themes/default/mActionNewVectorLayer.svg'))
         self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
         
-        self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
         self.openButton.clicked.connect(self.openDialog)
         self.saveButton.clicked.connect(self.saveDialog)
         self.addButton.clicked.connect(self.addSingleCoord)
@@ -47,13 +47,12 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.maxResults = 1000
         self.resultsTable.setColumnCount(3)
         self.resultsTable.setSortingEnabled(False)
-        self.resultsTable.setHorizontalHeaderLabels(['Label','Latitude','Longitude'])
+        self.resultsTable.setHorizontalHeaderLabels(['Latitude','Longitude','Label'])
         self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Stretch)
         self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
         self.resultsTable.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.llitems=[]
 
     def closeEvent(self, e):
         '''Called when the dialog box is being closed. We want to clear selected features and remove
@@ -130,14 +129,13 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 for line in f:
                     try:
                         parts = [x.strip() for x in line.split(',')]
-                        if len(parts) == 2:
+                        if len(parts) >=2:
                             lat = LatLon.parseDMSStringSingle(parts[0])
                             lon = LatLon.parseDMSStringSingle(parts[1])
-                            self.addCoord(lat, lon, '')
-                        elif len(parts) == 3:
-                            lat = LatLon.parseDMSStringSingle(parts[1])
-                            lon = LatLon.parseDMSStringSingle(parts[2])
-                            self.addCoord(lat, lon, parts[0])
+                            label = ''
+                            if len(parts) >= 3:
+                                label = parts[2]
+                            self.addCoord(lat, lon, label)
                     except:
                         pass
         except:
@@ -149,7 +147,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             return
         with open(fname,'w') as f:
             for item in self.llitems:
-                s = "{},{},{}\n".format(item.label, item.lat, item.lon)
+                s = "{},{},{}\n".format(item.lat, item.lon, item.label)
                 f.write(s)
         f.close()
             
@@ -171,13 +169,12 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         parts = [x.strip() for x in self.addLineEdit.text().split(',')]
         label = ''
         try:
-            if len(parts) == 2:
+            if len(parts) >= 2:
                 lat = LatLon.parseDMSStringSingle(parts[0])
                 lon = LatLon.parseDMSStringSingle(parts[1])
-            elif len(parts) == 3:
-                label = parts[0]
-                lat = LatLon.parseDMSStringSingle(parts[1])
-                lon = LatLon.parseDMSStringSingle(parts[2])
+                label = ''
+                if len(parts) >= 3:
+                    label = parts[2]
             else:
                 self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
                 return
@@ -195,13 +192,13 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.resultsTable.insertRow(self.numcoord)
         self.llitems.append(LatLonItem(lat, lon, label))
         self.resultsTable.blockSignals(True)
-        self.resultsTable.setItem(self.numcoord, 0, QTableWidgetItem(label))
+        self.resultsTable.setItem(self.numcoord, 2, QTableWidgetItem(label))
         item = QTableWidgetItem(str(lat))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.resultsTable.setItem(self.numcoord, 1, item)
+        self.resultsTable.setItem(self.numcoord, 0, item)
         item = QTableWidgetItem(str(lon))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.resultsTable.setItem(self.numcoord, 2, item)
+        self.resultsTable.setItem(self.numcoord, 1, item)
         self.resultsTable.blockSignals(False)
         self.numcoord += 1
         if self.showAllCheckBox.checkState():
@@ -231,7 +228,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
 
         
     def cellChanged(self, row, col):
-        if col == 0:
+        if col == 2:
             self.llitems[row].label = self.resultsTable.item(row, col).text()
             
     def createLayer(self):
@@ -240,28 +237,27 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             return
         ptLayer = QgsVectorLayer("Point?crs=epsg:4326", u"Lat Lon Locations", "memory")
         provider = ptLayer.dataProvider()
-        provider.addAttributes([QgsField("label", QVariant.String),
-            QgsField("latitude", QVariant.Double),
-            QgsField("longitude", QVariant.Double)])
+        provider.addAttributes([QgsField("latitude", QVariant.Double),
+            QgsField("longitude", QVariant.Double),
+            QgsField("label", QVariant.String)])
         ptLayer.updateFields()
         
         for item in self.llitems:
             feature = QgsFeature()
             feature.setGeometry(QgsGeometry.fromPoint(QgsPoint(item.lon,item.lat)))
-            feature.setAttributes([item.label, item.lat, item.lon])
+            feature.setAttributes([item.lat, item.lon, item.label])
             provider.addFeatures([feature])
         
         ptLayer.updateExtents()
         
-        if self.markerStyleComboBox.currentIndex() == 1:
+        if self.settings.multiZoomStyleID == 1:
             label = QgsPalLayerSettings()
             label.readFromLayer(ptLayer)
             label.enabled = True
             label.fieldName = 'label'
             label.placement= QgsPalLayerSettings.AroundPoint
-            label.setDataDefinedProperty(QgsPalLayerSettings.Size,True,True,'9','')
             label.writeToLayer(ptLayer)
-        elif self.markerStyleComboBox.currentIndex() == 2 and os.path.isfile(self.settings.customQMLFile()):
+        elif self.settings.multiZoomStyleID == 2 and os.path.isfile(self.settings.customQMLFile()):
             ptLayer.loadNamedStyle(self.settings.customQMLFile())
             
         QgsMapLayerRegistry.instance().addMapLayer(ptLayer)

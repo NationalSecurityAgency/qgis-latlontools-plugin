@@ -54,11 +54,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### MULTI-ZOOM ###
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
-        
+        self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
         
         self.readSettings()
-
-        
+    
     def captureCustomCRS(self):
         return self.captureProjectionSelectionWidget.crs()
         
@@ -96,6 +95,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### Multi-zoom Settings ###
         self.qmlLineEdit.setText('')
+        self.markerStyleComboBox.setCurrentIndex(0)
         
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
@@ -121,10 +121,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.mapZoom = int(settings.value('/LatLonTools/MapZoom', 13))
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
+        self.multiZoomStyleID = int(settings.value('/LatLonTools/MultiZoomStyleID', 0))
         self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
         if not os.path.isfile(self.qmlStyle):
             self.qmlStyle = ''
-        self.qmlLineEdit.setText(self.qmlStyle)
+            self.multiZoomStyleID = 0
         
         self.setEnabled()
         
@@ -161,6 +162,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         settings.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
+        settings.setValue('/LatLonTools/MultiZoomStyleID', int(self.markerStyleComboBox.currentIndex()))
         settings.setValue('/LatLonTools/QmlStyle', self.qmlStyle)
         
         self.readSettings()
@@ -223,6 +225,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.showPlacemarkCheckBox.setCheckState(self.showPlacemark)
         self.mapProviderComboBox.setCurrentIndex(self.mapProvider)
         self.zoomSpinBox.setValue(self.mapZoom)
+
+        ### MULTI-ZOOM CUSTOM QML STYLE ###
+        self.markerStyleComboBox.setCurrentIndex(self.multiZoomStyleID)
+        self.qmlLineEdit.setText(self.qmlStyle)
         
         self.setEnabled()
 

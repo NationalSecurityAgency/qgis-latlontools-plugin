@@ -307,14 +307,32 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="qmlLineEdit"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLineEdit" name="qmlLineEdit"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="qmlBrowseButton">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="qmlBrowseButton">
-         <property name="text">
-          <string>Open QGIS Point Vector Style</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>Default style for multi-zoom new layers</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="markerStyleComboBox"/>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_4">
