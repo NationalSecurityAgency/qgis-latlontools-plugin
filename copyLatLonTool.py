@@ -1,10 +1,10 @@
-from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import QgsCoordinateTransform
+from PyQt4.QtCore import Qt, pyqtSignal
+from PyQt4.QtGui import QApplication
+from qgis.core import QgsCoordinateTransform, QgsPoint
 from qgis.gui import QgsMapTool, QgsMessageBar
 
-from .LatLon import LatLon
-from . import mgrs
+from LatLon import LatLon
+import mgrs
 
 class CopyLatLonTool(QgsMapTool):
     '''Class to interact with the map canvas to capture the coordinate
