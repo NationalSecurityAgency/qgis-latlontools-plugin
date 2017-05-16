@@ -3,7 +3,6 @@ import re
 
 from PyQt4.uic import loadUiType
 from PyQt4.QtGui import QDockWidget, QIcon
-from PyQt4.QtCore import pyqtSignal
 from qgis.gui import QgsMessageBar, QgsVertexMarker
 from LatLon import LatLon
 
@@ -16,15 +15,13 @@ FORM_CLASS, _ = loadUiType(os.path.join(
 
 class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
-    closingPlugin = pyqtSignal()
-
     def __init__(self, lltools, iface, parent):
         super(ZoomToLatLon, self).__init__(parent)
         self.setupUi(self)
         self.canvas = iface.mapCanvas()
         self.marker = None
         self.zoomToolButton.setIcon(QIcon(':/images/themes/default/mActionZoomIn.svg'))
-        self.clearToolButton.setIcon(QIcon(':/images/themes/default/mIconClear.svg'))
+        self.clearToolButton.setIcon(QIcon(':/images/themes/default/mIconClearText.svg'))
         self.zoomToolButton.clicked.connect(self.zoomToPressed)
         self.clearToolButton.clicked.connect(self.removeMarker)
         self.lltools = lltools
@@ -35,7 +32,6 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
     def closeEvent(self, event):
         self.removeMarker()
-        self.closingPlugin.emit()
         event.accept()
         
     def is_number(self, s):
@@ -128,3 +124,4 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
+            self.coordTxt.clear()
