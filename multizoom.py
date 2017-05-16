@@ -3,7 +3,7 @@ import re
 
 from PyQt4.QtGui import QIcon, QDockWidget, QHeaderView, QAbstractItemView, QFileDialog, QTableWidgetItem
 from PyQt4.uic import loadUiType
-from PyQt4.QtCore import Qt, QVariant
+from PyQt4.QtCore import Qt, QVariant, pyqtSlot
 from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
     QgsField, QgsFeature, QgsPoint, QgsGeometry, 
     QgsPalLayerSettings, QgsMapLayerRegistry )
@@ -25,7 +25,12 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.lltools = lltools
         self.llitems=[]
         
+        # Set up a connection with the coordinate capture tool
+        self.lltools.mapTool.capturesig.connect(self.capturedPoint)
+        
         self.addButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/check.png"))
+        self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordinate_capture.png"))
+        self.coordCaptureButton.clicked.connect(self.startCapture)
         self.openButton.setIcon(QIcon(':/images/themes/default/mActionFileOpen.svg'))
         self.saveButton.setIcon(QIcon(':/images/themes/default/mActionFileSave.svg'))
         self.removeButton.setIcon(QIcon(':/images/themes/default/mActionDeleteSelected.svg'))
@@ -59,6 +64,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
            all the markers.'''
         self.resultsTable.clearSelection()
         self.removeMarkers()
+        self.stopCapture()
         self.hide()
         
     def showEvent(self, e):
@@ -66,6 +72,22 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
            see if markers need to be displayed.'''
         self.showAllChange()
         self.setEnabled(True)
+    
+
+    @pyqtSlot(QgsPoint)
+    def capturedPoint(self, pt):
+        self.addCoord(pt.y(), pt.x(),'')
+
+    def startCapture(self):
+        if self.coordCaptureButton.isChecked():
+            self.lltools.mapTool.capture4326 = True
+            self.lltools.startCapture()
+        else:
+            self.lltools.mapTool.capture4326 = False
+        
+    def stopCapture(self):
+        self.lltools.mapTool.capture4326 = False
+        self.coordCaptureButton.setChecked(False)
         
     def clearAll(self):
         self.removeMarkers()

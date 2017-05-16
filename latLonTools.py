@@ -36,7 +36,7 @@ class LatLonTools:
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
         self.copyAction = QAction(icon, "Copy Latitude, Longitude", self.iface.mainWindow())
-        self.copyAction.triggered.connect(self.setTool)
+        self.copyAction.triggered.connect(self.startCapture)
         self.copyAction.setCheckable(True)
         self.iface.addToolBarIcon(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
@@ -97,6 +97,8 @@ class LatLonTools:
         try:
             if not isinstance(tool, CopyLatLonTool):
                 self.copyAction.setChecked(False)
+                self.multiZoomDialog.stopCapture()
+                self.mapTool.capture4326 = False
             if not isinstance(tool, ShowOnMapTool):
                 self.externMapAction.setChecked(False)
         except:
@@ -121,14 +123,14 @@ class LatLonTools:
         self.iface.removeDockWidget(self.multiZoomDialog)
         self.zoomToDialog = None
         self.multiZoomDialog = None
-
-    def setTool(self):
+    
+    def startCapture(self):
         '''Set the focus of the copy coordinate tool and check it'''
         self.copyAction.setChecked(True)
         self.canvas.setMapTool(self.mapTool)
 
     def setShowMapTool(self):
-        '''Set the focus of the copy coordinate tool and check it'''
+        '''Set the focus of the external map tool and check it'''
         self.externMapAction.setChecked(True)
         self.canvas.setMapTool(self.showMapTool)
 
