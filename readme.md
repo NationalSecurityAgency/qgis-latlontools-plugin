@@ -24,6 +24,7 @@
     * <img src="doc/deleteall.png" alt="Clear All"> ***Clear All Locations*** removes all of the list entries.
     * <img src="doc/newlayer.png" alt="New"> ***Create Vector Layer From Location List*** creates a memory layer out of the zoom-to locations. 
     * <img src="doc/settings.png" alt="Settings"> ***Show Style Settings*** chooses a style for the layer created from the create layer button. This displays the **Settings** dialog box.
+    * <img src="images/coordinate_capture.png" alt="Start capture"> ***Start Capture*** enables the user to click on the map to capture coordinates directly to the list.
 
     <div style="text-align:center"><img src="doc/multizoom.jpg" alt="Multi-location Zoom"></div>
     
