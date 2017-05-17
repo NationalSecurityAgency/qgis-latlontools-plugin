@@ -1,6 +1,6 @@
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import QgsCoordinateTransform
+from qgis.core import QgsCoordinateTransform, QgsPoint
 from qgis.gui import QgsMapTool, QgsMessageBar
 
 from .LatLon import LatLon

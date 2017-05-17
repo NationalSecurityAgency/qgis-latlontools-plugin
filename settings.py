@@ -1,9 +1,9 @@
 import os
-import mapProviders
+from . import mapProviders
 
-from PyQt4.uic import loadUiType
-from PyQt4.QtGui import QDialog, QDialogButtonBox, QFileDialog
-from PyQt4.QtCore import QSettings, Qt
+from qgis.PyQt.uic import loadUiType
+from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
+from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.core import QgsCoordinateReferenceSystem
 
 
@@ -171,7 +171,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
     def qmlOpenDialog(self):
         filename = QFileDialog.getOpenFileName(None, "Input QML Style File", 
-                self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")
+                self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")[0]
         if filename:
             self.qmlStyle = filename
             self.qmlLineEdit.setText(filename)

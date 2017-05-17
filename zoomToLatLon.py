@@ -1,12 +1,14 @@
 import os
 import re
 
-from PyQt4.uic import loadUiType
-from PyQt4.QtGui import QDockWidget, QIcon
+from qgis.PyQt.uic import loadUiType
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QDockWidget
+from qgis.PyQt.QtCore import pyqtSignal
 from qgis.gui import QgsMessageBar, QgsVertexMarker
-from LatLon import LatLon
+from .LatLon import LatLon
 
-import mgrs
+from . import mgrs
 #import traceback
 
 FORM_CLASS, _ = loadUiType(os.path.join(
@@ -80,7 +82,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 srcCrs = self.settings.epsg4326
             elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
-                text = re.sub(r'\s+', '', unicode(text)) # Remove all white space
+                text = re.sub(r'\s+', '', str(text)) # Remove all white space
                 lat, lon = mgrs.toWgs(text)
                 srcCrs = self.settings.epsg4326
             else: # Is either the project or custom CRS

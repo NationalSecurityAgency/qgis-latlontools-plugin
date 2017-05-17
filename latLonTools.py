@@ -1,18 +1,19 @@
-from PyQt4.QtCore import Qt, QTimer, QUrl
-from PyQt4.QtGui import QIcon, QAction, QMenu
-from qgis.core import QGis, QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry
+from qgis.PyQt.QtCore import Qt, QTimer, QUrl
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction, QMenu
+from qgis.core import QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry, QgsWkbTypes
 from qgis.gui import QgsRubberBand
 
 # Initialize Qt resources from file resources.py
 # import resources
 
-from zoomToLatLon import ZoomToLatLon
-from multizoom import MultiZoomWidget
-from copyLatLonTool import CopyLatLonTool
-from showOnMapTool import ShowOnMapTool
-from settings import SettingsWidget
-from tomgrs import ToMGRSWidget
-from mgrstogeom import MGRStoLayerWidget
+from .zoomToLatLon import ZoomToLatLon
+from .multizoom import MultiZoomWidget
+from .copyLatLonTool import CopyLatLonTool
+from .showOnMapTool import ShowOnMapTool
+from .settings import SettingsWidget
+from .tomgrs import ToMGRSWidget
+from .mgrstogeom import MGRStoLayerWidget
 import os
 import webbrowser
 
@@ -21,7 +22,7 @@ class LatLonTools:
     def __init__(self, iface):
         self.iface = iface
         self.canvas = iface.mapCanvas()
-        self.crossRb = QgsRubberBand(self.canvas, QGis.Line)
+        self.crossRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
         self.crossRb.setColor(Qt.red)
 
     def initGui(self):
@@ -123,7 +124,7 @@ class LatLonTools:
         self.iface.removeDockWidget(self.multiZoomDialog)
         self.zoomToDialog = None
         self.multiZoomDialog = None
-    
+
     def startCapture(self):
         '''Set the focus of the copy coordinate tool and check it'''
         self.copyAction.setChecked(True)
@@ -189,7 +190,7 @@ class LatLonTools:
         horizLine = QgsGeometry.fromPolyline( [ leftPt , rightPt ] )
         vertLine = QgsGeometry.fromPolyline( [ topPt , bottomPt ] )
         
-        self.crossRb.reset(QGis.Line)
+        self.crossRb.reset(QgsWkbTypes.LineGeometry)
         self.crossRb.addGeometry(horizLine, None)
         self.crossRb.addGeometry(vertLine, None)
         

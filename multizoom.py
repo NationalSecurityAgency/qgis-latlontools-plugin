@@ -1,14 +1,15 @@
 import os
 import re
 
-from PyQt4.QtGui import QIcon, QDockWidget, QHeaderView, QAbstractItemView, QFileDialog, QTableWidgetItem
-from PyQt4.uic import loadUiType
-from PyQt4.QtCore import Qt, QVariant, pyqtSlot
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QDockWidget, QHeaderView, QAbstractItemView, QFileDialog, QTableWidget, QTableWidgetItem
+from qgis.PyQt.uic import loadUiType
+from qgis.PyQt.QtCore import Qt, QVariant, pyqtSlot
 from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
     QgsField, QgsFeature, QgsPoint, QgsGeometry, 
-    QgsPalLayerSettings, QgsMapLayerRegistry )
+    QgsPalLayerSettings, QgsProject )
 from qgis.gui import QgsVertexMarker, QgsMessageBar
-from LatLon import LatLon
+from .LatLon import LatLon
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
@@ -53,7 +54,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.resultsTable.setColumnCount(3)
         self.resultsTable.setSortingEnabled(False)
         self.resultsTable.setHorizontalHeaderLabels(['Latitude','Longitude','Label'])
-        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.resultsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
@@ -72,7 +73,6 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
            see if markers need to be displayed.'''
         self.showAllChange()
         self.setEnabled(True)
-    
 
     @pyqtSlot(QgsPoint)
     def capturedPoint(self, pt):
@@ -132,14 +132,14 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         
     def openDialog(self):
         filename = QFileDialog.getOpenFileName(None, "Input File", 
-                self.dirname, "Text, CSV (*.txt *.csv);;All files (*.*)")
+                self.dirname, "Text, CSV (*.txt *.csv);;All files (*.*)")[0]
         if filename:
             self.dirname = os.path.dirname(filename)
             self.readFile(filename)
         
     def saveDialog(self):
         filename = QFileDialog.getSaveFileName(None, "Save File", 
-                self.dirname, "Text CSV (*.csv)")
+                self.dirname, "Text CSV (*.csv)")[0]
         if filename:
             self.dirname = os.path.dirname(filename)
             self.saveFile(filename)
@@ -257,7 +257,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         '''Create a memory layer from the zoom to locations'''
         if self.numcoord == 0:
             return
-        ptLayer = QgsVectorLayer("Point?crs=epsg:4326", u"Lat Lon Locations", "memory")
+        ptLayer = QgsVectorLayer("Point?crs=epsg:4326", "Lat Lon Locations", "memory")
         provider = ptLayer.dataProvider()
         provider.addAttributes([QgsField("latitude", QVariant.Double),
             QgsField("longitude", QVariant.Double),
@@ -282,10 +282,10 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         elif self.settings.multiZoomStyleID == 2 and os.path.isfile(self.settings.customQMLFile()):
             ptLayer.loadNamedStyle(self.settings.customQMLFile())
             
-        QgsMapLayerRegistry.instance().addMapLayer(ptLayer)
+        QgsProject.instance().addMapLayer(ptLayer)
         
 class LatLonItem():
-    def __init__(self, lat, lon, label=u''):
+    def __init__(self, lat, lon, label=''):
         self.lat = lat
         self.lon = lon
         self.label = label

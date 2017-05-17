@@ -15,6 +15,8 @@
 *                                                                         *
 ***************************************************************************
 """
+from builtins import str
+from builtins import range
 
 __author__ = 'Alexander Bruy'
 __date__ = 'August 2016'
@@ -424,23 +426,23 @@ def _mgrsString(zone, letters, easting, northing, precision):
     """
     mrgs = ''
     if zone:
-        tmp = unicode(zone)
+        tmp = str(zone)
         mgrs = tmp.zfill(3 - len(tmp))
     else:
         mgrs = '  '
 
-    for i in xrange(3):
-        mgrs += ALPHABET.keys()[ALPHABET.values().index(letters[i])]
+    for i in range(3):
+        mgrs += list(ALPHABET.keys())[list(ALPHABET.values()).index(letters[i])]
 
     easting = math.fmod(easting + 1e-8, 100000.0)
     if easting >= 99999.5:
         easting = 99999.0
-    mgrs += unicode(int(easting)).rjust(5, '0')[:precision]
+    mgrs += str(int(easting)).rjust(5, '0')[:precision]
 
     northing = math.fmod(northing + 1e-8, 100000.0)
     if northing >= 99999.5:
         northing = 99999.0
-    mgrs += unicode(int(northing)).rjust(5, '0')[:precision]
+    mgrs += str(int(northing)).rjust(5, '0')[:precision]
 
     return mgrs
 
@@ -578,7 +580,7 @@ def _checkZone(mgrs):
     @returns - True if zone is given, False otherwise
     """
     mgrs = mgrs.lstrip()
-    count = sum(1 for c in itertools.takewhile(unicode.isdigit, mgrs))
+    count = sum(1 for c in itertools.takewhile(str.isdigit, mgrs))
     if count <= 2:
         return count > 0
     else:
@@ -594,7 +596,7 @@ def _breakMgrsString(mgrs):
     """
     mgrs = mgrs.lstrip()
     # Number of zone digits
-    count = sum(1 for c in itertools.takewhile(unicode.isdigit, mgrs))
+    count = sum(1 for c in itertools.takewhile(str.isdigit, mgrs))
     if count <= 2:
         if count > 0:
             zone = int(mgrs[:2])
@@ -607,7 +609,7 @@ def _breakMgrsString(mgrs):
 
     idx = count
     # MGRS letters
-    count = sum(1 for c in itertools.takewhile(unicode.isalpha, itertools.islice(mgrs, idx, None)))
+    count = sum(1 for c in itertools.takewhile(str.isalpha, itertools.islice(mgrs, idx, None)))
     if count == 3:
         a = ord('A')
         invalid = [ALPHABET['I'], ALPHABET['O']]
@@ -634,9 +636,9 @@ def _breakMgrsString(mgrs):
         raise MgrsException('An MGRS string error: string too long, too short, or badly formed')
 
     # Easting and Northing
-    count = sum(1 for c in itertools.takewhile(unicode.isdigit, itertools.islice(mgrs, idx, None)))
+    count = sum(1 for c in itertools.takewhile(str.isdigit, itertools.islice(mgrs, idx, None)))
     if count <= 10 and count % 2 == 0:
-        precision = count / 2
+        precision = int(count / 2)
         if precision > 0:
             easting = float(mgrs[idx:idx + precision])
             northing = float(mgrs[idx + precision:])

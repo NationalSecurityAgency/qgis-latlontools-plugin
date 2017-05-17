@@ -1,12 +1,12 @@
 import os
 
-from PyQt4.QtGui import QDialog
-from PyQt4.uic import loadUiType
-from PyQt4.QtCore import QVariant
-from qgis.core import QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsMapLayerRegistry
-from qgis.gui import QgsMapLayerProxyModel, QgsMessageBar
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.uic import loadUiType
+from qgis.PyQt.QtCore import QVariant
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.gui import QgsMessageBar
 
-import mgrs
+from . import mgrs
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/tomgrs.ui'))
@@ -65,7 +65,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
             ppoint.addFeatures([f])
             
         pointLayer.updateExtents()
-        QgsMapLayerRegistry.instance().addMapLayer(pointLayer)
+        QgsProject.instance().addMapLayer(pointLayer)
         self.close()
         
         

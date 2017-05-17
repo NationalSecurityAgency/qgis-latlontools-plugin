@@ -1,8 +1,9 @@
 [general]
 name=Lat Lon Tools
-qgisMinimumVersion=2.4
+qgisMinimumVersion=2.99
+qgisMaximumVersion=3.99
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support and MGRS conversion routines.
-version=0.8.4
+version=3.0
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -16,12 +17,14 @@ about=
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=coordinate,latitude,longitude,epsg:4326,4326,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,openstreetmap
+tags=coordinate,capture,latitude,longitude,epsg:4326,4326,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,openstreetmap
 category=Plugins
 icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.0.0 - First release for QGIS 3
+    0.8.5 - Added multi-zoom coordinate capture by clicking on map
     0.8.4 - Changed order of multi-zoom locations
     0.8.3 - Multi-zoom is now dockable, uses icons, and can style the memory layer
     0.8.2 - Bug fix.

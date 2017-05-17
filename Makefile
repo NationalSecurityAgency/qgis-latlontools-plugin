@@ -3,13 +3,13 @@ PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings
 EXTRAS = metadata.txt
 
 deploy:
-	mkdir -p $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vf $(PY_FILES) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vf $(EXTRAS) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vfr images $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vfr ui $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vfr doc $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vf helphead.html $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)/index.html
-	python -m markdown -x markdown.extensions.headerid readme.md >> $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)/index.html
-	echo '</body>' >> $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)/index.html
+	mkdir -p $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)
+	cp -vf $(PY_FILES) $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)
+	cp -vf $(EXTRAS) $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)
+	cp -vfr images $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)
+	cp -vfr ui $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)
+	cp -vfr doc $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)
+	cp -vf helphead.html $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)/index.html
+	python -m markdown -x markdown.extensions.headerid readme.md >> $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)/index.html
+	echo '</body>' >> $(HOME)/.qgis3/python/plugins/$(PLUGINNAME)/index.html
 

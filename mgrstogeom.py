@@ -1,14 +1,14 @@
 import os
 import re
 
-from PyQt4.QtGui import QDialog
-from PyQt4.uic import loadUiType
-from PyQt4.QtCore import QVariant
-from qgis.core import QgsVectorLayer, QgsFeature, QgsGeometry, QgsPoint, QgsMapLayerRegistry
-from qgis.gui import QgsMapLayerProxyModel, QgsMessageBar
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.uic import loadUiType
+from qgis.PyQt.QtCore import QVariant
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature, QgsGeometry, QgsPoint, QgsProject
+from qgis.gui import QgsMessageBar
 #import traceback
 
-import mgrs
+from . import mgrs
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/mgrstolayer.ui'))
@@ -31,7 +31,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
         layer_name = self.nameLineEdit.text()
         
         selectedField = self.mFieldComboBox.currentField()
-        fieldIndex = layer.fieldNameIndex(selectedField)
+        fieldIndex = layer.fields().lookupField(selectedField)
         if fieldIndex == -1:
             self.iface.messageBar().pushMessage("", "Invalid MGRS Field", level=QgsMessageBar.WARNING, duration=4)
             return
@@ -57,7 +57,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
             num_features += 1
             m = feature[fieldIndex]
             try:
-                m = re.sub(r'\s+', '', unicode(m)) # Remove all white space
+                m = re.sub(r'\s+', '', str(m)) # Remove all white space
                 lat, lon = mgrs.toWgs(m)
             except:
                 #traceback.print_exc()
@@ -69,7 +69,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
             ppoint.addFeatures([f])
             
         pointLayer.updateExtents()
-        QgsMapLayerRegistry.instance().addMapLayer(pointLayer)
+        QgsProject.instance().addMapLayer(pointLayer)
         
         if num_bad != 0:
             self.iface.messageBar().pushMessage("", "{} out of {} features failed".format(num_bad, num_features), level=QgsMessageBar.WARNING, duration=4)

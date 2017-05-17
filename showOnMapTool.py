@@ -1,5 +1,6 @@
-from PyQt4.QtCore import Qt, QUrl
-from PyQt4.QtGui import *
+from qgis.PyQt.QtCore import Qt, QUrl
+from qgis.PyQt.QtGui import *
+from qgis.PyQt.QtWidgets import *
 from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsMapTool, QgsMessageBar
 import webbrowser
