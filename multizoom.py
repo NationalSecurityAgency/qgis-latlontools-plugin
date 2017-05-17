@@ -72,7 +72,6 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
            see if markers need to be displayed.'''
         self.showAllChange()
         self.setEnabled(True)
-    
 
     @pyqtSlot(QgsPoint)
     def capturedPoint(self, pt):

@@ -123,7 +123,7 @@ class LatLonTools:
         self.iface.removeDockWidget(self.multiZoomDialog)
         self.zoomToDialog = None
         self.multiZoomDialog = None
-    
+
     def startCapture(self):
         '''Set the focus of the copy coordinate tool and check it'''
         self.copyAction.setChecked(True)
