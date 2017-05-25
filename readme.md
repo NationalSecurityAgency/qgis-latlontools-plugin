@@ -17,11 +17,11 @@
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
 
 * <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, and Bing Maps are supported. The desired map can be configured in **Settings**.
-* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste or type in a coordinate in the ***Add location*** box and add it to the list.  When the user clicks on a list location, QGIS centers the map on the location and highlights it. Double clicking on a **Label** cell allows the text to be edited. The following are additional functions.
+* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste or type in a coordinate in the ***Add location*** box and add it to the list.  When the user clicks on a list location, QGIS centers the map on the location and highlights it. Double clicking on a **Label** or **Data** cell allows the text to be edited. By default the **Data** fields will not be visible, but can be added from ***Settings***. The following are additional functions.
     * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"latitude,longitude,label"** or **"latitude,longitude"**.
     * <img src="doc/save.png" alt="Save"> ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"latitude,longitude,label"**.
     * <img src="doc/delete.png" alt="Delete"> ***Delete Selected Location*** removes the selected location. 
-    * <img src="doc/deleteall.png" alt="Clear All"> ***Clear All Locations*** removes all of the list entries.
+    * <img src="doc/deleteall.png" alt="Clear All"> ***Clear All Locations*** removes all of the list locations.
     * <img src="doc/newlayer.png" alt="New"> ***Create Vector Layer From Location List*** creates a memory layer out of the zoom-to locations. 
     * <img src="doc/settings.png" alt="Settings"> ***Show Style Settings*** chooses a style for the layer created from the create layer button. This displays the **Settings** dialog box.
     * <img src="images/coordinate_capture.png" alt="Start capture"> ***Start Capture*** enables the user to click on the map to capture coordinates directly to the list.
@@ -116,13 +116,14 @@ Here you can ***Select an External Map Provider***. The options are:
 * **Show placemark** - When checked the external map shows a placemark at the location clicked on in the QGIS map. If this is not checked then the external map centers itself around clicked location, but will not display the placemark.
 * **Map Zoom Level** - This is the desired default zoom level in the external map when it is launched.
 
-### Multi-zoom Settings
+### Multi-location Zoom Settings
 
-![Multi-zoom Settings](doc/settings4.jpg)
+![Multi-location Zoom Settings](doc/settings4.jpg)
 
-Here the user can specify a style for the multi-zoom to create layer. It can be a simple default style, default with labels, or a .qml style file that contains advanced styling.  
+These are setting for the Multi-location zoom dialog box. The user can specify a style when creating a layer from the zoom locations. It can be a simple default style, default with labels, or a .qml style file that contains advanced styling. The user can choose up to 10 additional data fields.
 
-* ***Default style for multi-zoom new layers*** determins the new layer style when ***Create Vector Layer Fron Location List*** is clicked on. The options are:
+* ***Default style for multi-location zoom new layers*** determins the new layer style when ***Create Vector Layer Fron Location List*** is clicked on. The options are:
     * ***Default*** - No style is applied.
     * ***Label*** - The newly created layer will have labels next to the points.
     * ***Custom*** - The user can create a QGIS .qml file that contains style infomation on how to style the new layer. If this is configured, then this will apply this style to the new layer.
+* ***Number of extra data fields*** - Besides *Latitude*, *Longitude*, and *Label*, the user can add up to 10 additional data fields which are labeled as *Data1*, *Data2*, ... *Data10*. By default this is set to 0.
