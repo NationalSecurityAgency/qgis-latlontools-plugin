@@ -162,6 +162,7 @@ class LatLonTools:
     def settingsChanged(self):
         # Settings may have changed so we need to make sure the zoomToDialog window is configured properly
         self.zoomToDialog.configure()
+        self.multiZoomDialog.settingsChanged()
             
  
     def zoomTo(self, srcCrs, lat, lon):

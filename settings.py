@@ -96,10 +96,12 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### Multi-zoom Settings ###
         self.qmlLineEdit.setText('')
         self.markerStyleComboBox.setCurrentIndex(0)
+        self.extraDataSpinBox.setValue(0)
         
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
-        the user quits QGIS.'''
+        the user quits QGIS. This just loads the saved information into varialbles,
+        but does not update the widgets. The widgets are updated with showEvent.'''
         settings = QSettings()
         
         ### CAPTURE SETTINGS ###
@@ -121,9 +123,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.mapZoom = int(settings.value('/LatLonTools/MapZoom', 13))
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
+        self.multiZoomNumCol = int(settings.value('/LatLonTools/MultiZoomExtraData', 0))
         self.multiZoomStyleID = int(settings.value('/LatLonTools/MultiZoomStyleID', 0))
         self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
         if not os.path.isfile(self.qmlStyle):
+            # If the file is invalid then set to an emply string
+            settings.setValue('/LatLonTools/QmlStyle', '')
+            settings.setValue('/LatLonTools/MultiZoomStyleID', 0)
             self.qmlStyle = ''
             self.multiZoomStyleID = 0
         
@@ -162,9 +168,12 @@ class SettingsWidget(QDialog, FORM_CLASS):
         settings.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
+        settings.setValue('/LatLonTools/MultiZoomExtraData', int(self.extraDataSpinBox.value()))
         settings.setValue('/LatLonTools/MultiZoomStyleID', int(self.markerStyleComboBox.currentIndex()))
         settings.setValue('/LatLonTools/QmlStyle', self.qmlStyle)
         
+        # The values have been read from the widgets and saved to the registry.
+        # Now we will read them back to the variables.
         self.readSettings()
         self.lltools.settingsChanged()
         self.close()
@@ -177,7 +186,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             self.qmlLineEdit.setText(filename)
             
     def customQMLFile(self):
-        return self.qmlLineEdit.text()
+        return self.qmlStyle
     
     def setEnabled(self):
         captureProjection = int(self.captureProjectionComboBox.currentIndex())
@@ -227,6 +236,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomSpinBox.setValue(self.mapZoom)
 
         ### MULTI-ZOOM CUSTOM QML STYLE ###
+        self.extraDataSpinBox.setValue(self.multiZoomNumCol)
         self.markerStyleComboBox.setCurrentIndex(self.multiZoomStyleID)
         self.qmlLineEdit.setText(self.qmlStyle)
         

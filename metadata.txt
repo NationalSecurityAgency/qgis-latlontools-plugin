@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=2.4
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support and MGRS conversion routines.
-version=0.8.4
+version=0.9
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -10,7 +10,7 @@ about=
     1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map.
     2) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, and can format the coordinates in decimal, DMS, or WKT POINT notation.
     3) Launch and display an external map based on the coordinate clicked on.
-    4) Create a list of points for rapid zooming.
+    4) Use a list of points for rapid zooming created from a file, direct input, or captured from the map. Create a point layer from these locations.
     5) MGRS conversion routines that converts a layer with an MGRS field into a point layer, and creates an MGRS field from the point layer.
     Lat Lon Tools makes it possible to seamlessly copy and paste between QGIS, Google Earth, and other on-line maps. The user can specify the delimiter used between coordinates and whether the coordinate order is 'Latitude, Longitude (Y,X)' or 'Longitude, Latitude (X,Y)'.
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
@@ -22,7 +22,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
-    0.8.5 - Added multi-zoom coordinate capture by clicking on map
+    0.9 - Added multi-location zoom coordinate capture by clicking on map & 10 data fields
     0.8.4 - Changed order of multi-zoom locations
     0.8.3 - Multi-zoom is now dockable, uses icons, and can style the memory layer
     0.8.2 - Bug fix.
