@@ -110,8 +110,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         '''This will force the columns to be stretched to the full width
            when the dialog geometry changes, but will then set it so that the user
            can adjust them.'''
-        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Stretch)
-        self.resultsTable.horizontalHeader().resizeSections()
+        self.resultsTable.horizontalHeader().resizeSections(QHeaderView.Stretch)
         self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Interactive)
     
     @pyqtSlot(QgsPoint)
