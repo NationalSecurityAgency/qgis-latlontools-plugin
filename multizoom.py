@@ -60,7 +60,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.resultsTable.setColumnCount(self.numCol)
         self.resultsTable.setSortingEnabled(False)
         self.resultsTable.setHorizontalHeaderLabels(LABELS[0:self.numCol])
-        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Stretch)
+        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Interactive)
         self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
@@ -103,7 +103,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         '''The dialog box is going to be displayed so we need to check to
            see if markers need to be displayed.'''
         self.updateDisplayedMarkers()
-        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Interactive)
+        self.resultsTable.horizontalHeader().resizeSections(QHeaderView.Stretch)
         self.setEnabled(True)
 
     def geomChanged(self):
@@ -111,7 +111,6 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
            when the dialog geometry changes, but will then set it so that the user
            can adjust them.'''
         self.resultsTable.horizontalHeader().resizeSections(QHeaderView.Stretch)
-        self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Interactive)
     
     @pyqtSlot(QgsPoint)
     def capturedPoint(self, pt):
