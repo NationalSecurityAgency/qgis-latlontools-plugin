@@ -55,6 +55,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### MULTI-ZOOM ###
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
         self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
+        self.qmlStyle = ''
         
         self.readSettings()
     
@@ -126,7 +127,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.multiZoomNumCol = int(settings.value('/LatLonTools/MultiZoomExtraData', 0))
         self.multiZoomStyleID = int(settings.value('/LatLonTools/MultiZoomStyleID', 0))
         self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
-        if not os.path.isfile(self.qmlStyle):
+        if self.qmlStyle == '' or self.qmlStyle == None or not os.path.isfile(self.qmlStyle):
             # If the file is invalid then set to an emply string
             settings.setValue('/LatLonTools/QmlStyle', '')
             settings.setValue('/LatLonTools/MultiZoomStyleID', 0)
@@ -170,7 +171,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### MULTI-ZOOM CUSTOM QML STYLE ###
         settings.setValue('/LatLonTools/MultiZoomExtraData', int(self.extraDataSpinBox.value()))
         settings.setValue('/LatLonTools/MultiZoomStyleID', int(self.markerStyleComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/QmlStyle', self.qmlStyle)
+        settings.setValue('/LatLonTools/QmlStyle', self.qmlLineEdit.text())
         
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -184,6 +185,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if filename:
             self.qmlStyle = filename
             self.qmlLineEdit.setText(filename)
+            self.markerStyleComboBox.setCurrentIndex(2)
             
     def customQMLFile(self):
         return self.qmlStyle
