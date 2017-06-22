@@ -46,7 +46,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.openButton.clicked.connect(self.openDialog)
         self.saveButton.clicked.connect(self.saveDialog)
         self.addButton.clicked.connect(self.addSingleCoord)
-        self.removeButton.clicked.connect(self.removeTableRow)
+        self.removeButton.clicked.connect(self.removeTableRows)
         self.addLineEdit.returnPressed.connect(self.addSingleCoord)
         self.clearAllButton.clicked.connect(self.clearAll)
         self.createLayerButton.clicked.connect(self.createLayer)
@@ -56,13 +56,14 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.maxResults = 5000
         self.numCol = 3 + self.settings.multiZoomNumCol
         self.resultsTable.setColumnCount(self.numCol)
-        self.resultsTable.setSortingEnabled(True)
+        self.resultsTable.setSortingEnabled(False)
         self.resultsTable.setHorizontalHeaderLabels(LABELS[0:self.numCol])
         self.resultsTable.horizontalHeader().setResizeMode(QHeaderView.Interactive)
         self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
-        self.resultsTable.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.resultsTable.itemSelectionChanged.connect(self.selectionChanged)
+        self.resultsTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.resultsTable.horizontalHeader().geometriesChanged.connect(self.geomChanged)
 
     def settingsChanged(self):
@@ -108,10 +109,8 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     
     @pyqtSlot(QgsPoint)
     def capturedPoint(self, pt):
-        self.resultsTable.clearSelection()
         newrow = self.addCoord(pt.y(), pt.x())
         self.resultsTable.selectRow(newrow)
-        self.updateDisplayedMarkers()
 
     def startCapture(self):
         if self.coordCaptureButton.isChecked():
@@ -126,7 +125,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         
     def clearAll(self):
         reply = QMessageBox.question(self, 'Message',
-            'Are your sure you want to delete all entries?',
+            'Are your sure you want to delete all locations?',
             QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
@@ -137,13 +136,8 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.settings.showTab(3)
         
     def updateDisplayedMarkers(self):
-        selectedRow = self.resultsTable.currentRow()
         rowcnt = self.resultsTable.rowCount()
 
-        # If the row is not selected we do not want to display the marker
-        indices = [x.row() for x in self.resultsTable.selectionModel().selectedRows()]
-        if not selectedRow in indices:
-            selectedRow = -1
         if self.showAllCheckBox.checkState():
             for id in xrange(rowcnt):
                 item = self.resultsTable.item(id, 0).data(Qt.UserRole)
@@ -154,10 +148,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     item.marker.setIconSize(18)
                     item.marker.setPenWidth(2)
                     item.marker.setIconType(QgsVertexMarker.ICON_CROSS)
-        else: # Only a selected row will be displayed
+        else: # Only selected rows will be displayed
+            indices = [x.row() for x in self.resultsTable.selectionModel().selectedRows()]
             for id in xrange(rowcnt):
                 item = self.resultsTable.item(id, 0).data(Qt.UserRole)
-                if id == selectedRow:
+                if id in indices:
                     if item.marker is None:
                         item.marker = QgsVertexMarker(self.canvas)
                         pt = self.canvasPoint(item.lat, item.lon)
@@ -243,18 +238,25 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         f.close()
             
         
-    def removeTableRow(self):
-        '''Remove an entry from the coordinate table.'''
-        row = int(self.resultsTable.currentRow())
+    def removeTableRows(self):
+        '''Remove selected entries from the coordinate table.'''
         indices = [x.row() for x in self.resultsTable.selectionModel().selectedRows()]
-        # Need to check to see if a row has been selected and that it is actually selected.
-        # currentRow() will return the last selected row even though it may have been deleted.
-        if row < 0 or not row in indices:
+        if len(indices) == 0:
             return
-        self.removeMarker(row)
-        self.resultsTable.removeRow(row)
-        self.resultsTable.clearSelection()
-        
+        # We need to remove the rows from the bottom to the top so that the indices
+        # don't change.
+        reply = QMessageBox.question(self, 'Message',
+            'Are your sure you want to delete the selected locations?',
+            QMessageBox.Yes, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            for row in sorted(indices, reverse=True):
+                # Remove the marker from the map
+                self.removeMarker(row)
+                # Then remove the location from the table
+                self.resultsTable.removeRow(row)
+            
+            self.resultsTable.clearSelection()
     
     def addSingleCoord(self):
         '''Add a coordinate that was pasted into the coordinate text box.'''
@@ -281,15 +283,15 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         newrow = self.addCoord(lat, lon, label, data)
         self.addLineEdit.clear()
         self.resultsTable.selectRow(newrow)
-        self.updateDisplayedMarkers()
+        self.itemClicked(newrow, 0)
         
     def addCoord(self, lat, lon, label='', data=[]):
         '''Add a coordinate to the list.'''
         rowcnt = self.resultsTable.rowCount()
         if rowcnt >= self.maxResults:
             return
-        self.resultsTable.insertRow(rowcnt)
         self.resultsTable.blockSignals(True)
+        self.resultsTable.insertRow(rowcnt)
         item = QTableWidgetItem(str(lat))
         item.setData(Qt.UserRole, LatLonItem(lat, lon, label, data))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
@@ -303,11 +305,16 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 self.resultsTable.setItem(rowcnt, i+3, QTableWidgetItem(data[i]))
             
         self.resultsTable.blockSignals(False)
-        return(rowcnt-1)
+        return(rowcnt)
+        
+    def selectionChanged(self):
+        '''There had been a change in what rows are selected in
+        the coordinate table. We need to update the displayed markers.'''
+        self.updateDisplayedMarkers()
         
     def itemClicked(self, row, col):
-        '''An item has been click on so zoom to it'''
-        self.updateDisplayedMarkers()
+        '''An item has been click on so zoom to it. The selectionChanged event will update
+        the displayed markers.'''
         selectedRow = self.resultsTable.currentRow()
         item = self.resultsTable.item(selectedRow, 0).data(Qt.UserRole)
         # Call the the parent's zoom to function
@@ -322,6 +329,8 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
 
         
     def cellChanged(self, row, col):
+        '''The label or one of the data cell strings have changed.
+        We need to update the LatLonItem data.'''
         rowcnt = self.resultsTable.rowCount()
         item = self.resultsTable.item(row, 0).data(Qt.UserRole)
         if col == 2:
