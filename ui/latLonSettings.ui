@@ -142,7 +142,7 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Zoom to Coordinate Type</string>
+          <string>'Zoom to' Input Coordinate CRS</string>
          </property>
         </widget>
        </item>

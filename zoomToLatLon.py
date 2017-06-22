@@ -28,11 +28,19 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         self.settings = lltools.settingsDialog
         self.iface = iface
         self.coordTxt.returnPressed.connect(self.zoomToPressed)
+        self.canvas.destinationCrsChanged.connect(self.crsChanged)
         self.configure()
 
+    def showEvent(self, e):
+        self.configure()
+        
     def closeEvent(self, event):
         self.removeMarker()
         event.accept()
+        
+    def crsChanged(self):
+        if self.isVisible():
+            self.configure()
         
     def is_number(self, s):
         try:
