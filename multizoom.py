@@ -65,8 +65,21 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.resultsTable.itemSelectionChanged.connect(self.selectionChanged)
         self.resultsTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.resultsTable.horizontalHeader().geometriesChanged.connect(self.geomChanged)
-
+        self.canvas.destinationCrsChanged.connect(self.crsChanged)
+        self.initLabel()
+        
+    def crsChanged(self):
+        if self.isVisible():
+            self.initLabel()
+        
+    def initLabel(self):
+        if self.settings.multiZoomToProjIsWgs84():
+            self.label.setText("Add location ('lat,lon or lat,lon,...)")
+        else:
+            self.label.setText("Add location ({} Y,X or Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
+            
     def settingsChanged(self):
+        self.initLabel()
         if self.numCol != self.settings.multiZoomNumCol + 3:
             # The number of columns have changed
             self.numCol = 3 + self.settings.multiZoomNumCol
@@ -99,6 +112,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
            see if markers need to be displayed.'''
         self.updateDisplayedMarkers()
         self.resultsTable.horizontalHeader().resizeSections(QHeaderView.Stretch)
+        self.initLabel()
         self.setEnabled(True)
 
     def geomChanged(self):
@@ -259,15 +273,20 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             self.resultsTable.clearSelection()
     
     def addSingleCoord(self):
-        '''Add a coordinate that was pasted into the coordinate text box.'''
+        '''Add a coordinate from the coordinate text box.'''
         parts = [x.strip() for x in self.addLineEdit.text().split(',')]
         label = ''
         data = []
         numFields = len(parts)
         try:
             if numFields >= 2:
-                lat = LatLon.parseDMSStringSingle(parts[0])
-                lon = LatLon.parseDMSStringSingle(parts[1])
+                if self.settings.multiZoomToProjIsWgs84():
+                    lat = LatLon.parseDMSStringSingle(parts[0])
+                    lon = LatLon.parseDMSStringSingle(parts[1])
+                else:
+                    srcCrs = self.settings.multiZoomToCRS()
+                    transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
+                    lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                 if numFields >= 3:
                     label = parts[2]
                 if numFields >= 4:
