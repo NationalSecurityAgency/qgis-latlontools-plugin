@@ -1,12 +1,12 @@
 [general]
 name=Lat Lon Tools
-qgisMinimumVersion=2.4
+qgisMinimumVersion=2.12
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support and MGRS conversion routines.
-version=0.9.2
+version=0.9.3
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
-    Lat Lon Tools is a suite of tools that makes it easy to capture and zoom to coordinates and interact with other on-line mapping tools. It also adds MGRS support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools. 
+    Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools. 
     1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map.
     2) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, and can format the coordinates in decimal, DMS, or WKT POINT notation.
     3) Launch and display an external map based on the coordinate clicked on.
@@ -22,6 +22,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.9.3 - Added ability to use other projections in multi-zoom dialog
     0.9.2 - Fixed Mac incompatibility
     0.9.1 - Fixed Linux incompatibility error
     0.9 - Added multi-location zoom coordinate capture by clicking on map & 10 data fields
