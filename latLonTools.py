@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QTimer, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu
-from qgis.core import QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry, QgsWkbTypes
+from qgis.core import QgsCoordinateTransform, QgsRectangle, QgsPointXY, QgsGeometry, QgsWkbTypes
 from qgis.gui import QgsRubberBand
 
 # Initialize Qt resources from file resources.py
@@ -163,6 +163,7 @@ class LatLonTools:
     def settingsChanged(self):
         # Settings may have changed so we need to make sure the zoomToDialog window is configured properly
         self.zoomToDialog.configure()
+        self.multiZoomDialog.settingsChanged()
             
  
     def zoomTo(self, srcCrs, lat, lon):
@@ -173,7 +174,7 @@ class LatLonTools:
         rect = QgsRectangle(x,y,x,y)
         self.canvas.setExtent(rect)
 
-        pt = QgsPoint(x,y)
+        pt = QgsPointXY(x,y)
         self.highlight(pt)
         self.canvas.refresh()
         return pt
@@ -181,11 +182,11 @@ class LatLonTools:
     def highlight(self, point):
         currExt = self.canvas.extent()
         
-        leftPt = QgsPoint(currExt.xMinimum(),point.y())
-        rightPt = QgsPoint(currExt.xMaximum(),point.y())
+        leftPt = QgsPointXY(currExt.xMinimum(),point.y())
+        rightPt = QgsPointXY(currExt.xMaximum(),point.y())
         
-        topPt = QgsPoint(point.x(),currExt.yMaximum())
-        bottomPt = QgsPoint(point.x(),currExt.yMinimum())
+        topPt = QgsPointXY(point.x(),currExt.yMaximum())
+        bottomPt = QgsPointXY(point.x(),currExt.yMinimum())
         
         horizLine = QgsGeometry.fromPolyline( [ leftPt , rightPt ] )
         vertLine = QgsGeometry.fromPolyline( [ topPt , bottomPt ] )

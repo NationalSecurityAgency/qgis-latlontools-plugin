@@ -1,6 +1,6 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import QgsCoordinateTransform, QgsPoint
+from qgis.core import QgsCoordinateTransform, QgsPointXY
 from qgis.gui import QgsMapTool, QgsMessageBar
 
 from .LatLon import LatLon
@@ -10,7 +10,7 @@ class CopyLatLonTool(QgsMapTool):
     '''Class to interact with the map canvas to capture the coordinate
     when the mouse button is pressed and to display the coordinate in
     in the status bar.'''
-    capturesig = pyqtSignal(QgsPoint)
+    capturesig = pyqtSignal(QgsPointXY)
     
     def __init__(self, settings, iface):
         QgsMapTool.__init__(self, iface.mapCanvas())
@@ -102,11 +102,11 @@ class CopyLatLonTool(QgsMapTool):
             msg = self.formatCoord(pt, ', ')
             formatString = self.coordFormatString()
             if msg == None:
-                self.iface.mainWindow().statusBar().showMessage("")
+                self.iface.statusBarIface().showMessage("")
             else:
-                self.iface.mainWindow().statusBar().showMessage("{} - {}".format(msg,formatString))
+                self.iface.statusBarIface().showMessage("{} - {}".format(msg,formatString),4000)
         except:
-            self.iface.mainWindow().statusBar().showMessage("")
+            self.iface.statusBarIface().showMessage("")
 
     def coordFormatString(self):
         if self.settings.captureProjIsWgs84():

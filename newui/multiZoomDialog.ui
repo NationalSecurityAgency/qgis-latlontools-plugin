@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MultiLocationZoom</class>
- <widget class="QDockWidget" name="MultiLocationZoom">
+ <widget class="QgsDockWidget" name="MultiLocationZoom">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>447</width>
-    <height>423</height>
+    <width>456</width>
+    <height>393</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -180,6 +180,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsDockWidget</class>
+   <extends>QDockWidget</extends>
+   <header>qgis.gui</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

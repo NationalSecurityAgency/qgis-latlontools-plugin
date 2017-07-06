@@ -1,10 +1,10 @@
 # Lat Lon Tools Plugin
 
-***Lat Lon Tools*** is a suite of tools that makes it easy to capture and zoom to coordinates and interact with other on-line mapping tools. It also adds MGRS support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
+***Lat Lon Tools*** makes it easy to capture and, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
 
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
-* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, or **WKT POINT** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities.
+* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, or **WKT POINT** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities.
   
 * <img src="images/zoomicon.png" alt="Zoom-to"> ***Zoom to Latitude, Longitude*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. If the default WGS 84 (EPSG:4326 - latitude/longitude) coordinate system is specified, "Zoom to Latitude, Longitude" can interpret **decimal degrees**, **DMS**, or **WKT POINT** coordinates. If configure in **Settings** it can zoom to **MGRS** coordinates or coordinates formatted in the project CRS or any other projection. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
 
@@ -17,11 +17,11 @@
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
 
 * <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, and Bing Maps are supported. The desired map can be configured in **Settings**.
-* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste or type in a coordinate in the ***Add location*** box and add it to the list.  When the user clicks on a list location, QGIS centers the map on the location and highlights it. Double clicking on a **Label** cell allows the text to be edited. The following are additional functions.
-    * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"latitude,longitude,label"** or **"latitude,longitude"**.
-    * <img src="doc/save.png" alt="Save"> ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"latitude,longitude,label"**.
-    * <img src="doc/delete.png" alt="Delete"> ***Delete Selected Location*** removes the selected location. 
-    * <img src="doc/deleteall.png" alt="Clear All"> ***Clear All Locations*** removes all of the list entries.
+* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste in or type in a coordinate in the ***Add location*** box to add it to the list. By default the format of the data entered is **"latitude,longitude[,label,data1,data10]"** where the contents in the [] are optional. Optionally, the user can define the input as **"Y,X[,label,data1,...,data10]"** where **Y** and **X** are coordinates defined by the project CRS or some other CRS. See ***Settings*** to set the input coordinate CRS. This defaults to WGS 84, Latitude and Longitude.<br/><br/>When the user clicks on a location in the list, QGIS centers the map on the location and highlights it. Double clicking on a **Label** or **Data** cell allows the text to be edited. By default the **Data** fields will not be visible, but can be added from ***Settings***. More than one location can be selected by clicking on the first point and then Shift-Click to select a range or using Ctrl-Click to add additional selected items. Markers for all selected items will be displayed. The following are additional functions.
+    * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"latitude,longitude,label,data1,...,data10"** or simply **"latitude,longitude"**.
+    * <img src="doc/save.png" alt="Save"> ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"latitude,longitude,label,data1,...,data10"**.
+    * <img src="doc/delete.png" alt="Delete"> ***Delete Selected Location*** removes all selected locations. 
+    * <img src="doc/deleteall.png" alt="Clear All"> ***Clear All Locations*** clears the list of all locations.
     * <img src="doc/newlayer.png" alt="New"> ***Create Vector Layer From Location List*** creates a memory layer out of the zoom-to locations. 
     * <img src="doc/settings.png" alt="Settings"> ***Show Style Settings*** chooses a style for the layer created from the create layer button. This displays the **Settings** dialog box.
     * <img src="images/coordinate_capture.png" alt="Start capture"> ***Start Capture*** enables the user to click on the map to capture coordinates directly to the list.
@@ -31,7 +31,7 @@
     * The ***Show all markers*** displays markers of all locations.
 
 * ***MGRS Conversions***
-    * <img src="images/mgrs2point.png" alt="MGRS to Geometry"> ***MGRS to Geometry*** - This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the layer to a new point vector layer where each record is converted to WGS84 (EPSG:4326) geometry.
+    * <img src="images/mgrs2point.png" alt="MGRS to Geometry"> ***MGRS to Geometry*** - This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the layer to a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
     
     <div style="text-align:center"><img src="doc/mgrs2geom.jpg" alt="MGRS to Geometry"></div>
 
@@ -48,9 +48,9 @@ By default ***Lat Lon Tools*** follows the **Google Map** convention making it p
 
 ### Capture & Display Settings
 
-![Capture and Display Settings](doc/settings.jpg)
+<div style="text-align:center"><img src="doc/settings.jpg" alt="Capture and Display Settings"></div>
 
-There are 4 capture projections that can be selected from the ***Coordinate Capture Projection*** drop down menu. They are as follows.
+There are 4 capture projections that can be selected from the ***CRS/Projection of Captured Coordinate*** drop down menu. They are as follows.
 
 * **WGS 84 (Latitude & Longitude)** - This captures the coordinates as a latitude and longitude regardless of what the project CRS is set to. This is the default setting.
 * **MGRS** - This captures the coordinates in the [MGRS](https://en.wikipedia.org/wiki/Military_grid_reference_system) format,
@@ -69,7 +69,7 @@ For ***Other CRS Number Format*** such as **Project CRS** or **Custom CRS** the 
 * **Normal Coordinate** - Decimal coordinate notation.
 * **WKT POINT**
 
-The order in which the coordinates are captured are determined by ***Coordinate Capture Order*** (not applicable to MGRS coordinates or WKT formatted coordinates) and are one of the following:
+The order in which the coordinates are captured are determined by ***Coordinate Order (Not applicable to MGRS and WKT)*** and are one of the following:
 
 * **Lat, Lon (Y,X) - Google Map Order**
 * **Lon, Lat (X,Y) Order**.
@@ -83,7 +83,7 @@ The order in which the coordinates are captured are determined by ***Coordinate 
 
 ### Zoom to Settings
 
-![Zoom to Settings](doc/settings2.jpg)
+<div style="text-align:center"><img src="doc/settings2.jpg" alt="Zoom to Settings"></div>
 
 The ***Zoom to Latitude, Longitude*** tool accepts the following input coordinates as specified by ***Zoom to Coordinate Type***:
 
@@ -101,7 +101,7 @@ The order in which the coordinates are parsed in the ***Zoom to Latitude, Longit
 
 ### External Map Settings
 
-![External Map Settings](doc/settings3.jpg)
+<div style="text-align:center"><img src="doc/settings3.jpg" alt="External Map Settings"></div>
 
 Here you can ***Select an External Map Provider***. The options are:
 
@@ -110,19 +110,41 @@ Here you can ***Select an External Map Provider***. The options are:
 * **Google Aerial**
 * **Bing Map**
 * **Bing Aerial**
+* **MapQuest Map**
+* **MapQuest Aerial**
 
 ***Map Hints*** are desired attributes you would like to see in the resulting map. 
 
 * **Show placemark** - When checked the external map shows a placemark at the location clicked on in the QGIS map. If this is not checked then the external map centers itself around clicked location, but will not display the placemark.
 * **Map Zoom Level** - This is the desired default zoom level in the external map when it is launched.
 
-### Multi-zoom Settings
+### Multi-location Zoom Settings
 
-![Multi-zoom Settings](doc/settings4.jpg)
+<div style="text-align:center"><img src="doc/settings4.jpg" alt="Multi-location Zoom Settings"></div>
 
-Here the user can specify a style for the multi-zoom to create layer. It can be a simple default style, default with labels, or a .qml style file that contains advanced styling.  
+These are settings for the Multi-location zoom dialog box. 
 
-* ***Default style for multi-zoom new layers*** determins the new layer style when ***Create Vector Layer Fron Location List*** is clicked on. The options are:
+**CRS of 'Add location' Input Coordinates**
+
+Here the user sets the CRS/projection of the coordinates entered in the ***Add location*** text box. By default this is set to WGS 84, latitude and longitude. This has no affect on the coordinates in the ***Location List*** that can be read in. The location list must always be WGS 84. The options are:
+
+* **WGS 84 (Latitude &amp; Longitude)**
+* **Project CRS**
+* **Custom CRS**
+
+When **Custom CRS** is selected, the user is allowed to select a custom CRS projection.
+
+**Create Vector Layer Style**
+
+The user can specify a style when creating a layer from the zoom locations. It can be a simple default style, default with labels, or a .qml style file that contains advanced styling. 
+
+* ***Default style for multi-location zoom new layers*** determins the new layer style when ***Create Vector Layer Fron Location List*** is clicked on. The options are:
     * ***Default*** - No style is applied.
     * ***Label*** - The newly created layer will have labels next to the points.
     * ***Custom*** - The user can create a QGIS .qml file that contains style infomation on how to style the new layer. If this is configured, then this will apply this style to the new layer.
+    
+The ***Browse*** button allows selection of the .qml style file. When a .qml file is selected, ***Custom*** is automatically selected for the default style.
+    
+**Data Field Settings**
+    
+* ***Number of extra data fields*** - Besides *Latitude*, *Longitude*, and *Label*, the user can add up to 10 additional data fields which are labeled as *Data1*, *Data2*, ... *Data10*. By default this is set to 0.

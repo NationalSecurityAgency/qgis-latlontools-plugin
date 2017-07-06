@@ -2,18 +2,22 @@ import os
 import re
 
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QDockWidget, QHeaderView, QAbstractItemView, QFileDialog, QTableWidget, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QDockWidget, QHeaderView, QAbstractItemView, QFileDialog, QTableWidget, QTableWidgetItem, QMessageBox
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import Qt, QVariant, pyqtSlot
 from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
-    QgsField, QgsFeature, QgsPoint, QgsGeometry, 
-    QgsPalLayerSettings, QgsProject )
+    QgsField, QgsFeature, QgsGeometry, QgsPointXY,
+    QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject )
 from qgis.gui import QgsVertexMarker, QgsMessageBar
 from .LatLon import LatLon
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
 
+LABELS = ['Latitude','Longitude','Label','Data1','Data2','Data3',
+    'Data4','Data5','Data6','Data7','Data8','Data9','Data10']
+
+MAXDATA = 10
 
 class MultiZoomWidget(QDockWidget, FORM_CLASS):
     '''Multizoom Dialog box.'''
@@ -24,7 +28,6 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.iface = lltools.iface
         self.canvas = self.iface.mapCanvas()
         self.lltools = lltools
-        self.llitems=[]
         
         # Set up a connection with the coordinate capture tool
         self.lltools.mapTool.capturesig.connect(self.capturedPoint)
@@ -42,23 +45,57 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.openButton.clicked.connect(self.openDialog)
         self.saveButton.clicked.connect(self.saveDialog)
         self.addButton.clicked.connect(self.addSingleCoord)
-        self.removeButton.clicked.connect(self.removeTableRow)
+        self.removeButton.clicked.connect(self.removeTableRows)
         self.addLineEdit.returnPressed.connect(self.addSingleCoord)
         self.clearAllButton.clicked.connect(self.clearAll)
         self.createLayerButton.clicked.connect(self.createLayer)
         self.optionsButton.clicked.connect(self.showSettings)
-        self.showAllCheckBox.stateChanged.connect(self.showAllChange)
+        self.showAllCheckBox.stateChanged.connect(self.updateDisplayedMarkers)
         self.dirname = ''
-        self.numcoord = 0
-        self.maxResults = 1000
-        self.resultsTable.setColumnCount(3)
+        self.maxResults = 5000
+        self.numCol = 3 + self.settings.multiZoomNumCol
+        self.resultsTable.setColumnCount(self.numCol)
         self.resultsTable.setSortingEnabled(False)
-        self.resultsTable.setHorizontalHeaderLabels(['Latitude','Longitude','Label'])
-        self.resultsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.resultsTable.setHorizontalHeaderLabels(LABELS[0:self.numCol])
+        self.resultsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         self.resultsTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.resultsTable.cellClicked.connect(self.itemClicked)
         self.resultsTable.cellChanged.connect(self.cellChanged)
-        self.resultsTable.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.resultsTable.itemSelectionChanged.connect(self.selectionChanged)
+        self.resultsTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.resultsTable.horizontalHeader().geometriesChanged.connect(self.geomChanged)
+        self.canvas.destinationCrsChanged.connect(self.crsChanged)
+        self.initLabel()
+        
+    def crsChanged(self):
+        if self.isVisible():
+            self.initLabel()
+        
+    def initLabel(self):
+        if self.settings.multiZoomToProjIsWgs84():
+            self.label.setText("Add location ('lat,lon or lat,lon,...)")
+        else:
+            self.label.setText("Add location ({} Y,X or Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
+            
+    def settingsChanged(self):
+        self.initLabel()
+        if self.numCol != self.settings.multiZoomNumCol + 3:
+            # The number of columns have changed
+            self.numCol = 3 + self.settings.multiZoomNumCol
+            self.resultsTable.blockSignals(True)
+            self.resultsTable.setColumnCount(self.numCol)
+            self.resultsTable.setHorizontalHeaderLabels(LABELS[0:self.numCol])
+            rowcnt = self.resultsTable.rowCount()
+            for i in range(rowcnt):
+                item = self.resultsTable.item(i, 0).data(Qt.UserRole)
+                if self.numCol > 3:
+                    for j in range(3,self.numCol):
+                        self.resultsTable.setItem(i, j, QTableWidgetItem(item.data[j-3]))
+                
+            self.resultsTable.clearSelection()
+            self.resultsTable.blockSignals(False)
+            self.geomChanged()
+            self.updateDisplayedMarkers()
 
     def closeEvent(self, e):
         '''Called when the dialog box is being closed. We want to clear selected features and remove
@@ -71,12 +108,21 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     def showEvent(self, e):
         '''The dialog box is going to be displayed so we need to check to
            see if markers need to be displayed.'''
-        self.showAllChange()
+        self.updateDisplayedMarkers()
+        self.resultsTable.horizontalHeader().resizeSections(QHeaderView.Stretch)
+        self.initLabel()
         self.setEnabled(True)
 
-    @pyqtSlot(QgsPoint)
+    def geomChanged(self):
+        '''This will force the columns to be stretched to the full width
+           when the dialog geometry changes, but will then set it so that the user
+           can adjust them.'''
+        self.resultsTable.horizontalHeader().resizeSections(QHeaderView.Stretch)
+    
+    @pyqtSlot(QgsPointXY)
     def capturedPoint(self, pt):
-        self.addCoord(pt.y(), pt.x(),'')
+        newrow = self.addCoord(pt.y(), pt.x())
+        self.resultsTable.selectRow(newrow)
 
     def startCapture(self):
         if self.coordCaptureButton.isChecked():
@@ -90,45 +136,64 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.coordCaptureButton.setChecked(False)
         
     def clearAll(self):
-        self.removeMarkers()
-        self.llitems=[]
-        self.resultsTable.setRowCount(0)
-        self.numcoord = 0
+        reply = QMessageBox.question(self, 'Message',
+            'Are your sure you want to delete all locations?',
+            QMessageBox.Yes, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.removeMarkers()
+            self.resultsTable.setRowCount(0)
         
     def showSettings(self):
         self.settings.showTab(3)
         
-    def showAllChange(self):
-        selectedRow = self.resultsTable.currentRow()
-        if not self.showAllCheckBox.checkState():
-            for id, item in enumerate(self.llitems):
-                if item.marker is not None and id != selectedRow:
-                    self.canvas.scene().removeItem(item.marker)
-                    item.marker = None
-        else:
-            for item in self.llitems:
+    def updateDisplayedMarkers(self):
+        rowcnt = self.resultsTable.rowCount()
+
+        if self.showAllCheckBox.checkState():
+            for id in range(rowcnt):
+                item = self.resultsTable.item(id, 0).data(Qt.UserRole)
                 if item.marker is None:
                     item.marker = QgsVertexMarker(self.canvas)
-                    pt = self.canvasPoint(item.lat, item.lon)
+                    pt = self.canvasPointXY(item.lat, item.lon)
                     item.marker.setCenter(pt)
                     item.marker.setIconSize(18)
                     item.marker.setPenWidth(2)
                     item.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+        else: # Only selected rows will be displayed
+            indices = [x.row() for x in self.resultsTable.selectionModel().selectedRows()]
+            for id in range(rowcnt):
+                item = self.resultsTable.item(id, 0).data(Qt.UserRole)
+                if id in indices:
+                    if item.marker is None:
+                        item.marker = QgsVertexMarker(self.canvas)
+                        pt = self.canvasPointXY(item.lat, item.lon)
+                        item.marker.setCenter(pt)
+                        item.marker.setIconSize(18)
+                        item.marker.setPenWidth(2)
+                        item.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+                elif item.marker is not None:
+                    self.canvas.scene().removeItem(item.marker)
+                    item.marker = None
         
     def removeMarkers(self):
-        if self.numcoord == 0:
+        rowcnt = self.resultsTable.rowCount()
+        if rowcnt == 0:
             return
-        for item in self.llitems:
+        for id in range(rowcnt):
+            item = self.resultsTable.item(id, 0).data(Qt.UserRole)
             if item.marker is not None:
                 self.canvas.scene().removeItem(item.marker)
                 item.marker = None
         
     def removeMarker(self, row):
-        if row >= len(self.llitems):
+        rowcnt = self.resultsTable.rowCount()
+        if row >= rowcnt:
             return
-        if self.llitems[row].marker is not None:
-            self.canvas.scene().removeItem(self.llitems[row].marker)
-            self.llitems[row].marker = None
+        item = self.resultsTable.item(row, 0).data(Qt.UserRole)
+        if item.marker is not None:
+            self.canvas.scene().removeItem(item.marker)
+            item.marker = None
         
     def openDialog(self):
         filename = QFileDialog.getOpenFileName(None, "Input File", 
@@ -155,48 +220,76 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                             lat = LatLon.parseDMSStringSingle(parts[0])
                             lon = LatLon.parseDMSStringSingle(parts[1])
                             label = ''
+                            data = []
                             if len(parts) >= 3:
                                 label = parts[2]
-                            self.addCoord(lat, lon, label)
+                            if len(parts) >= 4:
+                                data = parts[3:]
+                            self.addCoord(lat, lon, label, data)
                     except:
                         pass
         except:
             pass
+        self.updateDisplayedMarkers()
     
     def saveFile(self, fname):
         '''Save the zoom locations'''
-        if self.numcoord == 0:
+        rowcnt = self.resultsTable.rowCount()
+        if rowcnt == 0:
             return
         with open(fname,'w') as f:
-            for item in self.llitems:
-                s = "{},{},{}\n".format(item.lat, item.lon, item.label)
+            for id in range(rowcnt):
+                item = self.resultsTable.item(id, 0).data(Qt.UserRole)
+                s = "{},{},{}".format(item.lat, item.lon, item.label)
                 f.write(s)
+                if self.numCol >= 4:
+                    for i in range(self.numCol - 3):
+                        s = ",{}".format(item.data[i])
+                        f.write(s)
+                f.write('\n')
         f.close()
             
         
-    def removeTableRow(self):
-        '''Remove an entry from the coordinate table.'''
-        row = int(self.resultsTable.currentRow())
-        if row < 0:
+    def removeTableRows(self):
+        '''Remove selected entries from the coordinate table.'''
+        indices = [x.row() for x in self.resultsTable.selectionModel().selectedRows()]
+        if len(indices) == 0:
             return
-        self.removeMarker(row)
-        self.resultsTable.removeRow(row)
-        del self.llitems[row]
-        self.resultsTable.clearSelection()
-        self.numcoord -= 1
-        
+        # We need to remove the rows from the bottom to the top so that the indices
+        # don't change.
+        reply = QMessageBox.question(self, 'Message',
+            'Are your sure you want to delete the selected locations?',
+            QMessageBox.Yes, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            for row in sorted(indices, reverse=True):
+                # Remove the marker from the map
+                self.removeMarker(row)
+                # Then remove the location from the table
+                self.resultsTable.removeRow(row)
+            
+            self.resultsTable.clearSelection()
     
     def addSingleCoord(self):
-        '''Add a coordinate that was pasted into the coordinate text box.'''
+        '''Add a coordinate from the coordinate text box.'''
         parts = [x.strip() for x in self.addLineEdit.text().split(',')]
         label = ''
+        data = []
+        numFields = len(parts)
         try:
-            if len(parts) >= 2:
-                lat = LatLon.parseDMSStringSingle(parts[0])
-                lon = LatLon.parseDMSStringSingle(parts[1])
-                label = ''
-                if len(parts) >= 3:
+            if numFields >= 2:
+                if self.settings.multiZoomToProjIsWgs84():
+                    lat = LatLon.parseDMSStringSingle(parts[0])
+                    lon = LatLon.parseDMSStringSingle(parts[1])
+                else:
+                    srcCrs = self.settings.multiZoomToCRS()
+                    transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
+                    lon, lat = transform.transform(float(parts[1]), float(parts[0]))
+                if numFields >= 3:
                     label = parts[2]
+                if numFields >= 4:
+                    data = parts[3:]
+                    
             else:
                 self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
                 return
@@ -204,89 +297,110 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             if self.addLineEdit.text():
                 self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
             return
-        self.addCoord(lat, lon, label)
+        newrow = self.addCoord(lat, lon, label, data)
         self.addLineEdit.clear()
+        self.resultsTable.selectRow(newrow)
+        self.itemClicked(newrow, 0)
         
-    def addCoord(self, lat, lon, label):
+    def addCoord(self, lat, lon, label='', data=[]):
         '''Add a coordinate to the list.'''
-        if self.numcoord >= self.maxResults:
+        rowcnt = self.resultsTable.rowCount()
+        if rowcnt >= self.maxResults:
             return
-        self.resultsTable.insertRow(self.numcoord)
-        self.llitems.append(LatLonItem(lat, lon, label))
         self.resultsTable.blockSignals(True)
-        self.resultsTable.setItem(self.numcoord, 2, QTableWidgetItem(label))
+        self.resultsTable.insertRow(rowcnt)
         item = QTableWidgetItem(str(lat))
+        item.setData(Qt.UserRole, LatLonItem(lat, lon, label, data))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.resultsTable.setItem(self.numcoord, 0, item)
+        self.resultsTable.setItem(rowcnt, 0, item)
         item = QTableWidgetItem(str(lon))
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.resultsTable.setItem(self.numcoord, 1, item)
+        self.resultsTable.setItem(rowcnt, 1, item)
+        self.resultsTable.setItem(rowcnt, 2, QTableWidgetItem(label))
+        if self.numCol > 3 and len(data) > 0:
+            for i in range( min(self.numCol-3, len(data))):
+                self.resultsTable.setItem(rowcnt, i+3, QTableWidgetItem(data[i]))
+            
         self.resultsTable.blockSignals(False)
-        self.numcoord += 1
-        if self.showAllCheckBox.checkState():
-            self.showAllChange()
+        return(rowcnt)
+        
+    def selectionChanged(self):
+        '''There had been a change in what rows are selected in
+        the coordinate table. We need to update the displayed markers.'''
+        self.updateDisplayedMarkers()
         
     def itemClicked(self, row, col):
-        '''An item has been click on so zoom to it'''
-        if not self.showAllCheckBox.checkState():
-            self.removeMarkers()
+        '''An item has been click on so zoom to it. The selectionChanged event will update
+        the displayed markers.'''
         selectedRow = self.resultsTable.currentRow()
+        item = self.resultsTable.item(selectedRow, 0).data(Qt.UserRole)
         # Call the the parent's zoom to function
-        pt = self.lltools.zoomTo(self.settings.epsg4326, self.llitems[selectedRow].lat,self.llitems[selectedRow].lon)
-        if not self.showAllCheckBox.checkState():
-            if self.llitems[selectedRow].marker == None:
-                self.llitems[selectedRow].marker = QgsVertexMarker(self.canvas)
-            self.llitems[selectedRow].marker.setCenter(pt)
-            self.llitems[selectedRow].marker.setIconSize(18)
-            self.llitems[selectedRow].marker.setPenWidth(2)
-            self.llitems[selectedRow].marker.setIconType(QgsVertexMarker.ICON_CROSS)
+        pt = self.lltools.zoomTo(self.settings.epsg4326, item.lat,item.lon)
         
-    def canvasPoint(self, lat, lon):
+    def canvasPointXY(self, lat, lon):
         canvasCrs = self.canvas.mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(self.settings.epsg4326, canvasCrs)
         x, y = transform.transform(float(lon), float(lat))
-        pt = QgsPoint(x,y)
+        pt = QgsPointXY(x,y)
         return pt
 
         
     def cellChanged(self, row, col):
+        '''The label or one of the data cell strings have changed.
+        We need to update the LatLonItem data.'''
+        rowcnt = self.resultsTable.rowCount()
+        item = self.resultsTable.item(row, 0).data(Qt.UserRole)
         if col == 2:
-            self.llitems[row].label = self.resultsTable.item(row, col).text()
+            item.label = self.resultsTable.item(row, col).text()
+        elif col >= 3:
+            item.data[col-3] = self.resultsTable.item(row, col).text()
             
     def createLayer(self):
         '''Create a memory layer from the zoom to locations'''
-        if self.numcoord == 0:
+        rowcnt = self.resultsTable.rowCount()
+        if rowcnt == 0:
             return
-        ptLayer = QgsVectorLayer("Point?crs=epsg:4326", "Lat Lon Locations", "memory")
+        attr = []
+        for item, label in enumerate(LABELS[0:self.numCol]):
+            label = label.lower()
+            if item <= 1:
+                attr.append(QgsField(label, QVariant.Double))
+            else:
+                attr.append(QgsField(label, QVariant.String))
+        ptLayer = QgsVectorLayer("Point?crs=epsg:4326", u"Lat Lon Locations", "memory")
         provider = ptLayer.dataProvider()
-        provider.addAttributes([QgsField("latitude", QVariant.Double),
-            QgsField("longitude", QVariant.Double),
-            QgsField("label", QVariant.String)])
+        provider.addAttributes(attr)
         ptLayer.updateFields()
         
-        for item in self.llitems:
+        for id in range(rowcnt):
+            item = self.resultsTable.item(id, 0).data(Qt.UserRole)
             feature = QgsFeature()
-            feature.setGeometry(QgsGeometry.fromPoint(QgsPoint(item.lon,item.lat)))
-            feature.setAttributes([item.lat, item.lon, item.label])
+            feature.setGeometry(QgsGeometry.fromPoint(QgsPointXY(item.lon,item.lat)))
+            attr = [item.lat, item.lon, item.label]
+            for i in range(3,self.numCol):
+                attr.append(item.data[i-3])
+            feature.setAttributes(attr)
             provider.addFeatures([feature])
         
         ptLayer.updateExtents()
-        
         if self.settings.multiZoomStyleID == 1:
-            label = QgsPalLayerSettings()
-            label.readFromLayer(ptLayer)
-            label.enabled = True
-            label.fieldName = 'label'
-            label.placement= QgsPalLayerSettings.AroundPoint
-            label.writeToLayer(ptLayer)
+            settings = QgsPalLayerSettings()
+            settings.fieldName = 'label'
+            settings.placement= QgsPalLayerSettings.AroundPoint
+            labeling = QgsVectorLayerSimpleLabeling(settings)
+            ptLayer.setLabeling(labeling)
         elif self.settings.multiZoomStyleID == 2 and os.path.isfile(self.settings.customQMLFile()):
             ptLayer.loadNamedStyle(self.settings.customQMLFile())
             
         QgsProject.instance().addMapLayer(ptLayer)
         
 class LatLonItem():
-    def __init__(self, lat, lon, label=''):
+    def __init__(self, lat, lon, label='', data=[]):
         self.lat = lat
         self.lon = lon
         self.label = label
+        self.data = ['']*MAXDATA
+        for i, d in enumerate(data):
+            if i < MAXDATA:
+                self.data[i] = d
         self.marker = None

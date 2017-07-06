@@ -4,7 +4,7 @@ import re
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import QVariant
-from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature, QgsGeometry, QgsPoint, QgsProject
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature, QgsGeometry, QgsPointXY, QgsProject
 from qgis.gui import QgsMessageBar
 #import traceback
 
@@ -64,7 +64,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
                 num_bad += 1
                 continue
             f = QgsFeature()
-            f.setGeometry(QgsGeometry.fromPoint(QgsPoint(lon,lat)))
+            f.setGeometry(QgsGeometry.fromPoint(QgsPointXY(lon,lat)))
             f.setAttributes(feature.attributes())
             ppoint.addFeatures([f])
             
