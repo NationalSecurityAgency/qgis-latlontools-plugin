@@ -143,8 +143,10 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
+            self.resultsTable.blockSignals(True)
             self.removeMarkers()
             self.resultsTable.setRowCount(0)
+            self.resultsTable.blockSignals(False)
         
     def showSettings(self):
         self.settings.showTab(3)
@@ -187,15 +189,6 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             if item.marker is not None:
                 self.canvas.scene().removeItem(item.marker)
                 item.marker = None
-        
-    def removeMarker(self, row):
-        rowcnt = self.resultsTable.rowCount()
-        if row >= rowcnt:
-            return
-        item = self.resultsTable.item(row, 0).data(Qt.UserRole)
-        if item.marker is not None:
-            self.canvas.scene().removeItem(item.marker)
-            item.marker = None
         
     def openDialog(self):
         filename = QFileDialog.getOpenFileName(None, "Input File", 
@@ -264,12 +257,19 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
+            # Blocking the signals is necessary to prevent the signals replacing
+            # the marker before it is completely removed.
+            self.resultsTable.blockSignals(True)
             for row in sorted(indices, reverse=True):
                 # Remove the marker from the map
-                self.removeMarker(row)
+                item = self.resultsTable.item(row, 0).data(Qt.UserRole)
+                if item.marker is not None:
+                    self.canvas.scene().removeItem(item.marker)
+                    item.marker = None
                 # Then remove the location from the table
                 self.resultsTable.removeRow(row)
             
+            self.resultsTable.blockSignals(False)
             self.resultsTable.clearSelection()
     
     def addSingleCoord(self):
