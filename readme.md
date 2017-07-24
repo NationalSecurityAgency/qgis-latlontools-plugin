@@ -1,6 +1,6 @@
 # Lat Lon Tools Plugin
 
-***Lat Lon Tools*** makes it easy to capture and, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
+***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
 
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
@@ -16,7 +16,7 @@
     * WKT: POINT(-95.265483 38.959390)
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
 
-* <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, and Bing Maps are supported. The desired map can be configured in **Settings**.
+* <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, MapQuest, and Bing Maps are supported. The desired map can be configured in **Settings**.
 * <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste in or type in a coordinate in the ***Add location*** box to add it to the list. By default the format of the data entered is **"latitude,longitude[,label,data1,data10]"** where the contents in the [] are optional. Optionally, the user can define the input as **"Y,X[,label,data1,...,data10]"** where **Y** and **X** are coordinates defined by the project CRS or some other CRS. See ***Settings*** to set the input coordinate CRS. This defaults to WGS 84, Latitude and Longitude.<br/><br/>When the user clicks on a location in the list, QGIS centers the map on the location and highlights it. Double clicking on a **Label** or **Data** cell allows the text to be edited. By default the **Data** fields will not be visible, but can be added from ***Settings***. More than one location can be selected by clicking on the first point and then Shift-Click to select a range or using Ctrl-Click to add additional selected items. Markers for all selected items will be displayed. The following are additional functions.
     * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"latitude,longitude,label,data1,...,data10"** or simply **"latitude,longitude"**.
     * <img src="doc/save.png" alt="Save"> ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"latitude,longitude,label,data1,...,data10"**.
@@ -103,7 +103,7 @@ The order in which the coordinates are parsed in the ***Zoom to Latitude, Longit
 
 <div style="text-align:center"><img src="doc/settings3.jpg" alt="External Map Settings"></div>
 
-Here you can ***Select an External Map Provider***. The options are:
+You can ***Select an External Map Provider***. The options are:
 
 * **OSM** - Open Street Map
 * **Google Map**
@@ -126,7 +126,7 @@ These are settings for the Multi-location zoom dialog box.
 
 **CRS of 'Add location' Input Coordinates**
 
-Here the user sets the CRS/projection of the coordinates entered in the ***Add location*** text box. By default this is set to WGS 84, latitude and longitude. This has no affect on the coordinates in the ***Location List*** that can be read in. The location list must always be WGS 84. The options are:
+The user sets the CRS/projection of the coordinates entered in the ***Add location*** text box. By default this is set to WGS 84, latitude and longitude. This has no effect on the coordinates in the ***Location List*** that can be read in. The location list must always be WGS 84. The options are:
 
 * **WGS 84 (Latitude &amp; Longitude)**
 * **Project CRS**
