@@ -3,7 +3,7 @@ name=Lat Lon Tools
 qgisMinimumVersion=2.99
 qgisMaximumVersion=3.99
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support and MGRS conversion routines.
-version=3.0.1
+version=3.0.2
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -23,5 +23,6 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.0.2 - Updated for API changes - Equivalent to the QGIS 2.x 0.9.4 release
     3.0.1 - Updated to the latest QGIS 3 API - Equivalent to the QGIS 2.x 0.9.3 release
     3.0.0 - First release for QGIS 3
