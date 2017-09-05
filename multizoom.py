@@ -74,9 +74,15 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         
     def initLabel(self):
         if self.settings.multiZoomToProjIsWgs84():
-            self.label.setText("Add location ('lat,lon or lat,lon,...)")
+            if self.settings.multiCoordOrder == 0: # Lat Lon
+                self.label.setText("Add location ('lat,lon or lat,lon,...)")
+            else:
+                self.label.setText("Add location ('lon,lat or lon,lat,...)")
         else:
-            self.label.setText("Add location ({} Y,X or Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
+            if self.settings.multiCoordOrder == 0: # Lat Lon
+                self.label.setText("Add location ({} Y,X or Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
+            else:
+                self.label.setText("Add location ({} X,Y or X,Y,...)".format(self.settings.multiZoomToCRS().authid()))
             
     def settingsChanged(self):
         self.initLabel()
@@ -281,12 +287,19 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         try:
             if numFields >= 2:
                 if self.settings.multiZoomToProjIsWgs84():
-                    lat = LatLon.parseDMSStringSingle(parts[0])
-                    lon = LatLon.parseDMSStringSingle(parts[1])
+                    if self.settings.multiCoordOrder == 0: # Lat Lon
+                        lat = LatLon.parseDMSStringSingle(parts[0])
+                        lon = LatLon.parseDMSStringSingle(parts[1])
+                    else:
+                        lat = LatLon.parseDMSStringSingle(parts[1])
+                        lon = LatLon.parseDMSStringSingle(parts[0])
                 else:
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
-                    lon, lat = transform.transform(float(parts[1]), float(parts[0]))
+                    if self.settings.multiCoordOrder == 0: # Lat Lon
+                        lon, lat = transform.transform(float(parts[1]), float(parts[0]))
+                    else:
+                        lon, lat = transform.transform(float(parts[0]), float(parts[1]))
                 if numFields >= 3:
                     label = parts[2]
                 if numFields >= 4:

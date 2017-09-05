@@ -58,6 +58,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.multiZoomToProjectionSelectionWidget.setCrs(self.epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
         self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
+        self.multiCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.qmlStyle = ''
         
         self.readSettings()
@@ -103,6 +104,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### Multi-zoom Settings ###
         self.multiZoomToProjectionComboBox.setCurrentIndex(0) # WGS 84
         self.multiZoomToProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.multiCoordOrderComboBox.setCurrentIndex(self.OrderYX)
         self.qmlLineEdit.setText('')
         self.markerStyleComboBox.setCurrentIndex(0)
         self.extraDataSpinBox.setValue(0)
@@ -133,6 +135,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
         self.multiZoomToProjection = int(settings.value('/LatLonTools/MultiZoomToProjection', 0))
+        self.multiCoordOrder = int(settings.value('/LatLonTools/MultiCoordOrder', self.OrderYX))
         self.multiZoomNumCol = int(settings.value('/LatLonTools/MultiZoomExtraData', 0))
         self.multiZoomStyleID = int(settings.value('/LatLonTools/MultiZoomStyleID', 0))
         self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
@@ -179,6 +182,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### MULTI-ZOOM TO SETTINGS ###
         settings.setValue('/LatLonTools/MultiZoomToProjection', int(self.multiZoomToProjectionComboBox.currentIndex()))
+        settings.setValue('/LatLonTools/MultiCoordOrder', int(self.multiCoordOrderComboBox.currentIndex()))
         settings.setValue('/LatLonTools/MultiZoomExtraData', int(self.extraDataSpinBox.value()))
         settings.setValue('/LatLonTools/MultiZoomStyleID', int(self.markerStyleComboBox.currentIndex()))
         settings.setValue('/LatLonTools/QmlStyle', self.qmlLineEdit.text())
@@ -253,6 +257,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### MULTI-ZOOM CUSTOM QML STYLE ###
         self.multiZoomToProjectionComboBox.setCurrentIndex(self.multiZoomToProjection)
+        self.multiCoordOrderComboBox.setCurrentIndex(self.multiCoordOrder)
         self.extraDataSpinBox.setValue(self.multiZoomNumCol)
         self.markerStyleComboBox.setCurrentIndex(self.multiZoomStyleID)
         self.qmlLineEdit.setText(self.qmlStyle)

@@ -340,6 +340,18 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Coordinate Order of 'Add location' Input Coordinates</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QComboBox" name="multiCoordOrderComboBox"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Create Vector Layer Style</string>

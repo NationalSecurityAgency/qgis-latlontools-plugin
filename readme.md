@@ -35,7 +35,7 @@
     
     <div style="text-align:center"><img src="doc/mgrs2geom.jpg" alt="MGRS to Geometry"></div>
 
-    * <img src="images/point2mgrs.png" alt="Geometry to MGRS"> ***Geometry to MGRS*** - Convert a point vector layer into a point memory layer, but add an MGRS column, containing coordinates based on the vector layer's geometry. MGRS supports measuring precisions of 1m, 10m, 100m, 1km, 10km, and 100km. **MGRS Precision** of 5 is 1m and an **MGRS Precision** of 0 represents a point accuracy of 100km.
+    * <img src="images/point2mgrs.png" alt="Geometry to MGRS"> ***Geometry to MGRS*** - Convert a point vector layer into a point memory layer, but add an MGRS column, containing coordinates based on the vector layer's geometry. MGRS supports measuring precision's of 1m, 10m, 100m, 1km, 10km, and 100km. **MGRS Precision** of 5 is 1m and an **MGRS Precision** of 0 represents a point accuracy of 100km.
     
     <div style="text-align:center"><img src="doc/geom2mgrs.jpg" alt="MGRS to Geometry"></div>
 
@@ -45,6 +45,8 @@
 By default ***Lat Lon Tools*** follows the **Google Map** convention making it possible to copy and paste between QGIS, Google Map, Google Earth, and other on-line maps without breaking the coordinates into pieces. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In ***Settings*** the user can choose the ***Coordinate Capture Delimiter*** used between coordinates with presets for **Comma**, **Space**, and **Tab**. **Other** allows the user to specify a delimited string which can be more than one character.
 
 ## Settings
+
+> <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are independently set for the coordinate capture, zoom to, and multi-zoom to tools. Be careful that when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
 
 ### Capture & Display Settings
 
@@ -134,16 +136,20 @@ The user sets the CRS/projection of the coordinates entered in the ***Add locati
 
 When **Custom CRS** is selected, the user is allowed to select a custom CRS projection.
 
+**Coordinate Order of 'Add location' Input Coordinates**
+
+The user sets the order of coordinates entered in the ***Add location*** text box. The order is either latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps.
+
 **Create Vector Layer Style**
 
 The user can specify a style when creating a layer from the zoom locations. It can be a simple default style, default with labels, or a .qml style file that contains advanced styling. 
 
-* ***Default style for multi-location zoom new layers*** determins the new layer style when ***Create Vector Layer Fron Location List*** is clicked on. The options are:
+* ***Default style for multi-location zoom new layers*** determines the new layer style when ***Create Vector Layer From Location List*** is clicked on. The options are:
     * ***Default*** - No style is applied.
     * ***Label*** - The newly created layer will have labels next to the points.
-    * ***Custom*** - The user can create a QGIS .qml file that contains style infomation on how to style the new layer. If this is configured, then this will apply this style to the new layer.
+    * ***Custom*** - The user can create a QGIS .qml file that contains style information for a point vector layer. If a .qml file has been selected, then this setting will apply the style to the new layer.
     
-The ***Browse*** button allows selection of the .qml style file. When a .qml file is selected, ***Custom*** is automatically selected for the default style.
+The ***Browse*** button allows selection of the .qml style file. When a .qml file is selected, ***Custom*** is automatically selected as the default style.
     
 **Data Field Settings**
     
