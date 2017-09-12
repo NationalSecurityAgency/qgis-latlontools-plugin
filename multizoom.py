@@ -74,12 +74,12 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         
     def initLabel(self):
         if self.settings.multiZoomToProjIsWgs84():
-            if self.settings.multiCoordOrder == 0: # Lat Lon
+            if self.settings.multiCoordOrder == self.settings.OrderYX:
                 self.label.setText("Add location ('lat,lon or lat,lon,...)")
             else:
                 self.label.setText("Add location ('lon,lat or lon,lat,...)")
         else:
-            if self.settings.multiCoordOrder == 0: # Lat Lon
+            if self.settings.multiCoordOrder == self.settings.OrderYX:
                 self.label.setText("Add location ({} Y,X or Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
             else:
                 self.label.setText("Add location ({} X,Y or X,Y,...)".format(self.settings.multiZoomToCRS().authid()))
@@ -285,18 +285,33 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         data = []
         numFields = len(parts)
         try:
-            if numFields >= 2:
+            if numFields == 1:
+                '''Perhaps the user forgot to add the comma separator. Check to see
+                   if there are two coordinates anyway.'''
+                   
                 if self.settings.multiZoomToProjIsWgs84():
-                    if self.settings.multiCoordOrder == 0: # Lat Lon
-                        lat = LatLon.parseDMSStringSingle(parts[0])
-                        lon = LatLon.parseDMSStringSingle(parts[1])
+                    lat, lon = LatLon.parseDMSString(parts[0], self.settings.multiCoordOrder)
+                else:
+                    parts = re.split('[\s;:]+', parts[0], 1)
+                    if len(parts) < 2:
+                        self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=QgsMessageBar.WARNING, duration=3)
+                        return
+                    srcCrs = self.settings.multiZoomToCRS()
+                    transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
+                    if self.settings.multiCoordOrder == self.settings.OrderYX:
+                        lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
-                        lat = LatLon.parseDMSStringSingle(parts[1])
-                        lon = LatLon.parseDMSStringSingle(parts[0])
+                        lon, lat = transform.transform(float(parts[0]), float(parts[1]))
+            elif numFields >= 2:
+                if self.settings.multiZoomToProjIsWgs84():
+                    '''Combine the coordinates back together and use parseDMSString
+                       as it is more robust than parseDMSStringSingle.'''
+                    str = "{}, {}".format(parts[0], parts[1])
+                    lat, lon = LatLon.parseDMSString(str, self.settings.multiCoordOrder)
                 else:
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
-                    if self.settings.multiCoordOrder == 0: # Lat Lon
+                    if self.settings.multiCoordOrder == self.settings.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
                         lon, lat = transform.transform(float(parts[0]), float(parts[1]))
@@ -306,11 +321,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     data = parts[3:]
                     
             else:
-                self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
+                self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=QgsMessageBar.WARNING, duration=3)
                 return
         except:
             if self.addLineEdit.text():
-                self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=3)
+                self.iface.messageBar().pushMessage("", "Invalid Coordinate. Perhaps comma separators between fields were not used." , level=QgsMessageBar.WARNING, duration=3)
             return
         newrow = self.addCoord(lat, lon, label, data)
         self.addLineEdit.clear()
