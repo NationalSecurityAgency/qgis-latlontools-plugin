@@ -46,6 +46,8 @@ By default ***Lat Lon Tools*** follows the **Google Map** convention making it p
 
 ## Settings
 
+> <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are independently set for the coordinate capture, zoom to, and multi-zoom to tools. Be careful that when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
+
 ### Capture & Display Settings
 
 <div style="text-align:center"><img src="doc/settings.jpg" alt="Capture and Display Settings"></div>

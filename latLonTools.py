@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QTimer, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu
-from qgis.core import QgsCoordinateTransform, QgsRectangle, QgsPointXY, QgsGeometry, QgsWkbTypes
+from qgis.core import QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes
 from qgis.gui import QgsRubberBand
 
 # Initialize Qt resources from file resources.py
@@ -182,11 +182,11 @@ class LatLonTools:
     def highlight(self, point):
         currExt = self.canvas.extent()
         
-        leftPt = QgsPointXY(currExt.xMinimum(),point.y())
-        rightPt = QgsPointXY(currExt.xMaximum(),point.y())
+        leftPt = QgsPoint(currExt.xMinimum(),point.y())
+        rightPt = QgsPoint(currExt.xMaximum(),point.y())
         
-        topPt = QgsPointXY(point.x(),currExt.yMaximum())
-        bottomPt = QgsPointXY(point.x(),currExt.yMinimum())
+        topPt = QgsPoint(point.x(),currExt.yMaximum())
+        bottomPt = QgsPoint(point.x(),currExt.yMinimum())
         
         horizLine = QgsGeometry.fromPolyline( [ leftPt , rightPt ] )
         vertLine = QgsGeometry.fromPolyline( [ topPt , bottomPt ] )
