@@ -134,16 +134,20 @@ The user sets the CRS/projection of the coordinates entered in the ***Add locati
 
 When **Custom CRS** is selected, the user is allowed to select a custom CRS projection.
 
+**Coordinate Order of 'Add location' Input Coordinates**
+
+The user sets the order of coordinates entered in the ***Add location*** text box. The order is either latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps.
+
 **Create Vector Layer Style**
 
 The user can specify a style when creating a layer from the zoom locations. It can be a simple default style, default with labels, or a .qml style file that contains advanced styling. 
 
-* ***Default style for multi-location zoom new layers*** determins the new layer style when ***Create Vector Layer Fron Location List*** is clicked on. The options are:
+* ***Default style for multi-location zoom new layers*** determines the new layer style when ***Create Vector Layer From Location List*** is clicked on. The options are:
     * ***Default*** - No style is applied.
     * ***Label*** - The newly created layer will have labels next to the points.
-    * ***Custom*** - The user can create a QGIS .qml file that contains style infomation on how to style the new layer. If this is configured, then this will apply this style to the new layer.
+    * ***Custom*** - The user can create a QGIS .qml file that contains style information for a point vector layer. If a .qml file has been selected, then this setting will apply the style to the new layer.
     
-The ***Browse*** button allows selection of the .qml style file. When a .qml file is selected, ***Custom*** is automatically selected for the default style.
+The ***Browse*** button allows selection of the .qml style file. When a .qml file is selected, ***Custom*** is automatically selected as the default style.
     
 **Data Field Settings**
     
