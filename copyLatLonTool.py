@@ -1,24 +1,25 @@
 from PyQt4.QtCore import Qt, pyqtSignal
 from PyQt4.QtGui import QApplication
 from qgis.core import QgsCoordinateTransform, QgsPoint
-from qgis.gui import QgsMapTool, QgsMessageBar
+from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
 
 from LatLon import LatLon
 import mgrs
 
-class CopyLatLonTool(QgsMapTool):
+class CopyLatLonTool(QgsMapToolEmitPoint):
     '''Class to interact with the map canvas to capture the coordinate
     when the mouse button is pressed and to display the coordinate in
     in the status bar.'''
     capturesig = pyqtSignal(QgsPoint)
     
     def __init__(self, settings, iface):
-        QgsMapTool.__init__(self, iface.mapCanvas())
+        QgsMapToolEmitPoint.__init__(self, iface.mapCanvas())
         self.iface = iface
         self.canvas = iface.mapCanvas()
         self.settings = settings
         self.latlon = LatLon()
         self.capture4326 = False
+        self.canvasClicked.connect(self.clicked)
         
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
@@ -142,11 +143,10 @@ class CopyLatLonTool(QgsMapTool):
             s = ''
         return s
     
-    def canvasReleaseEvent(self, event):
+    def clicked(self, pt, b):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
         try:
-            pt = self.toMapCoordinates(event.pos())
             if self.capture4326:
                 canvasCRS = self.canvas.mapSettings().destinationCrs()
                 transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
