@@ -64,7 +64,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
                 num_bad += 1
                 continue
             f = QgsFeature()
-            f.setGeometry(QgsGeometry.fromPoint(QgsPointXY(lon,lat)))
+            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
             f.setAttributes(feature.attributes())
             ppoint.addFeatures([f])
             
