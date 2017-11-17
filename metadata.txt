@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=2.12
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support and MGRS conversion routines.
-version=0.9.6
+version=0.9.7
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -29,17 +29,3 @@ changelog=
     0.9.2 - Fixed Mac incompatibility
     0.9.1 - Fixed Linux incompatibility error
     0.9 - Added multi-location zoom coordinate capture by clicking on map & 10 data fields
-    0.8.4 - Changed order of multi-zoom locations
-    0.8.3 - Multi-zoom is now dockable, uses icons, and can style the memory layer
-    0.8.2 - Bug fix.
-    0.8.1 - Reworked Multi-Zoom to use persistent markers, save locations, & create memory layer
-    0.8 - Added MGRS conversion routines.
-    0.7 - Added support for any projection and WKT POINT coordinates.
-    0.6.1 - Made the "zoom to" marker persistent
-    0.6 - Added external map support and created local help files.
-    0.5 - Separated coordinate capture and zoom to settings and added MGRS support.
-    0.4.2 - Added the ability to select the input and capture order of the coordinates.
-    0.4.1 - Fixed GUIs to be font and machine independent.
-    0.4 - Added a multi location zoom to capability and reorganized the code.
-    0.3 - Added a settings dialog box and the ability to input DMS, and output decimal degrees, DMS, or native CRS with a comma, tab, space or other characters as a delimiter.
-    0.2 - First release with the ability to zoom to a lat, and lon as well to grab the coordinates

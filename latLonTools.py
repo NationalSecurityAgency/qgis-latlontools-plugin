@@ -1,23 +1,23 @@
 from PyQt4.QtCore import Qt, QTimer, QUrl
 from PyQt4.QtGui import QIcon, QAction, QMenu
-from qgis.core import QGis, QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry
+from qgis.core import QGis, QgsVectorLayer, QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry
 from qgis.gui import QgsRubberBand
 
-# Initialize Qt resources from file resources.py
-# import resources
-
-from zoomToLatLon import ZoomToLatLon
-from multizoom import MultiZoomWidget
-from copyLatLonTool import CopyLatLonTool
-from showOnMapTool import ShowOnMapTool
-from settings import SettingsWidget
-from tomgrs import ToMGRSWidget
-from mgrstogeom import MGRStoLayerWidget
+from .zoomToLatLon import ZoomToLatLon
+from .multizoom import MultiZoomWidget
+from .copyLatLonTool import CopyLatLonTool
+from .showOnMapTool import ShowOnMapTool
+from .settings import SettingsWidget
+from .tomgrs import ToMGRSWidget
+from .mgrstogeom import MGRStoLayerWidget
+from .digitizer import DigitizerWidget
 import os
 import webbrowser
 
 
 class LatLonTools:
+    digitizerDialog = None
+    
     def __init__(self, iface):
         self.iface = iface
         self.canvas = iface.mapCanvas()
@@ -46,7 +46,6 @@ class LatLonTools:
         self.zoomToAction = QAction(icon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
         self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
-        self.canvas.mapToolSet.connect(self.unsetTool)
 
         self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
@@ -87,10 +86,22 @@ class LatLonTools:
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
         
         # Help
-        helpicon = QIcon(os.path.dirname(__file__) + '/images/help.png')
-        self.helpAction = QAction(helpicon, "Help", self.iface.mainWindow())
+        icon = QIcon(os.path.dirname(__file__) + '/images/help.png')
+        self.helpAction = QAction(icon, "Help", self.iface.mainWindow())
         self.helpAction.triggered.connect(self.help)
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
+        
+        # Add to Digitize Toolbar
+        icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
+        self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
+        self.digitizeAction.triggered.connect(self.digitizeClicked)
+        self.digitizeAction.setEnabled(False)
+        self.iface.digitizeToolBar().addAction(self.digitizeAction)
+        
+        
+        self.iface.currentLayerChanged.connect(self.currentLayerChanged)
+        self.canvas.mapToolSet.connect(self.unsetTool)
+        self.enableDigitizeTool()
                 
     def unsetTool(self, tool):
         '''Uncheck the Copy Lat Lon tool'''
@@ -121,9 +132,15 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
         self.iface.removeDockWidget(self.zoomToDialog)
         self.iface.removeDockWidget(self.multiZoomDialog)
+        self.MGRStoLayerDialog = None
+        self.toMGRSDialog = None
         self.zoomToDialog = None
         self.multiZoomDialog = None
-
+        self.settingsDialog = None
+        self.showMapTool = None
+        self.mapTool = None
+        self.iface.digitizeToolBar().removeAction(self.digitizeAction)
+            
     def startCapture(self):
         '''Set the focus of the copy coordinate tool and check it'''
         self.copyAction.setChecked(True)
@@ -199,5 +216,39 @@ class LatLonTools:
     def resetRubberbands(self):
         self.crossRb.reset()
         
+    def digitizeClicked(self):
+        if self.digitizerDialog == None:
+            self.digitizerDialog = DigitizerWidget(self, self.iface, self.iface.mainWindow())
+        self.digitizerDialog.show()
+        
+    def currentLayerChanged(self):
+        layer = self.iface.activeLayer()
+        if layer != None:
+            try:
+                layer.editingStarted.disconnect(self.layerEditingChanged)
+            except:
+                pass
+            try:
+                layer.editingStopped.disconnect(self.layerEditingChanged)
+            except:
+                pass
+            
+            if isinstance(layer, QgsVectorLayer):
+                layer.editingStarted.connect(self.layerEditingChanged)
+                layer.editingStopped.connect(self.layerEditingChanged)
+                
+        self.enableDigitizeTool()
 
- 
+    def layerEditingChanged(self):
+        self.enableDigitizeTool()
+
+    def enableDigitizeTool(self):
+        self.digitizeAction.setEnabled(False)
+        layer = self.iface.activeLayer()
+        
+        if layer != None and isinstance(layer, QgsVectorLayer) and (layer.wkbType() == QGis.WKBPoint) and layer.isEditable():
+            self.digitizeAction.setEnabled(True)
+        else:
+            if self.digitizerDialog != None:
+                self.digitizerDialog.close()
+        
