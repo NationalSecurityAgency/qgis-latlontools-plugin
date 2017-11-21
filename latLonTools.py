@@ -140,6 +140,7 @@ class LatLonTools:
         self.showMapTool = None
         self.mapTool = None
         self.iface.digitizeToolBar().removeAction(self.digitizeAction)
+        self.digitizerDialog = None
             
     def startCapture(self):
         '''Set the focus of the copy coordinate tool and check it'''

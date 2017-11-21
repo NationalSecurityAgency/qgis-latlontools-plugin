@@ -4,18 +4,16 @@ import re
 from PyQt4.QtCore import QSize, QSettings
 from PyQt4.QtGui import QDialog, QIcon, QMenu, QToolButton
 from PyQt4.uic import loadUiType
-from qgis.core import QgsCoordinateReferenceSystem, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPoint
-from qgis.gui import QgsMessageBar
-from LatLon import LatLon
+from qgis.core import QgsCoordinateReferenceSystem, QgsCRSCache, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPoint
+from qgis.gui import QgsMessageBar, QgsGenericProjectionSelector
+from .LatLon import LatLon
+from .util import *
 #import traceback
 
 import mgrs
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/digitizer.ui'))
-    
-    
-epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
 
 
 class DigitizerWidget(QDialog, FORM_CLASS):
@@ -27,6 +25,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.setupUi(self)
         self.lltools = lltools
         self.iface = iface
+        self.canvas = iface.mapCanvas()
         self.xymenu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/yx.png')
         a = self.xymenu.addAction(icon, "Y, X (Lat, Lon) Order")
@@ -56,13 +55,18 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.crsButton.setIcon(icon)
         self.crsButton.setMenu(self.crsmenu)
         self.crsButton.triggered.connect(self.crsTriggered)
+        self.iface.currentLayerChanged.connect(self.currentLayerChanged)
         
         self.readSettings()
         self.configButtons()
         
+    def currentLayerChanged(self):
+        self.close()
+        
+    def showEvent(self, e):
+        self.labelUpdate()
         
     def accept(self):
-        print "accept"
         text = self.lineEdit.text().strip()
         layer = self.iface.activeLayer()
         if layer == None:
@@ -74,7 +78,6 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 else:
                     m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
-                        print "Here 1"
                         raise ValueError('Invalid Coordinates')
                     lon = float(m[0][0])
                     lat = float(m[0][1])
@@ -88,7 +91,6 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 if re.search('POINT\(', text) == None:
                     coords = re.split('[\s,;:]+', text, 1)
                     if len(coords) < 2:
-                        print "Here 2"
                         raise ValueError('Invalid Coordinates')
                     if self.inputXYOrder == 0: # Y, X Order
                         lat = float(coords[0])
@@ -99,65 +101,99 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 else:
                     m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
-                        print "Here 3"
                         raise ValueError('Invalid Coordinates')
                     lon = float(m[0][0])
                     lat = float(m[0][1])
                 if self.inputProjection == 2: # Project CRS
                     srcCrs = self.canvas.mapSettings().destinationCrs()
                 else:
-                    srcCrs = epsg4326
+                    srcCrs = QgsCRSCache().crsByOgcWmsCrs(self.inputCustomCRS)
         except:
             #traceback.print_exc()
-            print "Here 4"
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
-        print "lat ", lat
-        print "lon ", lon
-        #self.lineEdit.clear()
+        self.lineEdit.clear()
         caps = layer.dataProvider().capabilities()
         if caps & QgsVectorDataProvider.AddFeatures:
-            #lt = QgsTrackedVectorLayerTools()
+            destCRS = layer.crs() # Get the CRS of the layer we are adding a point toWgs
+            transform = QgsCoordinateTransform(srcCrs, destCRS) 
+            # Transform the input coordinate projection to the layer CRS
+            x, y = transform.transform(float(lon), float(lat))
             feat = QgsFeature(layer.pendingFields())
-            feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(lon,lat)))
-            #lt.addFeature(layer, {0:'id', 1:'name'}, QgsGeometry.fromPoint(QgsPoint(lon,lat)), feat)
-            layer.addFeature(feat)
-            #layer.dataProvider().addFeatures([feat])
-            self.lltools.zoomTo(srcCrs, lat, lon)
+            feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(x,y)))
+            if layer.pendingFields().count() == 0:
+                layer.addFeature(feat)
+                self.lltools.zoomTo(srcCrs, lat, lon)
+            else:
+                if self.iface.openFeatureForm(layer, feat):
+                    self.lltools.zoomTo(srcCrs, lat, lon)
+        
+    def labelUpdate(self):
+        #print "labelUpdate"
+        if self.inputProjection == 1: # MGRS projection
+            self.infoLabel.setText('Input Projection: MGRS')
+            return
+        if self.isWgs84():
+            if self.inputXYOrder == 0:
+                o = "Lat, Lon"
+            else:
+                o = "Lon, Lat"
+            proj = "Wgs84"
+        else:
+            if self.inputXYOrder == 0:
+                o = "Y, X"
+            else:
+                o = "X, Y"
+            if self.inputProjection == 2: # Project Projection
+                proj = self.canvas.mapSettings().destinationCrs().authid()
+            else:
+                proj = self.inputCustomCRS
+        s = "Input Projection: {} - Coordinate Order: {}".format(proj, o)
+        self.infoLabel.setText(s)
         
     def configButtons(self):
-        print "configButtons"
         self.xyButton.setDefaultAction(self.xymenu.actions()[self.inputXYOrder])
         self.crsButton.setDefaultAction(self.crsmenu.actions()[self.inputProjection])
         
     def readSettings(self):
-        print "readSettings"
         settings = QSettings()
         self.inputProjection = int(settings.value('/LatLonTools/DigitizerProjection', 0))
         self.inputXYOrder = int(settings.value('/LatLonTools/DigitizerXYOrder', 0))
+        self.inputCustomCRS = settings.value('/LatLonTools/DigitizerCustomCRS', 'EPSG:4326')
         if self.inputProjection < 0 or self.inputProjection > 3:
             self.inputProjection = 0
         if self.inputXYOrder < 0 or self.inputXYOrder > 1:
             self.inputXYOrder = 1
-        print "   inputProjection ", self.inputProjection
-        print "   inputXYOrder ", self.inputXYOrder
+        self.labelUpdate()
         
     def saveSettings(self):
-        print "saveSettings"
         settings = QSettings()
         settings.setValue('/LatLonTools/DigitizerProjection', self.inputProjection)
         settings.setValue('/LatLonTools/DigitizerXYOrder', self.inputXYOrder)
-        print "   inputProjection ", self.inputProjection
-        print "   inputXYOrder ", self.inputXYOrder
+        settings.setValue('/LatLonTools/DigitizerCustomCRS', self.inputCustomCRS)
+        self.labelUpdate()
         
     def crsTriggered(self, action):
-        print "crsTriggered"
         self.crsButton.setDefaultAction(action)
         self.inputProjection = action.data()
+        if self.inputProjection == 3:
+            selector = QgsGenericProjectionSelector()
+            selector.setSelectedAuthId(self.inputCustomCRS)
+            if selector.exec_():
+                self.inputCustomCRS = selector.selectedAuthId()
+            else:
+                self.inputCustomCRS = 'EPSG:4326'
         self.saveSettings()
         
     def xyTriggered(self, action):
-        print "xyTriggered"
         self.xyButton.setDefaultAction(action)
         self.inputXYOrder = action.data()
         self.saveSettings()
+
+    def isWgs84(self):
+        if self.inputProjection == 0: # WGS 84
+            return True
+        elif self.inputProjection == 2: # Projection Projection
+            if self.canvas.mapSettings().destinationCrs() == epsg4326:
+                return True
+        return False
