@@ -5,6 +5,7 @@ from PyQt4.uic import loadUiType
 from PyQt4.QtGui import QDialog, QDialogButtonBox, QFileDialog
 from PyQt4.QtCore import QSettings, Qt
 from qgis.core import QgsCoordinateReferenceSystem
+from .util import *
 
 
 
@@ -30,13 +31,12 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.lltools = lltools
         self.iface = iface
         self.canvas = iface.mapCanvas()
-        self.epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
         
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
         
         ### CAPTURE SETTINGS ###
         self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)','MGRS', 'Project CRS', 'Custom CRS'])
-        self.captureProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS','WKT POINT'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate','WKT POINT'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
@@ -45,7 +45,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS','Custom CRS'])
-        self.zoomToProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
         
@@ -55,7 +55,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### MULTI-ZOOM ###
         self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS','Custom CRS'])
         self.multiZoomToProjectionComboBox.activated.connect(self.setEnabled)
-        self.multiZoomToProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
         self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
         self.multiCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
@@ -88,13 +88,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.otherTxt.setText("")
         self.delimComboBox.setCurrentIndex(0)
         self.precisionSpinBox.setValue(0)
-        self.captureProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.captureProjectionSelectionWidget.setCrs(epsg4326)
         
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
         self.zoomToCoordOrderComboBox.setCurrentIndex(self.OrderYX)
         self.persistentMarkerCheckBox.setCheckState(Qt.Checked)
-        self.zoomToProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         
         ### EXTERNAL MAP ###
         self.showPlacemarkCheckBox.setCheckState(Qt.Checked)
@@ -103,7 +103,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### Multi-zoom Settings ###
         self.multiZoomToProjectionComboBox.setCurrentIndex(0) # WGS 84
-        self.multiZoomToProjectionSelectionWidget.setCrs(self.epsg4326)
+        self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.multiCoordOrderComboBox.setCurrentIndex(self.OrderYX)
         self.qmlLineEdit.setText('')
         self.markerStyleComboBox.setCurrentIndex(0)
@@ -278,10 +278,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if self.captureProjection == self.ProjectionTypeWgs84:
             return True
         elif self.captureProjection == self.ProjectionTypeProjectCRS:
-            if self.canvas.mapSettings().destinationCrs() == self.epsg4326:
+            if self.canvas.mapSettings().destinationCrs() == epsg4326:
                 return True
         elif self.captureProjection == self.ProjectionTypeCustomCRS:
-            if self.captureCustomCRS() == self.epsg4326:
+            if self.captureCustomCRS() == epsg4326:
                 return True
         return False
 
@@ -304,10 +304,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
             return True
         if self.zoomToProjection == self.ProjectionTypeProjectCRS:
-            if self.canvas.mapSettings().destinationCrs() == self.epsg4326:
+            if self.canvas.mapSettings().destinationCrs() == epsg4326:
                 return True
         if self.zoomToProjection == self.ProjectionTypeCustomCRS:
-            if self.zoomToCustomCRS() == self.epsg4326:
+            if self.zoomToCustomCRS() == epsg4326:
                 return True
         return False
         
@@ -325,10 +325,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if self.multiZoomToProjection == 0: # Wgs84
             return True
         if self.multiZoomToProjection == 1: # Project CRS
-            if self.canvas.mapSettings().destinationCrs() == self.epsg4326:
+            if self.canvas.mapSettings().destinationCrs() == epsg4326:
                 return True
         if self.multiZoomToProjection == 2: # Custom CRS
-            if self.multiZoomToCustomCRS() == self.epsg4326:
+            if self.multiZoomToCustomCRS() == epsg4326:
                 return True
         return False
 

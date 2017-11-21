@@ -10,7 +10,8 @@ from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
     QgsField, QgsFeature, QgsPoint, QgsGeometry, 
     QgsPalLayerSettings, QgsMapLayerRegistry )
 from qgis.gui import QgsVertexMarker, QgsMessageBar
-from LatLon import LatLon
+from .LatLon import LatLon
+from .util import *
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
@@ -297,7 +298,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                         self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=QgsMessageBar.WARNING, duration=3)
                         return
                     srcCrs = self.settings.multiZoomToCRS()
-                    transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
+                    transform = QgsCoordinateTransform(srcCrs, epsg4326)
                     if self.settings.multiCoordOrder == self.settings.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
@@ -310,7 +311,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     lat, lon = LatLon.parseDMSString(str, self.settings.multiCoordOrder)
                 else:
                     srcCrs = self.settings.multiZoomToCRS()
-                    transform = QgsCoordinateTransform(srcCrs, self.settings.epsg4326)
+                    transform = QgsCoordinateTransform(srcCrs, epsg4326)
                     if self.settings.multiCoordOrder == self.settings.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
@@ -365,11 +366,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         selectedRow = self.resultsTable.currentRow()
         item = self.resultsTable.item(selectedRow, 0).data(Qt.UserRole)
         # Call the the parent's zoom to function
-        pt = self.lltools.zoomTo(self.settings.epsg4326, item.lat,item.lon)
+        pt = self.lltools.zoomTo(epsg4326, item.lat,item.lon)
         
     def canvasPoint(self, lat, lon):
         canvasCrs = self.canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(self.settings.epsg4326, canvasCrs)
+        transform = QgsCoordinateTransform(epsg4326, canvasCrs)
         x, y = transform.transform(float(lon), float(lat))
         pt = QgsPoint(x,y)
         return pt

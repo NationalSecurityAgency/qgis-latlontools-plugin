@@ -6,6 +6,7 @@ from PyQt4.QtCore import QVariant
 from qgis.core import QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel, QgsMessageBar
 
+from .util import *
 import mgrs
 
 FORM_CLASS, _ = loadUiType(os.path.join(
@@ -45,7 +46,6 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
 
         # The input to the mgrs conversions requires latitudes and longitudes
         # If the layer is not EPSG:4326 we need to convert it.
-        epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
         if layerCRS != epsg4326:
             transform = QgsCoordinateTransform(inCRS, epsg4326)
 

@@ -3,7 +3,8 @@ from PyQt4.QtGui import QApplication
 from qgis.core import QgsCoordinateTransform, QgsPoint
 from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
 
-from LatLon import LatLon
+from .LatLon import LatLon
+from .util import *
 import mgrs
 
 class CopyLatLonTool(QgsMapToolEmitPoint):
@@ -31,10 +32,10 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         if self.settings.captureProjIsWgs84(): # ProjectionTypeWgs84
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapSettings().destinationCrs()
-            if canvasCRS == self.settings.epsg4326:
+            if canvasCRS == epsg4326:
                 pt4326 = pt
             else:
-                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
                 pt4326 = transform.transform(pt.x(), pt.y())
             self.latlon.setCoord(pt4326.y(), pt4326.x())
             self.latlon.setPrecision(self.settings.dmsPrecision)
@@ -83,10 +84,10 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         elif self.settings.captureProjIsMGRS():
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapSettings().destinationCrs()
-            if canvasCRS == self.settings.epsg4326:
+            if canvasCRS == epsg4326:
                 pt4326 = pt
             else:
-                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
                 pt4326 = transform.transform(pt.x(), pt.y())
             try:
                 msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
@@ -149,7 +150,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         try:
             if self.capture4326:
                 canvasCRS = self.canvas.mapSettings().destinationCrs()
-                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
                 pt4326 = transform.transform(pt.x(), pt.y())
                 self.capturesig.emit(pt4326)
                 return

@@ -4,7 +4,8 @@ import re
 from PyQt4.uic import loadUiType
 from PyQt4.QtGui import QDockWidget, QIcon
 from qgis.gui import QgsMessageBar, QgsVertexMarker
-from LatLon import LatLon
+from .LatLon import LatLon
+from .util import *
 
 import mgrs
 #import traceback
@@ -85,12 +86,12 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                         raise ValueError('Invalid Coordinates')
                     lon = float(m[0][0])
                     lat = float(m[0][1])
-                srcCrs = self.settings.epsg4326
+                srcCrs = epsg4326
             elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
                 text = re.sub(r'\s+', '', unicode(text)) # Remove all white space
                 lat, lon = mgrs.toWgs(text)
-                srcCrs = self.settings.epsg4326
+                srcCrs = epsg4326
             else: # Is either the project or custom CRS
                 if re.search('POINT\(', text) == None:
                     coords = re.split('[\s,;:]+', text, 1)
@@ -111,21 +112,22 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 if self.settings.zoomToProjIsProjectCRS():
                     srcCrs = self.canvas.mapSettings().destinationCrs()
                 else:
-                    srcCrs = self.settings.zoomToCustomCRS()    
+                    srcCrs = self.settings.zoomToCustomCRS()
+                    
+            pt = self.lltools.zoomTo(srcCrs, lat, lon)
+            if self.settings.persistentMarker:
+                if self.marker is None:
+                    self.marker = QgsVertexMarker(self.canvas)
+                self.marker.setCenter(pt)
+                self.marker.setIconSize(18)
+                self.marker.setPenWidth(2)
+                self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+            elif self.marker is not None:
+                self.removeMarker();
         except:
             #traceback.print_exc()
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
-        pt = self.lltools.zoomTo(srcCrs, lat, lon)
-        if self.settings.persistentMarker:
-            if self.marker is None:
-                self.marker = QgsVertexMarker(self.canvas)
-            self.marker.setCenter(pt)
-            self.marker.setIconSize(18)
-            self.marker.setPenWidth(2)
-            self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
-        elif self.marker is not None:
-            self.removeMarker();
 
 
     def removeMarker(self):
