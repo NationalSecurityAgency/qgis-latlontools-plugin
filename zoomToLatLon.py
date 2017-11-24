@@ -3,12 +3,13 @@ import re
 
 from PyQt4.uic import loadUiType
 from PyQt4.QtGui import QDockWidget, QIcon
+from PyQt4.QtCore import QTextCodec
 from qgis.gui import QgsMessageBar, QgsVertexMarker
+from qgis.core import QGis, QgsJSONUtils
 from .LatLon import LatLon
 from .util import *
 
 import mgrs
-#import traceback
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -76,8 +77,22 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
     def zoomToPressed(self):
         try:
-            text = self.coordTxt.text()
-            if self.settings.zoomToProjIsWgs84():
+            text = self.coordTxt.text().strip()
+            if text[0] == '{': # This may be a GeoJSON point
+                codec = QTextCodec.codecForName("UTF-8")
+                fields = QgsJSONUtils.stringToFields(text, codec)
+                fet = QgsJSONUtils.stringToFeatureList(text, fields, codec)
+                if (len(fet) == 0) or not fet[0].isValid():
+                    raise ValueError('Invalid Coordinates')
+                
+                geom = fet[0].constGeometry()
+                if geom.isEmpty() or (geom.wkbType() != QGis.WKBPoint):
+                    raise ValueError('Invalid GeoJSON Geometry')
+                pt = geom.asPoint()
+                lat = pt.y()
+                lon = pt.x()
+                srcCrs = epsg4326
+            elif self.settings.zoomToProjIsWgs84():
                 if re.search('POINT\(', text) == None:
                     lat, lon = LatLon.parseDMSString(text, self.settings.coordOrder)
                 else:
@@ -125,7 +140,6 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             elif self.marker is not None:
                 self.removeMarker();
         except:
-            #traceback.print_exc()
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
 

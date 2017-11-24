@@ -57,6 +57,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.crsButton.triggered.connect(self.crsTriggered)
         self.iface.currentLayerChanged.connect(self.currentLayerChanged)
         
+        self.addButton.clicked.connect(self.addFeature)
+        self.exitButton.clicked.connect(self.exit)
+        
         self.readSettings()
         self.configButtons()
         
@@ -66,8 +69,13 @@ class DigitizerWidget(QDialog, FORM_CLASS):
     def showEvent(self, e):
         self.labelUpdate()
         
-    def accept(self):
+    def exit(self):
+        self.close()
+        
+    def addFeature(self):
         text = self.lineEdit.text().strip()
+        if text == "":
+            return
         layer = self.iface.activeLayer()
         if layer == None:
             return

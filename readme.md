@@ -16,6 +16,30 @@
     * WKT: POINT(-95.265483 38.959390)
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
 
+* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Points Digitizing Tool*** - This tool digitizes points/add features using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. This tool is installed in the Digitize toolbar as follows.
+
+    <div style="text-align:center"><img src="doc/digitizeToolbar.jpg" alt="Digitize Toolbar"></div>
+    
+    For this to be enabled, a points vector layer must be selected and it must be editable. When the user clicks on the tool, the following dialog is displayed.
+    
+    <div style="text-align:center"><img src="doc/addfeature.jpg" alt="Add Feature"></div>
+    
+    Enter a coordinate in any of the ***Zoom to Latitude, Longitude*** formats and press **Enter** or click on the **Add Feature** button. If a layer contains fields then a secondary dialog box will popup to allow editing of the attributes.
+    
+    The projection of the input coordinates can be specified by the CRS drop down menu which has the following options:
+    
+    * <img src="images/wgs84Projection.png" alt="WGS84"> ***WGS84 Projection*** - This is the default specifying coordinates as latitudes and longitudes.
+    * <img src="images/mgrsProjection.png" alt="MGRS"> ***MGRS Projection*** - This specifies an MGRS coordinate.
+    * <img src="images/projProjection.png" alt="Project Projection"> ***Project Projection*** - With this selected, it is assumed that the input coordinates are in the projection of the project.
+    * <img src="images/customProjection.png" alt="Custome Projection"> ***New/Custom Projection*** - This allows the user to select any projection for the input coordinates.
+    
+    The next drop down menu specifies whether the coordinates are listed as **Y,X (Latitude, Longitude)** or **X,Y (Longitude, Latitude)**. If the coordinate uses **N, S, E, W** then these take presidence and this setting is ignored.
+    
+    * <img src="images/yx.png" alt="Y, X"> ***Y,X (Latitude, Longitude) Order***
+    * <img src="images/xy.png" alt="X, Y"> ***X,Y (Longitude, Latitude) Order***
+    
+    Right below the text input box is a status line that tells you exactly what CRS and coordinate order you are using.
+    
 * <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, MapQuest, and Bing Maps are supported. The desired map can be configured in **Settings**.
 * <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste in or type in a coordinate in the ***Add location*** box to add it to the list. By default the format of the data entered is **"latitude,longitude[,label,data1,data10]"** where the contents in the [] are optional. Optionally, the user can define the input as **"Y,X[,label,data1,...,data10]"** where **Y** and **X** are coordinates defined by the project CRS or some other CRS. See ***Settings*** to set the input coordinate CRS. This defaults to WGS 84, Latitude and Longitude.<br/><br/>When the user clicks on a location in the list, QGIS centers the map on the location and highlights it. Double clicking on a **Label** or **Data** cell allows the text to be edited. By default the **Data** fields will not be visible, but can be added from ***Settings***. More than one location can be selected by clicking on the first point and then Shift-Click to select a range or using Ctrl-Click to add additional selected items. Markers for all selected items will be displayed. The following are additional functions.
     * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"latitude,longitude,label,data1,...,data10"** or simply **"latitude,longitude"**.
