@@ -5,7 +5,8 @@ from PyQt4.uic import loadUiType
 from PyQt4.QtGui import QDockWidget, QIcon
 from PyQt4.QtCore import QTextCodec
 from qgis.gui import QgsMessageBar, QgsVertexMarker
-from qgis.core import QGis, QgsJSONUtils
+from qgis.core import QGis
+#from qgis.com import QgsJSONUtils
 from .LatLon import LatLon
 from .util import *
 
@@ -78,7 +79,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
     def zoomToPressed(self):
         try:
             text = self.coordTxt.text().strip()
-            if text[0] == '{': # This may be a GeoJSON point
+            '''if text[0] == '{': # This may be a GeoJSON point
                 codec = QTextCodec.codecForName("UTF-8")
                 fields = QgsJSONUtils.stringToFields(text, codec)
                 fet = QgsJSONUtils.stringToFeatureList(text, fields, codec)
@@ -92,7 +93,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 lat = pt.y()
                 lon = pt.x()
                 srcCrs = epsg4326
-            elif self.settings.zoomToProjIsWgs84():
+            elif self.settings.zoomToProjIsWgs84():'''
+            if self.settings.zoomToProjIsWgs84():
                 if re.search('POINT\(', text) == None:
                     lat, lon = LatLon.parseDMSString(text, self.settings.coordOrder)
                 else:

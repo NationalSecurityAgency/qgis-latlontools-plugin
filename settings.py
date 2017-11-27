@@ -19,6 +19,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     Wgs84TypeDMS = 1
     Wgs84TypeDDMMSS = 2
     Wgs84TypeWKT = 3
+    Wgs84TypeGeoJSON = 4
     ProjectionTypeWgs84 = 0
     ProjectionTypeMGRS = 1
     ProjectionTypeProjectCRS = 2
@@ -37,7 +38,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### CAPTURE SETTINGS ###
         self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)','MGRS', 'Project CRS', 'Custom CRS'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
-        self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS','WKT POINT'])
+        self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS','WKT POINT','GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate','WKT POINT'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.delimComboBox.addItems(['Comma', 'Space', 'Tab', 'Other'])

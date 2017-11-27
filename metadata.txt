@@ -2,13 +2,13 @@
 name=Lat Lon Tools
 qgisMinimumVersion=2.12
 description=Tools to capture and zoom to coordinates (including MGRS), using decimal, DMS, and WKT notation. Provides external map support, MGRS conversion routines and point digitizing tools.
-version=0.9.7
+version=0.9.9
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
     Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools. 
     1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map.
-    2) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, and can format the coordinates in decimal, DMS, or WKT POINT notation.
+    2) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
     3) Digitizing service to add points to a layer. It supports all the "Zoom to" input formats.
     4) Launch and display an external map based on the coordinate clicked on.
     5) Use a list of points for rapid zooming created from a file, direct input, or captured from the map. Create a point layer from these locations.
@@ -17,12 +17,14 @@ about=
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=coordinate,capture,latitude,longitude,epsg:4326,4326,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,openstreetmap,digitizing,digitize
+tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,openstreetmap,digitizing,digitize,geojson
 category=Plugins
 icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    0.9.9 - Added GeoJSON capture
+    0.9.8 - Bug fix for QGIS 2.14
     0.9.7 - Added points digitizing service
     0.9.6 - Make the coordinate entry for multi-zoom a little more robust
     0.9.5 - Added coordinate order setting for multi-zoom dialog

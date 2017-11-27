@@ -52,6 +52,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                         msg = self.latlon.getDDMMSSLonLatOrder(delimiter)
                 elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT: # WKT
                     msg = 'POINT({} {})'.format(self.latlon.lon, self.latlon.lat)
+                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON: # GeoJSON
+                    msg = '{{"type": "Point","coordinates": [{},{}]}}'.format(self.latlon.lon, self.latlon.lat)
                 else: # decimal degrees
                     if self.settings.coordOrder == self.settings.OrderYX:
                         msg = '{}{}{}'.format(self.latlon.lat,delimiter,self.latlon.lon)
@@ -119,6 +121,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                     s = 'Lon Lat'
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:
                 s = 'WKT'
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:
+                s = 'GeoJSON'
             else:
                 s = 'DMS'
         elif self.settings.captureProjIsProjectCRS():
