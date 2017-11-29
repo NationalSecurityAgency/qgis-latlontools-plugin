@@ -1,24 +1,26 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.core import QgsCoordinateTransform, QgsPointXY
-from qgis.gui import QgsMapTool, QgsMessageBar
+from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
 
 from .LatLon import LatLon
+from .util import *
 from . import mgrs
 
-class CopyLatLonTool(QgsMapTool):
+class CopyLatLonTool(QgsMapToolEmitPoint):
     '''Class to interact with the map canvas to capture the coordinate
     when the mouse button is pressed and to display the coordinate in
     in the status bar.'''
     capturesig = pyqtSignal(QgsPointXY)
     
     def __init__(self, settings, iface):
-        QgsMapTool.__init__(self, iface.mapCanvas())
+        QgsMapToolEmitPoint.__init__(self, iface.mapCanvas())
         self.iface = iface
         self.canvas = iface.mapCanvas()
         self.settings = settings
         self.latlon = LatLon()
         self.capture4326 = False
+        self.canvasClicked.connect(self.clicked)
         
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
@@ -30,10 +32,10 @@ class CopyLatLonTool(QgsMapTool):
         if self.settings.captureProjIsWgs84(): # ProjectionTypeWgs84
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapSettings().destinationCrs()
-            if canvasCRS == self.settings.epsg4326:
+            if canvasCRS == epsg4326:
                 pt4326 = pt
             else:
-                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
                 pt4326 = transform.transform(pt.x(), pt.y())
             self.latlon.setCoord(pt4326.y(), pt4326.x())
             self.latlon.setPrecision(self.settings.dmsPrecision)
@@ -50,6 +52,8 @@ class CopyLatLonTool(QgsMapTool):
                         msg = self.latlon.getDDMMSSLonLatOrder(delimiter)
                 elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT: # WKT
                     msg = 'POINT({} {})'.format(self.latlon.lon, self.latlon.lat)
+                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON: # GeoJSON
+                    msg = '{{"type": "Point","coordinates": [{},{}]}}'.format(self.latlon.lon, self.latlon.lat)
                 else: # decimal degrees
                     if self.settings.coordOrder == self.settings.OrderYX:
                         msg = '{}{}{}'.format(self.latlon.lat,delimiter,self.latlon.lon)
@@ -82,10 +86,10 @@ class CopyLatLonTool(QgsMapTool):
         elif self.settings.captureProjIsMGRS():
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapSettings().destinationCrs()
-            if canvasCRS == self.settings.epsg4326:
+            if canvasCRS == epsg4326:
                 pt4326 = pt
             else:
-                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
                 pt4326 = transform.transform(pt.x(), pt.y())
             try:
                 msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
@@ -117,6 +121,8 @@ class CopyLatLonTool(QgsMapTool):
                     s = 'Lon Lat'
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:
                 s = 'WKT'
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:
+                s = 'GeoJSON'
             else:
                 s = 'DMS'
         elif self.settings.captureProjIsProjectCRS():
@@ -142,14 +148,13 @@ class CopyLatLonTool(QgsMapTool):
             s = ''
         return s
     
-    def canvasReleaseEvent(self, event):
+    def clicked(self, pt, b):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
         try:
-            pt = self.toMapCoordinates(event.pos())
             if self.capture4326:
                 canvasCRS = self.canvas.mapSettings().destinationCrs()
-                transform = QgsCoordinateTransform(canvasCRS, self.settings.epsg4326)
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
                 pt4326 = transform.transform(pt.x(), pt.y())
                 self.capturesig.emit(pt4326)
                 return

@@ -4,12 +4,14 @@ import re
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDockWidget
-from qgis.PyQt.QtCore import pyqtSignal
+from qgis.PyQt.QtCore import pyqtSignal, QTextCodec
 from qgis.gui import QgsMessageBar, QgsVertexMarker
+from qgis.core import QgsJsonUtils, QgsWkbTypes
 from .LatLon import LatLon
+from .util import *
+#import traceback
 
 from . import mgrs
-#import traceback
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -77,8 +79,22 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
     def zoomToPressed(self):
         try:
-            text = self.coordTxt.text()
-            if self.settings.zoomToProjIsWgs84():
+            text = self.coordTxt.text().strip()
+            if text[0] == '{': # This may be a GeoJSON point
+                codec = QTextCodec.codecForName("UTF-8")
+                fields = QgsJsonUtils.stringToFields(text, codec)
+                fet = QgsJsonUtils.stringToFeatureList(text, fields, codec)
+                if (len(fet) == 0) or not fet[0].isValid():
+                    raise ValueError('Invalid Coordinates')
+                
+                geom = fet[0].geometry()
+                if geom.isEmpty() or (geom.wkbType() != QgsWkbTypes.Point):
+                    raise ValueError('Invalid GeoJSON Geometry')
+                pt = geom.asPoint()
+                lat = pt.y()
+                lon = pt.x()
+                srcCrs = epsg4326
+            elif self.settings.zoomToProjIsWgs84():
                 if re.search('POINT\(', text) == None:
                     lat, lon = LatLon.parseDMSString(text, self.settings.coordOrder)
                 else:
@@ -87,12 +103,12 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                         raise ValueError('Invalid Coordinates')
                     lon = float(m[0][0])
                     lat = float(m[0][1])
-                srcCrs = self.settings.epsg4326
+                srcCrs = epsg4326
             elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
                 text = re.sub(r'\s+', '', str(text)) # Remove all white space
                 lat, lon = mgrs.toWgs(text)
-                srcCrs = self.settings.epsg4326
+                srcCrs = epsg4326
             else: # Is either the project or custom CRS
                 if re.search('POINT\(', text) == None:
                     coords = re.split('[\s,;:]+', text, 1)
@@ -113,21 +129,22 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 if self.settings.zoomToProjIsProjectCRS():
                     srcCrs = self.canvas.mapSettings().destinationCrs()
                 else:
-                    srcCrs = self.settings.zoomToCustomCRS()    
+                    srcCrs = self.settings.zoomToCustomCRS()
+                    
+            pt = self.lltools.zoomTo(srcCrs, lat, lon)
+            if self.settings.persistentMarker:
+                if self.marker is None:
+                    self.marker = QgsVertexMarker(self.canvas)
+                self.marker.setCenter(pt)
+                self.marker.setIconSize(18)
+                self.marker.setPenWidth(2)
+                self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+            elif self.marker is not None:
+                self.removeMarker();
         except:
             #traceback.print_exc()
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
             return
-        pt = self.lltools.zoomTo(srcCrs, lat, lon)
-        if self.settings.persistentMarker:
-            if self.marker is None:
-                self.marker = QgsVertexMarker(self.canvas)
-            self.marker.setCenter(pt)
-            self.marker.setIconSize(18)
-            self.marker.setPenWidth(2)
-            self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
-        elif self.marker is not None:
-            self.removeMarker();
 
 
     def removeMarker(self):
