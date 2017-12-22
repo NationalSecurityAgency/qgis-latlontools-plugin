@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtGui import *
 from qgis.PyQt.QtWidgets import *
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
 from .util import *
 import webbrowser
@@ -25,7 +25,7 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
         canvasCRS = self.canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(canvasCRS, epsg4326)
+        transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
         pt4326 = transform.transform(pt.x(), pt.y())
         lat = pt4326.y()
         lon = pt4326.x()

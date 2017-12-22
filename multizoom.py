@@ -296,7 +296,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                         self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=QgsMessageBar.WARNING, duration=3)
                         return
                     srcCrs = self.settings.multiZoomToCRS()
-                    transform = QgsCoordinateTransform(srcCrs, epsg4326)
+                    transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())
                     if self.settings.multiCoordOrder == self.settings.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
@@ -309,7 +309,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     lat, lon = LatLon.parseDMSString(str, self.settings.multiCoordOrder)
                 else:
                     srcCrs = self.settings.multiZoomToCRS()
-                    transform = QgsCoordinateTransform(srcCrs, epsg4326)
+                    transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())
                     if self.settings.multiCoordOrder == self.settings.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
@@ -368,7 +368,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         
     def canvasPointXY(self, lat, lon):
         canvasCrs = self.canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(epsg4326, canvasCrs)
+        transform = QgsCoordinateTransform(epsg4326, canvasCrs, QgsProject.instance())
         x, y = transform.transform(float(lon), float(lat))
         pt = QgsPointXY(x,y)
         return pt

@@ -3,7 +3,7 @@ import os
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import QVariant
-from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, QgsProject
 from qgis.gui import QgsMessageBar
 
 from . import mgrs
@@ -47,7 +47,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
         # If the layer is not EPSG:4326 we need to convert it.
         epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
         if layerCRS != epsg4326:
-            transform = QgsCoordinateTransform(inCRS, epsg4326)
+            transform = QgsCoordinateTransform(inCRS, epsg4326, QgsProject.instance())
 
         iter = layer.getFeatures()
 

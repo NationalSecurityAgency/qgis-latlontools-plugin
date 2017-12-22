@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QTimer, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu
-from qgis.core import QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes
+from qgis.core import QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject
 from qgis.gui import QgsRubberBand
 
 from .zoomToLatLon import ZoomToLatLon
@@ -186,7 +186,7 @@ class LatLonTools:
  
     def zoomTo(self, srcCrs, lat, lon):
         canvasCrs = self.canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(srcCrs, canvasCrs)
+        transform = QgsCoordinateTransform(srcCrs, canvasCrs, QgsProject.instance())
         x, y = transform.transform(float(lon), float(lat))
             
         rect = QgsRectangle(x,y,x,y)

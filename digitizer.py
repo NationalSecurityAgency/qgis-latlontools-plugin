@@ -5,7 +5,7 @@ from qgis.PyQt.QtCore import QSize, QSettings, QTextCodec
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QMenu, QToolButton
 from qgis.PyQt.uic import loadUiType
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
 from qgis.gui import QgsMessageBar, QgsProjectionSelectionTreeWidget
 from .LatLon import LatLon
 from .util import *
@@ -139,7 +139,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         caps = layer.dataProvider().capabilities()
         if caps & QgsVectorDataProvider.AddFeatures:
             destCRS = layer.crs() # Get the CRS of the layer we are adding a point toWgs
-            transform = QgsCoordinateTransform(srcCrs, destCRS) 
+            transform = QgsCoordinateTransform(srcCrs, destCRS, QgsProject.instance()) 
             # Transform the input coordinate projection to the layer CRS
             x, y = transform.transform(float(lon), float(lat))
             feat = QgsFeature(layer.pendingFields())
