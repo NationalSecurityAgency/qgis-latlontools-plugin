@@ -142,9 +142,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
             transform = QgsCoordinateTransform(srcCrs, destCRS, QgsProject.instance()) 
             # Transform the input coordinate projection to the layer CRS
             x, y = transform.transform(float(lon), float(lat))
-            feat = QgsFeature(layer.pendingFields())
+            feat = QgsFeature(layer.fields())
             feat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(x,y)))
-            if layer.pendingFields().count() == 0:
+            if layer.fields().count() == 0:
                 layer.addFeature(feat)
                 self.lltools.zoomTo(srcCrs, lat, lon)
             else:
