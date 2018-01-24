@@ -36,7 +36,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
             self.iface.messageBar().pushMessage("", "Invalid MGRS Field", level=QgsMessageBar.WARNING, duration=4)
             return
         
-        fields = layer.pendingFields()
+        fields = layer.fields()
         # Check to see if the field is of the right type
         f = fields.at(fieldIndex)
         if f.type() != QVariant.String:

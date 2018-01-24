@@ -29,7 +29,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
             return
             
         # Get the field names for the input layer. The will be copied to the output layer with MGRS added
-        fields = layer.pendingFields()
+        fields = layer.fields()
         fieldsout = QgsFields(fields)
         
         # We need to add the mgrs field at the end
