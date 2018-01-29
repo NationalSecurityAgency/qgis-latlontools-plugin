@@ -418,6 +418,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             settings.placement= QgsPalLayerSettings.AroundPoint
             labeling = QgsVectorLayerSimpleLabeling(settings)
             ptLayer.setLabeling(labeling)
+            ptLayer.setLabelsEnabled(True)
         elif self.settings.multiZoomStyleID == 2 and os.path.isfile(self.settings.customQMLFile()):
             ptLayer.loadNamedStyle(self.settings.customQMLFile())
             
