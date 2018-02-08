@@ -9,15 +9,15 @@ from .multizoom import MultiZoomWidget
 from .copyLatLonTool import CopyLatLonTool
 from .showOnMapTool import ShowOnMapTool
 from .settings import SettingsWidget
-from .tomgrs import ToMGRSWidget
-from .mgrstogeom import MGRStoLayerWidget
-from .digitizer import DigitizerWidget
 import os
 import webbrowser
 
 
 class LatLonTools:
     digitizerDialog = None
+    toMGRSDialog = None
+    MGRStoLayerDialog = None
+    geom2FieldDialog = None
     
     def __init__(self, iface):
         self.iface = iface
@@ -31,8 +31,6 @@ class LatLonTools:
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         self.showMapTool = ShowOnMapTool(self.settingsDialog, self.iface)
-        self.toMGRSDialog = ToMGRSWidget(self.iface, self.iface.mainWindow())
-        self.MGRStoLayerDialog = MGRStoLayerWidget(self.iface, self.iface.mainWindow())
         
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
@@ -71,12 +69,14 @@ class LatLonTools:
         self.multiZoomDialog.setFloating(True)
         
         # Add To MGRS conversion
-        icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
-        icon2 = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
         menu = QMenu()
+        icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
+        menu.addAction(icon, "Geometry to Field", self.geom2Field)
+        icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
         menu.addAction(icon, "MGRS to Geometry", self.MGRStoLayer)
-        menu.addAction(icon2, "Geometry to MGRS", self.toMGRS)
-        self.toMGRSAction = QAction(icon2, "MGRS Conversions", self.iface.mainWindow())
+        icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
+        menu.addAction(icon, "Geometry to MGRS", self.toMGRS)
+        self.toMGRSAction = QAction(icon, "Conversions", self.iface.mainWindow())
         self.toMGRSAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.toMGRSAction)
         
@@ -133,6 +133,7 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
         self.iface.removeDockWidget(self.zoomToDialog)
         self.iface.removeDockWidget(self.multiZoomDialog)
+        self.geom2FieldDialog = None
         self.MGRStoLayerDialog = None
         self.toMGRSDialog = None
         self.zoomToDialog = None
@@ -161,12 +162,25 @@ class LatLonTools:
         '''Display the Multi-zoom to dialog box'''
         self.multiZoomDialog.show()
 
+    def geom2Field(self):
+        '''Convert layer geometry to a text string'''
+        if self.geom2FieldDialog == None:
+            from .geom2field import Geom2FieldWidget
+            self.geom2FieldDialog = Geom2FieldWidget(self.iface, self.iface.mainWindow())
+        self.geom2FieldDialog.show()
+
     def toMGRS(self):
         '''Display the to MGRS  dialog box'''
+        if self.toMGRSDialog == None:
+            from .tomgrs import ToMGRSWidget
+            self.toMGRSDialog = ToMGRSWidget(self.iface, self.iface.mainWindow())
         self.toMGRSDialog.show()
 
     def MGRStoLayer(self):
         '''Display the to MGRS  dialog box'''
+        if self.MGRStoLayerDialog == None:
+            from .mgrstogeom import MGRStoLayerWidget
+            self.MGRStoLayerDialog = MGRStoLayerWidget(self.iface, self.iface.mainWindow())
         self.MGRStoLayerDialog.show()
     
     def settings(self):
@@ -220,6 +234,7 @@ class LatLonTools:
         
     def digitizeClicked(self):
         if self.digitizerDialog == None:
+            from .digitizer import DigitizerWidget
             self.digitizerDialog = DigitizerWidget(self, self.iface, self.iface.mainWindow())
         self.digitizerDialog.show()
         
