@@ -4,8 +4,7 @@ import re
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import QVariant
-from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature, QgsGeometry, QgsPointXY, QgsProject
-from qgis.gui import QgsMessageBar
+from qgis.core import Qgis, QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature, QgsGeometry, QgsPointXY, QgsProject
 #import traceback
 
 from . import mgrs
@@ -26,21 +25,21 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
     def accept(self):
         layer = self.mMapLayerComboBox.currentLayer()
         if not layer:
-            self.iface.messageBar().pushMessage("", "No Valid Layer to Process", level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "No Valid Layer to Process", level=Qgis.Warning, duration=4)
             return
         layer_name = self.nameLineEdit.text()
         
         selectedField = self.mFieldComboBox.currentField()
         fieldIndex = layer.fields().lookupField(selectedField)
         if fieldIndex == -1:
-            self.iface.messageBar().pushMessage("", "Invalid MGRS Field", level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "Invalid MGRS Field", level=Qgis.Warning, duration=4)
             return
         
         fields = layer.fields()
         # Check to see if the field is of the right type
         f = fields.at(fieldIndex)
         if f.type() != QVariant.String:
-            self.iface.messageBar().pushMessage("", "Selected MGRS Field is not a valid data type", level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "Selected MGRS Field is not a valid data type", level=Qgis.Warning, duration=4)
             return
             
         
@@ -72,7 +71,7 @@ class MGRStoLayerWidget(QDialog, FORM_CLASS):
         QgsProject.instance().addMapLayer(pointLayer)
         
         if num_bad != 0:
-            self.iface.messageBar().pushMessage("", "{} out of {} features failed".format(num_bad, num_features), level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "{} out of {} features failed".format(num_bad, num_features), level=Qgis.Warning, duration=4)
         
         self.close()
         

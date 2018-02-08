@@ -1,8 +1,8 @@
 from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtGui import *
 from qgis.PyQt.QtWidgets import *
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
-from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
+from qgis.core import Qgis,QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.gui import QgsMapToolEmitPoint
 from .util import *
 import webbrowser
 
@@ -32,4 +32,4 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         mapprovider = self.settings.getMapProviderString(lat, lon)
         url = QUrl(mapprovider).toString()
         webbrowser.open(url, new=2)
-        self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat,lon), level=QgsMessageBar.INFO, duration=3)
+        self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat,lon), level=Qgis.Info, duration=3)

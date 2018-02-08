@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import QgsCoordinateTransform, QgsPointXY, QgsProject
-from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
+from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject
+from qgis.gui import QgsMapToolEmitPoint
 
 from .LatLon import LatLon
 from .util import *
@@ -163,6 +163,6 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             if msg != None:
                 clipboard = QApplication.clipboard()
                 clipboard.setText(msg)
-                self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=QgsMessageBar.INFO, duration=4)
+                self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=Qgis.Info, duration=4)
         except Exception as e:
-            self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=Qgis.Warning, duration=4)

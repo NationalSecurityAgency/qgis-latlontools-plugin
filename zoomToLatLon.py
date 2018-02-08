@@ -5,8 +5,8 @@ from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDockWidget
 from qgis.PyQt.QtCore import pyqtSignal, QTextCodec
-from qgis.gui import QgsMessageBar, QgsVertexMarker
-from qgis.core import QgsJsonUtils, QgsWkbTypes
+from qgis.gui import QgsVertexMarker
+from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes
 from .LatLon import LatLon
 from .util import *
 #import traceback
@@ -143,7 +143,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 self.removeMarker();
         except:
             #traceback.print_exc()
-            self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
+            self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=Qgis.Warning, duration=2)
             return
 
 

@@ -5,8 +5,8 @@ from qgis.PyQt.QtCore import QSize, QSettings, QTextCodec
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QMenu, QToolButton
 from qgis.PyQt.uic import loadUiType
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
-from qgis.gui import QgsMessageBar, QgsProjectionSelectionTreeWidget
+from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
+from qgis.gui import QgsProjectionSelectionTreeWidget
 from .LatLon import LatLon
 from .util import *
 #import traceback
@@ -133,7 +133,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                     srcCrs = QgsCoordinateReferenceSystem().createFromString(self.inputCustomCRS)
         except:
             #traceback.print_exc()
-            self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=QgsMessageBar.WARNING, duration=2)
+            self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=Qgis.Warning, duration=2)
             return
         self.lineEdit.clear()
         caps = layer.dataProvider().capabilities()

@@ -8,7 +8,7 @@ from qgis.PyQt.QtCore import Qt, QVariant, pyqtSlot
 from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
     QgsField, QgsFeature, QgsGeometry, QgsPointXY,
     QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject )
-from qgis.gui import QgsVertexMarker, QgsMessageBar
+from qgis.gui import QgsVertexMarker
 from .LatLon import LatLon
 from .util import *
 
@@ -293,7 +293,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 else:
                     parts = re.split('[\s;:]+', parts[0], 1)
                     if len(parts) < 2:
-                        self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=QgsMessageBar.WARNING, duration=3)
+                        self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=Qgis.Warning, duration=3)
                         return
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())
@@ -320,11 +320,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     data = parts[3:]
                     
             else:
-                self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=QgsMessageBar.WARNING, duration=3)
+                self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=Qgis.Warning, duration=3)
                 return
         except:
             if self.addLineEdit.text():
-                self.iface.messageBar().pushMessage("", "Invalid Coordinate. Perhaps comma separators between fields were not used." , level=QgsMessageBar.WARNING, duration=3)
+                self.iface.messageBar().pushMessage("", "Invalid Coordinate. Perhaps comma separators between fields were not used." , level=Qgis.Warning, duration=3)
             return
         newrow = self.addCoord(lat, lon, label, data)
         self.addLineEdit.clear()

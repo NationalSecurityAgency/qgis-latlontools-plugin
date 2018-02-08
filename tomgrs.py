@@ -4,7 +4,6 @@ from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, QgsProject
-from qgis.gui import QgsMessageBar
 
 from . import mgrs
 
@@ -25,7 +24,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
         layer_name = self.layerLineEdit.text()
         layer = self.mapLayerComboBox.currentLayer()
         if not layer:
-            self.iface.messageBar().pushMessage("", "No Valid Layer", level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "No Valid Layer", level=Qgis.Warning, duration=4)
             return
             
         # Get the field names for the input layer. The will be copied to the output layer with MGRS added
@@ -34,7 +33,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
         
         # We need to add the mgrs field at the end
         if fieldsout.append(QgsField(field_name, QVariant.String)) == False:
-            self.iface.messageBar().pushMessage("", "MGRS Field Name must be unique", level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "MGRS Field Name must be unique", level=Qgis.Warning, duration=4)
             return
         precision = self.precisionSpinBox.value()
         layerCRS = layer.crs()
@@ -47,7 +46,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
         # If the layer is not EPSG:4326 we need to convert it.
         epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
         if layerCRS != epsg4326:
-            transform = QgsCoordinateTransform(inCRS, epsg4326, QgsProject.instance())
+            transform = QgsCoordinateTransform(layerCRS, epsg4326, QgsProject.instance())
 
         iter = layer.getFeatures()
 
