@@ -96,7 +96,7 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         self.precisionSpinBox.setEnabled(precision)
         
     def isWgs84(self):
-        wgs = int(self.wgs84NumberFormatComboBox.currentIndex())
+        wgs = int(self.outputCrsComboBox.currentIndex())
         layer = self.mapLayerComboBox.currentLayer()
         
         if wgs == 0: # Forced WGS 84
