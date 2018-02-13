@@ -152,8 +152,6 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
             delimiter = '\t'
         else:
             delimiter = self.otherDelimLineEdit.text()
-        print ("delimiter '{}'".format(delimiter))
-        print ("delimType {}".format(delimType))
         crsType = int(self.outputCrsComboBox.currentIndex())
         crsOther = self.crsSelectionWidget.crs()
         wgs84Format = int(self.wgs84NumberFormatComboBox.currentIndex())
