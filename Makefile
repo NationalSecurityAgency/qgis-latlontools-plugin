@@ -1,15 +1,16 @@
 PLUGINNAME = latlontools
-PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py multizoom.py mgrs.py showOnMapTool.py mapProviders.py tomgrs.py mgrstogeom.py digitizer.py util.py
+PLUGINS = "$(HOME)"/.qgis2/python/plugins/$(PLUGINNAME)
+PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py geom2field.py multizoom.py mgrs.py showOnMapTool.py mapProviders.py tomgrs.py mgrstogeom.py digitizer.py util.py
 EXTRAS = metadata.txt
 
 deploy:
-	mkdir -p $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vf $(PY_FILES) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vf $(EXTRAS) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vfr images $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vfr ui $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vfr doc $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
-	cp -vf helphead.html $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)/index.html
-	python -m markdown -x markdown.extensions.headerid readme.md >> $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)/index.html
-	echo '</body>' >> $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)/index.html
+	mkdir -p $(PLUGINS)
+	cp -vf $(PY_FILES) $(PLUGINS)
+	cp -vf $(EXTRAS) $(PLUGINS)
+	cp -vfr images $(PLUGINS)
+	cp -vfr ui $(PLUGINS)
+	cp -vfr doc $(PLUGINS)
+	cp -vf helphead.html $(PLUGINS)/index.html
+	python -m markdown -x markdown.extensions.headerid readme.md >> $(PLUGINS)/index.html
+	echo '</body>' >> $(PLUGINS)/index.html
 
