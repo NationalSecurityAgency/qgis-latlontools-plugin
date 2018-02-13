@@ -55,7 +55,11 @@
     
     * The ***Show all markers*** displays markers of all locations.
 
-* ***MGRS Conversions***
+* ***Conversions***
+    * <img src="images/geom2field.png" alt="Geometry to Field"> ***Geometry to Field*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two text fields in the new layer. The user has a lot of flexability as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats are GeoJSON, WKT, and MGRS. 
+    
+    <div style="text-align:center"><img src="doc/geom2field.jpg" alt="Geometry to Field"></div>
+    
     * <img src="images/mgrs2point.png" alt="MGRS to Geometry"> ***MGRS to Geometry*** - This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the layer to a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
     
     <div style="text-align:center"><img src="doc/mgrs2geom.jpg" alt="MGRS to Geometry"></div>
