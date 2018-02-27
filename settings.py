@@ -140,7 +140,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.multiZoomNumCol = int(settings.value('/LatLonTools/MultiZoomExtraData', 0))
         self.multiZoomStyleID = int(settings.value('/LatLonTools/MultiZoomStyleID', 0))
         self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
-        if self.qmlStyle == '' or self.qmlStyle == None or not os.path.isfile(self.qmlStyle):
+        if (self.multiZoomStyleID == 2) and (self.qmlStyle == '' or self.qmlStyle == None or not os.path.isfile(self.qmlStyle)):
             # If the file is invalid then set to an emply string
             settings.setValue('/LatLonTools/QmlStyle', '')
             settings.setValue('/LatLonTools/MultiZoomStyleID', 0)
