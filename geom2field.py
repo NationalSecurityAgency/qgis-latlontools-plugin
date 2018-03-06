@@ -3,7 +3,7 @@ import os
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import QVariant
-from qgis.core import Qgis, QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, QgsProject
+from qgis.core import Qgis, QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 
 from . import mgrs
 from .LatLon import LatLon

@@ -5,7 +5,7 @@ from qgis.PyQt.QtCore import QSize, QSettings, QTextCodec
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QMenu, QToolButton
 from qgis.PyQt.uic import loadUiType
-from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
+from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
 from qgis.gui import QgsProjectionSelectionTreeWidget
 from .LatLon import LatLon
 from .util import *
