@@ -6,7 +6,7 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QMenu, QToolButton
 from qgis.PyQt.uic import loadUiType
 from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
-from qgis.gui import QgsProjectionSelectionTreeWidget
+from qgis.gui import QgsProjectionSelectionDialog
 from .LatLon import LatLon
 from .util import *
 #import traceback
@@ -130,7 +130,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 if self.inputProjection == 2: # Project CRS
                     srcCrs = self.canvas.mapSettings().destinationCrs()
                 else:
-                    srcCrs = QgsCoordinateReferenceSystem().createFromString(self.inputCustomCRS)
+                    srcCrs = QgsCoordinateReferenceSystem(self.inputCustomCRS)
         except:
             #traceback.print_exc()
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=Qgis.Warning, duration=2)
@@ -153,7 +153,6 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                     self.lltools.zoomTo(srcCrs, lat, lon)
         
     def labelUpdate(self):
-        #print "labelUpdate"
         if self.inputProjection == 1: # MGRS projection
             self.infoLabel.setText('Input Projection: MGRS')
             return
@@ -201,9 +200,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.crsButton.setDefaultAction(action)
         self.inputProjection = action.data()
         if self.inputProjection == 3:
-            selector = QgsProjectionSelectionTreeWidget()
-            selector.setOgcWmsCrsFilter(self.inputCustomCRS)
-            if selector.exec_():
+            selector = QgsProjectionSelectionDialog()
+            selector.setCrs(QgsCoordinateReferenceSystem(self.inputCustomCRS))
+            if selector.exec():
                 self.inputCustomCRS = selector.crs().authid()
             else:
                 self.inputCustomCRS = 'EPSG:4326'
