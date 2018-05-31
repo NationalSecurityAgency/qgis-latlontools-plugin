@@ -35,6 +35,7 @@ class LatLonTools:
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
         self.copyAction = QAction(icon, "Copy Latitude, Longitude", self.iface.mainWindow())
+        self.copyAction.setObjectName('latLonToolsCopy')
         self.copyAction.triggered.connect(self.startCapture)
         self.copyAction.setCheckable(True)
         self.iface.addToolBarIcon(self.copyAction)
@@ -43,6 +44,7 @@ class LatLonTools:
         # Add Interface for Zoom to Coordinate
         icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
         self.zoomToAction = QAction(icon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
+        self.zoomToAction.setObjectName('latLonToolsZoom')
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
         self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
 
@@ -53,6 +55,7 @@ class LatLonTools:
         # Add Interface for External Map
         icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
         self.externMapAction = QAction(icon, "Show in External Map", self.iface.mainWindow())
+        self.externMapAction.setObjectName('latLonToolsExternalMap')
         self.externMapAction.triggered.connect(self.setShowMapTool)
         self.externMapAction.setCheckable(True)
         self.iface.addToolBarIcon(self.externMapAction)
@@ -61,6 +64,7 @@ class LatLonTools:
         # Add Interface for Multi point zoom
         icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
         self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
+        self.multiZoomToAction.setObjectName('latLonToolsMultiZoom')
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
         self.iface.addPluginToMenu('Lat Lon Tools', self.multiZoomToAction)
 
@@ -71,11 +75,14 @@ class LatLonTools:
         # Add To MGRS conversion
         menu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
-        menu.addAction(icon, "Geometry to Field", self.geom2Field)
+        action = menu.addAction(icon, "Geometry to Field", self.geom2Field)
+        action.setObjectName('latLonToolsGeom2Field')
         icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
-        menu.addAction(icon, "MGRS to Geometry", self.MGRStoLayer)
+        action = menu.addAction(icon, "MGRS to Geometry", self.MGRStoLayer)
+        action.setObjectName('latLonToolsMGRS2Geom')
         icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
-        menu.addAction(icon, "Geometry to MGRS", self.toMGRS)
+        action = menu.addAction(icon, "Geometry to MGRS", self.toMGRS)
+        action.setObjectName('latLonToolsGeom2MGRS')
         self.toMGRSAction = QAction(icon, "Conversions", self.iface.mainWindow())
         self.toMGRSAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.toMGRSAction)
@@ -83,18 +90,21 @@ class LatLonTools:
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
         self.settingsAction = QAction(settingsicon, "Settings", self.iface.mainWindow())
+        self.settingsAction.setObjectName('latLonToolsSettings')
         self.settingsAction.triggered.connect(self.settings)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
         
         # Help
         icon = QIcon(os.path.dirname(__file__) + '/images/help.png')
         self.helpAction = QAction(icon, "Help", self.iface.mainWindow())
+        self.helpAction.setObjectName('latLonToolsHelp')
         self.helpAction.triggered.connect(self.help)
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
         
         # Add to Digitize Toolbar
         icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
         self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
+        self.digitizeAction.setObjectName('latLonToolsDigitize')
         self.digitizeAction.triggered.connect(self.digitizeClicked)
         self.digitizeAction.setEnabled(False)
         self.iface.digitizeToolBar().addAction(self.digitizeAction)
