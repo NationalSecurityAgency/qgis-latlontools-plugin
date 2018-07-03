@@ -1,0 +1,1 @@
+Convert point vector coordinates into into MGRS coordinates and add them to an MGRS column. MGRS supports measuring precision's of 1m, 10m, 100m, 1km, 10km, and 100km. MGRS Precision of 5 is 1m and an MGRS Precision of 0 represents a point accuracy of 100km. 'MGRS field name' is the name given to the MGRS field in the output layer. This must be unique or the algorithm will fail.

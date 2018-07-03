@@ -1,0 +1,1 @@
+This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the fields to a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.

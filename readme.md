@@ -64,7 +64,7 @@
     
     <div style="text-align:center"><img src="doc/mgrs2geom.jpg" alt="MGRS to Geometry"></div>
 
-    * <img src="images/point2mgrs.png" alt="Geometry to MGRS"> ***Geometry to MGRS*** - Convert a point vector layer into a point memory layer, but add an MGRS column, containing coordinates based on the vector layer's geometry. MGRS supports measuring precision's of 1m, 10m, 100m, 1km, 10km, and 100km. **MGRS Precision** of 5 is 1m and an **MGRS Precision** of 0 represents a point accuracy of 100km.
+    * <img src="images/point2mgrs.png" alt="Geometry to MGRS"> ***Geometry to MGRS*** - Convert a point vector layer into a new layer, but add an MGRS column, containing coordinates based on the vector layer's geometry. MGRS supports measuring precision's of 1m, 10m, 100m, 1km, 10km, and 100km. **MGRS Precision** of 5 is 1m and an **MGRS Precision** of 0 represents a point accuracy of 100km.
     
     <div style="text-align:center"><img src="doc/geom2mgrs.jpg" alt="MGRS to Geometry"></div>
 

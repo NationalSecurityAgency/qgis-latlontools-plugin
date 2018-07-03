@@ -1,56 +1,89 @@
 import os
 
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.uic import loadUiType
-from qgis.PyQt.QtCore import QVariant
-from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, QgsProject
+from qgis.PyQt.QtCore import QVariant, QUrl
+from qgis.PyQt.QtGui import QIcon
+from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+
+from qgis.core import (QgsProcessing,
+    QgsProcessingException,
+    QgsProcessingAlgorithm,
+    QgsProcessingParameterString,
+    QgsProcessingParameterNumber,
+    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterFeatureSink)
 
 from . import mgrs
 
-FORM_CLASS, _ = loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui/tomgrs.ui'))
-
-
-class ToMGRSWidget(QDialog, FORM_CLASS):
-    '''ToMGRS Dialog box.'''
-    def __init__(self, iface, parent):
-        super(ToMGRSWidget, self).__init__(parent)
-        self.setupUi(self)
-        self.iface = iface
-        self.mapLayerComboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
-                
-    def accept(self):
-        field_name = self.fieldLineEdit.text()
-        layer_name = self.layerLineEdit.text()
-        layer = self.mapLayerComboBox.currentLayer()
-        if not layer:
-            self.iface.messageBar().pushMessage("", "No Valid Layer", level=Qgis.Warning, duration=4)
-            return
+class ToMGRSAlgorithm(QgsProcessingAlgorithm):
+    """
+    Algorithm to convert a point layer to a MGRS field.
+    """
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+    PrmInputLayer = 'InputLayer'
+    PrmMgrsFieldName = 'MgrsFieldName'
+    PrmMgrsPrecision = 'MgrsPrecision'
+    PrmOutputLayer = 'OutputLayer'
+    
+    def initAlgorithm(self, config):
+        self.addParameter(
+            QgsProcessingParameterFeatureSource(
+                self.PrmInputLayer,
+                'Input point vector layer',
+                [QgsProcessing.TypeVectorPoint])
+        )
+        self.addParameter(
+            QgsProcessingParameterString(
+                self.PrmMgrsFieldName,
+                'MGRS field name',
+                defaultValue='mgrs')
+            )
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmMgrsPrecision,
+                'MGRS Precision',
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=5,
+                optional=False,
+                minValue=0,
+                maxValue=5
+                )
+            )
+        self.addParameter(
+            QgsProcessingParameterFeatureSink(
+                self.PrmOutputLayer,
+                'Output layer')
+            )
             
-        # Get the field names for the input layer. The will be copied to the output layer with MGRS added
-        fields = layer.fields()
-        fieldsout = QgsFields(fields)
+    def processAlgorithm(self, parameters, context, feedback):
+        source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
+        mgrs_name = self.parameterAsString(parameters, self.PrmMgrsFieldName, context).strip()
+        precision = self.parameterAsInt(parameters, self.PrmMgrsPrecision, context)
         
-        # We need to add the mgrs field at the end
-        if fieldsout.append(QgsField(field_name, QVariant.String)) == False:
-            self.iface.messageBar().pushMessage("", "MGRS Field Name must be unique", level=Qgis.Warning, duration=4)
-            return
-        precision = self.precisionSpinBox.value()
-        layerCRS = layer.crs()
-        pointLayer = QgsVectorLayer("Point?crs={}".format(layerCRS.authid()), layer_name, "memory")
-        ppoint = pointLayer.dataProvider()
-        ppoint.addAttributes(fieldsout)
-        pointLayer.updateFields()
-
+        fieldsout = QgsFields(source.fields())
+        
+        if fieldsout.append(QgsField(mgrs_name, QVariant.String)) == False:
+            msg = "MGRS Field Name must be unique. There is already a field named '{}'".format(mgrs_name)
+            feedback.reportError(msg)
+            raise QgsProcessingException(msg)
+        
+        layerCRS = source.sourceCrs()
+        (sink, dest_id) = self.parameterAsSink(parameters, self.PrmOutputLayer,
+                context, fieldsout, source.wkbType(), layerCRS)
+                
         # The input to the mgrs conversions requires latitudes and longitudes
         # If the layer is not EPSG:4326 we need to convert it.
         epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
         if layerCRS != epsg4326:
             transform = QgsCoordinateTransform(layerCRS, epsg4326, QgsProject.instance())
 
-        iter = layer.getFeatures()
+        total = 100.0 / source.featureCount() if source.featureCount() else 0
 
-        for feature in iter:
+        iterator = source.getFeatures()
+        for cnt, feature in enumerate(iterator):
+            if feedback.isCanceled():
+                break
             pt = feature.geometry().asPoint()
             if layerCRS != epsg4326:
                 pt = transform.transform(pt)
@@ -61,10 +94,40 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
             f = QgsFeature()
             f.setGeometry(feature.geometry())
             f.setAttributes(feature.attributes()+[msg])
-            ppoint.addFeatures([f])
+            sink.addFeature(f)
+            feedback.setProgress(int(cnt * total))
             
-        pointLayer.updateExtents()
-        QgsProject.instance().addMapLayer(pointLayer)
-        self.close()
+        return {self.PrmOutputLayer: dest_id}
         
+    def name(self):
+        return 'point2mgrs'
+
+    def icon(self):
+        return QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
+    
+    def displayName(self):
+        return 'Point geometry 2 MGRS'
+    
+    def group(self):
+        return 'Vector conversion'
+        
+    def groupId(self):
+        return 'vectorconversion'
+        
+    def helpUrl(self):
+        file = os.path.dirname(__file__)+'/index.html'
+        if not os.path.exists(file):
+            return ''
+        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+    
+    def shortHelpString(self):
+        file = os.path.dirname(__file__)+'/doc/geom2mgrs.help'
+        if not os.path.exists(file):
+            return ''
+        with open(file) as helpf:
+            help=helpf.read()
+        return help
+        
+    def createInstance(self):
+        return ToMGRSAlgorithm()
         

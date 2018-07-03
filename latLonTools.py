@@ -1,14 +1,16 @@
 from qgis.PyQt.QtCore import Qt, QTimer, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu
-from qgis.core import QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject
+from qgis.core import QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
 from qgis.gui import QgsRubberBand
+import processing
 
 from .zoomToLatLon import ZoomToLatLon
 from .multizoom import MultiZoomWidget
 from .copyLatLonTool import CopyLatLonTool
 from .showOnMapTool import ShowOnMapTool
 from .settings import SettingsWidget
+from .provider import LatLonToolsProvider
 import os
 import webbrowser
 
@@ -24,6 +26,7 @@ class LatLonTools:
         self.canvas = iface.mapCanvas()
         self.crossRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
         self.crossRb.setColor(Qt.red)
+        self.provider = LatLonToolsProvider()        
 
     def initGui(self):
         '''Initialize Lot Lon Tools GUI.'''
@@ -113,6 +116,9 @@ class LatLonTools:
         self.iface.currentLayerChanged.connect(self.currentLayerChanged)
         self.canvas.mapToolSet.connect(self.unsetTool)
         self.enableDigitizeTool()
+        # Add the processing provider
+        
+        QgsApplication.processingRegistry().addProvider(self.provider)
                 
     def unsetTool(self, tool):
         '''Uncheck the Copy Lat Lon tool'''
@@ -153,6 +159,7 @@ class LatLonTools:
         self.mapTool = None
         self.iface.digitizeToolBar().removeAction(self.digitizeAction)
         self.digitizerDialog = None
+        QgsApplication.processingRegistry().removeProvider(self.provider)
 
     def startCapture(self):
         '''Set the focus of the copy coordinate tool and check it'''
@@ -181,17 +188,11 @@ class LatLonTools:
 
     def toMGRS(self):
         '''Display the to MGRS  dialog box'''
-        if self.toMGRSDialog == None:
-            from .tomgrs import ToMGRSWidget
-            self.toMGRSDialog = ToMGRSWidget(self.iface, self.iface.mainWindow())
-        self.toMGRSDialog.show()
+        results = processing.execAlgorithmDialog('latlontools:point2mgrs', {})
 
     def MGRStoLayer(self):
         '''Display the to MGRS  dialog box'''
-        if self.MGRStoLayerDialog == None:
-            from .mgrstogeom import MGRStoLayerWidget
-            self.MGRStoLayerDialog = MGRStoLayerWidget(self.iface, self.iface.mainWindow())
-        self.MGRStoLayerDialog.show()
+        results = processing.execAlgorithmDialog('latlontools:mgrs2point', {})
     
     def settings(self):
         '''Show the settings dialog box'''

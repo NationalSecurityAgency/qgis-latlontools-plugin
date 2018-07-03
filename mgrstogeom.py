@@ -1,85 +1,119 @@
 import os
 import re
 
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.uic import loadUiType
-from qgis.PyQt.QtCore import QVariant
-from qgis.core import Qgis, QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature, QgsGeometry, QgsPointXY, QgsProject
+from qgis.PyQt.QtCore import QUrl
+from qgis.PyQt.QtGui import QIcon
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsCoordinateReferenceSystem, QgsWkbTypes 
 #import traceback
+
+from qgis.core import (QgsProcessing,
+    QgsProcessingException,
+    QgsProcessingAlgorithm,
+    QgsProcessingParameterField,
+    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterFeatureSink)
 
 from . import mgrs
 
-FORM_CLASS, _ = loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui/mgrstolayer.ui'))
-
-
-class MGRStoLayerWidget(QDialog, FORM_CLASS):
-    '''Convert an MGRS field to a point geometry layer.'''
-    def __init__(self, iface, parent):
-        super(MGRStoLayerWidget, self).__init__(parent)
-        self.setupUi(self)
-        self.iface = iface
-        self.mMapLayerComboBox.setFilters(QgsMapLayerProxyModel.VectorLayer | QgsMapLayerProxyModel.NoGeometry)
-        self.mMapLayerComboBox.layerChanged.connect(self.layerChanged)
-        
-    def accept(self):
-        layer = self.mMapLayerComboBox.currentLayer()
-        if not layer:
-            self.iface.messageBar().pushMessage("", "No Valid Layer to Process", level=Qgis.Warning, duration=4)
-            return
-        layer_name = self.nameLineEdit.text()
-        
-        selectedField = self.mFieldComboBox.currentField()
-        fieldIndex = layer.fields().lookupField(selectedField)
-        if fieldIndex == -1:
-            self.iface.messageBar().pushMessage("", "Invalid MGRS Field", level=Qgis.Warning, duration=4)
-            return
-        
-        fields = layer.fields()
-        # Check to see if the field is of the right type
-        f = fields.at(fieldIndex)
-        if f.type() != QVariant.String:
-            self.iface.messageBar().pushMessage("", "Selected MGRS Field is not a valid data type", level=Qgis.Warning, duration=4)
-            return
+class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
+    """
+    Algorithm to convert a layer with an MGRS field into a point layer.
+    """
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+    PrmInputLayer = 'InputLayer'
+    PrmMgrsField = 'MgrsField'
+    PrmOutputLayer = 'OutputLayer'
+    
+    def initAlgorithm(self, config):
+        self.addParameter(
+            QgsProcessingParameterFeatureSource(
+                self.PrmInputLayer,
+                'Input vector layer or table',
+                [QgsProcessing.TypeVector])
+        )
+        self.addParameter(
+            QgsProcessingParameterField(
+                self.PrmMgrsField,
+                'Field containing MGRS coordinate',
+                defaultValue='mgrs',
+                parentLayerParameterName=self.PrmInputLayer,
+                type=QgsProcessingParameterField.String)
+            )
+        self.addParameter(
+            QgsProcessingParameterFeatureSink(
+                self.PrmOutputLayer,
+                'Output layer')
+            )
             
+    def processAlgorithm(self, parameters, context, feedback):
+        source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
+        mgrsfieldname = self.parameterAsString(parameters, self.PrmMgrsField, context)
+        if not mgrsfieldname:
+            msg = 'Select an MGRS field to process'
+            feedback.reportError(msg)
+            raise QgsProcessingException(msg)
+        epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
+        (sink, dest_id) = self.parameterAsSink(parameters, self.PrmOutputLayer,
+                context, source.fields(), QgsWkbTypes.Point, epsg4326)
         
-        pointLayer = QgsVectorLayer("Point?crs=epsg:4326", layer_name, "memory")
-        ppoint = pointLayer.dataProvider()
-        ppoint.addAttributes(fields)
-        pointLayer.updateFields()
-
-        iter = layer.getFeatures()
-
-        num_features = 0
-        num_bad = 0
-        for feature in iter:
-            num_features += 1
-            m = feature[fieldIndex]
+        featureCount = source.featureCount()
+        total = 100.0 / featureCount if featureCount else 0
+        badFeatures = 0
+        
+        iterator = source.getFeatures()
+        for cnt, feature in enumerate(iterator):
+            if feedback.isCanceled():
+                break
+            m = feature[mgrsfieldname]
             try:
                 m = re.sub(r'\s+', '', str(m)) # Remove all white space
                 lat, lon = mgrs.toWgs(m)
             except:
                 #traceback.print_exc()
-                num_bad += 1
+                badFeatures += 1
                 continue
             f = QgsFeature()
             f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
             f.setAttributes(feature.attributes())
-            ppoint.addFeatures([f])
-            
-        pointLayer.updateExtents()
-        QgsProject.instance().addMapLayer(pointLayer)
+            sink.addFeature(f)
+            feedback.setProgress(int(cnt * total))
         
-        if num_bad != 0:
-            self.iface.messageBar().pushMessage("", "{} out of {} features failed".format(num_bad, num_features), level=Qgis.Warning, duration=4)
+        if badFeatures > 0:
+            msg = "{} out of {} features contained MGRS coordinates".format(featureCount - badFeatures, featureCount)
+            feedback.pushInfo(msg)
+                
+        return {self.PrmOutputLayer: dest_id}
         
-        self.close()
+    def name(self):
+        return 'mgrs2point'
+
+    def icon(self):
+        return QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
+    
+    def displayName(self):
+        return 'MGRS 2 point geometry'
+    
+    def group(self):
+        return 'Vector conversion'
         
-    def layerChanged(self):
-        if not self.isVisible():
-            return
-        layer = self.mMapLayerComboBox.currentLayer()
-        self.mFieldComboBox.setLayer(layer)
+    def groupId(self):
+        return 'vectorconversion'
         
-    def showEvent(self, event):
-        self.layerChanged()
+    def helpUrl(self):
+        file = os.path.dirname(__file__)+'/index.html'
+        if not os.path.exists(file):
+            return ''
+        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+    
+    def shortHelpString(self):
+        file = os.path.dirname(__file__)+'/doc/mgrs2point.help'
+        if not os.path.exists(file):
+            return ''
+        with open(file) as helpf:
+            help=helpf.read()
+        return help
+        
+    def createInstance(self):
+        return MGRStoLayerlgorithm()
