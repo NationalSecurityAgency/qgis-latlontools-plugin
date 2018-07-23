@@ -6,18 +6,12 @@ from .mgrstogeom import MGRStoLayerlgorithm
 
 class LatLonToolsProvider(QgsProcessingProvider):
 
-    def __init__(self):
-        QgsProcessingProvider.__init__(self)
-
-        # Load algorithms
-        self.alglist = [MGRStoLayerlgorithm(),ToMGRSAlgorithm()]
-
     def unload(self):
         QgsProcessingProvider.unload(self)
 
     def loadAlgorithms(self):
-        for alg in self.alglist:
-            self.addAlgorithm( alg )
+        self.addAlgorithm(MGRStoLayerlgorithm())
+        self.addAlgorithm(ToMGRSAlgorithm())
 
     def icon(self):
         return QIcon(os.path.dirname(__file__) + '/images/copyicon.png')
