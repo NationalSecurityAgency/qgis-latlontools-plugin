@@ -12,6 +12,7 @@ from .util import *
 #import traceback
 
 from . import mgrs
+from . import olc
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -59,6 +60,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         if self.settings.zoomToProjIsMGRS():
             # This is an MGRS coordinate
             self.label.setText("Enter MGRS Coordinate")
+        elif self.settings.zoomToProjIsPlusCodes():
+            self.label.setText("Enter Plus Codes")
         elif self.settings.zoomToProjIsWgs84():
             if self.settings.zoomToCoordOrder == 0:
                 self.label.setText("Enter 'Latitude, Longitude'")
@@ -96,7 +99,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 srcCrs = epsg4326
             elif self.settings.zoomToProjIsWgs84():
                 if re.search('POINT\(', text) == None:
-                    lat, lon = LatLon.parseDMSString(text, self.settings.coordOrder)
+                    lat, lon = LatLon.parseDMSString(text, self.settings.zoomToCoordOrder)
                 else:
                     m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
@@ -104,6 +107,12 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                     lon = float(m[0][0])
                     lat = float(m[0][1])
                 srcCrs = epsg4326
+            elif self.settings.zoomToProjIsPlusCodes() and olc.isValid(text):
+                # This looks like a Plus Codes coordinate
+                coord = olc.decode(text)
+                srcCrs = epsg4326
+                lat = coord.latitudeCenter 
+                lon = coord.longitudeCenter
             elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
                 text = re.sub(r'\s+', '', str(text)) # Remove all white space
@@ -114,7 +123,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                     coords = re.split('[\s,;:]+', text, 1)
                     if len(coords) < 2:
                         raise ValueError('Invalid Coordinates')
-                    if self.settings.coordOrder == self.settings.OrderYX:
+                    if self.settings.zoomToCoordOrder == self.settings.OrderYX:
                         lat = float(coords[0])
                         lon = float(coords[1])
                     else:

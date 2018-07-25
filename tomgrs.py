@@ -36,7 +36,7 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmMgrsFieldName,
-                'MGRS field name',
+                'Output MGRS field name',
                 defaultValue='mgrs')
             )
         self.addParameter(
@@ -106,7 +106,7 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
     
     def displayName(self):
-        return 'Point geometry 2 MGRS'
+        return 'Point layer 2 MGRS'
     
     def group(self):
         return 'Vector conversion'

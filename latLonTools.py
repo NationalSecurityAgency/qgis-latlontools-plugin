@@ -80,11 +80,16 @@ class LatLonTools:
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
         action = menu.addAction(icon, "Geometry to Field", self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
+        icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
+        action = menu.addAction(icon, "Plus Codes to point layer", self.PlusCodestoLayer)
+        action.setObjectName('latLonToolsPlusCodes2Geom')
+        action = menu.addAction(icon, "Point layer to Plus Codes", self.toPlusCodes)
+        action.setObjectName('latLonToolsGeom2PlusCodes')
         icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
-        action = menu.addAction(icon, "MGRS to Geometry", self.MGRStoLayer)
+        action = menu.addAction(icon, "MGRS to point layer", self.MGRStoLayer)
         action.setObjectName('latLonToolsMGRS2Geom')
         icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
-        action = menu.addAction(icon, "Geometry to MGRS", self.toMGRS)
+        action = menu.addAction(icon, "Point layer to MGRS", self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
         self.toMGRSAction = QAction(icon, "Conversions", self.iface.mainWindow())
         self.toMGRSAction.setMenu(menu)
@@ -193,6 +198,12 @@ class LatLonTools:
     def MGRStoLayer(self):
         '''Display the to MGRS  dialog box'''
         results = processing.execAlgorithmDialog('latlontools:mgrs2point', {})
+
+    def toPlusCodes(self):
+        results = processing.execAlgorithmDialog('latlontools:point2pluscodes', {})
+
+    def PlusCodestoLayer(self):
+        results = processing.execAlgorithmDialog('latlontools:pluscodes2point', {})
     
     def settings(self):
         '''Show the settings dialog box'''

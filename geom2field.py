@@ -8,6 +8,7 @@ from qgis.core import Qgis, QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, Qg
 from . import mgrs
 from .LatLon import LatLon
 from .util import *
+from . import olc
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/geom2field.ui'))
@@ -22,7 +23,7 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         self.canvas = iface.mapCanvas()
         self.mapLayerComboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
         self.mapLayerComboBox.activated.connect(self.enableWidgets)
-        self.outputFormatComboBox.addItems(["Coordinates in 2 fields", "Coordinates in 1 field", "GeoJSON","WKT","MGRS"])
+        self.outputFormatComboBox.addItems(["Coordinates in 2 fields", "Coordinates in 1 field", "GeoJSON","WKT","MGRS","Plus Codes"])
         self.outputFormatComboBox.activated.connect(self.enableWidgets)
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.delimComboBox.addItems(['Comma', 'Space', 'Tab', 'Other'])
@@ -48,6 +49,7 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         crsSelection = False
         wgs84NumberFormat = False
         precision = False
+        pluscodeslen = False
         
         formatIndex = int(self.outputFormatComboBox.currentIndex())
         if formatIndex == 0: # Two coordinates
@@ -61,8 +63,10 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
             field1Name = 'GeoJSON field name'
         elif formatIndex == 3: # WKT
             field1Name = 'WKT field name'
-        else: # MGRS
+        elif formatIndex == 4: # MGRS
             field1Name = 'MGRS field name'
+        else: # Plus Codes
+            field1Name = 'Plus Codes field name'
         
         if layer:
             field1Line = True
@@ -83,6 +87,8 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
                 outCrs = True
             if int(self.outputCrsComboBox.currentIndex()) == 3:
                 crsSelection = True
+            if formatIndex == 5: #Plus Codes
+                pluscodeslen = True
             
         self.field1Label.setText(field1Name)
         self.field1LineEdit.setEnabled(field1Line)
@@ -94,6 +100,7 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         self.crsSelectionWidget.setEnabled(crsSelection)
         self.wgs84NumberFormatComboBox.setEnabled(wgs84NumberFormat)
         self.precisionSpinBox.setEnabled(precision)
+        self.plusCodesSpinBox.setEnabled(pluscodeslen)
         
     def isWgs84(self):
         wgs = int(self.outputCrsComboBox.currentIndex())
@@ -118,8 +125,8 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         layer = self.mapLayerComboBox.currentLayer()
         outputFormat = int(self.outputFormatComboBox.currentIndex())
         # This shouldn't be called if there is not a layer, but if so just
-        # return 4326.
-        if outputFormat == 2 or outputFormat == 4 or not layer:
+        # return 4326. Return 4326 for GeoJSON, MGRS, and Plus Codes
+        if (outputFormat == 2) or (outputFormat == 4) or (outputFormat == 5) or not layer:
             return (epsg4326)
         outCRS = int(self.outputCrsComboBox.currentIndex())
         
@@ -156,6 +163,7 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         crsOther = self.crsSelectionWidget.crs()
         wgs84Format = int(self.wgs84NumberFormatComboBox.currentIndex())
         precision = self.precisionSpinBox.value()
+        plusCodesLength = self.plusCodesSpinBox.value()
         
         fields = layer.fields()
         fieldsout = QgsFields(fields)
@@ -234,8 +242,10 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
                     msg = '{{"type": "Point","coordinates": [{},{}]}}'.format(pt.x(), pt.y())
                 elif outputFormat == 3: # WKT
                     msg = 'POINT({} {})'.format(pt.x(), pt.y())
-                else: # MGRS
+                elif outputFormat == 4: # MGRS
                     msg = mgrs.toMgrs(pt.y(), pt.x(), 5)
+                else: # Plus codes
+                    msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
             except:
                 msg = ''
             f = QgsFeature()

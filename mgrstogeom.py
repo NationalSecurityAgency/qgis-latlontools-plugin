@@ -93,7 +93,7 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
     
     def displayName(self):
-        return 'MGRS 2 point geometry'
+        return 'MGRS 2 point layer'
     
     def group(self):
         return 'Vector conversion'

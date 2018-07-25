@@ -1,12 +1,12 @@
 # Lat Lon Tools Plugin
 
-***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
+***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS and Plus Code coordinate support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
 
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
-* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities.
+* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Plus Codes** **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities.
   
-* <img src="images/zoomicon.png" alt="Zoom-to"> ***Zoom to Latitude, Longitude*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. If the default WGS 84 (EPSG:4326 - latitude/longitude) coordinate system is specified, "Zoom to Latitude, Longitude" can interpret **decimal degrees**, **DMS**, **WKT POINT**, or **GeoJSON** coordinates. If configure in **Settings** it can zoom to **MGRS** coordinates or coordinates formatted in the project CRS or any other projection. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
+* <img src="images/zoomicon.png" alt="Zoom-to"> ***Zoom to Latitude, Longitude*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. If the default WGS 84 (EPSG:4326 - latitude/longitude) coordinate system is specified, "Zoom to Latitude, Longitude" can interpret **decimal degrees**, **DMS**, **WKT POINT**, or **GeoJSON** coordinates. If configure in **Settings** it can zoom to **MGRS** coordinates , **Plus Code** coordinates or coordinates formatted in the project CRS or any other projection. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
 
     * Decimal Degree: 38.959390&deg;, -95.265483&deg; / 38.959390, -95.265483 / 38.959390N, 95.265483 W (d.dddd, d.dddd)
     * Degree, Minute: 38&deg; 57.5634'N 95&deg; 15.92890'W (d m.mmmm, d m.mmmm)
@@ -16,6 +16,7 @@
     * WKT: POINT(-95.265483 38.959390)
     * GeoJSON: {"type": "Point","coordinates": [-95.265483,38.959390]}
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
+    * Example Plus Code coordinate when **Zoom to Coordinate Type** is set to ***Plus Codes***: 86C6XP5M+QR
 
 * <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Points Digitizing Tool*** - This tool digitizes points/add features using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. This tool is installed in the Digitize toolbar as follows.
 
@@ -56,17 +57,25 @@
     * The ***Show all markers*** displays markers of all locations.
 
 * ***Conversions***
-    * <img src="images/geom2field.png" alt="Geometry to Field"> ***Geometry to Field*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two text fields in the new layer. The user has a lot of flexability as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats are GeoJSON, WKT, and MGRS. 
+    * <img src="images/geom2field.png" alt="Geometry to Field"> ***Geometry to Field*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two text fields in the new layer. The user has a lot of flexability as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats include GeoJSON, WKT, MGRS, and Plus Codes. 
     
     <div style="text-align:center"><img src="doc/geom2field.jpg" alt="Geometry to Field"></div>
     
-    * <img src="images/mgrs2point.png" alt="MGRS to Geometry"> ***MGRS to Geometry*** - This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the layer to a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
+    * <img src="images/mgrs2point.png" alt="MGRS to point layer"> ***MGRS to point layer*** - This takes a table or vector layer and if there is a field that contains MGRS coordinates, it converts the layer to a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
     
-    <div style="text-align:center"><img src="doc/mgrs2geom.jpg" alt="MGRS to Geometry"></div>
+    <div style="text-align:center"><img src="doc/mgrs2geom.jpg" alt="MGRS to point layer"></div>
 
-    * <img src="images/point2mgrs.png" alt="Geometry to MGRS"> ***Geometry to MGRS*** - Convert a point vector layer into a new layer, but add an MGRS column, containing coordinates based on the vector layer's geometry. MGRS supports measuring precision's of 1m, 10m, 100m, 1km, 10km, and 100km. **MGRS Precision** of 5 is 1m and an **MGRS Precision** of 0 represents a point accuracy of 100km.
+    * <img src="images/point2mgrs.png" alt="Point layer to MGRS"> ***Point layer to MGRS*** - Convert a point vector layer into a new layer, but add an MGRS column, containing coordinates based on the vector layer's geometry. MGRS supports measuring precision's of 1m, 10m, 100m, 1km, 10km, and 100km. **MGRS Precision** of 5 is 1m and an **MGRS Precision** of 0 represents a point accuracy of 100km.
     
     <div style="text-align:center"><img src="doc/geom2mgrs.jpg" alt="MGRS to Geometry"></div>
+
+    * <img src="images/pluscodes.png" alt="Plus Codes to point layer"> ***Plus Codes to point layer*** - Convert a Plus Codes field from a table or vector layer into a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
+
+    <div style="text-align:center"><img src="doc/pluscodes2geom.jpg" alt="Plus Codes to point layer"></div>
+
+    * <img src="images/pluscodes.png" alt="Plus Codes"> ***Point layer to Plus Codes*** - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.
+
+    <div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div>
 
 * <img src="images/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.png" alt="Help"> ***Help*** - Displays this help page.
@@ -81,12 +90,13 @@ By default ***Lat Lon Tools*** follows the **Google Map** convention making it p
 
 <div style="text-align:center"><img src="doc/settings.jpg" alt="Capture and Display Settings"></div>
 
-There are 4 capture projections that can be selected from the ***CRS/Projection of Captured Coordinate*** drop down menu. They are as follows.
+There are 5 capture projections that can be selected from the ***CRS/Projection of Captured Coordinate*** drop down menu. They are as follows.
 
 * **WGS 84 (Latitude & Longitude)** - This captures the coordinates as a latitude and longitude regardless of what the project CRS is set to. This is the default setting.
 * **MGRS** - This captures the coordinates in the [MGRS](https://en.wikipedia.org/wiki/Military_grid_reference_system) format,
 * **Project CRS** - This captures the coordinates using the project's specified CRS.
 * **Custom CRS** - The captures the coordinate in any coordinate reference system regardless of what the project CRS is set to. When this is selected, then the ***Custom CRS*** dialog box is activated allowing selection of any projection.
+* **Plus Codes** - This captures the coordinate in [Google Plus Codes](https://plus.codes/) format.
 
 Additional coordinate formatting can be specified with ***WGS 84 (Latitude & Longitude) Number Format***.
 
@@ -110,7 +120,8 @@ The order in which the coordinates are captured are determined by ***Coordinate 
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
     * **Space**
     * **Other** - With this selected, the contents of ***Other Delimiter*** is used.
-* ***DMS Second Precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal. 
+* ***DMS Second Precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal.
+* ***Plus Codes Length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 
 ### Zoom to Settings
 
@@ -122,8 +133,9 @@ The ***Zoom to Latitude, Longitude*** tool accepts the following input coordinat
 * **MGRS** - This accepts [MGRS](https://en.wikipedia.org/wiki/Military_grid_reference_system) coordinates as input.
 * **Project CRS** - This accepts coordinates formatted in the CRS of the QGIS project. The numbers can be formatted in decimal or WKT notation.
 * **Custom CRS** - You can specify any CRS for the input coordinates and QGIS zooms to that coordinate regardless of the project CRS. The numbers can be formatted in decimal or WKT notation.
+* **Plus Codes** - This accepts [Plus Codes](https://plus.codes/) coordinates as input.
 
-The order in which the coordinates are parsed in the ***Zoom to Latitude, Longitude*** tool is specified by ***Zoom to Coordinate Type*** and has the following two options: This is not applicable for **MGRS** coordinates or **WKT** formatted coordinates.
+The order in which the coordinates are parsed in the ***Zoom to Latitude, Longitude*** tool is specified by ***Zoom to Coordinate Type*** and has the following two options: This is not applicable for **MGRS** coordinates, **WKT** coordinates, nor **Plus Codes** coordinates.
 
 * **Lat, Lon (Y,X) - Google Map Order**
 * **Lon, Lat (X,Y) Order**
@@ -143,6 +155,8 @@ You can ***Select an External Map Provider***. The options are:
 * **Bing Aerial**
 * **MapQuest Map**
 * **MapQuest Aerial**
+* **Mapillary Street**
+* **Mapillary Aerial**
 
 ***Map Hints*** are desired attributes you would like to see in the resulting map. 
 

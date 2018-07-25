@@ -3,6 +3,7 @@ from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 from .tomgrs import ToMGRSAlgorithm
 from .mgrstogeom import MGRStoLayerlgorithm
+from .pluscodes import ToPlusCodesAlgorithm, PlusCodes2Layerlgorithm
 
 class LatLonToolsProvider(QgsProcessingProvider):
 
@@ -10,6 +11,8 @@ class LatLonToolsProvider(QgsProcessingProvider):
         QgsProcessingProvider.unload(self)
 
     def loadAlgorithms(self):
+        self.addAlgorithm(PlusCodes2Layerlgorithm())
+        self.addAlgorithm(ToPlusCodesAlgorithm())
         self.addAlgorithm(MGRStoLayerlgorithm())
         self.addAlgorithm(ToMGRSAlgorithm())
 

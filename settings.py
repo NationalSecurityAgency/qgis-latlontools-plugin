@@ -24,6 +24,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeMGRS = 1
     ProjectionTypeProjectCRS = 2
     ProjectionTypeCustomCRS = 3
+    ProjectionTypePlusCodes = 4
     OrderYX = 0
     OrderXY = 1
     def __init__(self, lltools, iface, parent):
@@ -36,7 +37,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
         
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)','MGRS', 'Project CRS', 'Custom CRS'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)','MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS','WKT POINT','GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate','WKT POINT'])
@@ -45,7 +46,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
         
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS','Custom CRS'])
+        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS','Custom CRS','Plus Codes'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -90,6 +91,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.delimComboBox.setCurrentIndex(0)
         self.precisionSpinBox.setValue(0)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
+        self.plusCodesSpinBox.setValue(10)
         
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
@@ -123,6 +125,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.coordOrder = int(settings.value('/LatLonTools/CoordOrder', self.OrderYX))
         self.wgs84NumberFormat = int(settings.value('/LatLonTools/WGS84NumberFormat', 0))
         self.otherNumberFormat = int(settings.value('/LatLonTools/OtherNumberFormat', 0))
+        self.plusCodesLength = int(settings.value('/LatLonTools/PlusCodesLength', 10))
         
         ### ZOOM TO SETTINGS ###
         self.zoomToCoordOrder = int(settings.value('/LatLonTools/ZoomToCoordOrder', self.OrderYX))
@@ -170,6 +173,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             settings.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
             
         settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
+        settings.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
         
         ### ZOOM TO SETTINGS ###
         settings.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
@@ -211,7 +215,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         # Simple Zoom to Enables
         zoomToProjection = int(self.zoomToProjectionComboBox.currentIndex())
-        self.zoomToCoordOrderComboBox.setEnabled(zoomToProjection != self.ProjectionTypeMGRS)
+        self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and (zoomToProjection != self.ProjectionTypePlusCodes))
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
 
         zoomToProjection = int(self.multiZoomToProjectionComboBox.currentIndex())
@@ -300,6 +304,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if self.captureProjection == self.ProjectionTypeCustomCRS:
             return True
         return False
+    
+    def captureProjIsPlusCodes(self):
+        if self.captureProjection == self.ProjectionTypePlusCodes:
+            return True
+        return False
 
     def zoomToProjIsWgs84(self):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
@@ -319,6 +328,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def zoomToProjIsProjectCRS(self):
         if self.zoomToProjection == self.ProjectionTypeProjectCRS:
+            return True
+        return False
+
+    def zoomToProjIsPlusCodes(self):
+        if self.zoomToProjection == self.ProjectionTypePlusCodes:
             return True
         return False
 

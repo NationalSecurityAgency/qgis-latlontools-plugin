@@ -1,0 +1,1 @@
+Convert a Plus Code field from a table or vector layer into a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
