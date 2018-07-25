@@ -290,4 +290,3 @@ class LatLonTools:
         else:
             if self.digitizerDialog != None:
                 self.digitizerDialog.close()
-        

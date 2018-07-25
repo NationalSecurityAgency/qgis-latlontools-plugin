@@ -320,7 +320,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             if self.zoomToCustomCRS() == epsg4326:
                 return True
         return False
-        
+    
     def zoomToProjIsMGRS(self):
         if self.zoomToProjection == self.ProjectionTypeMGRS:
             return True

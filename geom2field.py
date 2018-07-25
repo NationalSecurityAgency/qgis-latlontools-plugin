@@ -260,4 +260,3 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         QgsProject.instance().addMapLayer(pointLayer)
         self.close()
         
-        

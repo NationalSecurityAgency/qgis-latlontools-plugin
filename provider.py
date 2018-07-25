@@ -18,7 +18,7 @@ class LatLonToolsProvider(QgsProcessingProvider):
 
     def icon(self):
         return QIcon(os.path.dirname(__file__) + '/images/copyicon.png')
-        
+    
     def id(self):
         return 'latlontools'
 

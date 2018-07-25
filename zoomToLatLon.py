@@ -155,7 +155,6 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.iface.messageBar().pushMessage("", "Invalid Coordinate" , level=Qgis.Warning, duration=2)
             return
 
-
     def removeMarker(self):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)

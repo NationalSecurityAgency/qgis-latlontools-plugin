@@ -59,7 +59,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
                 self.PrmOutputLayer,
                 'Output layer')
             )
-            
+    
     def processAlgorithm(self, parameters, context, feedback):
         source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
         field_name = self.parameterAsString(parameters, self.PrmPlusCodesFieldName, context).strip()
