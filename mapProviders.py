@@ -6,7 +6,9 @@ MAP_PROVIDERS = [
 ['Bing Map', 'https://www.bing.com/maps?cp=@LAT@~@LON@&lvl=@Z@', 'https://www.bing.com/maps?cp=@LAT@~@LON@&lvl=@Z@&sp=point.@LAT@_@LON@_QGIS%20Point'],
 ['Bing Aerial', 'https://www.bing.com/maps?cp=@LAT@~@LON@&lvl=@Z@&style=a', 'https://www.bing.com/maps?cp=@LAT@~@LON@&lvl=@Z@&style=a&sp=point.@LAT@_@LON@_QGIS%20Point'],
 ['MapQuest Map', 'https://www.mapquest.com/latlng/@LAT@,@LON@?centerOnResults=1&zoom=@Z@', 'https://www.mapquest.com/latlng/@LAT@,@LON@?centerOnResults=1&zoom=@Z@'],
-['MapQuest Aerial', 'https://www.mapquest.com/latlng/@LAT@,@LON@?centerOnResults=1&maptyp=sat&zoom=@Z@', 'https://www.mapquest.com/latlng/@LAT@,@LON@?centerOnResults=1&maptyp=sat&zoom=@Z@']
+['MapQuest Aerial', 'https://www.mapquest.com/latlng/@LAT@,@LON@?centerOnResults=1&maptyp=sat&zoom=@Z@', 'https://www.mapquest.com/latlng/@LAT@,@LON@?centerOnResults=1&maptyp=sat&zoom=@Z@'],
+['Mapillary Street', 'https://www.mapillary.com/app/?lat=@LAT@&lng=@LON@&z=@Z@&menu=false&focus=map&mapStyle=mapbox_streets', 'https://www.mapillary.com/app/?lat=@LAT@&lng=@LON@&z=@Z@&menu=false&focus=map&mapStyle=mapbox_streets'],
+['Mapillary Aerial', 'https://www.mapillary.com/app/?lat=@LAT@&lng=@LON@&z=@Z@&menu=false&focus=map&mapStyle=mapbox_satellite', 'https://www.mapillary.com/app/?lat=@LAT@&lng=@LON@&z=@Z@&menu=false&focus=map&mapStyle=mapbox_satellite']
 ]
 
 def mapProviderNames():
