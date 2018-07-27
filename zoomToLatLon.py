@@ -96,7 +96,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             elif self.settings.zoomToProjIsWgs84():'''
             if self.settings.zoomToProjIsWgs84():
                 if re.search('POINT\(', text) == None:
-                    lat, lon = LatLon.parseDMSString(text, self.settings.coordOrder)
+                    lat, lon = LatLon.parseDMSString(text, self.settings.zoomToCoordOrder)
                 else:
                     m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
@@ -114,7 +114,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                     coords = re.split('[\s,;:]+', text, 1)
                     if len(coords) < 2:
                         raise ValueError('Invalid Coordinates')
-                    if self.settings.coordOrder == self.settings.OrderYX:
+                    if self.settings.zoomToCoordOrder == self.settings.OrderYX:
                         lat = float(coords[0])
                         lon = float(coords[1])
                     else:
