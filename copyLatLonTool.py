@@ -6,6 +6,7 @@ from qgis.gui import QgsMapToolEmitPoint, QgsMessageBar
 from .LatLon import LatLon
 from .util import *
 import mgrs
+import olc
 
 class CopyLatLonTool(QgsMapToolEmitPoint):
     '''Class to interact with the map canvas to capture the coordinate
@@ -95,6 +96,18 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
             except:
                 msg = None
+        elif self.settings.captureProjIsPlusCodes():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
+            if canvasCRS == epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326)
+                pt4326 = transform.transform(pt.x(), pt.y())
+            try:
+                msg = olc.encode(pt4326.y(), pt4326.x(), self.settings.plusCodesLength)
+            except:
+                msg = None
 
         return msg
         
@@ -136,6 +149,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 s = 'WKT'
         elif self.settings.captureProjIsMGRS():
             s = 'MGRS'
+        elif self.settings.captureProjIsPlusCodes():
+            s = 'Plus Codes'
         elif self.settings.captureProjIsCustomCRS():
             if self.settings.otherNumberFormat == 0: # Numerical
                 if self.settings.coordOrder == self.settings.OrderYX:

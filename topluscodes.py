@@ -7,16 +7,16 @@ from qgis.core import QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordi
 from qgis.gui import QgsMapLayerProxyModel, QgsMessageBar
 
 from .util import *
-import mgrs
+import olc
 
 FORM_CLASS, _ = loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui/tomgrs.ui'))
+    os.path.dirname(__file__), 'ui/topluscodes.ui'))
 
 
-class ToMGRSWidget(QDialog, FORM_CLASS):
+class ToPlusCodesWidget(QDialog, FORM_CLASS):
     '''ToMGRS Dialog box.'''
     def __init__(self, iface, parent):
-        super(ToMGRSWidget, self).__init__(parent)
+        super(ToPlusCodesWidget, self).__init__(parent)
         self.setupUi(self)
         self.iface = iface
         self.mapLayerComboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
@@ -29,13 +29,13 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
             self.iface.messageBar().pushMessage("", "No Valid Layer", level=QgsMessageBar.WARNING, duration=4)
             return
             
-        # Get the field names for the input layer. The will be copied to the output layer with MGRS added
+        # Get the field names for the input layer. The will be copied to the output layer with Plus Codes added
         fields = layer.pendingFields()
         fieldsout = QgsFields(fields)
         
-        # We need to add the mgrs field at the end
+        # We need to add the plus codes field at the end
         if fieldsout.append(QgsField(field_name, QVariant.String)) == False:
-            self.iface.messageBar().pushMessage("", "MGRS Field Name must be unique", level=QgsMessageBar.WARNING, duration=4)
+            self.iface.messageBar().pushMessage("", "Plus Codes Field Name must be unique", level=QgsMessageBar.WARNING, duration=4)
             return
         precision = self.precisionSpinBox.value()
         layerCRS = layer.crs()
@@ -44,7 +44,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
         ppoint.addAttributes(fieldsout)
         pointLayer.updateFields()
 
-        # The input to the mgrs conversions requires latitudes and longitudes
+        # The input to the plus codes conversions requires latitudes and longitudes
         # If the layer is not EPSG:4326 we need to convert it.
         if layerCRS != epsg4326:
             transform = QgsCoordinateTransform(layerCRS, epsg4326)
@@ -56,7 +56,7 @@ class ToMGRSWidget(QDialog, FORM_CLASS):
             if layerCRS != epsg4326:
                 pt = transform.transform(pt)
             try:
-                msg = mgrs.toMgrs(pt.y(), pt.x(), precision)
+                msg = olc.encode(pt.y(), pt.x(), precision)
             except:
                 msg = ''
             f = QgsFeature()

@@ -1,6 +1,6 @@
 PLUGINNAME = latlontools
 PLUGINS = "$(HOME)"/.qgis2/python/plugins/$(PLUGINNAME)
-PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py geom2field.py multizoom.py mgrs.py showOnMapTool.py mapProviders.py tomgrs.py mgrstogeom.py digitizer.py util.py
+PY_FILES = latLonTools.py __init__.py copyLatLonTool.py zoomToLatLon.py settings.py LatLon.py geom2field.py multizoom.py mgrs.py showOnMapTool.py mapProviders.py tomgrs.py mgrstogeom.py digitizer.py util.py olc.py pluscodetogeom.py topluscodes.py
 EXTRAS = metadata.txt
 
 deploy:

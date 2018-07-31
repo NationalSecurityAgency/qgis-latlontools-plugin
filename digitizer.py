@@ -11,6 +11,7 @@ from .util import *
 #import traceback
 
 import mgrs
+import olc
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/digitizer.ui'))
@@ -51,6 +52,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         icon = QIcon(os.path.dirname(__file__) + '/images/customProjection.png')
         a = self.crsmenu.addAction(icon, "Specify CRS")
         a.setData(3)
+        icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
+        a = self.crsmenu.addAction(icon, "Plus Codes")
+        a.setData(4)
         self.crsButton.setIconSize(QSize(24,24))
         self.crsButton.setIcon(icon)
         self.crsButton.setMenu(self.crsmenu)
@@ -95,6 +99,12 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 text = re.sub(r'\s+', '', unicode(text)) # Remove all white space
                 lat, lon = mgrs.toWgs(text)
                 srcCrs = epsg4326
+            elif self.inputProjection == 4:
+                text = text.strip()
+                coord = olc.decode(text)
+                lat = coord.latitudeCenter 
+                lon = coord.longitudeCenter
+                srcCrs = epsg4326
             else: # Is either the project or custom CRS
                 if re.search('POINT\(', text) == None:
                     coords = re.split('[\s,;:]+', text, 1)
@@ -134,12 +144,15 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 self.lltools.zoomTo(srcCrs, lat, lon)
             else:
                 if self.iface.openFeatureForm(layer, feat):
+                    layer.addFeature(feat)
                     self.lltools.zoomTo(srcCrs, lat, lon)
         
     def labelUpdate(self):
-        #print "labelUpdate"
         if self.inputProjection == 1: # MGRS projection
-            self.infoLabel.setText('Input Projection: MGRS')
+            self.infoLabel.setText('Input Coordinate: MGRS')
+            return
+        if self.inputProjection == 4: # Plus Codes projection
+            self.infoLabel.setText('Input Coordinate: Plus Codes')
             return
         if self.isWgs84():
             if self.inputXYOrder == 0:
@@ -168,7 +181,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.inputProjection = int(settings.value('/LatLonTools/DigitizerProjection', 0))
         self.inputXYOrder = int(settings.value('/LatLonTools/DigitizerXYOrder', 0))
         self.inputCustomCRS = settings.value('/LatLonTools/DigitizerCustomCRS', 'EPSG:4326')
-        if self.inputProjection < 0 or self.inputProjection > 3:
+        if self.inputProjection < 0 or self.inputProjection > 4:
             self.inputProjection = 0
         if self.inputXYOrder < 0 or self.inputXYOrder > 1:
             self.inputXYOrder = 1

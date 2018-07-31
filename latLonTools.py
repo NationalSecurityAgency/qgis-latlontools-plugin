@@ -14,6 +14,8 @@ import webbrowser
 
 class LatLonTools:
     digitizerDialog = None
+    toPlusCodesDialog = None
+    PlusCodestoLayerDialog = None
     toMGRSDialog = None
     MGRStoLayerDialog = None
     geom2FieldDialog = None
@@ -23,6 +25,8 @@ class LatLonTools:
         self.canvas = iface.mapCanvas()
         self.crossRb = QgsRubberBand(self.canvas, QGis.Line)
         self.crossRb.setColor(Qt.red)
+        self.toolbar = self.iface.addToolBar('Lat Lon Tools Toolbar')
+        self.toolbar.setObjectName('LatLonToolsToolbar')
 
     def initGui(self):
         '''Initialize Lot Lon Tools GUI.'''
@@ -37,19 +41,8 @@ class LatLonTools:
         self.copyAction.setObjectName('latLonToolsCopy')
         self.copyAction.triggered.connect(self.startCapture)
         self.copyAction.setCheckable(True)
-        self.iface.addToolBarIcon(self.copyAction)
+        self.toolbar.addAction(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
-
-        # Add Interface for Zoom to Coordinate
-        icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
-        self.zoomToAction = QAction(icon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
-        self.zoomToAction.setObjectName('latLonToolsZoom')
-        self.zoomToAction.triggered.connect(self.showZoomToDialog)
-        self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
-
-        self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
-        self.zoomToDialog.hide()
         
         # Add Interface for External Map
         icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
@@ -57,14 +50,27 @@ class LatLonTools:
         self.externMapAction.setObjectName('latLonToolsExternalMap')
         self.externMapAction.triggered.connect(self.setShowMapTool)
         self.externMapAction.setCheckable(True)
-        self.iface.addToolBarIcon(self.externMapAction)
+        self.toolbar.addAction(self.externMapAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
+
+        # Add Interface for Zoom to Coordinate
+        icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
+        self.zoomToAction = QAction(icon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
+        self.zoomToAction.setObjectName('latLonToolsZoom')
+        self.zoomToAction.triggered.connect(self.showZoomToDialog)
+        self.toolbar.addAction(self.zoomToAction)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.zoomToAction)
+
+        self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
+        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
+        self.zoomToDialog.hide()
         
         # Add Interface for Multi point zoom
         icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
         self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
         self.multiZoomToAction.setObjectName('latLonToolsMultiZoom')
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
+        self.toolbar.addAction(self.multiZoomToAction)
         self.iface.addPluginToMenu('Lat Lon Tools', self.multiZoomToAction)
 
         self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
@@ -76,15 +82,29 @@ class LatLonTools:
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
         action = menu.addAction(icon, "Geometry to Field", self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
+        icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
+        action = menu.addAction(icon, "Plus Codes to point layer", self.PlusCodestoLayer)
+        action.setObjectName('latLonToolsPlusCodes2Geom')
+        action = menu.addAction(icon, "Point layer to Plus Codes", self.toPlusCodes)
+        action.setObjectName('latLonToolsGeom2PlusCodes')
         icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
-        action = menu.addAction(icon, "MGRS to Geometry", self.MGRStoLayer)
+        action = menu.addAction(icon, "MGRS to point layer", self.MGRStoLayer)
         action.setObjectName('latLonToolsMGRS2Geom')
         icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
-        action = menu.addAction(icon, "Geometry to MGRS", self.toMGRS)
+        action = menu.addAction(icon, "Point layer to MGRS", self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
         self.toMGRSAction = QAction(icon, "Conversions", self.iface.mainWindow())
         self.toMGRSAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.toMGRSAction)
+        
+        # Add to Digitize Toolbar
+        icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
+        self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
+        self.digitizeAction.setObjectName('latLonToolsDigitize')
+        self.digitizeAction.triggered.connect(self.digitizeClicked)
+        self.digitizeAction.setEnabled(False)
+        self.toolbar.addAction(self.digitizeAction)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.digitizeAction)
         
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
@@ -99,14 +119,6 @@ class LatLonTools:
         self.helpAction.setObjectName('latLonToolsHelp')
         self.helpAction.triggered.connect(self.help)
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
-        
-        # Add to Digitize Toolbar
-        icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
-        self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
-        self.digitizeAction.setObjectName('latLonToolsDigitize')
-        self.digitizeAction.triggered.connect(self.digitizeClicked)
-        self.digitizeAction.setEnabled(False)
-        self.iface.digitizeToolBar().addAction(self.digitizeAction)
         
         
         self.iface.currentLayerChanged.connect(self.currentLayerChanged)
@@ -132,16 +144,23 @@ class LatLonTools:
         self.canvas.unsetMapTool(self.mapTool)
         self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
-        self.iface.removeToolBarIcon(self.copyAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
-        self.iface.removeToolBarIcon(self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.toMGRSAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.digitizeAction)
         self.iface.removeDockWidget(self.zoomToDialog)
         self.iface.removeDockWidget(self.multiZoomDialog)
+        # Remove Toolbar Icons
+        self.iface.removeToolBarIcon(self.copyAction)
+        self.iface.removeToolBarIcon(self.zoomToAction)
+        self.iface.removeToolBarIcon(self.externMapAction)
+        self.iface.removeToolBarIcon(self.multiZoomToAction)
+        self.iface.removeToolBarIcon(self.digitizeAction)
+        del self.toolbar
+        
         self.geom2FieldDialog = None
         self.MGRStoLayerDialog = None
         self.toMGRSDialog = None
@@ -150,7 +169,6 @@ class LatLonTools:
         self.settingsDialog = None
         self.showMapTool = None
         self.mapTool = None
-        self.iface.digitizeToolBar().removeAction(self.digitizeAction)
         self.digitizerDialog = None
             
     def startCapture(self):
@@ -177,6 +195,20 @@ class LatLonTools:
             from .geom2field import Geom2FieldWidget
             self.geom2FieldDialog = Geom2FieldWidget(self.iface, self.iface.mainWindow())
         self.geom2FieldDialog.show()
+
+    def toPlusCodes(self):
+        '''Display the to Plus Codes dialog box'''
+        if self.toPlusCodesDialog == None:
+            from .topluscodes import ToPlusCodesWidget
+            self.toPlusCodesDialog = ToPlusCodesWidget(self.iface, self.iface.mainWindow())
+        self.toPlusCodesDialog.show()
+
+    def PlusCodestoLayer(self):
+        '''Display the to MGRS  dialog box'''
+        if self.PlusCodestoLayerDialog == None:
+            from .pluscodetogeom import PlusCodetoLayerWidget
+            self.PlusCodestoLayerDialog = PlusCodetoLayerWidget(self.iface, self.iface.mainWindow())
+        self.PlusCodestoLayerDialog.show()
 
     def toMGRS(self):
         '''Display the to MGRS  dialog box'''
