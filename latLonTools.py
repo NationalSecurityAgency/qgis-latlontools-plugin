@@ -45,6 +45,15 @@ class LatLonTools:
         self.copyAction.setCheckable(True)
         self.toolbar.addAction(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
+        
+        # Add Interface for External Map
+        icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
+        self.externMapAction = QAction(icon, "Show in External Map", self.iface.mainWindow())
+        self.externMapAction.setObjectName('latLonToolsExternalMap')
+        self.externMapAction.triggered.connect(self.setShowMapTool)
+        self.externMapAction.setCheckable(True)
+        self.toolbar.addAction(self.externMapAction)
+        self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
 
         # Add Interface for Zoom to Coordinate
         icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
@@ -57,15 +66,6 @@ class LatLonTools:
         self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
         self.zoomToDialog.hide()
-        
-        # Add Interface for External Map
-        icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
-        self.externMapAction = QAction(icon, "Show in External Map", self.iface.mainWindow())
-        self.externMapAction.setObjectName('latLonToolsExternalMap')
-        self.externMapAction.triggered.connect(self.setShowMapTool)
-        self.externMapAction.setCheckable(True)
-        self.toolbar.addAction(self.externMapAction)
-        self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
         
         # Add Interface for Multi point zoom
         icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
