@@ -296,7 +296,7 @@ class LatLonTools:
         self.digitizeAction.setEnabled(False)
         layer = self.iface.activeLayer()
         
-        if layer != None and isinstance(layer, QgsVectorLayer) and (layer.wkbType() == QgsWkbTypes.Point) and layer.isEditable():
+        if layer != None and isinstance(layer, QgsVectorLayer) and (layer.geometryType() == QgsWkbTypes.PointGeometry) and layer.isEditable():
             self.digitizeAction.setEnabled(True)
         else:
             if self.digitizerDialog != None:
