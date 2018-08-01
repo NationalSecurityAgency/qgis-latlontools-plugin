@@ -1,6 +1,6 @@
 from PyQt4.QtCore import Qt, QTimer, QUrl
 from PyQt4.QtGui import QIcon, QAction, QMenu
-from qgis.core import QGis, QgsVectorLayer, QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry
+from qgis.core import QGis, QgsVectorLayer, QgsCoordinateTransform, QgsRectangle, QgsPoint, QgsGeometry, QgsWKBTypes
 from qgis.gui import QgsRubberBand
 
 from .zoomToLatLon import ZoomToLatLon
@@ -304,7 +304,7 @@ class LatLonTools:
         self.digitizeAction.setEnabled(False)
         layer = self.iface.activeLayer()
         
-        if layer != None and isinstance(layer, QgsVectorLayer) and (layer.wkbType() == QGis.WKBPoint) and layer.isEditable():
+        if layer != None and isinstance(layer, QgsVectorLayer) and (layer.geometryType() == QgsWKBTypes.PointGeometry) and layer.isEditable():
             self.digitizeAction.setEnabled(True)
         else:
             if self.digitizerDialog != None:
