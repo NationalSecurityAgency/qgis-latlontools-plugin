@@ -58,7 +58,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * The ***Show all markers*** displays markers of all locations.
 
 * ***Conversions***
-    * <img src="images/geom2field.png" alt="Geometry to Field"> ***Geometry to Field*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two text fields in the new layer. The user has a lot of flexability as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats include GeoJSON, WKT, MGRS, and Plus Codes. 
+    * <img src="images/geom2field.png" alt="Geometry to Field"> ***Geometry to Field*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two text fields in the new layer. The user has a lot of flexibility as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats include GeoJSON, WKT, MGRS, and Plus Codes. 
     
     <div style="text-align:center"><img src="doc/geom2field.jpg" alt="Geometry to Field"></div>
     
@@ -85,7 +85,7 @@ By default ***Lat Lon Tools*** follows the **Google Map** convention making it p
 
 ## Settings
 
-> <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are independently set for the coordinate capture, zoom to, and multi-zoom to tools. Be careful that when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
+> <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are set independently for the coordinate capture, zoom to, and multi-zoom to tools. Be careful when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
 
 ### Capture & Display Settings
 
