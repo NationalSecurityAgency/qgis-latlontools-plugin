@@ -78,7 +78,8 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
             f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
             f.setAttributes(feature.attributes())
             sink.addFeature(f)
-            feedback.setProgress(int(cnt * total))
+            if cnt % 100 == 0:
+                feedback.setProgress(int(cnt * total))
         
         if badFeatures > 0:
             msg = "{} out of {} features contained MGRS coordinates".format(featureCount - badFeatures, featureCount)

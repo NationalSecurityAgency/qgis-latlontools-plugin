@@ -99,7 +99,9 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
             f.setGeometry(feature.geometry())
             f.setAttributes(feature.attributes()+[msg])
             sink.addFeature(f)
-            feedback.setProgress(int(cnt * total))
+            
+            if cnt % 100 == 0:
+                feedback.setProgress(int(cnt * total))
             
         return {self.PrmOutputLayer: dest_id}
         
@@ -199,7 +201,9 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
             f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
             f.setAttributes(feature.attributes())
             sink.addFeature(f)
-            feedback.setProgress(int(cnt * total))
+            
+            if cnt % 100 == 0:
+                feedback.setProgress(int(cnt * total))
         
         if badFeatures > 0:
             msg = "{} out of {} features contained Plus Codes coordinates".format(featureCount - badFeatures, featureCount)
