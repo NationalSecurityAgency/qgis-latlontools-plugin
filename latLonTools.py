@@ -17,9 +17,6 @@ import webbrowser
 
 class LatLonTools:
     digitizerDialog = None
-    toMGRSDialog = None
-    MGRStoLayerDialog = None
-    geom2FieldDialog = None
     
     def __init__(self, iface):
         self.iface = iface
@@ -82,7 +79,7 @@ class LatLonTools:
         # Add To MGRS conversion
         menu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
-        action = menu.addAction(icon, "Geometry to Field", self.geom2Field)
+        action = menu.addAction(icon, "Geometry to field", self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
         action = menu.addAction(icon, "Plus Codes to point layer", self.PlusCodestoLayer)
@@ -166,9 +163,6 @@ class LatLonTools:
         self.iface.removeToolBarIcon(self.digitizeAction)
         del self.toolbar
         
-        self.geom2FieldDialog = None
-        self.MGRStoLayerDialog = None
-        self.toMGRSDialog = None
         self.zoomToDialog = None
         self.multiZoomDialog = None
         self.settingsDialog = None
@@ -197,10 +191,7 @@ class LatLonTools:
 
     def geom2Field(self):
         '''Convert layer geometry to a text string'''
-        if self.geom2FieldDialog == None:
-            from .geom2field import Geom2FieldWidget
-            self.geom2FieldDialog = Geom2FieldWidget(self.iface, self.iface.mainWindow())
-        self.geom2FieldDialog.show()
+        results = processing.execAlgorithmDialog('latlontools:geom2field', {})
 
     def toMGRS(self):
         '''Display the to MGRS  dialog box'''

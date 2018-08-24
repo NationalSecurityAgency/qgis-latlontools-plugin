@@ -1,156 +1,178 @@
 import os
 
-from qgis.PyQt.QtWidgets import QDialog
-from qgis.PyQt.uic import loadUiType
-from qgis.PyQt.QtCore import QVariant
-from qgis.core import Qgis, QgsMapLayerProxyModel, QgsVectorLayer, QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.PyQt.QtCore import QVariant, QCoreApplication
+from qgis.PyQt.QtGui import QIcon
+from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateTransform, QgsProject
+
+from qgis.core import (QgsProcessing,
+    QgsProcessingException,
+    QgsProcessingAlgorithm,
+    QgsProcessingParameterEnum,
+    QgsProcessingParameterString,
+    QgsProcessingParameterNumber,
+    QgsProcessingParameterCrs,
+    QgsProcessingParameterFeatureSource,
+    QgsProcessingParameterFeatureSink)
 
 from . import mgrs
 from .LatLon import LatLon
-from .util import *
+from .util import epsg4326
 from . import olc
 
-FORM_CLASS, _ = loadUiType(os.path.join(
-    os.path.dirname(__file__), 'ui/geom2field.ui'))
-
-
-class Geom2FieldWidget(QDialog, FORM_CLASS):
-    '''ToMGRS Dialog box.'''
-    def __init__(self, iface, parent):
-        super(Geom2FieldWidget, self).__init__(parent)
-        self.setupUi(self)
-        self.iface = iface
-        self.canvas = iface.mapCanvas()
-        self.mapLayerComboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
-        self.mapLayerComboBox.activated.connect(self.enableWidgets)
-        self.outputFormatComboBox.addItems(["Coordinates in 2 fields", "Coordinates in 1 field", "GeoJSON","WKT","MGRS","Plus Codes"])
-        self.outputFormatComboBox.activated.connect(self.enableWidgets)
-        self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
-        self.delimComboBox.addItems(['Comma', 'Space', 'Tab', 'Other'])
-        self.delimComboBox.activated.connect(self.enableWidgets)
-        self.outputCrsComboBox.addItems(['WGS 84', 'Layer CRS', 'Project CRS', 'Custom CRS'])
-        self.outputCrsComboBox.activated.connect(self.enableWidgets)
-        self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS'])
-        self.wgs84NumberFormatComboBox.activated.connect(self.enableWidgets)
-        self.crsSelectionWidget.setCrs(epsg4326)
-
-    def showEvent(self, e):
-        self.enableWidgets()
+def tr(string):
+    return QCoreApplication.translate('Processing', string)
         
+class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
+    """
+    Algorithm to convert a point layer to a Plus codes field.
+    """
+    # Constants used to refer to parameters and outputs. They will be
+    # used when calling the algorithm from another algorithm, or when
+    # calling from the QGIS console.
+    PrmInputLayer = 'InputLayer'
+    PrmOutputFormat = 'OutputFormat'
+    PrmYFieldName = 'YFieldName'
+    PrmXFieldName = 'XFieldName'
+    PrmCoordinateOrder = 'CoordinateOrder'
+    PrmCoordinateDelimiter = 'CoordinateDelimiter'
+    PrmOtherDelimiter = 'OtherDelimiter'
+    PrmOutputCRSType = 'OutputCRSType'
+    PrmCustomCRS = 'CustomCRS'
+    PrmWgs84NumberFormat = 'Wgs84NumberFormat'
+    PrmCoordinatePrecision = 'CoordinatePrecision'
+    PrmDMSSecondPrecision = 'DMSSecondPrecision'
+    PrmPlusCodesLength = 'PlusCodesLength'
+    PrmOutputLayer = 'OutputLayer'
+    
+    def initAlgorithm(self, config):
+        self.addParameter(
+            QgsProcessingParameterFeatureSource(
+                self.PrmInputLayer,
+                tr('Input point vector layer'),
+                [QgsProcessing.TypeVectorPoint])
+        )
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.PrmOutputFormat,
+                tr('Output format'),
+                options=[tr('Coordinates in 2 fields'),
+                    tr('Coordinates in 1 field'),
+                    'GeoJSON','WKT','MGRS','Plus Codes'],
+                defaultValue=0,
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterString(
+                self.PrmYFieldName,
+                tr('Latitude (Y), GeoJSON, WKT, MGRS, or Plus Codes field name'),
+                defaultValue='y',
+                optional=True)
+            )
+        self.addParameter(
+            QgsProcessingParameterString(
+                self.PrmXFieldName,
+                tr('Longitude (X) field name'),
+                defaultValue='x',
+                optional=True)
+            )
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.PrmCoordinateOrder,
+                tr('Coordinate order when using 1 field'),
+                options=[tr('Lat,Lon (Y,X) - Google map order'),tr('Lon,Lat (X,Y) order')],
+                defaultValue=0,
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.PrmCoordinateDelimiter,
+                tr('Coordinate delimiter when using 1 field'),
+                options=[tr('Comma'),tr('Space'),tr('Tab'),tr('Other')],
+                defaultValue=0,
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterString(
+                self.PrmOtherDelimiter,
+                tr('Other delimiter when using 1 field'),
+                defaultValue='',
+                optional=True)
+            )
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.PrmOutputCRSType,
+                tr('Output CRS of coordinates added to a field'),
+                options=[tr('WGS 84'),tr('Layer CRS'),tr('Project CRS'),tr('Custom CRS')],
+                defaultValue=0,
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterCrs(
+                self.PrmCustomCRS,
+                tr('Custom CRS for coordinates added to a field'),
+                'EPSG:4326',
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.PrmWgs84NumberFormat,
+                tr('Select Decimal or DMS degress for WGS 84 numbers'),
+                options=[tr('Decimal degrees'),tr('DMS'),tr('DDMMSS')],
+                defaultValue=0,
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmCoordinatePrecision,
+                tr('Decimal number precision'),
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=6,
+                optional=True,
+                minValue=0
+                )
+            )
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmDMSSecondPrecision,
+                tr('DMS second precision'),
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=0,
+                optional=True,
+                minValue=0
+                )
+            )
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmPlusCodesLength,
+                'Plus Codes length',
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=11,
+                optional=False,
+                minValue=10,
+                maxValue=20
+                )
+            )
+        self.addParameter(
+            QgsProcessingParameterFeatureSink(
+                self.PrmOutputLayer,
+                'Output layer')
+            )
+    
+    def processAlgorithm(self, parameters, context, feedback):
+        source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
+        outputFormat = self.parameterAsInt(parameters, self.PrmOutputFormat, context)
+        field1Name = self.parameterAsString(parameters, self.PrmYFieldName, context).strip()
+        field2Name = self.parameterAsString(parameters, self.PrmXFieldName, context).strip()
+        coordOrder = self.parameterAsInt(parameters, self.PrmCoordinateOrder, context)
+        delimType = self.parameterAsInt(parameters, self.PrmCoordinateDelimiter, context)
+        otherDelim = self.parameterAsString(parameters, self.PrmOtherDelimiter, context).strip()
+        crsType = self.parameterAsInt(parameters, self.PrmOutputCRSType, context)
+        crsOther = self.parameterAsCrs(parameters, self.PrmCustomCRS, context)
+        wgs84Format = self.parameterAsInt(parameters, self.PrmWgs84NumberFormat, context)
+        decimalPrecision = self.parameterAsInt(parameters, self.PrmCoordinatePrecision, context)
+        dmsPrecision = self.parameterAsInt(parameters, self.PrmDMSSecondPrecision, context)
+        plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
         
-    def enableWidgets(self):
-        layer = self.mapLayerComboBox.currentLayer()
-        field1Line = False
-        field2Line = False
-        coordOrder = False
-        delim = False
-        otherDelim = False
-        outCrs = False
-        crsSelection = False
-        wgs84NumberFormat = False
-        precision = False
-        pluscodeslen = False
-        
-        formatIndex = int(self.outputFormatComboBox.currentIndex())
-        if formatIndex == 0: # Two coordinates
-            field1Name = 'Latitude (Y) field name'
-        elif formatIndex == 1: # Coordinates in 1 field
-            if int(self.coordOrderComboBox.currentIndex()) == 0:
-                field1Name = 'Lat, Lon (Y,X) field name'
-            else:
-                field1Name = 'Lon, Lat (X,Y) field name'
-        elif formatIndex == 2: # GeoJSON
-            field1Name = 'GeoJSON field name'
-        elif formatIndex == 3: # WKT
-            field1Name = 'WKT field name'
-        elif formatIndex == 4: # MGRS
-            field1Name = 'MGRS field name'
-        else: # Plus Codes
-            field1Name = 'Plus Codes field name'
-        
-        if layer:
-            field1Line = True
-            if formatIndex == 0: # Two coordinates
-                field2Line = True
-            if formatIndex <= 1: 
-                wgs84NumberFormat = True
-                if int(self.wgs84NumberFormatComboBox.currentIndex()) >= 1:
-                    precision = True
-            if formatIndex == 1: # Coordinates in 1 field
-                coordOrder = True
-                delim = True
-                if int(self.delimComboBox.currentIndex()) == 3:
-                    otherDelim = True
-            if formatIndex == 2: # GeoJSON
-                self.outputCrsComboBox.setCurrentIndex(0)
-            if formatIndex <= 1 or formatIndex == 3:
-                outCrs = True
-            if int(self.outputCrsComboBox.currentIndex()) == 3:
-                crsSelection = True
-            if formatIndex == 5: #Plus Codes
-                pluscodeslen = True
-            
-        self.field1Label.setText(field1Name)
-        self.field1LineEdit.setEnabled(field1Line)
-        self.field2LineEdit.setEnabled(field2Line)
-        self.coordOrderComboBox.setEnabled(coordOrder)
-        self.delimComboBox.setEnabled(delim)
-        self.otherDelimLineEdit.setEnabled(otherDelim)
-        self.outputCrsComboBox.setEnabled(outCrs)
-        self.crsSelectionWidget.setEnabled(crsSelection)
-        self.wgs84NumberFormatComboBox.setEnabled(wgs84NumberFormat)
-        self.precisionSpinBox.setEnabled(precision)
-        self.plusCodesSpinBox.setEnabled(pluscodeslen)
-        
-    def isWgs84(self):
-        wgs = int(self.outputCrsComboBox.currentIndex())
-        layer = self.mapLayerComboBox.currentLayer()
-        
-        if wgs == 0: # Forced WGS 84
-            return (True)
-        elif wgs == 1: # Check the layer CRS
-            if not layer:
-                return (False)
-            if layer.sourceCrs() == epsg4326:
-                return (True)
-        elif wgs == 2: # Check the project CRS
-            if self.canvas.mapSettings().destinationCrs() == epsg4326:
-                return (True)
-        else:
-            if self.crsSelectionWidget.crs() == epsg4326:
-                return (True)
-        return(False)
-                
-    def outputCrs(self):
-        layer = self.mapLayerComboBox.currentLayer()
-        outputFormat = int(self.outputFormatComboBox.currentIndex())
-        # This shouldn't be called if there is not a layer, but if so just
-        # return 4326. Return 4326 for GeoJSON, MGRS, and Plus Codes
-        if (outputFormat == 2) or (outputFormat == 4) or (outputFormat == 5) or not layer:
-            return (epsg4326)
-        outCRS = int(self.outputCrsComboBox.currentIndex())
-        
-        if outCRS == 0: # Forced WGS 84
-            return (epsg4326)
-        elif outCRS == 1: # Check the layer CRS
-            return (layer.sourceCrs())
-        elif outCRS == 2: # Check the project CRS
-            return (self.canvas.mapSettings().destinationCrs())
-        
-        #other CRS
-        return (self.crsSelectionWidget.crs())
-                
-    def accept(self):
-        layer = self.mapLayerComboBox.currentLayer()
-        if not layer:
-            self.iface.messageBar().pushMessage("", "No Valid Layer", level=Qgis.Warning, duration=4)
-            return
-        layer_name = self.outputLayerLineEdit.text()
-        outputFormat = int(self.outputFormatComboBox.currentIndex())
-        field1Name = self.field1LineEdit.text()
-        field2Name = self.field2LineEdit.text()
-        coordOrder = int(self.coordOrderComboBox.currentIndex())
-        delimType = int(self.delimComboBox.currentIndex())
         if delimType == 0:
             delimiter = ','
         elif delimType == 1:
@@ -158,51 +180,56 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
         elif delimType == 2:
             delimiter = '\t'
         else:
-            delimiter = self.otherDelimLineEdit.text()
-        crsType = int(self.outputCrsComboBox.currentIndex())
-        crsOther = self.crsSelectionWidget.crs()
-        wgs84Format = int(self.wgs84NumberFormatComboBox.currentIndex())
-        precision = self.precisionSpinBox.value()
-        plusCodesLength = self.plusCodesSpinBox.value()
+            delimiter = otherDelim
+            
+        layerCRS = source.sourceCrs()
+        # For the first condition, the user has either EPSG:4326 selected or
+        # or have chosen GeoJSON or WKT which will be 4326 as well
+        if crsType == 0 or outputFormat >= 2: # Forced WGS 84
+            outCRS = epsg4326
+        elif crsType == 1: # Layer CRS
+            outCRS = layerCRS
+        elif crsType == 2: # Project CRS
+            outCRS = QgsProject.instance().crs()
+        else:
+            outCRS = crsOther
+            
+        fieldsout = QgsFields(source.fields())
         
-        fields = layer.fields()
-        fieldsout = QgsFields(fields)
-        
-        # We need to add the mgrs field at the end
         if fieldsout.append(QgsField(field1Name, QVariant.String)) == False:
-            self.iface.messageBar().pushMessage("", "Coordinate Field Names must be unique", level=Qgis.Warning, duration=4)
-            return
+            msg = "Field names must be unique. There is already a field named '{}'".format(field1Name)
+            feedback.reportError(msg)
+            raise QgsProcessingException(msg)
         if outputFormat == 0: # Two fields for coordinates
             if fieldsout.append(QgsField(field2Name, QVariant.String)) == False:
-                self.iface.messageBar().pushMessage("", "Coordinate Field Names must be unique", level=Qgis.Warning, duration=4)
-                return
-        layerCRS = layer.crs()
-        pointLayer = QgsVectorLayer("Point?crs={}".format(layerCRS.authid()), layer_name, "memory")
-        ppoint = pointLayer.dataProvider()
-        ppoint.addAttributes(fieldsout)
-        pointLayer.updateFields()
-
-        # The input to the mgrs conversions requires latitudes and longitudes
-        # If the layer is not EPSG:4326 we need to convert it.
-        outCRS = self.outputCrs()
+                msg = "Field names must be unique. There is already a field named '{}'".format(field2Name)
+                feedback.reportError(msg)
+                raise QgsProcessingException(msg)
+        
+        (sink, dest_id) = self.parameterAsSink(parameters, self.PrmOutputLayer,
+                context, fieldsout, source.wkbType(), layerCRS)
+                
         if layerCRS != outCRS:
             transform = QgsCoordinateTransform(layerCRS, outCRS, QgsProject.instance())
-
-        iter = layer.getFeatures()
+        
         latlon = LatLon()
-        latlon.setPrecision(precision)
+        latlon.setPrecision(dmsPrecision)
 
-        msg2 = ''
-        for feature in iter:
+        total = 100.0 / source.featureCount() if source.featureCount() else 0
+
+        iterator = source.getFeatures()
+        for cnt, feature in enumerate(iterator):
+            if feedback.isCanceled():
+                break
             pt = feature.geometry().asPoint()
             if layerCRS != outCRS:
                 pt = transform.transform(pt)
             try:
                 if outputFormat == 0: # Two fields for coordinates
-                    if self.isWgs84():
+                    if outCRS == epsg4326:
                         if wgs84Format == 0: # Decimal Degrees
-                            msg = '{}'.format(pt.y())
-                            msg2 = '{}'.format(pt.x())
+                            msg = '{:.{prec}f}'.format(pt.y(),prec=decimalPrecision)
+                            msg2 = '{:.{prec}f}'.format(pt.x(),prec=decimalPrecision)
                         elif wgs84Format == 1: # DMS
                             latlon.setCoord(pt.y(), pt.x())
                             msg = latlon.convertDD2DMS(pt.y(), True, True)
@@ -212,15 +239,15 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
                             msg = latlon.convertDD2DMS(pt.y(), True, False)
                             msg2 = latlon.convertDD2DMS(pt.x(), False, False)
                     else:
-                        msg = '{}'.format(pt.y())
-                        msg2 = '{}'.format(pt.x())
+                        msg = '{:.{prec}f}'.format(pt.y(),prec=decimalPrecision)
+                        msg2 = '{:.{prec}f}'.format(pt.x(),prec=decimalPrecision)
                 elif outputFormat == 1: # One field for coordinate
-                    if self.isWgs84():
+                    if outCRS == epsg4326:
                         if wgs84Format == 0: # Decimal Degrees
                             if coordOrder == 0:
-                                msg = '{}{}{}'.format(pt.y(),delimiter,pt.x())
+                                msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(),delimiter,pt.x(),prec=decimalPrecision)
                             else:
-                                msg = '{}{}{}'.format(pt.x(),delimiter,pt.y())
+                                msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(),delimiter,pt.y(),prec=decimalPrecision)
                         elif wgs84Format == 1: # DMS
                             latlon.setCoord(pt.y(), pt.x())
                             if coordOrder == 0:
@@ -235,28 +262,61 @@ class Geom2FieldWidget(QDialog, FORM_CLASS):
                                 msg = latlon.getDDMMSSLonLatOrder(delimiter)
                     else:
                         if coordOrder == 0:
-                            msg = '{}{}{}'.format(pt.y(),delimiter,pt.x())
+                            msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(),delimiter,pt.x(),prec=decimalPrecision)
                         else:
-                            msg = '{}{}{}'.format(pt.x(),delimiter,pt.y())
+                            msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(),delimiter,pt.y(),prec=decimalPrecision)
                 elif outputFormat == 2: # GeoJSON
-                    msg = '{{"type": "Point","coordinates": [{},{}]}}'.format(pt.x(), pt.y())
+                    msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(pt.x(), pt.y(),prec=decimalPrecision)
                 elif outputFormat == 3: # WKT
-                    msg = 'POINT({} {})'.format(pt.x(), pt.y())
+                    msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(),prec=decimalPrecision)
                 elif outputFormat == 4: # MGRS
                     msg = mgrs.toMgrs(pt.y(), pt.x(), 5)
                 else: # Plus codes
                     msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
             except:
                 msg = ''
+
             f = QgsFeature()
             f.setGeometry(feature.geometry())
             if outputFormat == 0: # Two fields for coordinates
                 f.setAttributes(feature.attributes()+[msg, msg2])
             else:
                 f.setAttributes(feature.attributes()+[msg])
-            ppoint.addFeatures([f])
+            sink.addFeature(f)
             
-        pointLayer.updateExtents()
-        QgsProject.instance().addMapLayer(pointLayer)
-        self.close()
+            if cnt % 100 == 0:
+                feedback.setProgress(int(cnt * total))
+            
+        return {self.PrmOutputLayer: dest_id}
         
+    def name(self):
+        return 'geom2field'
+
+    def icon(self):
+        return QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
+    
+    def displayName(self):
+        return 'Point geometry to field'
+    
+    def group(self):
+        return 'Vector conversion'
+        
+    def groupId(self):
+        return 'vectorconversion'
+        
+    def helpUrl(self):
+        file = os.path.dirname(__file__)+'/index.html'
+        if not os.path.exists(file):
+            return ''
+        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+    
+    def shortHelpString(self):
+        file = os.path.dirname(__file__)+'/doc/geom2fields.help'
+        if not os.path.exists(file):
+            return ''
+        with open(file) as helpf:
+            help=helpf.read()
+        return help
+        
+    def createInstance(self):
+        return Geom2FieldAlgorithm()
