@@ -85,7 +85,7 @@ By default ***Lat Lon Tools*** follows the **Google Map** convention making it p
 
 ## Settings
 
-> <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are independently set for the coordinate capture, zoom to, and multi-zoom to tools. Be careful that when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
+> <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are independently set for the coordinate capture, zoom to, and multi-zoom to tools. Be careful when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
 
 ### Capture & Display Settings
 
@@ -121,6 +121,7 @@ The order in which the coordinates are captured are determined by ***Coordinate 
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
     * **Space**
     * **Other** - With this selected, the contents of ***Other Delimiter*** is used.
+* ***Number of decimal digits*** - This is the number of significant decimal digits that are captured. The default is 6.
 * ***DMS Second Precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal.
 * ***Plus Codes Length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 

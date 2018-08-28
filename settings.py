@@ -92,6 +92,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.precisionSpinBox.setValue(0)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
+        self.digitsSpinBox.setValue(6)
         
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
@@ -126,6 +127,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.wgs84NumberFormat = int(settings.value('/LatLonTools/WGS84NumberFormat', 0))
         self.otherNumberFormat = int(settings.value('/LatLonTools/OtherNumberFormat', 0))
         self.plusCodesLength = int(settings.value('/LatLonTools/PlusCodesLength', 10))
+        self.decimalDigits = int(settings.value('/LatLonTools/DecimalDigits', 6))
         
         ### ZOOM TO SETTINGS ###
         self.zoomToCoordOrder = int(settings.value('/LatLonTools/ZoomToCoordOrder', self.OrderYX))
@@ -174,6 +176,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             
         settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
         settings.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
+        settings.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         
         ### ZOOM TO SETTINGS ###
         settings.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
