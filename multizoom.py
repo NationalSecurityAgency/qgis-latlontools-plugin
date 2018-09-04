@@ -7,7 +7,7 @@ from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtCore import Qt, QVariant, pyqtSlot
 from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
     QgsField, QgsFeature, QgsGeometry, QgsPointXY,
-    QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject )
+    QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject, Qgis )
 from qgis.gui import QgsVertexMarker
 from .LatLon import LatLon
 from .util import *
