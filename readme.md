@@ -14,15 +14,16 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
     * Decimal Degree: 38.959390&deg;, -95.265483&deg; / 38.959390, -95.265483 / 38.959390N, 95.265483 W (d.dddd, d.dddd)
     * Degree, Minute: 38&deg; 57.5634'N 95&deg; 15.92890'W (d m.mmmm, d m.mmmm)
-    * Degree, Minute: 3857.5634N 09515.92890W (ddmm.mmmm, ddmm.mmmm) - In this format there must be 2 digits for latitude degrees, and 3 digits for longitude degrees.
+    * Degree, Minute: 3857.5634N 09515.92890W (ddmm.mmmm, dddmm.mmmm) - In this format the degree digits need to be 0 padded using 2 digits for latitude, and 3 digits for longitude degrees.
     * Degree, Minute, Second: 38&deg;57'33.804"N, 95&deg;15'55.739"W (d m s.ssss, d m s.ssss)
-    * Degree, Minute, Second: 385733.804N 0951555.739W (ddmmss.ssss, dddmmss.ssss) - In this format there must be 2 digits for latitude degrees, and 3 digits for longitude degrees.
+    * Degree, Minute, Second: 385733.804N 0951555.739W (ddmmss.ssss, dddmmss.ssss) - In this format the degree digits need to be 0 padded with 2 digits for latitude, and 3 digits for longitude.
+    * Degree, Minute, Second: 004656S, 0093917E (ddmmss, dddmmss)- Notice the need for 0 padding in the decimal degree digits.
     * WKT: POINT(-95.265483 38.959390)
     * GeoJSON: {"type": "Point","coordinates": [-95.265483,38.959390]}
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
     * Example Plus Code coordinate when **Zoom to Coordinate Type** is set to ***Plus Codes***: 86C6XP5M+QR
 
-* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Points Digitizing Tool*** - This tool digitizes points and add features the the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
+* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Points Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
     
     <div style="text-align:center"><img src="doc/addfeature.jpg" alt="Add Feature"></div>
     

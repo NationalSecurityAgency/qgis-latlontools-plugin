@@ -133,8 +133,12 @@ class LatLon():
                 l = len(dms)
             if l >= 7:
                 deg = float(dms[0:3]) + float(dms[3:5]) / 60.0 + float(dms[5:]) / 3600.0
+            elif l == 6: # A leading 0 was left off but we can still work with 6 digits
+                 deg = float(dms[0:2]) + float(dms[2:4]) / 60.0 + float(dms[4:]) / 3600.0
             elif l == 5:
                 deg = float(dms[0:3]) + float(dms[3:]) / 60.0
+            elif l == 4: # Leading 0's were left off
+                deg = float(dms[0:2]) + float(dms[2:]) / 60.0
             else:
                 deg = float(dms)
         else:
