@@ -98,10 +98,10 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 lon = pt.x()
                 srcCrs = epsg4326
             elif self.settings.zoomToProjIsWgs84():
-                if re.search('POINT\(', text) == None:
+                if re.search(r'POINT\(', text) == None:
                     lat, lon = LatLon.parseDMSString(text, self.settings.zoomToCoordOrder)
                 else:
-                    m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
+                    m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
                         raise ValueError('Invalid Coordinates')
                     lon = float(m[0][0])
@@ -119,8 +119,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 lat, lon = mgrs.toWgs(text)
                 srcCrs = epsg4326
             else: # Is either the project or custom CRS
-                if re.search('POINT\(', text) == None:
-                    coords = re.split('[\s,;:]+', text, 1)
+                if re.search(r'POINT\(', text) == None:
+                    coords = re.split(r'[\s,;:]+', text, 1)
                     if len(coords) < 2:
                         raise ValueError('Invalid Coordinates')
                     if self.settings.zoomToCoordOrder == self.settings.OrderYX:
@@ -130,7 +130,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                         lon = float(coords[0])
                         lat = float(coords[1])
                 else:
-                    m = re.findall('POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
+                    m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
                         raise ValueError('Invalid Coordinates')
                     lon = float(m[0][0])

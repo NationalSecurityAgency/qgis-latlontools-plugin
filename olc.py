@@ -239,7 +239,7 @@ def decode(code):
     # Strip out separator character (we've already established the code is
     # valid so the maximum is one), padding characters and convert to upper
     # case.
-    code = re.sub('[+0]','',code)
+    code = re.sub(r'[+0]','',code)
     code = code.upper()
     # Decode the lat/lng pair component.
     codeArea = decodePairs(code[0:PAIR_CODE_LENGTH_])

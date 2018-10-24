@@ -291,7 +291,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 if self.settings.multiZoomToProjIsWgs84():
                     lat, lon = LatLon.parseDMSString(parts[0], self.settings.multiCoordOrder)
                 else:
-                    parts = re.split('[\s;:]+', parts[0], 1)
+                    parts = re.split(r'[\s;:]+', parts[0], 1)
                     if len(parts) < 2:
                         self.iface.messageBar().pushMessage("", "Invalid Coordinate." , level=Qgis.Warning, duration=3)
                         return
