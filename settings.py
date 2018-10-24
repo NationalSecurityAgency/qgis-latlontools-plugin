@@ -92,7 +92,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.precisionSpinBox.setValue(0)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
-        self.digitsSpinBox.setValue(6)
+        self.digitsSpinBox.setValue(8)
         
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
