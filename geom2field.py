@@ -1,6 +1,6 @@
 import os
 
-from qgis.PyQt.QtCore import QVariant, QCoreApplication
+from qgis.PyQt.QtCore import QVariant, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateTransform, QgsProject
 
