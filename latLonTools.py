@@ -76,7 +76,7 @@ class LatLonTools:
         self.multiZoomDialog.hide()
         self.multiZoomDialog.setFloating(True)
         
-        # Add To MGRS conversion
+        # Create the conversions menu
         menu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
         action = menu.addAction(icon, "Geometry to field", self.geom2Field)
@@ -92,9 +92,9 @@ class LatLonTools:
         icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
         action = menu.addAction(icon, "Point layer to MGRS", self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
-        self.toMGRSAction = QAction(icon, "Conversions", self.iface.mainWindow())
-        self.toMGRSAction.setMenu(menu)
-        self.iface.addPluginToMenu('Lat Lon Tools', self.toMGRSAction)
+        self.conversionsAction = QAction(icon, "Conversions", self.iface.mainWindow())
+        self.conversionsAction.setMenu(menu)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
         
         # Add to Digitize Toolbar
         icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
@@ -149,7 +149,7 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
-        self.iface.removePluginMenu('Lat Lon Tools', self.toMGRSAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.conversionsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.digitizeAction)
