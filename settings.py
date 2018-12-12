@@ -89,7 +89,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.bBoxFormatComboBox.addItems([
             '"minX,minY,maxX,maxY" - Using the selected delimiter',
             '"minX,maxX,minY,maxY" - Using the selected delimiter',
-            '"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Rectangle format',
+            '"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Polygon format',
             'WKT Polygon',
             '"bbox: [minX, minY, maxX, maxY]" - MapProxy',
             '"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS'
