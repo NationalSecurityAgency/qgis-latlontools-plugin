@@ -13,6 +13,27 @@ FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/latLonSettings.ui'))
 
 
+class Settings():
+
+    def __init__(self):
+        self.readSettings()
+
+    def readSettings(self):
+        '''Load the user selected settings. The settings are retained even when
+        the user quits QGIS. This just loads the saved information into variables,
+        but does not update the widgets. The widgets are updated with showEvent.'''
+        qset = QSettings()
+        
+        ### BBOX CAPTURE SETTINGS ###
+        self.bBoxCrs = int(qset.value('/LatLonTools/BBoxCrs', 0)) # Specifies WGS 84
+        self.bBoxFormat = int(qset.value('/LatLonTools/BBoxFormat', 0))
+        self.bBoxDelimiter = qset.value('/LatLonTools/BBoxDelimiter', ',')
+        self.bBoxDigits = int(qset.value('/LatLonTools/BBoxDigits', 8))
+        self.bBoxPrefix = qset.value('/LatLonTools/BBoxPrefix', '')
+        self.bBoxSuffix = qset.value('/LatLonTools/BBoxSuffix', '')
+
+settings = Settings()
+
 class SettingsWidget(QDialog, FORM_CLASS):
     '''Settings Dialog box.'''
     Wgs84TypeDecimal = 0
@@ -62,6 +83,18 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
         self.multiCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
         self.qmlStyle = ''
+        
+        ### BBOX CAPTURE SETTINGS ###
+        self.bBoxCrsComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS'])
+        self.bBoxFormatComboBox.addItems([
+            '"minX,minY,maxX,maxY" - Using the selected delimiter',
+            '"minX,maxX,minY,maxY" - Using the selected delimiter',
+            '"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Rectangle format',
+            'WKT Polygon',
+            '"bbox: [minX, minY, maxX, maxY]" - MapProxy',
+            '"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS'
+            ])
+        self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma, Space','Space','Tab','Other'])
         
         self.readSettings()
     
@@ -113,87 +146,117 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.markerStyleComboBox.setCurrentIndex(0)
         self.extraDataSpinBox.setValue(0)
         
+        ### BBOX CAPTURE SETTINGS ###
+        self.bBoxCrsComboBox.setCurrentIndex(0) # WGS 84
+        self.bBoxFormatComboBox.setCurrentIndex(0) # MapProxy format
+        self.bBoxDelimiterComboBox.setCurrentIndex(0) # Comma
+        self.bBoxDelimiterLineEdit.setText('')
+        self.bBoxPrefixLineEdit.setText('')
+        self.bBoxSuffixLineEdit.setText('')
+        self.bBoxDigitsSpinBox.setValue(8)
+        
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
         the user quits QGIS. This just loads the saved information into varialbles,
         but does not update the widgets. The widgets are updated with showEvent.'''
-        settings = QSettings()
+        qset = QSettings()
         
         ### CAPTURE SETTINGS ###
-        self.captureProjection = int(settings.value('/LatLonTools/CaptureProjection', self.ProjectionTypeWgs84))
-        self.delimiter = settings.value('/LatLonTools/Delimiter', ', ')
-        self.dmsPrecision =  int(settings.value('/LatLonTools/DMSPrecision', 0))
-        self.coordOrder = int(settings.value('/LatLonTools/CoordOrder', self.OrderYX))
-        self.wgs84NumberFormat = int(settings.value('/LatLonTools/WGS84NumberFormat', 0))
-        self.otherNumberFormat = int(settings.value('/LatLonTools/OtherNumberFormat', 0))
-        self.plusCodesLength = int(settings.value('/LatLonTools/PlusCodesLength', 10))
-        self.decimalDigits = int(settings.value('/LatLonTools/DecimalDigits', 6))
+        self.captureProjection = int(qset.value('/LatLonTools/CaptureProjection', self.ProjectionTypeWgs84))
+        self.delimiter = qset.value('/LatLonTools/Delimiter', ', ')
+        self.dmsPrecision =  int(qset.value('/LatLonTools/DMSPrecision', 0))
+        self.coordOrder = int(qset.value('/LatLonTools/CoordOrder', self.OrderYX))
+        self.wgs84NumberFormat = int(qset.value('/LatLonTools/WGS84NumberFormat', 0))
+        self.otherNumberFormat = int(qset.value('/LatLonTools/OtherNumberFormat', 0))
+        self.plusCodesLength = int(qset.value('/LatLonTools/PlusCodesLength', 10))
+        self.decimalDigits = int(qset.value('/LatLonTools/DecimalDigits', 6))
         
         ### ZOOM TO SETTINGS ###
-        self.zoomToCoordOrder = int(settings.value('/LatLonTools/ZoomToCoordOrder', self.OrderYX))
-        self.zoomToProjection = int(settings.value('/LatLonTools/ZoomToCoordType', 0))
-        self.persistentMarker = int(settings.value('/LatLonTools/PersistentMarker', Qt.Checked))
+        self.zoomToCoordOrder = int(qset.value('/LatLonTools/ZoomToCoordOrder', self.OrderYX))
+        self.zoomToProjection = int(qset.value('/LatLonTools/ZoomToCoordType', 0))
+        self.persistentMarker = int(qset.value('/LatLonTools/PersistentMarker', Qt.Checked))
         
         ### EXTERNAL MAP ###
-        self.showPlacemark = int(settings.value('/LatLonTools/ShowPlacemark', Qt.Checked))
-        self.mapProvider = int(settings.value('/LatLonTools/MapProvider', 0))
-        self.mapZoom = int(settings.value('/LatLonTools/MapZoom', 13))
+        self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
+        self.mapProvider = int(qset.value('/LatLonTools/MapProvider', 0))
+        self.mapZoom = int(qset.value('/LatLonTools/MapZoom', 13))
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
-        self.multiZoomToProjection = int(settings.value('/LatLonTools/MultiZoomToProjection', 0))
-        self.multiCoordOrder = int(settings.value('/LatLonTools/MultiCoordOrder', self.OrderYX))
-        self.multiZoomNumCol = int(settings.value('/LatLonTools/MultiZoomExtraData', 0))
-        self.multiZoomStyleID = int(settings.value('/LatLonTools/MultiZoomStyleID', 0))
-        self.qmlStyle = settings.value('/LatLonTools/QmlStyle', '')
+        self.multiZoomToProjection = int(qset.value('/LatLonTools/MultiZoomToProjection', 0))
+        self.multiCoordOrder = int(qset.value('/LatLonTools/MultiCoordOrder', self.OrderYX))
+        self.multiZoomNumCol = int(qset.value('/LatLonTools/MultiZoomExtraData', 0))
+        self.multiZoomStyleID = int(qset.value('/LatLonTools/MultiZoomStyleID', 0))
+        self.qmlStyle = qset.value('/LatLonTools/QmlStyle', '')
         if (self.multiZoomStyleID == 2) and (self.qmlStyle == '' or self.qmlStyle == None or not os.path.isfile(self.qmlStyle)):
             # If the file is invalid then set to an emply string
-            settings.setValue('/LatLonTools/QmlStyle', '')
-            settings.setValue('/LatLonTools/MultiZoomStyleID', 0)
+            qset.setValue('/LatLonTools/QmlStyle', '')
+            qset.setValue('/LatLonTools/MultiZoomStyleID', 0)
             self.qmlStyle = ''
             self.multiZoomStyleID = 0
+        
+        ### BBOX SETTINGS ###
+        settings.readSettings()
         
         self.setEnabled()
         
     def accept(self):
         '''Accept the settings and save them for next time.'''
-        settings = QSettings()
+        qset = QSettings()
         
         ### CAPTURE SETTINGS ###
-        settings.setValue('/LatLonTools/CaptureProjection', int(self.captureProjectionComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/CaptureProjection', int(self.captureProjectionComboBox.currentIndex()))
             
-        settings.setValue('/LatLonTools/WGS84NumberFormat', int(self.wgs84NumberFormatComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/OtherNumberFormat', int(self.otherNumberFormatComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/CoordOrder', int(self.coordOrderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/WGS84NumberFormat', int(self.wgs84NumberFormatComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/OtherNumberFormat', int(self.otherNumberFormatComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/CoordOrder', int(self.coordOrderComboBox.currentIndex()))
         delim = self.delimComboBox.currentIndex()
         if delim == 0:
-            settings.setValue('/LatLonTools/Delimiter', ', ')
+            qset.setValue('/LatLonTools/Delimiter', ', ')
         elif delim == 1:
-            settings.setValue('/LatLonTools/Delimiter', ' ')
+            qset.setValue('/LatLonTools/Delimiter', ' ')
         elif delim == 2:
-            settings.setValue('/LatLonTools/Delimiter', '\t')
+            qset.setValue('/LatLonTools/Delimiter', '\t')
         else:
-            settings.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
+            qset.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
             
-        settings.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
-        settings.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
-        settings.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
+        qset.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
+        qset.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
+        qset.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         
         ### ZOOM TO SETTINGS ###
-        settings.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/ZoomToCoordOrder', int(self.zoomToCoordOrderComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/PersistentMarker', self.persistentMarkerCheckBox.checkState())
+        qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/ZoomToCoordOrder', int(self.zoomToCoordOrderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/PersistentMarker', self.persistentMarkerCheckBox.checkState())
         
         ### EXTERNAL MAP ###
-        settings.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
-        settings.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
+        qset.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
+        qset.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
         ### MULTI-ZOOM TO SETTINGS ###
-        settings.setValue('/LatLonTools/MultiZoomToProjection', int(self.multiZoomToProjectionComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/MultiCoordOrder', int(self.multiCoordOrderComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/MultiZoomExtraData', int(self.extraDataSpinBox.value()))
-        settings.setValue('/LatLonTools/MultiZoomStyleID', int(self.markerStyleComboBox.currentIndex()))
-        settings.setValue('/LatLonTools/QmlStyle', self.qmlLineEdit.text())
+        qset.setValue('/LatLonTools/MultiZoomToProjection', int(self.multiZoomToProjectionComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/MultiCoordOrder', int(self.multiCoordOrderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/MultiZoomExtraData', int(self.extraDataSpinBox.value()))
+        qset.setValue('/LatLonTools/MultiZoomStyleID', int(self.markerStyleComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/QmlStyle', self.qmlLineEdit.text())
+        
+        ### BBOX CAPTURE SETTINGS ###
+        qset.setValue('/LatLonTools/BBoxCrs', int(self.bBoxCrsComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/BBoxFormat', int(self.bBoxFormatComboBox.currentIndex()))
+        delim = self.bBoxDelimiterComboBox.currentIndex()
+        if delim == 0:
+            qset.setValue('/LatLonTools/BBoxDelimiter', ',')
+        elif delim == 1:
+            qset.setValue('/LatLonTools/BBoxDelimiter', ', ')
+        elif delim == 2:
+            qset.setValue('/LatLonTools/BBoxDelimiter', ' ')
+        elif delim == 3:
+            qset.setValue('/LatLonTools/BBoxDelimiter', '\t')
+        else:
+            qset.setValue('/LatLonTools/BBoxDelimiter', self.bBoxDelimiterLineEdit.text())
+        qset.setValue('/LatLonTools/BBoxPrefix', self.bBoxPrefixLineEdit.text())
+        qset.setValue('/LatLonTools/BBoxSuffix', self.bBoxSuffixLineEdit.text())
+        qset.setValue('/LatLonTools/BBoxDigits', self.bBoxDigitsSpinBox.value())
         
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -269,6 +332,25 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.extraDataSpinBox.setValue(self.multiZoomNumCol)
         self.markerStyleComboBox.setCurrentIndex(self.multiZoomStyleID)
         self.qmlLineEdit.setText(self.qmlStyle)
+        
+        ### BBOX CAPTURE SETTINGS ###
+        self.bBoxCrsComboBox.setCurrentIndex(settings.bBoxCrs)
+        self.bBoxFormatComboBox.setCurrentIndex(settings.bBoxFormat)
+        self.bBoxDelimiterLineEdit.setText('')
+        if settings.bBoxDelimiter == ',':
+            self.bBoxDelimiterComboBox.setCurrentIndex(0)
+        elif settings.bBoxDelimiter == ', ':
+            self.bBoxDelimiterComboBox.setCurrentIndex(1)
+        elif settings.bBoxDelimiter == ' ':
+            self.bBoxDelimiterComboBox.setCurrentIndex(2)
+        elif settings.bBoxDelimiter == '\t':
+            self.bBoxDelimiterComboBox.setCurrentIndex(3)
+        else:
+            self.bBoxDelimiterComboBox.setCurrentIndex(4)
+            self.bBoxDelimiterLineEdit.setText(settings.bBoxDelimiter)
+        self.bBoxPrefixLineEdit.setText(settings.bBoxPrefix)
+        self.bBoxSuffixLineEdit.setText(settings.bBoxSuffix)
+        self.bBoxDigitsSpinBox.setValue(settings.bBoxDigits)
         
         self.setEnabled()
 

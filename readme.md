@@ -23,7 +23,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
     * Example Plus Code coordinate when **Zoom to Coordinate Type** is set to ***Plus Codes***: 86C6XP5M+QR
 
-* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Points Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
+* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Lat Lon Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
     
     <div style="text-align:center"><img src="doc/addfeature.jpg" alt="Add Feature"></div>
     
@@ -78,6 +78,8 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * <img src="images/pluscodes.png" alt="Plus Codes"> ***Point layer to Plus Codes*** - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.
 
     <div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div>
+
+* <img src="images/copycanvas.png" alt="Copy canvas bounding box"> ***Copy Canvas Bounding Box*** - Copy the canvas bounding box to the clipboard using one of the formats in settings.
 
 * <img src="images/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.png" alt="Help"> ***Help*** - Displays this help page.
@@ -199,3 +201,33 @@ The ***Browse*** button allows selection of the .qml style file. When a .qml fil
 **Data Field Settings**
     
 * ***Number of extra data fields*** - Besides *Latitude*, *Longitude*, and *Label*, the user can add up to 10 additional data fields which are labeled as *Data1*, *Data2*, ... *Data10*. By default this is set to 0.
+
+### BBox Capture Settings
+
+<div style="text-align:center"><img src="doc/settings5.jpg" alt="BBOX Capture Settings"></div>
+
+These are the settings for the bounding box capture to clipboard tool.
+
+**CRS/Projection of captured bounding box coordinates**
+
+Specify whether the captured bounding box will use WGS84 or the QGIS project's projections. The options are:
+
+* ***WGS 84 (Latitude & Longitude)***
+* ***Project CRS***
+
+**Format of the captured bounding box** specifies the format of the bounding box captured on the clipboard. It can be one of the following formats.
+
+* ***minX,minY,maxX,maxY*** - Using the selected delimiter
+* ***minX,maxX,minY,maxY*** - Using the selected delimiter
+* ***x1 y1,x2 y2,x3 y3,x4 y4,x1 y1*** - Polygon format
+* ***WKT Polygon***
+* ***bbox: [minX, minY, maxX, maxY]*** - Format used by MapProxy
+* ***bbox=minX,minY,maxX,maxY*** - Format used by GeoServer WFS, WMS
+
+**Delimiter between coordinates for non-specific formats** - This affects only the first two of the above formats. It is used between coordinates with presets for **Comma**, **Comma Space**, **Space**, **Tab**, and **Other**.
+
+**Prefix** - This is used for the first 3 formats and it is a prefix that is attached to the beginning of the captured bounding box string.
+
+**Suffix** - This is used for the first 3 formats and it is a suffix that is attached to the ending of the captured bounding box string.
+
+**Significant digits after decimal** - This is the precision or number of digits after the decimal in the ouput coordinates.

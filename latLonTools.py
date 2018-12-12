@@ -1,7 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QTimer, QUrl
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMenu
-from qgis.core import QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
+from qgis.PyQt.QtWidgets import QAction, QMenu, QApplication
+from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
 from qgis.gui import QgsRubberBand
 import processing
 
@@ -9,8 +9,9 @@ from .zoomToLatLon import ZoomToLatLon
 from .multizoom import MultiZoomWidget
 from .copyLatLonTool import CopyLatLonTool
 from .showOnMapTool import ShowOnMapTool
-from .settings import SettingsWidget
+from .settings import SettingsWidget, settings
 from .provider import LatLonToolsProvider
+from .util import epsg4326
 import os
 import webbrowser
 
@@ -105,6 +106,14 @@ class LatLonTools:
         self.toolbar.addAction(self.digitizeAction)
         self.iface.addPluginToMenu('Lat Lon Tools', self.digitizeAction)
         
+        # Add Interface for copying the canvas extent
+        icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.png")
+        self.copyCanvasAction = QAction(icon, "Copy Canvas Bounding Box", self.iface.mainWindow())
+        self.copyCanvasAction.setObjectName('latLonToolsCopyCanvas')
+        self.copyCanvasAction.triggered.connect(self.copyCanvas)
+        self.toolbar.addAction(self.copyCanvasAction)
+        self.iface.addPluginToMenu("Lat Lon Tools", self.copyCanvasAction)
+        
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
         self.settingsAction = QAction(settingsicon, "Settings", self.iface.mainWindow())
@@ -146,6 +155,7 @@ class LatLonTools:
         self.canvas.unsetMapTool(self.mapTool)
         self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.copyCanvasAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
@@ -157,6 +167,7 @@ class LatLonTools:
         self.iface.removeDockWidget(self.multiZoomDialog)
         # Remove Toolbar Icons
         self.iface.removeToolBarIcon(self.copyAction)
+        self.iface.removeToolBarIcon(self.copyCanvasAction)
         self.iface.removeToolBarIcon(self.zoomToAction)
         self.iface.removeToolBarIcon(self.externMapAction)
         self.iface.removeToolBarIcon(self.multiZoomToAction)
@@ -176,6 +187,43 @@ class LatLonTools:
         self.copyAction.setChecked(True)
         self.canvas.setMapTool(self.mapTool)
 
+    def copyCanvas(self):
+        extent = self.iface.mapCanvas().extent()
+        canvasCrs = self.canvas.mapSettings().destinationCrs()
+        if settings.bBoxCrs ==0 and canvasCrs != epsg4326:
+            transform = QgsCoordinateTransform(canvasCrs, epsg4326, QgsProject.instance())
+            p1x, p1y = transform.transform(float(extent.xMinimum()), float(extent.yMinimum()))
+            p2x, p2y = transform.transform(float(extent.xMaximum()), float(extent.yMaximum()))
+            extent.set(p1x, p1y, p2x, p2y)
+        delim = settings.bBoxDelimiter
+        prefix = settings.bBoxPrefix
+        suffix = settings.bBoxSuffix
+        precision = settings.bBoxDigits
+        outStr = ''
+        if settings.bBoxFormat == 0: # minX,minY,maxX,maxY - using the delimiter
+            outStr = '{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}'.format(prefix,
+                extent.xMinimum(),delim,extent.yMinimum(),delim,
+                extent.xMaximum(),delim,extent.yMaximum(),suffix,prec=precision)
+        elif settings.bBoxFormat == 1: # minX,maxX,minY,maxY - Using the selected delimiter'
+            outStr = '{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}'.format(prefix,
+                extent.xMinimum(),delim,extent.xMaximum(),delim,
+                extent.yMinimum(),delim,extent.yMaximum(),suffix,prec=precision)
+        elif settings.bBoxFormat == 2: # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
+            outStr = extent.asPolygon()
+        elif settings.bBoxFormat == 3: # WKT Polygon
+            outStr = extent.asWktPolygon()
+        elif settings.bBoxFormat == 4: # bbox: [minX, minY, maxX, maxY] - MapProxy
+            outStr = 'bbox: [{}, {}, {}, {}]'.format(
+                extent.xMinimum(),extent.yMinimum(),
+                extent.xMaximum(),extent.yMaximum())
+        elif settings.bBoxFormat == 5: # bbox: [minX, minY, maxX, maxY] - MapProxy
+            outStr = 'bbox={},{},{},{}'.format(
+                extent.xMinimum(),extent.yMinimum(),
+                extent.xMaximum(),extent.yMaximum())
+        clipboard = QApplication.clipboard()
+        clipboard.setText(outStr)
+        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+        
     def setShowMapTool(self):
         '''Set the focus of the external map tool and check it'''
         self.externMapAction.setChecked(True)
