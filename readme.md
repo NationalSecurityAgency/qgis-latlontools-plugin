@@ -220,14 +220,15 @@ Specify whether the captured bounding box will use WGS84 or the QGIS project's p
 * ***minX,minY,maxX,maxY*** - Using the selected delimiter
 * ***minX,maxX,minY,maxY*** - Using the selected delimiter
 * ***x1 y1,x2 y2,x3 y3,x4 y4,x1 y1*** - Polygon format
+* ***x1,y1 x2,y2 x3,y3 x4,y4, x1,y1*** - Alternate polygon format
 * ***WKT Polygon***
 * ***bbox: [minX, minY, maxX, maxY]*** - Format used by MapProxy
 * ***bbox=minX,minY,maxX,maxY*** - Format used by GeoServer WFS, WMS
 
 **Delimiter between coordinates for non-specific formats** - This affects only the first two of the above formats. It is used between coordinates with presets for **Comma**, **Comma Space**, **Space**, **Tab**, and **Other**.
 
-**Prefix** - This is used for the first 3 formats and it is a prefix that is attached to the beginning of the captured bounding box string.
+**Prefix** - This is used for the first 4 formats and it is a prefix that is attached to the beginning of the captured bounding box string.
 
-**Suffix** - This is used for the first 3 formats and it is a suffix that is attached to the ending of the captured bounding box string.
+**Suffix** - This is used for the first 4 formats and it is a suffix that is attached to the ending of the captured bounding box string.
 
 **Significant digits after decimal** - This is the precision or number of digits after the decimal in the ouput coordinates.

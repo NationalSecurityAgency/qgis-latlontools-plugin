@@ -200,26 +200,30 @@ class LatLonTools:
         suffix = settings.bBoxSuffix
         precision = settings.bBoxDigits
         outStr = ''
+        minX = extent.xMinimum()
+        minY = extent.yMinimum()
+        maxX = extent.xMaximum()
+        maxY = extent.yMaximum()
         if settings.bBoxFormat == 0: # minX,minY,maxX,maxY - using the delimiter
             outStr = '{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}'.format(prefix,
-                extent.xMinimum(),delim,extent.yMinimum(),delim,
-                extent.xMaximum(),delim,extent.yMaximum(),suffix,prec=precision)
+                minX,delim,minY,delim,maxX,delim,maxY,suffix,prec=precision)
         elif settings.bBoxFormat == 1: # minX,maxX,minY,maxY - Using the selected delimiter'
             outStr = '{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}'.format(prefix,
-                extent.xMinimum(),delim,extent.xMaximum(),delim,
-                extent.yMinimum(),delim,extent.yMaximum(),suffix,prec=precision)
+                minX,delim,maxX,delim,minY,delim,maxY,suffix,prec=precision)
         elif settings.bBoxFormat == 2: # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
-            outStr = extent.asPolygon()
-        elif settings.bBoxFormat == 3: # WKT Polygon
+            outStr = '{}{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f}{}'.format(
+                prefix,minX,minY,minX,maxY,maxX,maxY,maxX,minY,minX,minY,suffix,prec=precision)
+        elif settings.bBoxFormat == 3: # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
+            outStr = '{}{:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f}{}'.format(
+                prefix,minX,minY,minX,maxY,maxX,maxY,maxX,minY,minX,minY,suffix,prec=precision)
+        elif settings.bBoxFormat == 4: # WKT Polygon
             outStr = extent.asWktPolygon()
-        elif settings.bBoxFormat == 4: # bbox: [minX, minY, maxX, maxY] - MapProxy
-            outStr = 'bbox: [{}, {}, {}, {}]'.format(
-                extent.xMinimum(),extent.yMinimum(),
-                extent.xMaximum(),extent.yMaximum())
         elif settings.bBoxFormat == 5: # bbox: [minX, minY, maxX, maxY] - MapProxy
+            outStr = 'bbox: [{}, {}, {}, {}]'.format(
+                minX,minY,maxX,maxY)
+        elif settings.bBoxFormat == 6: # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox={},{},{},{}'.format(
-                extent.xMinimum(),extent.yMinimum(),
-                extent.xMaximum(),extent.yMaximum())
+                minX,minY,maxX,maxY)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
         self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)

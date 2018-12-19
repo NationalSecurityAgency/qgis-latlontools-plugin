@@ -90,6 +90,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             '"minX,minY,maxX,maxY" - Using the selected delimiter',
             '"minX,maxX,minY,maxY" - Using the selected delimiter',
             '"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Polygon format',
+            '"X1,y1 x2,y2 x3,y3 x4,y4 x1,y1" - Alternate polgyon format',
             'WKT Polygon',
             '"bbox: [minX, minY, maxX, maxY]" - MapProxy',
             '"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS'
