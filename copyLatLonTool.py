@@ -110,7 +110,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             except:
                 msg = None
         
-
+        msg = '{}{}{}'.format(self.settings.capturePrefix, msg, self.settings.captureSuffix)
         return msg
         
     def canvasMoveEvent(self, event):

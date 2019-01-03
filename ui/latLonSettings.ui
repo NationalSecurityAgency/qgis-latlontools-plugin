@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>490</height>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -149,6 +149,26 @@
             <number>8</number>
            </property>
           </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>Coordinate prefix</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_29">
+           <property name="text">
+            <string>Coordinate suffix</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="capturePrefixLineEdit"/>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="captureSuffixLineEdit"/>
          </item>
         </layout>
        </item>
@@ -547,7 +567,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
          <item row="1" column="0">
           <widget class="QLabel" name="label_26">
            <property name="text">
-            <string>Prefix</string>
+            <string>BBOX prefix</string>
            </property>
           </widget>
          </item>
@@ -557,7 +577,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
          <item row="2" column="0">
           <widget class="QLabel" name="label_27">
            <property name="text">
-            <string>Suffix</string>
+            <string>BBOX suffix</string>
            </property>
           </widget>
          </item>

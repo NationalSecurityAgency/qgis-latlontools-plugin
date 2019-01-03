@@ -8,7 +8,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
-* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Plus Codes**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities.
+* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Plus Codes**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**.
   
 * <img src="images/zoomicon.png" alt="Zoom-to"> ***Zoom to Latitude, Longitude*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. If the default WGS 84 (EPSG:4326 - latitude/longitude) coordinate system is specified, "Zoom to Latitude, Longitude" can interpret **decimal degrees**, **DMS**, **WKT POINT**, or **GeoJSON** coordinates. If configured in **Settings**, it can zoom to **MGRS** coordinates , **Plus Code** coordinates or coordinates formatted in the project CRS or any other projection. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
 
@@ -126,6 +126,8 @@ The order in which the coordinates are captured are determined by ***Coordinate 
     * **Other** - With this selected, the contents of ***Other Delimiter*** is used.
 * ***DMS Second Precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal.
 * ***Plus Codes Length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
+* ***Coordinate prefix*** - This text string is added to the beginning of the captured coordinate.
+* ***Coordinate suffix*** - This text string is added to the end of the captured coordinate.
 
 ### Zoom to Settings
 
@@ -227,8 +229,8 @@ Specify whether the captured bounding box will use WGS84 or the QGIS project's p
 
 **Delimiter between coordinates for non-specific formats** - This affects only the first two of the above formats. It is used between coordinates with presets for **Comma**, **Comma Space**, **Space**, **Tab**, and **Other**.
 
-**Prefix** - This is used for the first 4 formats and it is a prefix that is attached to the beginning of the captured bounding box string.
+**BBOX prefix** - This text string is added to the beginning of the captured bounding box string.
 
-**Suffix** - This is used for the first 4 formats and it is a suffix that is attached to the ending of the captured bounding box string.
+**BBOX suffix** - This text string is added to the end of the captured bounding box string.
 
 **Significant digits after decimal** - This is the precision or number of digits after the decimal in the ouput coordinates.

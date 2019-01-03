@@ -4,17 +4,17 @@ from qgis.PyQt.QtWidgets import *
 from qgis.core import Qgis,QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.gui import QgsMapToolEmitPoint
 from .util import *
+from .settings import settings
 import webbrowser
 
 class ShowOnMapTool(QgsMapToolEmitPoint):
     '''Class to interact with the map canvas to capture the coordinate
     when the mouse button is pressed and to display the coordinate in
     in the status bar.'''
-    def __init__(self, settings, iface):
+    def __init__(self, iface):
         QgsMapToolEmitPoint.__init__(self, iface.mapCanvas())
         self.iface = iface
         self.canvas = iface.mapCanvas()
-        self.settings = settings
         self.canvasClicked.connect(self.clicked)
         
     def activate(self):
@@ -29,7 +29,7 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         pt4326 = transform.transform(pt.x(), pt.y())
         lat = pt4326.y()
         lon = pt4326.x()
-        mapprovider = self.settings.getMapProviderString(lat, lon)
+        mapprovider = settings.getMapProviderString(lat, lon)
         url = QUrl(mapprovider).toString()
         webbrowser.open(url, new=2)
         self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat,lon), level=Qgis.Info, duration=3)
