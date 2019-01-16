@@ -84,7 +84,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 * <img src="images/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.png" alt="Help"> ***Help*** - Displays this help page.
 
-By default ***Lat Lon Tools*** follows the **Google Map** convention making it possible to copy and paste between QGIS, Google Map, Google Earth, and other on-line maps without breaking the coordinates into pieces. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In ***Settings*** the user can choose the ***Coordinate Capture Delimiter*** used between coordinates with presets for **Comma**, **Space**, and **Tab**. **Other** allows the user to specify a delimited string which can be more than one character.
+By default ***Lat Lon Tools*** follows the **Google Map** convention making it possible to copy and paste between QGIS, Google Map, Google Earth, and other on-line maps without breaking the coordinates into pieces. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In ***Settings*** the user can choose the ***Coordinate Capture Delimiter*** used between coordinates with presets for **Comma**, **Comma Space**, **Space**, and **Tab**. **Other** allows the user to specify a delimited string which can be more than one character.
 
 ## Settings
 
@@ -120,7 +120,8 @@ The order in which the coordinates are captured are determined by ***Coordinate 
 * **Lon, Lat (X,Y) Order**.
 
 * ***Coordinate Capture Delimiter (Not applicable to MGRS and WKT)*** - Specifies the delimiter that separates the two coordinates. The options are:
-    * **Comma** - This is really a comma followed by a space. 
+    * **Comma** - Specifies a comma separator 
+    * **Comma Space** - This is a comma followed by a space. 
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
     * **Space**
     * **Other** - With this selected, the contents of ***Other Delimiter*** is used.

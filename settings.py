@@ -78,7 +78,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS','WKT POINT','GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate','WKT POINT'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
-        self.delimComboBox.addItems(['Comma', 'Space', 'Tab', 'Other'])
+        self.delimComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
         
         ### ZOOM TO SETTINGS ###
@@ -110,7 +110,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             '"bbox: [minX, minY, maxX, maxY]" - MapProxy',
             '"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS'
             ])
-        self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma, Space','Space','Tab','Other'])
+        self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma Space','Space','Tab','Other'])
         
         self.readSettings()
     
@@ -137,7 +137,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.otherNumberFormatComboBox.setCurrentIndex(0)
         self.coordOrderComboBox.setCurrentIndex(self.OrderYX)
         self.otherTxt.setText("")
-        self.delimComboBox.setCurrentIndex(0)
+        self.delimComboBox.setCurrentIndex(1)
         self.precisionSpinBox.setValue(0)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
@@ -226,10 +226,12 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/CoordOrder', int(self.coordOrderComboBox.currentIndex()))
         delim = self.delimComboBox.currentIndex()
         if delim == 0:
-            qset.setValue('/LatLonTools/Delimiter', ', ')
+            qset.setValue('/LatLonTools/Delimiter', ',')
         elif delim == 1:
-            qset.setValue('/LatLonTools/Delimiter', ' ')
+            qset.setValue('/LatLonTools/Delimiter', ', ')
         elif delim == 2:
+            qset.setValue('/LatLonTools/Delimiter', ' ')
+        elif delim == 3:
             qset.setValue('/LatLonTools/Delimiter', '\t')
         else:
             qset.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
@@ -321,14 +323,16 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.coordOrderComboBox.setCurrentIndex(self.coordOrder)
         
         self.otherTxt.setText("")
-        if self.delimiter == ', ':
+        if self.delimiter == ',':
             self.delimComboBox.setCurrentIndex(0)
-        elif self.delimiter == ' ':
+        elif self.delimiter == ', ':
             self.delimComboBox.setCurrentIndex(1)
-        elif self.delimiter == '\t':
+        elif self.delimiter == ' ':
             self.delimComboBox.setCurrentIndex(2)
-        else:
+        elif self.delimiter == '\t':
             self.delimComboBox.setCurrentIndex(3)
+        else:
+            self.delimComboBox.setCurrentIndex(4)
             self.otherTxt.setText(self.delimiter)
             
         self.precisionSpinBox.setValue(self.dmsPrecision)
