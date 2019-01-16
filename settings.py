@@ -187,7 +187,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.wgs84NumberFormat = int(qset.value('/LatLonTools/WGS84NumberFormat', 0))
         self.otherNumberFormat = int(qset.value('/LatLonTools/OtherNumberFormat', 0))
         self.plusCodesLength = int(qset.value('/LatLonTools/PlusCodesLength', 10))
-        self.decimalDigits = int(qset.value('/LatLonTools/DecimalDigits', 6))
+        self.decimalDigits = int(qset.value('/LatLonTools/DecimalDigits', 8))
         self.capturePrefix = qset.value('/LatLonTools/CapturePrefix', '')
         self.captureSuffix = qset.value('/LatLonTools/CaptureSuffix', '')
         
@@ -335,6 +335,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             self.delimComboBox.setCurrentIndex(4)
             self.otherTxt.setText(self.delimiter)
             
+        self.digitsSpinBox.setValue(self.decimalDigits)
         self.precisionSpinBox.setValue(self.dmsPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
         self.captureSuffixLineEdit.setText(self.captureSuffix)
