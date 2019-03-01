@@ -74,7 +74,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             else:
                 self.label.setText("Enter {} X,Y".format(crsID))
         else: # Default to custom CRS
-            crsID = self.settings.zoomToCustomCRSID()
+            crsID = self.settings.zoomToCustomCrsId()
             if self.settings.zoomToCoordOrder == 0:
                 self.label.setText("Enter {} Y,X".format(crsID))
             else:

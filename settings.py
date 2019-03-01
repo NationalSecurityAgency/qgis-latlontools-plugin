@@ -126,7 +126,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     def multiZoomToCustomCRS(self):
         return self.multiZoomToProjectionSelectionWidget.crs()
         
-    def zoomToCustomCRSID(self):
+    def zoomToCustomCrsId(self):
         return self.zoomToProjectionSelectionWidget.crs().authid()
     
     def restoreDefaults(self):
@@ -195,6 +195,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomToCoordOrder = int(qset.value('/LatLonTools/ZoomToCoordOrder', self.OrderYX))
         self.zoomToProjection = int(qset.value('/LatLonTools/ZoomToCoordType', 0))
         self.persistentMarker = int(qset.value('/LatLonTools/PersistentMarker', Qt.Checked))
+        self.zoomToCustomCrsAuthId = qset.value('/LatLonTools/ZoomToCustomCrsId', 'EPSG:4326')
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
         self.multiZoomToProjection = int(qset.value('/LatLonTools/MultiZoomToProjection', 0))
@@ -246,6 +247,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
         qset.setValue('/LatLonTools/ZoomToCoordOrder', int(self.zoomToCoordOrderComboBox.currentIndex()))
         qset.setValue('/LatLonTools/PersistentMarker', self.persistentMarkerCheckBox.checkState())
+        qset.setValue('/LatLonTools/ZoomToCustomCrsId', self.zoomToCustomCrsId())
         
         ### EXTERNAL MAP ###
         qset.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
@@ -341,7 +343,12 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureSuffixLineEdit.setText(self.captureSuffix)
         
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
+        if self.zoomToCustomCrsAuthId == 'EPSG:4326':
+            self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
+            self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
+        else:
+            self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
+            self.zoomToProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(self.zoomToCustomCrsAuthId))
         self.zoomToCoordOrderComboBox.setCurrentIndex(self.zoomToCoordOrder)
         self.persistentMarkerCheckBox.setCheckState(self.persistentMarker)
         
