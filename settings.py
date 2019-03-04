@@ -196,6 +196,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomToProjection = int(qset.value('/LatLonTools/ZoomToCoordType', 0))
         self.persistentMarker = int(qset.value('/LatLonTools/PersistentMarker', Qt.Checked))
         self.zoomToCustomCrsAuthId = qset.value('/LatLonTools/ZoomToCustomCrsId', 'EPSG:4326')
+        self.zoomToProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(self.zoomToCustomCrsAuthId))
         
         ### MULTI-ZOOM CUSTOM QML STYLE ###
         self.multiZoomToProjection = int(qset.value('/LatLonTools/MultiZoomToProjection', 0))
