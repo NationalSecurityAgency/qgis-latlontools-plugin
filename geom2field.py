@@ -126,7 +126,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 self.PrmCoordinatePrecision,
                 tr('Decimal number precision'),
                 type=QgsProcessingParameterNumber.Integer,
-                defaultValue=6,
+                defaultValue=8,
                 optional=True,
                 minValue=0
                 )
@@ -296,7 +296,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
     
     def displayName(self):
-        return 'Point geometry to field'
+        return 'Point layer to fields'
     
     def group(self):
         return 'Vector conversion'

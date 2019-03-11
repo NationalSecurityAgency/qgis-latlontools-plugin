@@ -79,8 +79,11 @@ class LatLonTools:
         
         # Create the conversions menu
         menu = QMenu()
+        icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.png')
+        action = menu.addAction(icon, "Fields to point layer", self.field2geom)
+        action.setObjectName('latLonToolsField2Geom')
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
-        action = menu.addAction(icon, "Geometry to field", self.geom2Field)
+        action = menu.addAction(icon, "Point layer to fields", self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
         action = menu.addAction(icon, "Plus Codes to point layer", self.PlusCodestoLayer)
@@ -241,6 +244,10 @@ class LatLonTools:
     def multiZoomTo(self):
         '''Display the Multi-zoom to dialog box'''
         self.multiZoomDialog.show()
+
+    def field2geom(self):
+        '''Convert layer containing a point x & y coordinate to a new point layer'''
+        results = processing.execAlgorithmDialog('latlontools:field2geom', {})
 
     def geom2Field(self):
         '''Convert layer geometry to a text string'''
