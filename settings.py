@@ -36,6 +36,11 @@ class Settings():
         self.bBoxDigits = int(qset.value('/LatLonTools/BBoxDigits', 8))
         self.bBoxPrefix = qset.value('/LatLonTools/BBoxPrefix', '')
         self.bBoxSuffix = qset.value('/LatLonTools/BBoxSuffix', '')
+        
+    def googleEarthMapProvider(self):
+        if self.mapProvider >= len(mapProviders.MAP_PROVIDERS):
+            return True
+        return False
 
     def getMapProviderString(self, lat, lon):
         if self.showPlacemark:

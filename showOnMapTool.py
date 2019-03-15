@@ -5,7 +5,10 @@ from qgis.core import Qgis,QgsCoordinateReferenceSystem, QgsCoordinateTransform,
 from qgis.gui import QgsMapToolEmitPoint
 from .util import *
 from .settings import settings
+import os
 import webbrowser
+import tempfile
+import platform
 
 class ShowOnMapTool(QgsMapToolEmitPoint):
     '''Class to interact with the map canvas to capture the coordinate
@@ -29,7 +32,29 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         pt4326 = transform.transform(pt.x(), pt.y())
         lat = pt4326.y()
         lon = pt4326.x()
-        mapprovider = settings.getMapProviderString(lat, lon)
-        url = QUrl(mapprovider).toString()
-        webbrowser.open(url, new=2)
-        self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat,lon), level=Qgis.Info, duration=3)
+        if settings.googleEarthMapProvider():
+            f = tempfile.NamedTemporaryFile(mode='w',suffix = ".kml",delete=False)
+            f.write('<?xml version="1.0" encoding="UTF-8"?>')
+            f.write('<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">')
+            f.write('<Document>')
+            f.write('   <name>QGIS Location</name>')
+            f.write('   <description>{:.8f}, {:.8f}</description>'.format(lon,lat))
+            f.write('   <Placemark>')
+            f.write('       <name>QGIS Location</name>')
+            f.write('       <Point>')
+            f.write('           <coordinates>{:.8f},{:.8f},0</coordinates>'.format(lon,lat))
+            f.write('       </Point>')
+            f.write('   </Placemark>')
+            f.write('</Document>')
+            f.write('</kml>')
+            f.close()
+            if platform.system() == 'Windows':
+                os.startfile(f.name)
+            else:
+                webbrowser.open(f.name)
+            self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in Google Earth" % (lat,lon), level=Qgis.Info, duration=3)
+        else:
+            mapprovider = settings.getMapProviderString(lat, lon)
+            url = QUrl(mapprovider).toString()
+            webbrowser.open(url, new=2)
+            self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat,lon), level=Qgis.Info, duration=3)

@@ -15,4 +15,5 @@ def mapProviderNames():
     plist =[]
     for x in MAP_PROVIDERS:
         plist.append(x[0])
+    plist.append('Google Earth (If Installed)')
     return plist
