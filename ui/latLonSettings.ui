@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>527</height>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QgsProjectionSelectionWidget" name="captureProjectionSelectionWidget" native="true"/>
+        <widget class="QgsProjectionSelectionWidget" name="captureProjectionSelectionWidget"/>
        </item>
        <item>
         <widget class="QLabel" name="label_11">
@@ -173,6 +173,13 @@
         </layout>
        </item>
        <item>
+        <widget class="QCheckBox" name="captureMarkerCheckBox">
+         <property name="text">
+          <string>Show marker on QGIS map</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -210,7 +217,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QgsProjectionSelectionWidget" name="zoomToProjectionSelectionWidget" native="true"/>
+        <widget class="QgsProjectionSelectionWidget" name="zoomToProjectionSelectionWidget"/>
        </item>
        <item>
         <widget class="QLabel" name="label_6">
@@ -341,6 +348,13 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
         </layout>
        </item>
        <item>
+        <widget class="QCheckBox" name="showLocationCheckBox">
+         <property name="text">
+          <string>Show marker on QGIS map</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -395,7 +409,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
            </widget>
           </item>
           <item>
-           <widget class="QgsProjectionSelectionWidget" name="multiZoomToProjectionSelectionWidget" native="true"/>
+           <widget class="QgsProjectionSelectionWidget" name="multiZoomToProjectionSelectionWidget"/>
           </item>
          </layout>
         </widget>

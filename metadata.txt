@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, and Plus Codes notation. Provides external map support, MGRS & Plus Codes conversion and point digitizing tools.
-version=3.1.15
+version=3.1.16
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -28,6 +28,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.1.16 - Added show marker setting for coordinate capture and external map
     3.1.15 - Added Google Earth to external map support.
     3.1.14 - Added field to point layer conversion.
     3.1.13 - Fix Zoom To persistent bug

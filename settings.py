@@ -24,10 +24,14 @@ class Settings():
         but does not update the widgets. The widgets are updated with showEvent.'''
         qset = QSettings()
         
+        ### CAPTURE SETTINGS ###
+        self.captureShowLocation = int(qset.value('/LatLonTools/CaptureShowClickedLocation', Qt.Unchecked))
+        
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
         self.mapProvider = int(qset.value('/LatLonTools/MapProvider', 0))
         self.mapZoom = int(qset.value('/LatLonTools/MapZoom', 13))
+        self.externalMapShowLocation = int(qset.value('/LatLonTools/ExternMapShowClickedLocation', Qt.Unchecked))
         
         ### BBOX CAPTURE SETTINGS ###
         self.bBoxCrs = int(qset.value('/LatLonTools/BBoxCrs', 0)) # Specifies WGS 84
@@ -149,6 +153,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.digitsSpinBox.setValue(8)
         self.capturePrefixLineEdit.setText('')
         self.captureSuffixLineEdit.setText('')
+        self.captureMarkerCheckBox.setCheckState(Qt.Unchecked)
         
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
@@ -160,6 +165,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.showPlacemarkCheckBox.setCheckState(Qt.Checked)
         self.mapProviderComboBox.setCurrentIndex(0)
         self.zoomSpinBox.setValue(13)
+        self.showLocationCheckBox.setCheckState(Qt.Unchecked)
         
         ### Multi-zoom Settings ###
         self.multiZoomToProjectionComboBox.setCurrentIndex(0) # WGS 84
@@ -248,6 +254,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         qset.setValue('/LatLonTools/CapturePrefix', self.capturePrefixLineEdit.text())
         qset.setValue('/LatLonTools/CaptureSuffix', self.captureSuffixLineEdit.text())
+        qset.setValue('/LatLonTools/CaptureShowClickedLocation', self.captureMarkerCheckBox.checkState())
         
         ### ZOOM TO SETTINGS ###
         qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
@@ -257,6 +264,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### EXTERNAL MAP ###
         qset.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
+        qset.setValue('/LatLonTools/ExternMapShowClickedLocation', self.showLocationCheckBox.checkState())
         qset.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
         qset.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
         
@@ -347,6 +355,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.precisionSpinBox.setValue(self.dmsPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
         self.captureSuffixLineEdit.setText(self.captureSuffix)
+        self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
         
         ### ZOOM TO SETTINGS ###
         if self.zoomToCustomCrsAuthId == 'EPSG:4326':
@@ -360,6 +369,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         
         ### EXTERNAL MAP ###
         self.showPlacemarkCheckBox.setCheckState(settings.showPlacemark)
+        self.showLocationCheckBox.setCheckState(settings.externalMapShowLocation)
         self.mapProviderComboBox.setCurrentIndex(settings.mapProvider)
         self.zoomSpinBox.setValue(settings.mapZoom)
 

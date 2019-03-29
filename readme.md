@@ -10,7 +10,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 * <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Plus Codes**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**.
   
-* <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, MapQuest, and Bing Maps are supported. Google Earth is supported if it is installed on the system. The desired map can be configured in **Settings**.
+* <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, MapQuest, and Bing Maps are supported. Google Earth is supported if it is installed on the system. The desired map can be configured in **Settings**. A temporary marker can be displayed on the map at the location clicked on. To turn this on go to **Settings**.
 
 * <img src="images/zoomicon.png" alt="Zoom-to"> ***Zoom to Latitude, Longitude*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. If the default WGS 84 (EPSG:4326 - latitude/longitude) coordinate system is specified, "Zoom to Latitude, Longitude" can interpret **decimal degrees**, **DMS**, **WKT POINT**, or **GeoJSON** coordinates. If configured in **Settings**, it can zoom to **MGRS** coordinates , **Plus Code** coordinates or coordinates formatted in the project CRS or any other projection. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
 
@@ -159,6 +159,8 @@ The order in which the coordinates are parsed in the ***Zoom to Latitude, Longit
 
 **Use Persistent Marker** - If this is checked, then when you zoom to a coordinate a persistent marker is displayed until you exit, zoom to another location, or click on the <img src="doc/cleartool.jpg" alt="Clear marker"> button.
 
+* **Show marker on QGIS map** - If checked a temporary marker will be displayed at the location click on.
+
 ### External Map Settings
 
 <div style="text-align:center"><img src="doc/settings3.jpg" alt="External Map Settings"></div>
@@ -180,6 +182,10 @@ You can ***Select an External Map Provider***. The options are:
 
 * **Show placemark** - When checked the external map shows a placemark at the location clicked on in the QGIS map. If this is not checked then the external map centers itself around clicked location, but will not display the placemark.
 * **Map Zoom Level** - This is the desired default zoom level in the external map when it is launched.
+
+Enable the following if a temporary marker is desired to be displayed at the location click on:
+
+* **Show marker on QGIS map**
 
 ### Multi-location Zoom Settings
 

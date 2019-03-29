@@ -1,8 +1,9 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject
-from qgis.gui import QgsMapToolEmitPoint
+from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
+from .settings import settings
 from .LatLon import LatLon
 from .util import *
 from . import mgrs
@@ -23,10 +24,14 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         self.latlon = LatLon()
         self.capture4326 = False
         self.canvasClicked.connect(self.clicked)
+        self.marker = None
         
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
         self.canvas.setCursor(Qt.CrossCursor)
+    
+    def deactivate(self):
+        self.removeMarker()
         
     def formatCoord(self, pt, delimiter):
         '''Format the coordinate string according to the settings from
@@ -168,6 +173,16 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     def clicked(self, pt, b):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
+        if settings.captureShowLocation:
+            if self.marker is None:
+                self.marker = QgsVertexMarker(self.canvas)
+                self.marker.setIconSize(18)
+                self.marker.setPenWidth(2)
+                self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
+            self.marker.setCenter(pt)
+        else:
+            self.removeMarker();
+        
         try:
             if self.capture4326:
                 canvasCRS = self.canvas.mapSettings().destinationCrs()
@@ -183,3 +198,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=Qgis.Info, duration=4)
         except Exception as e:
             self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=Qgis.Warning, duration=4)
+    
+    def removeMarker(self):
+        if self.marker is not None:
+            self.canvas.scene().removeItem(self.marker)
+            self.marker = None
