@@ -1,4 +1,7 @@
-import sys, math, re, string
+import sys
+import math
+import re
+import string
 from qgis.core import QgsPointXY
 
 
