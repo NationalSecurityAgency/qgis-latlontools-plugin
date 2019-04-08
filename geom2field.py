@@ -57,7 +57,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 tr('Output format'),
                 options=[tr('Coordinates in 2 fields'),
                     tr('Coordinates in 1 field'),
-                    'GeoJSON','WKT','MGRS','Plus Codes'],
+                    'GeoJSON', 'WKT', 'MGRS', 'Plus Codes'],
                 defaultValue=0,
                 optional=True)
         )
@@ -79,7 +79,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmCoordinateOrder,
                 tr('Coordinate order when using 1 field'),
-                options=[tr('Lat,Lon (Y,X) - Google map order'),tr('Lon,Lat (X,Y) order')],
+                options=[tr('Lat,Lon (Y,X) - Google map order'), tr('Lon,Lat (X,Y) order')],
                 defaultValue=0,
                 optional=True)
         )
@@ -87,7 +87,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmCoordinateDelimiter,
                 tr('Coordinate delimiter when using 1 field'),
-                options=[tr('Comma'),tr('Space'),tr('Tab'),tr('Other')],
+                options=[tr('Comma'), tr('Space'), tr('Tab'), tr('Other')],
                 defaultValue=0,
                 optional=True)
         )
@@ -102,7 +102,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmOutputCRSType,
                 tr('Output CRS of coordinates added to a field'),
-                options=[tr('WGS 84'),tr('Layer CRS'),tr('Project CRS'),tr('Custom CRS')],
+                options=[tr('WGS 84'), tr('Layer CRS'), tr('Project CRS'), tr('Custom CRS')],
                 defaultValue=0,
                 optional=True)
         )
@@ -117,7 +117,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmWgs84NumberFormat,
                 tr('Select Decimal or DMS degress for WGS 84 numbers'),
-                options=[tr('Decimal degrees'),tr('DMS'),tr('DDMMSS')],
+                options=[tr('Decimal degrees'), tr('DMS'), tr('DDMMSS')],
                 defaultValue=0,
                 optional=True)
         )
@@ -228,8 +228,8 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 if outputFormat == 0: # Two fields for coordinates
                     if outCRS == epsg4326:
                         if wgs84Format == 0: # Decimal Degrees
-                            msg = '{:.{prec}f}'.format(pt.y(),prec=decimalPrecision)
-                            msg2 = '{:.{prec}f}'.format(pt.x(),prec=decimalPrecision)
+                            msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
+                            msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
                         elif wgs84Format == 1: # DMS
                             latlon.setCoord(pt.y(), pt.x())
                             msg = latlon.convertDD2DMS(pt.y(), True, True)
@@ -239,15 +239,15 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             msg = latlon.convertDD2DMS(pt.y(), True, False)
                             msg2 = latlon.convertDD2DMS(pt.x(), False, False)
                     else:
-                        msg = '{:.{prec}f}'.format(pt.y(),prec=decimalPrecision)
-                        msg2 = '{:.{prec}f}'.format(pt.x(),prec=decimalPrecision)
+                        msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
+                        msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
                 elif outputFormat == 1: # One field for coordinate
                     if outCRS == epsg4326:
                         if wgs84Format == 0: # Decimal Degrees
                             if coordOrder == 0:
-                                msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(),delimiter,pt.x(),prec=decimalPrecision)
+                                msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
                             else:
-                                msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(),delimiter,pt.y(),prec=decimalPrecision)
+                                msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
                         elif wgs84Format == 1: # DMS
                             latlon.setCoord(pt.y(), pt.x())
                             if coordOrder == 0:
@@ -262,13 +262,13 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                                 msg = latlon.getDDMMSSLonLatOrder(delimiter)
                     else:
                         if coordOrder == 0:
-                            msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(),delimiter,pt.x(),prec=decimalPrecision)
+                            msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
                         else:
-                            msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(),delimiter,pt.y(),prec=decimalPrecision)
+                            msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
                 elif outputFormat == 2: # GeoJSON
-                    msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(pt.x(), pt.y(),prec=decimalPrecision)
+                    msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(pt.x(), pt.y(), prec=decimalPrecision)
                 elif outputFormat == 3: # WKT
-                    msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(),prec=decimalPrecision)
+                    msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(), prec=decimalPrecision)
                 elif outputFormat == 4: # MGRS
                     msg = mgrs.toMgrs(pt.y(), pt.x(), 5)
                 else: # Plus codes
