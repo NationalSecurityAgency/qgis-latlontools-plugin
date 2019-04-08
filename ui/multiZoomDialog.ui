@@ -133,7 +133,7 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Add location ('lat,lon or lat,lon,...)</string>
+       <string>Enter coordinate ('lat,lon,...)</string>
       </property>
      </widget>
     </item>

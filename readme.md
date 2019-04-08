@@ -46,7 +46,15 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     
     Right below the text input box is a status line that tells you exactly what CRS and coordinate order you are using.
     
-* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste in or type in a coordinate in the ***Add location*** box to add it to the list. By default the format of the data entered is **"latitude,longitude[,label,data1,data10]"** where the contents in the [] are optional. Optionally, the user can define the input as **"Y,X[,label,data1,...,data10]"** where **Y** and **X** are coordinates defined by the project CRS or some other CRS. See ***Settings*** to set the input coordinate CRS. This defaults to WGS 84, Latitude and Longitude.<br/><br/>When the user clicks on a location in the list, QGIS centers the map on the location and highlights it. Double clicking on a **Label** or **Data** cell allows the text to be edited. By default the **Data** fields will not be visible, but can be added from ***Settings***. More than one location can be selected by clicking on the first point and then Shift-Click to select a range or using Ctrl-Click to add additional selected items. Markers for all selected items will be displayed. The following are additional functions.
+* <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste in or type in a coordinate in the ***Enter coordinate*** box to add it to the list. By default the format of the data entered is **"latitude,longitude[,label,data1,...,data10]"** where the contents in [...] are optional. Various input formats are supported and can be configured in **Settings** by selecting the input projection and coordinate order. These include:
+    * **"latitude,longitude[,label,data1,...,data10]"**
+    * **"longitude,latitude[,label,data1,...,data10]"**
+    * **"mgrs[,label,data1,...,data10]"**
+    * **"Y,X[,label,data1,...,data10]"**
+    * **"X,Y[,label,data1,...,data10]"**
+     * **"plus codes[,label,data1,...,data10]"**
+   
+    When the user clicks on a location in the list, QGIS centers the map on the location and highlights it. Double clicking on a **Label** or **Data** cell allows the text to be edited. By default the **Data** fields will not be visible, but can be added from ***Settings***. More than one location can be selected by clicking on the first point and then Shift-Click to select a range or using Ctrl-Click to add additional selected items. Markers for all selected items will be displayed. The following are additional functions.
     * <img src="doc/open.png" alt="Open"> ***Open Location List*** reads in a set of coordinates that are comma separated with an optional label. There should only be one location per line and formatted as **"latitude,longitude,label,data1,...,data10"** or simply **"latitude,longitude"**.
     * <img src="doc/save.png" alt="Save"> ***Save Location List*** saves all of the zoom-to entries in a .csv file, formatted as **"latitude,longitude,label,data1,...,data10"**.
     * <img src="doc/delete.png" alt="Delete"> ***Delete Selected Location*** removes all selected locations. 
@@ -193,19 +201,21 @@ Enable the following if a temporary marker is desired to be displayed at the loc
 
 These are settings for the Multi-location zoom dialog box. 
 
-**CRS of 'Add location' Input Coordinates**
+**CRS/Projection of input coordinates**
 
-The user sets the CRS/projection of the coordinates entered in the ***Add location*** text box. By default this is set to WGS 84, latitude and longitude. This has no effect on the coordinates in the ***Location List*** that can be read in. The location list must always be WGS 84. The options are:
+The user sets the CRS/projection of the coordinates in the ***Enter coordinate*** text box. By default this is set to WGS 84, latitude and longitude. This has no effect on the coordinates in the ***Location List*** that can be read in. The location list must always be WGS 84. The options are:
 
 * **WGS 84 (Latitude &amp; Longitude)**
+* **MGRS**
 * **Project CRS**
 * **Custom CRS**
+* **Plus Codes**
 
 When **Custom CRS** is selected, the user is allowed to select a custom CRS projection.
 
-**Coordinate Order of 'Add location' Input Coordinates**
+**Coordinate Order of input coordinates**
 
-The user sets the order of coordinates entered in the ***Add location*** text box. The order is either latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps.
+The user sets the order of coordinates in the ***Enter coordinate*** text box. The order is either latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. This is not applicable when MGRS or Plus Codes coordinates are being used.
 
 **Create Vector Layer Style**
 

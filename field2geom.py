@@ -18,7 +18,7 @@ from . import mgrs
 from .LatLon import LatLon
 from .util import epsg4326
 from . import olc
-import traceback
+#import traceback
 
 def tr(string):
     return QCoreApplication.translate('Processing', string)
@@ -158,8 +158,8 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                 f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
                 sink.addFeature(f)
             except:
-                s = traceback.format_exc()
-                feedback.pushInfo(s)
+                '''s = traceback.format_exc()
+                feedback.pushInfo(s)'''
                 failed += 1
 
             

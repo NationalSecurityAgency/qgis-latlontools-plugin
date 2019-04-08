@@ -383,7 +383,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
           </sizepolicy>
          </property>
          <property name="title">
-          <string>CRS of 'Add location' Input Coordinates</string>
+          <string>CRS/Projection of input coordinates</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -417,7 +417,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Coordinate Order of 'Add location' Input Coordinates</string>
+          <string>Coordinate order of input coordinates (Excluding MGRS and Plus Codes)</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
@@ -479,7 +479,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
        <item>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
-          <string>Data Field Settings</string>
+          <string>Data field settings</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">

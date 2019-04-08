@@ -11,6 +11,8 @@ from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
 from qgis.gui import QgsVertexMarker
 from .LatLon import LatLon
 from .util import *
+from . import mgrs
+from . import olc
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
@@ -75,14 +77,18 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     def initLabel(self):
         if self.settings.multiZoomToProjIsWgs84():
             if self.settings.multiCoordOrder == self.settings.OrderYX:
-                self.label.setText("Add location ('lat,lon or lat,lon,...)")
+                self.label.setText("Enter coordinate ('lat,lon,...)")
             else:
-                self.label.setText("Add location ('lon,lat or lon,lat,...)")
+                self.label.setText("Enter coordinate ('lon,lat,...)")
+        elif self.settings.multiZoomToProjIsMGRS():
+            self.label.setText("Enter coordinate ('mgrs,...)")
+        elif self.settings.multiZoomToProjIsPlusCodes():
+            self.label.setText("Enter coordinate ('Plus code,...)")
         else:
             if self.settings.multiCoordOrder == self.settings.OrderYX:
-                self.label.setText("Add location ({} Y,X or Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
+                self.label.setText("Enter coordinate ({} Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
             else:
-                self.label.setText("Add location ({} X,Y or X,Y,...)".format(self.settings.multiZoomToCRS().authid()))
+                self.label.setText("Enter coordinate ({} X,Y,...)".format(self.settings.multiZoomToCRS().authid()))
             
     def settingsChanged(self):
         self.initLabel()
@@ -284,7 +290,22 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         data = []
         numFields = len(parts)
         try:
-            if numFields == 1:
+            if self.settings.multiZoomToProjIsMGRS():
+                '''Check to see if we have an MGRS coordinate for entry'''
+                lat, lon = mgrs.toWgs(parts[0])
+                if numFields >= 2:
+                    label = parts[1]
+                if numFields >= 3:
+                    data = parts[2:]
+            if self.settings.multiZoomToProjIsPlusCodes():
+                coord = olc.decode(parts[0])
+                lat = coord.latitudeCenter 
+                lon = coord.longitudeCenter
+                if numFields >= 2:
+                    label = parts[1]
+                if numFields >= 3:
+                    data = parts[2:]
+            elif numFields == 1:
                 '''Perhaps the user forgot to add the comma separator. Check to see
                    if there are two coordinates anyway.'''
                    

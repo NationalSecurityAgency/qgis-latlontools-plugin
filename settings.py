@@ -100,7 +100,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.mapProviderComboBox.addItems(mapProviders.mapProviderNames())
         
         ### MULTI-ZOOM ###
-        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS','Custom CRS'])
+        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS','Custom CRS','Plus Codes'])
         self.multiZoomToProjectionComboBox.activated.connect(self.setEnabled)
         self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
@@ -319,8 +319,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and (zoomToProjection != self.ProjectionTypePlusCodes))
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
 
+        # MULTI Zoom
         zoomToProjection = int(self.multiZoomToProjectionComboBox.currentIndex())
-        self.multiZoomToProjectionSelectionWidget.setEnabled(zoomToProjection == 2)
+        self.multiZoomToProjectionSelectionWidget.setEnabled(zoomToProjection == 3)
         
     def showTab(self, tab):
         self.tabWidget.setCurrentIndex(tab)
@@ -457,14 +458,24 @@ class SettingsWidget(QDialog, FORM_CLASS):
         if self.zoomToProjection == self.ProjectionTypePlusCodes:
             return True
         return False
+    
+    def multiZoomToProjIsMGRS(self):
+        if self.multiZoomToProjection == 1: # MGRS
+            return True
+        return False
+    
+    def multiZoomToProjIsPlusCodes(self):
+        if self.multiZoomToProjection == 4: # Plus Codes
+            return True
+        return False
 
     def multiZoomToProjIsWgs84(self):
         if self.multiZoomToProjection == 0: # Wgs84
             return True
-        if self.multiZoomToProjection == 1: # Project CRS
+        if self.multiZoomToProjection == 2: # Project CRS
             if self.canvas.mapSettings().destinationCrs() == epsg4326:
                 return True
-        if self.multiZoomToProjection == 2: # Custom CRS
+        if self.multiZoomToProjection == 3: # Custom CRS
             if self.multiZoomToCustomCRS() == epsg4326:
                 return True
         return False
@@ -472,7 +483,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     def multiZoomToCRS(self):
         if self.multiZoomToProjection == 0: # Wgs84
             return self.epse4326
-        if self.multiZoomToProjection == 1: # Project CRS
+        if self.multiZoomToProjection == 2: # Project CRS
             return self.canvas.mapSettings().destinationCrs()
-        if self.multiZoomToProjection == 2: # Custom CRS
+        if self.multiZoomToProjection == 3: # Custom CRS
             return self.multiZoomToCustomCRS()
