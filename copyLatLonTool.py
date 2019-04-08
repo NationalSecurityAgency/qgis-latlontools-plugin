@@ -63,20 +63,20 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                     msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(self.latlon.lon, self.latlon.lat, prec=self.settings.decimalDigits)
                 else: # decimal degrees
                     if self.settings.coordOrder == self.settings.OrderYX:
-                        msg = '{:.{prec}f}{}{:.{prec}f}'.format(self.latlon.lat,delimiter,self.latlon.lon,prec=self.settings.decimalDigits)
+                        msg = '{:.{prec}f}{}{:.{prec}f}'.format(self.latlon.lat, delimiter, self.latlon.lon, prec=self.settings.decimalDigits)
                     else:
-                        msg = '{:.{prec}f}{}{:.{prec}f}'.format(self.latlon.lon,delimiter,self.latlon.lat,prec=self.settings.decimalDigits)
+                        msg = '{:.{prec}f}{}{:.{prec}f}'.format(self.latlon.lon, delimiter, self.latlon.lat, prec=self.settings.decimalDigits)
             else:
                 msg = None
         elif self.settings.captureProjIsProjectCRS():
             # Projection in the project CRS
             if self.settings.otherNumberFormat == 0: # Numerical
                 if self.settings.coordOrder == self.settings.OrderYX:
-                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(),delimiter,pt.x(),prec=self.settings.decimalDigits)
+                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=self.settings.decimalDigits)
                 else:
-                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(),delimiter,pt.y(),prec=self.settings.decimalDigits)
+                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=self.settings.decimalDigits)
             else:
-                msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(),prec=self.settings.decimalDigits)
+                msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(), prec=self.settings.decimalDigits)
         elif self.settings.captureProjIsCustomCRS():
             # Projection is a custom CRS
             canvasCRS = self.canvas.mapSettings().destinationCrs()
@@ -85,11 +85,11 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             pt = transform.transform(pt.x(), pt.y())
             if self.settings.otherNumberFormat == 0: # Numerical
                 if self.settings.coordOrder == self.settings.OrderYX:
-                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(),delimiter,pt.x(),prec=self.settings.decimalDigits)
+                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=self.settings.decimalDigits)
                 else:
-                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(),delimiter,pt.y(),prec=self.settings.decimalDigits)
+                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=self.settings.decimalDigits)
             else:
-                msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(),prec=self.settings.decimalDigits)
+                msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(), prec=self.settings.decimalDigits)
         elif self.settings.captureProjIsMGRS():
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapSettings().destinationCrs()
@@ -128,7 +128,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             if msg == None:
                 self.iface.statusBarIface().showMessage("")
             else:
-                self.iface.statusBarIface().showMessage("{} - {}".format(msg,formatString),4000)
+                self.iface.statusBarIface().showMessage("{} - {}".format(msg, formatString), 4000)
         except:
             self.iface.statusBarIface().showMessage("")
 
