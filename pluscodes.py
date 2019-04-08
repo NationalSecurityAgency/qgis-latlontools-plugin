@@ -3,7 +3,7 @@ import os
 from qgis.PyQt.QtCore import QVariant, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import (QgsFields, QgsField,
-    QgsFeature, QgsGeometry, QgsPointXY, 
+    QgsFeature, QgsGeometry, QgsPointXY,
     QgsCoordinateReferenceSystem, QgsCoordinateTransform,
     QgsProject, QgsWkbTypes)
 
