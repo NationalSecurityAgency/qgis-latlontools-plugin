@@ -22,6 +22,7 @@ LABELS = ['Latitude', 'Longitude', 'Label', 'Data1', 'Data2', 'Data3',
 
 MAXDATA = 10
 
+
 class MultiZoomWidget(QDockWidget, FORM_CLASS):
     '''Multizoom Dialog box.'''
     def __init__(self, lltools, settings, parent):
@@ -445,6 +446,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             
         QgsProject.instance().addMapLayer(ptLayer)
         
+
 class LatLonItem():
     def __init__(self, lat, lon, label='', data=[]):
         self.lat = lat
