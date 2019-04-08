@@ -239,7 +239,7 @@ def decode(code):
     # Strip out separator character (we've already established the code is
     # valid so the maximum is one), padding characters and convert to upper
     # case.
-    code = re.sub(r'[+0]','',code)
+    code = re.sub(r'[+0]', '', code)
     code = code.upper()
     # Decode the lat/lng pair component.
     codeArea = decodePairs(code[0:PAIR_CODE_LENGTH_])
@@ -342,7 +342,7 @@ def recoverNearest(code, referenceLatitude, referenceLongitude):
    Either the original code, if the reference location was not close enough,
    or the .
 """
-def shorten(code,latitude,longitude):
+def shorten(code, latitude, longitude):
     if not isFull(code):
         raise ValueError('Passed code is not valid and full: ' + str(code))
     if code.find(PADDING_CHARACTER_) != -1:
@@ -556,7 +556,7 @@ def decodeGrid(code):
        This excludes the separator.
 """
 class CodeArea(object):
-    def __init__(self,latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength):
+    def __init__(self, latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength):
         self.latitudeLo = latitudeLo
         self.longitudeLo = longitudeLo
         self.latitudeHi = latitudeHi
