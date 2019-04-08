@@ -222,7 +222,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 for line in f:
                     try:
                         parts = [x.strip() for x in line.split(',')]
-                        if len(parts) >=2:
+                        if len(parts) >= 2:
                             lat = LatLon.parseDMSStringSingle(parts[0])
                             lon = LatLon.parseDMSStringSingle(parts[1])
                             label = ''
@@ -436,7 +436,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         if self.settings.multiZoomStyleID == 1:
             settings = QgsPalLayerSettings()
             settings.fieldName = 'label'
-            settings.placement= QgsPalLayerSettings.AroundPoint
+            settings.placement = QgsPalLayerSettings.AroundPoint
             labeling = QgsVectorLayerSimpleLabeling(settings)
             ptLayer.setLabeling(labeling)
             ptLayer.setLabelsEnabled(True)
