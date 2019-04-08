@@ -18,6 +18,7 @@ from qgis.core import (QgsProcessing,
 
 from . import olc
 
+
 class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
     """
     Algorithm to convert a point layer to a Plus codes field.
@@ -136,6 +137,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         
     def createInstance(self):
         return ToPlusCodesAlgorithm()
+
 
 class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
     """
