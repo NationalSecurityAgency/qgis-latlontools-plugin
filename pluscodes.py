@@ -198,7 +198,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
                 badFeatures += 1
                 continue
             f = QgsFeature()
-            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
+            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
             f.setAttributes(feature.attributes())
             sink.addFeature(f)
             
