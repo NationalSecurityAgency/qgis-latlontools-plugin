@@ -24,7 +24,7 @@ class LatLonTools:
         self.canvas = iface.mapCanvas()
         self.crossRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
         self.crossRb.setColor(Qt.red)
-        self.provider = LatLonToolsProvider()        
+        self.provider = LatLonToolsProvider()
         self.toolbar = self.iface.addToolBar('Lat Lon Tools Toolbar')
         self.toolbar.setObjectName('LatLonToolsToolbar')
 
