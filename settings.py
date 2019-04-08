@@ -58,6 +58,7 @@ class Settings():
 
 settings = Settings()
 
+
 class SettingsWidget(QDialog, FORM_CLASS):
     '''Settings Dialog box.'''
     Wgs84TypeDecimal = 0
