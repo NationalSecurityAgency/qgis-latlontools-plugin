@@ -209,25 +209,25 @@ class LatLonTools:
         maxY = extent.yMaximum()
         if settings.bBoxFormat == 0: # minX,minY,maxX,maxY - using the delimiter
             outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
-                minX,delim,minY,delim,maxX,delim,maxY,prec=precision)
+                minX, delim, minY, delim, maxX, delim, maxY, prec=precision)
         elif settings.bBoxFormat == 1: # minX,maxX,minY,maxY - Using the selected delimiter'
             outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
-                minX,delim,maxX,delim,minY,delim,maxY,prec=precision)
+                minX, delim, maxX, delim, minY, delim, maxY, prec=precision)
         elif settings.bBoxFormat == 2: # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
             outStr = '{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f}'.format(
-                minX,minY,minX,maxY,maxX,maxY,maxX,minY,minX,minY,prec=precision)
+                minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
         elif settings.bBoxFormat == 3: # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
             outStr = '{:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f}'.format(
-                minX,minY,minX,maxY,maxX,maxY,maxX,minY,minX,minY,prec=precision)
+                minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
         elif settings.bBoxFormat == 4: # WKT Polygon
             outStr = extent.asWktPolygon()
         elif settings.bBoxFormat == 5: # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox: [{}, {}, {}, {}]'.format(
-                minX,minY,maxX,maxY)
+                minX, minY, maxX, maxY)
         elif settings.bBoxFormat == 6: # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox={},{},{},{}'.format(
-                minX,minY,maxX,maxY)
-        outStr = '{}{}{}'.format(prefix,outStr,suffix)
+                minX, minY, maxX, maxY)
+        outStr = '{}{}{}'.format(prefix, outStr, suffix)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
         self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
@@ -287,10 +287,10 @@ class LatLonTools:
         transform = QgsCoordinateTransform(srcCrs, canvasCrs, QgsProject.instance())
         x, y = transform.transform(float(lon), float(lat))
             
-        rect = QgsRectangle(x,y,x,y)
+        rect = QgsRectangle(x, y, x, y)
         self.canvas.setExtent(rect)
 
-        pt = QgsPointXY(x,y)
+        pt = QgsPointXY(x, y)
         self.highlight(pt)
         self.canvas.refresh()
         return pt
@@ -298,11 +298,11 @@ class LatLonTools:
     def highlight(self, point):
         currExt = self.canvas.extent()
         
-        leftPt = QgsPoint(currExt.xMinimum(),point.y())
-        rightPt = QgsPoint(currExt.xMaximum(),point.y())
+        leftPt = QgsPoint(currExt.xMinimum(), point.y())
+        rightPt = QgsPoint(currExt.xMaximum(), point.y())
         
-        topPt = QgsPoint(point.x(),currExt.yMaximum())
-        bottomPt = QgsPoint(point.x(),currExt.yMinimum())
+        topPt = QgsPoint(point.x(), currExt.yMaximum())
+        bottomPt = QgsPoint(point.x(), currExt.yMinimum())
         
         horizLine = QgsGeometry.fromPolyline( [ leftPt , rightPt ] )
         vertLine = QgsGeometry.fromPolyline( [ topPt , bottomPt ] )
