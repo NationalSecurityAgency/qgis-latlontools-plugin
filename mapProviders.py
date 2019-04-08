@@ -11,6 +11,7 @@ MAP_PROVIDERS = [
 ['Mapillary Aerial', 'https://www.mapillary.com/app/?lat=@LAT@&lng=@LON@&z=@Z@&mapStyle=mapbox_satellite', 'https://www.mapillary.com/app/?lat=@LAT@&lng=@LON@&z=@Z@&mapStyle=mapbox_satellite']
 ]
 
+
 def mapProviderNames():
     plist = []
     for x in MAP_PROVIDERS:
