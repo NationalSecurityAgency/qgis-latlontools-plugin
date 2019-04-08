@@ -185,8 +185,8 @@ class LatLon():
         degree notation. If order is 0 then then decimal coordinates are assumed to
         be in Lat Lon order otherwise they are in Lon Lat order. For DMS coordinates
         it does not matter the order.'''
-        str = str.strip().upper() # Make it all upper case 
-        try: 
+        str = str.strip().upper() # Make it all upper case
+        try:
             if re.search(r"[NSEW]", str) == None:
                 # There were no annotated dms coordinates so assume decimal degrees
                 # Remove any characters that are not digits and decimal
