@@ -203,14 +203,14 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 item.marker = None
         
     def openDialog(self):
-        filename = QFileDialog.getOpenFileName(None, "Input File", 
+        filename = QFileDialog.getOpenFileName(None, "Input File",
                 self.dirname, "Text, CSV (*.txt *.csv);;All files (*.*)")[0]
         if filename:
             self.dirname = os.path.dirname(filename)
             self.readFile(filename)
         
     def saveDialog(self):
-        filename = QFileDialog.getSaveFileName(None, "Save File", 
+        filename = QFileDialog.getSaveFileName(None, "Save File",
                 self.dirname, "Text CSV (*.csv)")[0]
         if filename:
             self.dirname = os.path.dirname(filename)
@@ -300,7 +300,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     data = parts[2:]
             if self.settings.multiZoomToProjIsPlusCodes():
                 coord = olc.decode(parts[0])
-                lat = coord.latitudeCenter 
+                lat = coord.latitudeCenter
                 lon = coord.longitudeCenter
                 if numFields >= 2:
                     label = parts[1]
