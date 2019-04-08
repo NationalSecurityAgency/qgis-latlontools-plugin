@@ -17,8 +17,8 @@ from . import olc
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/multiZoomDialog.ui'))
 
-LABELS = ['Latitude','Longitude','Label','Data1','Data2','Data3',
-    'Data4','Data5','Data6','Data7','Data8','Data9','Data10']
+LABELS = ['Latitude', 'Longitude', 'Label', 'Data1', 'Data2', 'Data3',
+    'Data4', 'Data5', 'Data6', 'Data7', 'Data8', 'Data9', 'Data10']
 
 MAXDATA = 10
 
@@ -102,7 +102,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             for i in range(rowcnt):
                 item = self.resultsTable.item(i, 0).data(Qt.UserRole)
                 if self.numCol > 3:
-                    for j in range(3,self.numCol):
+                    for j in range(3, self.numCol):
                         self.resultsTable.setItem(i, j, QTableWidgetItem(item.data[j-3]))
                 
             self.resultsTable.clearSelection()
@@ -243,7 +243,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         rowcnt = self.resultsTable.rowCount()
         if rowcnt == 0:
             return
-        with open(fname,'w') as f:
+        with open(fname, 'w') as f:
             for id in range(rowcnt):
                 item = self.resultsTable.item(id, 0).data(Qt.UserRole)
                 s = "{},{},{}".format(item.lat, item.lon, item.label)
@@ -385,13 +385,13 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         selectedRow = self.resultsTable.currentRow()
         item = self.resultsTable.item(selectedRow, 0).data(Qt.UserRole)
         # Call the the parent's zoom to function
-        pt = self.lltools.zoomTo(epsg4326, item.lat,item.lon)
+        pt = self.lltools.zoomTo(epsg4326, item.lat, item.lon)
         
     def canvasPointXY(self, lat, lon):
         canvasCrs = self.canvas.mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(epsg4326, canvasCrs, QgsProject.instance())
         x, y = transform.transform(float(lon), float(lat))
-        pt = QgsPointXY(x,y)
+        pt = QgsPointXY(x, y)
         return pt
 
         
@@ -425,9 +425,9 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         for id in range(rowcnt):
             item = self.resultsTable.item(id, 0).data(Qt.UserRole)
             feature = QgsFeature()
-            feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(item.lon,item.lat)))
+            feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(item.lon, item.lat)))
             attr = [item.lat, item.lon, item.label]
-            for i in range(3,self.numCol):
+            for i in range(3, self.numCol):
                 attr.append(item.data[i-3])
             feature.setAttributes(attr)
             provider.addFeatures([feature])
