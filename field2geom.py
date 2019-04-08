@@ -51,7 +51,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                 options=[tr('Latitude (Y)'),
                     tr('Latitude (Y), Longitude (X)'),
                     tr('Longitude (X), Latitude (Y)'),
-                    tr('MGRS'),tr('Plus Codes')],
+                    tr('MGRS'), tr('Plus Codes')],
                 defaultValue=0,
                 optional=False)
         )
@@ -155,7 +155,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
 
                 f = QgsFeature()
                 f.setAttributes(feature.attributes())
-                f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
+                f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
                 sink.addFeature(f)
             except:
                 '''s = traceback.format_exc()
