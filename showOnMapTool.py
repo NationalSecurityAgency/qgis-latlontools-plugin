@@ -47,7 +47,7 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         lat = pt4326.y()
         lon = pt4326.x()
         if settings.googleEarthMapProvider():
-            f = tempfile.NamedTemporaryFile(mode='w', suffix = ".kml", delete=False)
+            f = tempfile.NamedTemporaryFile(mode='w', suffix=".kml", delete=False)
             f.write('<?xml version="1.0" encoding="UTF-8"?>')
             f.write('<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">')
             f.write('<Document>')
