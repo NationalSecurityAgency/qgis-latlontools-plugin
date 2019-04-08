@@ -35,7 +35,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         icon = QIcon(os.path.dirname(__file__) + '/images/xy.png')
         a = self.xymenu.addAction(icon, "X, Y (Lon, Lat) Order")
         a.setData(1)
-        self.xyButton.setIconSize(QSize(24,24))
+        self.xyButton.setIconSize(QSize(24, 24))
         self.xyButton.setIcon(icon)
         self.xyButton.setMenu(self.xymenu)
         self.xyButton.triggered.connect(self.xyTriggered)
@@ -56,7 +56,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
         a = self.crsmenu.addAction(icon, "Plus Codes")
         a.setData(4)
-        self.crsButton.setIconSize(QSize(24,24))
+        self.crsButton.setIconSize(QSize(24, 24))
         self.crsButton.setIcon(icon)
         self.crsButton.setMenu(self.crsmenu)
         self.crsButton.triggered.connect(self.crsTriggered)
@@ -153,7 +153,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
             # Transform the input coordinate projection to the layer CRS
             x, y = transform.transform(float(lon), float(lat))
             feat = QgsFeature(layer.fields())
-            feat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(x,y)))
+            feat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(x, y)))
             if layer.fields().count() == 0:
                 layer.addFeature(feat)
                 self.lltools.zoomTo(srcCrs, lat, lon)
