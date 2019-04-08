@@ -301,7 +301,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.close()
         
     def qmlOpenDialog(self):
-        filename = QFileDialog.getOpenFileName(None, "Input QML Style File", 
+        filename = QFileDialog.getOpenFileName(None, "Input QML Style File",
                 self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")[0]
         if filename:
             self.qmlStyle = filename
