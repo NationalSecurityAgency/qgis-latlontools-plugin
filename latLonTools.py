@@ -193,7 +193,7 @@ class LatLonTools:
     def copyCanvas(self):
         extent = self.iface.mapCanvas().extent()
         canvasCrs = self.canvas.mapSettings().destinationCrs()
-        if settings.bBoxCrs ==0 and canvasCrs != epsg4326:
+        if settings.bBoxCrs == 0 and canvasCrs != epsg4326:
             transform = QgsCoordinateTransform(canvasCrs, epsg4326, QgsProject.instance())
             p1x, p1y = transform.transform(float(extent.xMinimum()), float(extent.yMinimum()))
             p2x, p2y = transform.transform(float(extent.xMaximum()), float(extent.yMaximum()))
