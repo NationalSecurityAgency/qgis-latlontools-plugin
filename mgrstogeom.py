@@ -3,7 +3,7 @@ import re
 
 from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsCoordinateReferenceSystem, QgsWkbTypes 
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsCoordinateReferenceSystem, QgsWkbTypes
 #import traceback
 
 from qgis.core import (QgsProcessing,
