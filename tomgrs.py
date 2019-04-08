@@ -132,4 +132,3 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         
     def createInstance(self):
         return ToMGRSAlgorithm()
-        
