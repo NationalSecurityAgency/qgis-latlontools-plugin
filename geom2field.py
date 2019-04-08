@@ -315,7 +315,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):
