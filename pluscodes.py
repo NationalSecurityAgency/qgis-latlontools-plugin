@@ -131,7 +131,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):
@@ -237,7 +237,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):
