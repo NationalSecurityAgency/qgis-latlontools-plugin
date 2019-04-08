@@ -111,7 +111,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 # This looks like a Plus Codes coordinate
                 coord = olc.decode(text)
                 srcCrs = epsg4326
-                lat = coord.latitudeCenter 
+                lat = coord.latitudeCenter
                 lon = coord.longitudeCenter
             elif self.settings.zoomToProjIsMGRS():
                 # This is an MGRS coordinate
