@@ -19,9 +19,11 @@ from .LatLon import LatLon
 from .util import epsg4326
 from . import olc
 
+
 def tr(string):
     return QCoreApplication.translate('Processing', string)
         
+
 class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     """
     Algorithm to convert a point layer to a Plus codes field.
