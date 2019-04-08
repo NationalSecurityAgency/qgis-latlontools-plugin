@@ -14,6 +14,7 @@ from qgis.core import (QgsProcessing,
 
 from . import mgrs
 
+
 class ToMGRSAlgorithm(QgsProcessingAlgorithm):
     """
     Algorithm to convert a point layer to a MGRS field.
