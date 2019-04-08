@@ -3,7 +3,7 @@ import os
 from qgis.PyQt.QtCore import QVariant, QUrl
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import (QgsFields, QgsField,
-    QgsFeature, QgsGeometry, QgsPointXY, 
+    QgsFeature, QgsGeometry, QgsPointXY,
     QgsCoordinateReferenceSystem, QgsCoordinateTransform,
     QgsProject, QgsWkbTypes)
 
@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
     QgsProcessingParameterFeatureSink)
 
 from . import olc
+
 
 class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
     """
@@ -131,11 +132,12 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):
         return ToPlusCodesAlgorithm()
+
 
 class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
     """
@@ -198,7 +200,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
                 badFeatures += 1
                 continue
             f = QgsFeature()
-            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
+            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
             f.setAttributes(feature.attributes())
             sink.addFeature(f)
             
@@ -237,7 +239,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):

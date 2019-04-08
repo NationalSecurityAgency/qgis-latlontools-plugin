@@ -20,9 +20,11 @@ from .util import epsg4326
 from . import olc
 #import traceback
 
+
 def tr(string):
     return QCoreApplication.translate('Processing', string)
         
+
 class Field2GeomAlgorithm(QgsProcessingAlgorithm):
     """
     Algorithm to convert a point layer to a Plus codes field.
@@ -51,7 +53,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                 options=[tr('Latitude (Y)'),
                     tr('Latitude (Y), Longitude (X)'),
                     tr('Longitude (X), Latitude (Y)'),
-                    tr('MGRS'),tr('Plus Codes')],
+                    tr('MGRS'), tr('Plus Codes')],
                 defaultValue=0,
                 optional=False)
         )
@@ -155,7 +157,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
 
                 f = QgsFeature()
                 f.setAttributes(feature.attributes())
-                f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
+                f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
                 sink.addFeature(f)
             except:
                 '''s = traceback.format_exc()
@@ -198,7 +200,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):

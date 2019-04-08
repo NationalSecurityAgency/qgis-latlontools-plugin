@@ -58,6 +58,7 @@ class Settings():
 
 settings = Settings()
 
+
 class SettingsWidget(QDialog, FORM_CLASS):
     '''Settings Dialog box.'''
     Wgs84TypeDecimal = 0
@@ -82,30 +83,30 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
         
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)','MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
-        self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS','WKT POINT','GeoJSON'])
-        self.otherNumberFormatComboBox.addItems(['Normal Coordinate','WKT POINT'])
-        self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
+        self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'WKT POINT', 'GeoJSON'])
+        self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
+        self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.delimComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
         
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS','Custom CRS','Plus Codes'])
+        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
-        self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
+        self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
         
         ### EXTERNAL MAP ###
         self.mapProviderComboBox.addItems(mapProviders.mapProviderNames())
         
         ### MULTI-ZOOM ###
-        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS','Custom CRS','Plus Codes'])
+        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
         self.multiZoomToProjectionComboBox.activated.connect(self.setEnabled)
         self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
-        self.markerStyleComboBox.addItems(['Default','Labeled','Custom'])
-        self.multiCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order','Lon, Lat (X,Y) Order'])
+        self.markerStyleComboBox.addItems(['Default', 'Labeled', 'Custom'])
+        self.multiCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.qmlStyle = ''
         
         ### BBOX CAPTURE SETTINGS ###
@@ -119,7 +120,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             '"bbox: [xmin, ymin, xmax, ymax]" - MapProxy',
             '"bbox=xmin,ymin,xmax,ymax" - GeoServer WFS, WMS'
             ])
-        self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma Space','Space','Tab','Other'])
+        self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
         
         self.readSettings()
     
@@ -265,8 +266,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### EXTERNAL MAP ###
         qset.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
         qset.setValue('/LatLonTools/ExternMapShowClickedLocation', self.showLocationCheckBox.checkState())
-        qset.setValue('/LatLonTools/MapProvider',int(self.mapProviderComboBox.currentIndex()))
-        qset.setValue('/LatLonTools/MapZoom',int(self.zoomSpinBox.value()))
+        qset.setValue('/LatLonTools/MapProvider', int(self.mapProviderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/MapZoom', int(self.zoomSpinBox.value()))
         
         ### MULTI-ZOOM TO SETTINGS ###
         qset.setValue('/LatLonTools/MultiZoomToProjection', int(self.multiZoomToProjectionComboBox.currentIndex()))
@@ -300,7 +301,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.close()
         
     def qmlOpenDialog(self):
-        filename = QFileDialog.getOpenFileName(None, "Input QML Style File", 
+        filename = QFileDialog.getOpenFileName(None, "Input QML Style File",
                 self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")[0]
         if filename:
             self.qmlStyle = filename

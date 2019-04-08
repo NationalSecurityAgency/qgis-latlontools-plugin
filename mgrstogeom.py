@@ -3,7 +3,7 @@ import re
 
 from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsCoordinateReferenceSystem, QgsWkbTypes 
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsCoordinateReferenceSystem, QgsWkbTypes
 #import traceback
 
 from qgis.core import (QgsProcessing,
@@ -14,6 +14,7 @@ from qgis.core import (QgsProcessing,
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
+
 
 class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
     """
@@ -75,7 +76,7 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
                 badFeatures += 1
                 continue
             f = QgsFeature()
-            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon,lat)))
+            f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
             f.setAttributes(feature.attributes())
             sink.addFeature(f)
             if cnt % 100 == 0:
@@ -113,7 +114,7 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
-            help=helpf.read()
+            help = helpf.read()
         return help
         
     def createInstance(self):

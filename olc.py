@@ -112,6 +112,8 @@ To be valid, all characters must be from the Open Location Code character
 set with at most one separator. The separator can be in any even-numbered
 position up to the eighth digit.
 """
+
+
 def isValid(code):
     # The separator is required.
     sep = code.find(SEPARATOR_)
@@ -155,6 +157,8 @@ A short Open Location Code is a sequence created by removing four or more
 digits from an Open Location Code. It must include a separator
 character.
 """
+
+
 def isShort(code):
     # Check it's valid.
     if not isValid(code):
@@ -173,6 +177,8 @@ def isShort(code):
  character is present, it must be the first character. If the separator
  character is present, it must be after four characters.
 """
+
+
 def isFull(code):
     if not isValid(code):
         return False
@@ -207,6 +213,8 @@ def isFull(code):
    codeLength: The number of significant digits in the output code, not
        including any separator characters.
 """
+
+
 def encode(latitude, longitude, codeLength=PAIR_CODE_LENGTH_):
     if codeLength < 2 or (codeLength < PAIR_CODE_LENGTH_ and codeLength % 2 == 1):
         raise ValueError('Invalid Open Location Code length - ' + str(codeLength))
@@ -233,13 +241,15 @@ def encode(latitude, longitude, codeLength=PAIR_CODE_LENGTH_):
    A CodeArea object that provides the latitude and longitude of two of the
    corners of the area, the center, and the length of the original code.
 """
+
+
 def decode(code):
     if not isFull(code):
         raise ValueError('Passed Open Location Code is not a valid full code - ' + str(code))
     # Strip out separator character (we've already established the code is
     # valid so the maximum is one), padding characters and convert to upper
     # case.
-    code = re.sub(r'[+0]','',code)
+    code = re.sub(r'[+0]', '', code)
     code = code.upper()
     # Decode the lat/lng pair component.
     codeArea = decodePairs(code[0:PAIR_CODE_LENGTH_])
@@ -281,6 +291,8 @@ def decode(code):
    valid full code, it is returned with proper capitalization but otherwise
    unchanged.
 """
+
+
 def recoverNearest(code, referenceLatitude, referenceLongitude):
     # if code is a valid full code, return it properly capitalized
     if isFull(code):
@@ -342,7 +354,9 @@ def recoverNearest(code, referenceLatitude, referenceLongitude):
    Either the original code, if the reference location was not close enough,
    or the .
 """
-def shorten(code,latitude,longitude):
+
+
+def shorten(code, latitude, longitude):
     if not isFull(code):
         raise ValueError('Passed code is not valid and full: ' + str(code))
     if code.find(PADDING_CHARACTER_) != -1:
@@ -370,6 +384,8 @@ def shorten(code,latitude,longitude):
  Args:
    latitude: A latitude in signed decimal degrees.
 """
+
+
 def clipLatitude(latitude):
     return min(90, max(-90, latitude))
 
@@ -379,6 +395,8 @@ def clipLatitude(latitude):
  have different precisions due to the grid method having fewer columns than
  rows.
 """
+
+
 def computeLatitudePrecision(codeLength):
     if codeLength <= 10:
         return pow(20, math.floor((codeLength / -2) + 2))
@@ -389,6 +407,8 @@ def computeLatitudePrecision(codeLength):
  Args:
    longitude: A longitude in signed decimal degrees.
 """
+
+
 def normalizeLongitude(longitude):
     while longitude < -180:
         longitude = longitude + 360;
@@ -407,6 +427,8 @@ def normalizeLongitude(longitude):
    codeLength: The number of significant digits in the output code, not
        including any separator characters.
 """
+
+
 def encodePairs(latitude, longitude, codeLength):
     code = ''
     # Adjust latitude and longitude so they fall into positive ranges.
@@ -449,6 +471,8 @@ def encodePairs(latitude, longitude, codeLength):
    longitude: A longitude in signed decimal degrees.
    codeLength: The number of characters required.
 """
+
+
 def encodeGrid(latitude, longitude, codeLength):
     code = ''
     latPlaceValue = GRID_SIZE_DEGREES_
@@ -481,6 +505,8 @@ def encodeGrid(latitude, longitude, codeLength):
    code: A valid OLC code, presumed to be full, but with the separator
    removed.
 """
+
+
 def decodePairs(code):
     # Get the latitude and longitude values. These will need correcting from
     # positive ranges.
@@ -507,6 +533,8 @@ def decodePairs(code):
    last position. Both values are offset into positive ranges and will need
    to be corrected before use.
 """
+
+
 def decodePairsSequence(code, offset):
     i = 0
     value = 0
@@ -522,6 +550,8 @@ def decodePairsSequence(code, offset):
    code: A valid OLC code sequence that is only the grid refinement
        portion. This is the portion of a code starting at position 11.
 """
+
+
 def decodeGrid(code):
     latitudeLo = 0.0
     longitudeLo = 0.0
@@ -555,8 +585,10 @@ def decodeGrid(code):
    code_length: The number of significant characters that were in the code.
        This excludes the separator.
 """
+
+
 class CodeArea(object):
-    def __init__(self,latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength):
+    def __init__(self, latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength):
         self.latitudeLo = latitudeLo
         self.longitudeLo = longitudeLo
         self.latitudeHi = latitudeHi
