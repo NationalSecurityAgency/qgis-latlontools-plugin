@@ -78,4 +78,3 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
-       
