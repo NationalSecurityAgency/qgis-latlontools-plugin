@@ -117,7 +117,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
             elif self.inputProjection == 4:
                 text = text.strip()
                 coord = olc.decode(text)
-                lat = coord.latitudeCenter 
+                lat = coord.latitudeCenter
                 lon = coord.longitudeCenter
                 srcCrs = epsg4326
             else: # Is either the project or custom CRS
@@ -149,7 +149,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         caps = layer.dataProvider().capabilities()
         if caps & QgsVectorDataProvider.AddFeatures:
             destCRS = layer.crs() # Get the CRS of the layer we are adding a point toWgs
-            transform = QgsCoordinateTransform(srcCrs, destCRS, QgsProject.instance()) 
+            transform = QgsCoordinateTransform(srcCrs, destCRS, QgsProject.instance())
             # Transform the input coordinate projection to the layer CRS
             x, y = transform.transform(float(lon), float(lat))
             feat = QgsFeature(layer.fields())
