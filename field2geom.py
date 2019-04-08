@@ -20,9 +20,11 @@ from .util import epsg4326
 from . import olc
 #import traceback
 
+
 def tr(string):
     return QCoreApplication.translate('Processing', string)
         
+
 class Field2GeomAlgorithm(QgsProcessingAlgorithm):
     """
     Algorithm to convert a point layer to a Plus codes field.
