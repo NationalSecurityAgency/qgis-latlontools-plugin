@@ -293,12 +293,12 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         try:
             if self.settings.multiZoomToProjIsMGRS():
                 '''Check to see if we have an MGRS coordinate for entry'''
-                lat, lon = mgrs.toWgs(parts[0])
+                lat, lon = mgrs.toWgs(re.sub(r'\s+', '', parts[0]))
                 if numFields >= 2:
                     label = parts[1]
                 if numFields >= 3:
                     data = parts[2:]
-            if self.settings.multiZoomToProjIsPlusCodes():
+            elif self.settings.multiZoomToProjIsPlusCodes():
                 coord = olc.decode(parts[0])
                 lat = coord.latitudeCenter
                 lon = coord.longitudeCenter
