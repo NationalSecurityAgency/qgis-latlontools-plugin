@@ -15,8 +15,10 @@
 *                                                                         *
 ***************************************************************************
 """
-from builtins import str
+import itertools
+import math
 from builtins import range
+from builtins import str
 
 __author__ = 'Alexander Bruy'
 __date__ = 'August 2016'
@@ -25,10 +27,6 @@ __copyright__ = '(C) 2016 Boundless, http://boundlessgeo.com'
 # This will get replaced with a git SHA1 when you do a git archive
 
 __revision__ = '$Format:%H$'
-
-
-import math
-import itertools
 
 from osgeo import osr
 
@@ -48,11 +46,12 @@ MAX_EAST_NORTH = 4000000
 # 3rd letter range - high (UPS),
 # false easting based on 2nd letter,
 # false northing based on 3rd letter
-UPS_CONSTANTS = {0: (ALPHABET['A'], ALPHABET['J'], ALPHABET['Z'], ALPHABET['Z'], 800000.0, 800000.0),
-                 1: (ALPHABET['B'], ALPHABET['A'], ALPHABET['R'], ALPHABET['Z'], 2000000.0, 800000.0),
-                 2: (ALPHABET['Y'], ALPHABET['J'], ALPHABET['Z'], ALPHABET['P'], 800000.0, 1300000.0),
-                 3: (ALPHABET['Z'], ALPHABET['A'], ALPHABET['J'], ALPHABET['P'], 2000000.0, 1300000.0)
-                }
+UPS_CONSTANTS = {
+    0: (ALPHABET['A'], ALPHABET['J'], ALPHABET['Z'], ALPHABET['Z'], 800000.0, 800000.0),
+    1: (ALPHABET['B'], ALPHABET['A'], ALPHABET['R'], ALPHABET['Z'], 2000000.0, 800000.0),
+    2: (ALPHABET['Y'], ALPHABET['J'], ALPHABET['Z'], ALPHABET['P'], 800000.0, 1300000.0),
+    3: (ALPHABET['Z'], ALPHABET['A'], ALPHABET['J'], ALPHABET['P'], 2000000.0, 1300000.0)
+}
 
 # letter, minimum northing, upper latitude, lower latitude, northing offset
 LATITUDE_BANDS = [(ALPHABET['C'], 1100000.0, -72.0, -80.5, 0.0),
@@ -195,7 +194,7 @@ def _upsToMgrs(hemisphere, easting, northing, precision):
         letters[2] = letters[2] + 1
 
     gridEasting = easting
-    gridEasting = gridEasting - falseEasting;
+    gridEasting = gridEasting - falseEasting
     letters[1] = ltr2LowValue + int(gridEasting / ONEHT)
 
     if easting < TWOMIL:
@@ -382,7 +381,7 @@ def _mgrsToUtm(mgrs):
     # Check that the second letter of the MGRS string is within the range
     # of valid second letter values. Also check that the third letter is valid
     if (letters[1] < ltr2LowValue) or (letters[1] > ltr2HighValue) or (letters[2] > ALPHABET['V']):
-        raise  MgrsException('An MGRS string error: string too long, too short, or badly formed')
+        raise MgrsException('An MGRS string error: string too long, too short, or badly formed')
 
     rowLetterNorthing = float(letters[2] * ONEHT)
     gridEasting = float((letters[1] - ltr2LowValue + 1) * ONEHT)
@@ -424,7 +423,7 @@ def _mgrsString(zone, letters, easting, northing, precision):
     @param precision - precision level of MGRS string
     @returns - MGRS coordinate string
     """
-    mrgs = ''
+
     if zone:
         tmp = str(zone)
         mgrs = tmp.zfill(3 - len(tmp))

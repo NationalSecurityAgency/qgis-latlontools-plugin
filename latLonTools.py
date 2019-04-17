@@ -1,24 +1,26 @@
-from qgis.PyQt.QtCore import Qt, QTimer, QUrl
-from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMenu, QApplication
-from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
-from qgis.gui import QgsRubberBand
-import processing
-
-from .zoomToLatLon import ZoomToLatLon
-from .multizoom import MultiZoomWidget
-from .copyLatLonTool import CopyLatLonTool
-from .showOnMapTool import ShowOnMapTool
-from .settings import SettingsWidget, settings
-from .provider import LatLonToolsProvider
-from .util import epsg4326
 import os
 import webbrowser
+
+import processing
+
+from qgis.PyQt.QtCore import QTimer, QUrl, Qt
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction, QApplication, QMenu
+from qgis.core import Qgis, QgsApplication, QgsCoordinateTransform, QgsGeometry, QgsPoint, QgsPointXY, QgsProject, QgsRectangle, QgsVectorLayer, QgsWkbTypes
+from qgis.gui import QgsRubberBand
+
+from .copyLatLonTool import CopyLatLonTool
+from .multizoom import MultiZoomWidget
+from .provider import LatLonToolsProvider
+from .settings import SettingsWidget, settings
+from .showOnMapTool import ShowOnMapTool
+from .util import epsg4326
+from .zoomToLatLon import ZoomToLatLon
 
 
 class LatLonTools:
     digitizerDialog = None
-    
+
     def __init__(self, iface):
         self.iface = iface
         self.canvas = iface.mapCanvas()
@@ -34,7 +36,7 @@ class LatLonTools:
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
         self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         self.showMapTool = ShowOnMapTool(self.iface)
-        
+
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
         self.copyAction = QAction(icon, "Copy Latitude, Longitude", self.iface.mainWindow())
@@ -43,7 +45,7 @@ class LatLonTools:
         self.copyAction.setCheckable(True)
         self.toolbar.addAction(self.copyAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
-        
+
         # Add Interface for External Map
         icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
         self.externMapAction = QAction(icon, "Show in External Map", self.iface.mainWindow())
@@ -64,7 +66,7 @@ class LatLonTools:
         self.zoomToDialog = ZoomToLatLon(self, self.iface, self.iface.mainWindow())
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.zoomToDialog)
         self.zoomToDialog.hide()
-        
+
         # Add Interface for Multi point zoom
         icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
         self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
@@ -76,7 +78,7 @@ class LatLonTools:
         self.multiZoomDialog = MultiZoomWidget(self, self.settingsDialog, self.iface.mainWindow())
         self.multiZoomDialog.hide()
         self.multiZoomDialog.setFloating(True)
-        
+
         # Create the conversions menu
         menu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.png')
@@ -99,7 +101,7 @@ class LatLonTools:
         self.conversionsAction = QAction(icon, "Conversions", self.iface.mainWindow())
         self.conversionsAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
-        
+
         # Add to Digitize Toolbar
         icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
         self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
@@ -108,7 +110,7 @@ class LatLonTools:
         self.digitizeAction.setEnabled(False)
         self.toolbar.addAction(self.digitizeAction)
         self.iface.addPluginToMenu('Lat Lon Tools', self.digitizeAction)
-        
+
         # Add Interface for copying the canvas extent
         icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.png")
         self.copyCanvasAction = QAction(icon, "Copy Canvas Bounding Box", self.iface.mainWindow())
@@ -116,29 +118,28 @@ class LatLonTools:
         self.copyCanvasAction.triggered.connect(self.copyCanvas)
         self.toolbar.addAction(self.copyCanvasAction)
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyCanvasAction)
-        
+
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
         self.settingsAction = QAction(settingsicon, "Settings", self.iface.mainWindow())
         self.settingsAction.setObjectName('latLonToolsSettings')
         self.settingsAction.triggered.connect(self.settings)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
-        
+
         # Help
         icon = QIcon(os.path.dirname(__file__) + '/images/help.png')
         self.helpAction = QAction(icon, "Help", self.iface.mainWindow())
         self.helpAction.setObjectName('latLonToolsHelp')
         self.helpAction.triggered.connect(self.help)
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
-        
-        
+
         self.iface.currentLayerChanged.connect(self.currentLayerChanged)
         self.canvas.mapToolSet.connect(self.unsetTool)
         self.enableDigitizeTool()
         # Add the processing provider
-        
+
         QgsApplication.processingRegistry().addProvider(self.provider)
-                
+
     def unsetTool(self, tool):
         '''Uncheck the Copy Lat Lon tool'''
         try:
@@ -148,7 +149,7 @@ class LatLonTools:
                 self.mapTool.capture4326 = False
             if not isinstance(tool, ShowOnMapTool):
                 self.externMapAction.setChecked(False)
-        except:
+        except Exception:
             pass
 
     def unload(self):
@@ -176,7 +177,7 @@ class LatLonTools:
         self.iface.removeToolBarIcon(self.multiZoomToAction)
         self.iface.removeToolBarIcon(self.digitizeAction)
         del self.toolbar
-        
+
         self.zoomToDialog = None
         self.multiZoomDialog = None
         self.settingsDialog = None
@@ -207,31 +208,31 @@ class LatLonTools:
         minY = extent.yMinimum()
         maxX = extent.xMaximum()
         maxY = extent.yMaximum()
-        if settings.bBoxFormat == 0: # minX,minY,maxX,maxY - using the delimiter
+        if settings.bBoxFormat == 0:  # minX,minY,maxX,maxY - using the delimiter
             outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
                 minX, delim, minY, delim, maxX, delim, maxY, prec=precision)
-        elif settings.bBoxFormat == 1: # minX,maxX,minY,maxY - Using the selected delimiter'
+        elif settings.bBoxFormat == 1:  # minX,maxX,minY,maxY - Using the selected delimiter'
             outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
                 minX, delim, maxX, delim, minY, delim, maxY, prec=precision)
-        elif settings.bBoxFormat == 2: # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
+        elif settings.bBoxFormat == 2:  # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
             outStr = '{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f}'.format(
                 minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
-        elif settings.bBoxFormat == 3: # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
+        elif settings.bBoxFormat == 3:  # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
             outStr = '{:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f}'.format(
                 minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
-        elif settings.bBoxFormat == 4: # WKT Polygon
+        elif settings.bBoxFormat == 4:  # WKT Polygon
             outStr = extent.asWktPolygon()
-        elif settings.bBoxFormat == 5: # bbox: [minX, minY, maxX, maxY] - MapProxy
+        elif settings.bBoxFormat == 5:  # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox: [{}, {}, {}, {}]'.format(
                 minX, minY, maxX, maxY)
-        elif settings.bBoxFormat == 6: # bbox: [minX, minY, maxX, maxY] - MapProxy
+        elif settings.bBoxFormat == 6:  # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox={},{},{},{}'.format(
                 minX, minY, maxX, maxY)
         outStr = '{}{}{}'.format(prefix, outStr, suffix)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
         self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
-        
+
     def setShowMapTool(self):
         '''Set the focus of the external map tool and check it'''
         self.externMapAction.setChecked(True)
@@ -247,46 +248,45 @@ class LatLonTools:
 
     def field2geom(self):
         '''Convert layer containing a point x & y coordinate to a new point layer'''
-        results = processing.execAlgorithmDialog('latlontools:field2geom', {})
+        results = processing.execAlgorithmDialog('latlontools:field2geom', {}) # noqa
 
     def geom2Field(self):
         '''Convert layer geometry to a text string'''
-        results = processing.execAlgorithmDialog('latlontools:geom2field', {})
+        results = processing.execAlgorithmDialog('latlontools:geom2field', {}) # noqa
 
     def toMGRS(self):
         '''Display the to MGRS  dialog box'''
-        results = processing.execAlgorithmDialog('latlontools:point2mgrs', {})
+        results = processing.execAlgorithmDialog('latlontools:point2mgrs', {}) # noqa
 
     def MGRStoLayer(self):
         '''Display the to MGRS  dialog box'''
-        results = processing.execAlgorithmDialog('latlontools:mgrs2point', {})
+        results = processing.execAlgorithmDialog('latlontools:mgrs2point', {}) # noqa
 
     def toPlusCodes(self):
-        results = processing.execAlgorithmDialog('latlontools:point2pluscodes', {})
+        results = processing.execAlgorithmDialog('latlontools:point2pluscodes', {}) # noqa
 
     def PlusCodestoLayer(self):
-        results = processing.execAlgorithmDialog('latlontools:pluscodes2point', {})
-    
+        results = processing.execAlgorithmDialog('latlontools:pluscodes2point', {}) # noqa
+
     def settings(self):
         '''Show the settings dialog box'''
         self.settingsDialog.show()
-        
+
     def help(self):
         '''Display a help page'''
         url = QUrl.fromLocalFile(os.path.dirname(__file__) + "/index.html").toString()
         webbrowser.open(url, new=2)
-        
+
     def settingsChanged(self):
         # Settings may have changed so we need to make sure the zoomToDialog window is configured properly
         self.zoomToDialog.configure()
         self.multiZoomDialog.settingsChanged()
-            
- 
+
     def zoomTo(self, srcCrs, lat, lon):
         canvasCrs = self.canvas.mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(srcCrs, canvasCrs, QgsProject.instance())
         x, y = transform.transform(float(lon), float(lat))
-            
+
         rect = QgsRectangle(x, y, x, y)
         self.canvas.setExtent(rect)
 
@@ -294,50 +294,50 @@ class LatLonTools:
         self.highlight(pt)
         self.canvas.refresh()
         return pt
-        
+
     def highlight(self, point):
         currExt = self.canvas.extent()
-        
+
         leftPt = QgsPoint(currExt.xMinimum(), point.y())
         rightPt = QgsPoint(currExt.xMaximum(), point.y())
-        
+
         topPt = QgsPoint(point.x(), currExt.yMaximum())
         bottomPt = QgsPoint(point.x(), currExt.yMinimum())
-        
-        horizLine = QgsGeometry.fromPolyline( [ leftPt , rightPt ] )
-        vertLine = QgsGeometry.fromPolyline( [ topPt , bottomPt ] )
-        
+
+        horizLine = QgsGeometry.fromPolyline([leftPt, rightPt])
+        vertLine = QgsGeometry.fromPolyline([topPt, bottomPt])
+
         self.crossRb.reset(QgsWkbTypes.LineGeometry)
         self.crossRb.addGeometry(horizLine, None)
         self.crossRb.addGeometry(vertLine, None)
-        
+
         QTimer.singleShot(700, self.resetRubberbands)
-        
+
     def resetRubberbands(self):
         self.crossRb.reset()
-        
+
     def digitizeClicked(self):
-        if self.digitizerDialog == None:
+        if self.digitizerDialog is None:
             from .digitizer import DigitizerWidget
             self.digitizerDialog = DigitizerWidget(self, self.iface, self.iface.mainWindow())
         self.digitizerDialog.show()
-        
+
     def currentLayerChanged(self):
         layer = self.iface.activeLayer()
-        if layer != None:
+        if layer is not None:
             try:
                 layer.editingStarted.disconnect(self.layerEditingChanged)
-            except:
+            except Exception:
                 pass
             try:
                 layer.editingStopped.disconnect(self.layerEditingChanged)
-            except:
+            except Exception:
                 pass
-            
+
             if isinstance(layer, QgsVectorLayer):
                 layer.editingStarted.connect(self.layerEditingChanged)
                 layer.editingStopped.connect(self.layerEditingChanged)
-                
+
         self.enableDigitizeTool()
 
     def layerEditingChanged(self):
@@ -346,9 +346,9 @@ class LatLonTools:
     def enableDigitizeTool(self):
         self.digitizeAction.setEnabled(False)
         layer = self.iface.activeLayer()
-        
-        if layer != None and isinstance(layer, QgsVectorLayer) and (layer.geometryType() == QgsWkbTypes.PointGeometry) and layer.isEditable():
+
+        if layer is not None and isinstance(layer, QgsVectorLayer) and (layer.geometryType() == QgsWkbTypes.PointGeometry) and layer.isEditable():
             self.digitizeAction.setEnabled(True)
         else:
-            if self.digitizerDialog != None:
+            if self.digitizerDialog is not None:
                 self.digitizerDialog.close()

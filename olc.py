@@ -57,16 +57,16 @@
 #   var code = olc.recoverNearest('9G8F+6X', 47.4, 8.6);
 #   var code = olc.recoverNearest('8F+6X', 47.4, 8.6);
 
-import re
 import math
+import re
 
-#A separator used to break the code into two parts to aid memorability.
+# A separator used to break the code into two parts to aid memorability.
 SEPARATOR_ = '+'
 
-#The number of characters to place before the separator.
+# The number of characters to place before the separator.
 SEPARATOR_POSITION_ = 8
 
-#The character used to pad codes.
+# The character used to pad codes.
 PADDING_CHARACTER_ = '0'
 
 # The character set used to encode the values.
@@ -78,29 +78,29 @@ ENCODING_BASE_ = len(CODE_ALPHABET_)
 # The maximum value for latitude in degrees.
 LATITUDE_MAX_ = 90
 
-#The maximum value for longitude in degrees.
+# The maximum value for longitude in degrees.
 LONGITUDE_MAX_ = 180
 
-#Maximum code length using lat/lng pair encoding. The area of such a
-#code is approximately 13x13 meters (at the equator), and should be suitable
-#for identifying buildings. This excludes prefix and separator characters.
+# Maximum code length using lat/lng pair encoding. The area of such a
+# code is approximately 13x13 meters (at the equator), and should be suitable
+# for identifying buildings. This excludes prefix and separator characters.
 PAIR_CODE_LENGTH_ = 10
 
-#The resolution values in degrees for each position in the lat/lng pair
-#encoding. These give the place value of each position, and therefore the
-#dimensions of the resulting area.
+# The resolution values in degrees for each position in the lat/lng pair
+# encoding. These give the place value of each position, and therefore the
+# dimensions of the resulting area.
 PAIR_RESOLUTIONS_ = [20.0, 1.0, .05, .0025, .000125]
 
-#Number of columns in the grid refinement method.
+# Number of columns in the grid refinement method.
 GRID_COLUMNS_ = 4
 
-#Number of rows in the grid refinement method.
+# Number of rows in the grid refinement method.
 GRID_ROWS_ = 5
 
-#Size of the initial grid in degrees.
+# Size of the initial grid in degrees.
 GRID_SIZE_DEGREES_ = 0.000125
 
-#Minimum length of a code that can be shortened.
+# Minimum length of a code that can be shortened.
 MIN_TRIMMABLE_CODE_LEN_ = 6
 
 SP = '+0'
@@ -151,6 +151,7 @@ def isValid(code):
             return False
     return True
 
+
 """
 Determines if a code is a valid short code.
 A short Open Location Code is a sequence created by removing four or more
@@ -168,6 +169,7 @@ def isShort(code):
     if sep >= 0 and sep < SEPARATOR_POSITION_:
         return True
     return False
+
 
 """
  Determines if a code is a valid full Open Location Code.
@@ -197,6 +199,8 @@ def isFull(code):
         # The code would decode to a longitude of >= 180 degrees.
         return False
     return True
+
+
 """
  Encode a location into an Open Location Code.
  Produces a code of the specified length, or the default length if no length
@@ -231,6 +235,7 @@ def encode(latitude, longitude, codeLength=PAIR_CODE_LENGTH_):
         code = code + encodeGrid(latitude, longitude, codeLength - PAIR_CODE_LENGTH_)
     return code
 
+
 """
  Decodes an Open Location Code into the location coordinates.
  Returns a CodeArea object that includes the coordinates of the bounding
@@ -255,13 +260,16 @@ def decode(code):
     codeArea = decodePairs(code[0:PAIR_CODE_LENGTH_])
     if len(code) <= PAIR_CODE_LENGTH_:
         return codeArea
-     # If there is a grid refinement component, decode that.
+    # If there is a grid refinement component, decode that.
     gridArea = decodeGrid(code[PAIR_CODE_LENGTH_:])
-    return CodeArea(codeArea.latitudeLo + gridArea.latitudeLo,
-            codeArea.longitudeLo + gridArea.longitudeLo,
-            codeArea.latitudeLo + gridArea.latitudeHi,
-            codeArea.longitudeLo + gridArea.longitudeHi,
-            codeArea.codeLength + gridArea.codeLength)
+    return CodeArea(
+        codeArea.latitudeLo + gridArea.latitudeLo,
+        codeArea.longitudeLo + gridArea.longitudeLo,
+        codeArea.latitudeLo + gridArea.latitudeHi,
+        codeArea.longitudeLo + gridArea.longitudeHi,
+        codeArea.codeLength + gridArea.codeLength
+    )
+
 
 """
  Recover the nearest matching code to a specified location.
@@ -316,12 +324,12 @@ def recoverNearest(code, referenceLatitude, referenceLongitude):
     # than half the resolution, we need to move it north or south but keep it
     # within -90 to 90 degrees.
     if (referenceLatitude + halfResolution < codeArea.latitudeCenter and
-        codeArea.latitudeCenter - resolution >= -LATITUDE_MAX_):
+            codeArea.latitudeCenter - resolution >= -LATITUDE_MAX_):
         # If the proposed code is more than half a cell north of the reference location,
         # it's too far, and the best match will be one cell south.
         codeArea.latitudeCenter -= resolution
     elif (referenceLatitude - halfResolution > codeArea.latitudeCenter and
-          codeArea.latitudeCenter + resolution <= LATITUDE_MAX_):
+            codeArea.latitudeCenter + resolution <= LATITUDE_MAX_):
         # If the proposed code is more than half a cell south of the reference location,
         # it's too far, and the best match will be one cell north.
         codeArea.latitudeCenter += resolution
@@ -331,6 +339,7 @@ def recoverNearest(code, referenceLatitude, referenceLongitude):
     elif referenceLongitude - halfResolution > codeArea.longitudeCenter:
         codeArea.longitudeCenter += resolution
     return encode(codeArea.latitudeCenter, codeArea.longitudeCenter, codeArea.codeLength)
+
 
 """
  Remove characters from the start of an OLC code.
@@ -376,8 +385,9 @@ def shorten(code, latitude, longitude):
         # use 0.3 instead of 0.5 as a multiplier.
         if coderange < (PAIR_RESOLUTIONS_[i] * 0.3):
             # Trim it.
-            return code[(i+1)*2:]
+            return code[(i + 1) * 2:]
     return code
+
 
 """
  Clip a latitude into the range -90 to 90.
@@ -388,6 +398,7 @@ def shorten(code, latitude, longitude):
 
 def clipLatitude(latitude):
     return min(90, max(-90, latitude))
+
 
 """
  Compute the latitude precision value for a given code length. Lengths <=
@@ -402,6 +413,7 @@ def computeLatitudePrecision(codeLength):
         return pow(20, math.floor((codeLength / -2) + 2))
     return pow(20, -3) / pow(GRID_ROWS_, codeLength - 10)
 
+
 """
  Normalize a longitude into the range -180 to 180, not including 180.
  Args:
@@ -411,10 +423,11 @@ def computeLatitudePrecision(codeLength):
 
 def normalizeLongitude(longitude):
     while longitude < -180:
-        longitude = longitude + 360;
+        longitude = longitude + 360
     while longitude >= 180:
-        longitude = longitude - 360;
-    return longitude;
+        longitude = longitude - 360
+    return longitude
+
 
 """
  Encode a location into a sequence of OLC lat/lng pairs.
@@ -461,6 +474,7 @@ def encodePairs(latitude, longitude, codeLength):
         code += SEPARATOR_
     return code
 
+
 """
  Encode a location using the grid refinement method into an OLC string.
  The grid refinement method divides the area into a grid of 4x5, and uses a
@@ -495,7 +509,8 @@ def encodeGrid(latitude, longitude, codeLength):
         adjustedLatitude -= row * latPlaceValue
         adjustedLongitude -= col * lngPlaceValue
         code += CODE_ALPHABET_[row * GRID_COLUMNS_ + col]
-    return code;
+    return code
+
 
 """
  Decode an OLC code made up of lat/lng pairs.
@@ -513,11 +528,12 @@ def decodePairs(code):
     latitude = decodePairsSequence(code, 0)
     longitude = decodePairsSequence(code, 1)
     # Correct the values and set them into the CodeArea object.
-    return CodeArea( latitude[0] - LATITUDE_MAX_,
-                     longitude[0] - LONGITUDE_MAX_,
-                     latitude[1] - LATITUDE_MAX_,
-                     longitude[1] - LONGITUDE_MAX_,
-                     len(code))
+    return CodeArea(latitude[0] - LATITUDE_MAX_,
+                    longitude[0] - LONGITUDE_MAX_,
+                    latitude[1] - LATITUDE_MAX_,
+                    longitude[1] - LONGITUDE_MAX_,
+                    len(code))
+
 
 """
  Decode either a latitude or longitude sequence.
@@ -543,6 +559,7 @@ def decodePairsSequence(code, offset):
         i += 1
     return [value, value + PAIR_RESOLUTIONS_[i - 1]]
 
+
 """
  Decode the grid refinement portion of an OLC code.
  This decodes an OLC code using the grid refinement method.
@@ -567,8 +584,9 @@ def decodeGrid(code):
         latitudeLo += row * latPlaceValue
         longitudeLo += col * lngPlaceValue
         i += 1
-    return CodeArea( latitudeLo, longitudeLo, latitudeLo + latPlaceValue,
-                     longitudeLo + lngPlaceValue, len(code));
+    return CodeArea(latitudeLo, longitudeLo, latitudeLo + latPlaceValue,
+                    longitudeLo + lngPlaceValue, len(code))
+
 
 """
  Coordinates of a decoded Open Location Code.
@@ -594,17 +612,19 @@ class CodeArea(object):
         self.latitudeHi = latitudeHi
         self.longitudeHi = longitudeHi
         self.codeLength = codeLength
-        self.latitudeCenter = min( latitudeLo + (latitudeHi - latitudeLo) / 2, LATITUDE_MAX_)
-        self.longitudeCenter = min( longitudeLo + (longitudeHi - longitudeLo) / 2, LONGITUDE_MAX_)
+        self.latitudeCenter = min(latitudeLo + (latitudeHi - latitudeLo) / 2, LATITUDE_MAX_)
+        self.longitudeCenter = min(longitudeLo + (longitudeHi - longitudeLo) / 2, LONGITUDE_MAX_)
 
     def __repr__(self):
-        return str([self.latitudeLo,
-                self.longitudeLo,
-                self.latitudeHi,
-                self.longitudeHi,
-                self.latitudeCenter,
-                self.longitudeCenter,
-                self.codeLength])
+        return str([
+            self.latitudeLo,
+            self.longitudeLo,
+            self.latitudeHi,
+            self.longitudeHi,
+            self.latitudeCenter,
+            self.longitudeCenter,
+            self.codeLength
+        ])
 
     def latlng(self):
         return [self.latitudeCenter, self.longitudeCenter]
