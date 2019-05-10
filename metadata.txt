@@ -1,13 +1,13 @@
 [general]
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
-description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, and Plus Codes notation. Provides external map support, MGRS & Plus Codes conversion and point digitizing tools.
-version=3.1.18
+description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes notation. Provides external map support, MGRS & Plus Codes conversion and point digitizing tools.
+version=3.2.0
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
     Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS and Plus Codes support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools.
-    1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map.
+    1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map. This includes DMS, UTM, MGRS, and Plus Codes.
     2) Capture the bounding box of the canvas.
     3) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS and Plus Codes, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
     4) Digitizing service to add points to a layer. It supports all the "Zoom to" input formats.
@@ -22,12 +22,13 @@ about=
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box
+tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box
 category=Plugins
 icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.2.0 - Added Standard WGS84 UTM Support
     3.1.18 - Fixed MGRS bug
     3.1.17 - Added MGRS & Plus Code coordinate input to multi-location zoom
     3.1.16 - Added show marker setting for coordinate capture and external map

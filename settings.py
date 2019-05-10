@@ -71,6 +71,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeProjectCRS = 2
     ProjectionTypeCustomCRS = 3
     ProjectionTypePlusCodes = 4
+    ProjectionTypeUTM = 5
     OrderYX = 0
     OrderXY = 1
     def __init__(self, lltools, iface, parent):
@@ -83,7 +84,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
         
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes', 'Standard UTM'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -431,6 +432,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
     
     def captureProjIsPlusCodes(self):
         if self.captureProjection == self.ProjectionTypePlusCodes:
+            return True
+        return False
+    
+    def captureProjIsUTM(self):
+        if self.captureProjection == self.ProjectionTypeUTM:
             return True
         return False
 

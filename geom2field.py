@@ -2,7 +2,7 @@ import os
 
 from qgis.PyQt.QtCore import QVariant, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateTransform, QgsProject
+from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 
 from qgis.core import (QgsProcessing,
     QgsProcessingException,
@@ -17,6 +17,7 @@ from qgis.core import (QgsProcessing,
 from . import mgrs
 from .LatLon import LatLon
 from .util import epsg4326
+from .utm import latLon2UtmString
 from . import olc
 
 
@@ -59,22 +60,22 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 tr('Output format'),
                 options=[tr('Coordinates in 2 fields'),
                     tr('Coordinates in 1 field'),
-                    'GeoJSON', 'WKT', 'MGRS', 'Plus Codes'],
+                    'GeoJSON', 'WKT', 'MGRS', 'Plus Codes', 'Standard UTM'],
                 defaultValue=0,
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterString(
-                self.PrmYFieldName,
-                tr('Latitude (Y), GeoJSON, WKT, MGRS, or Plus Codes field name'),
-                defaultValue='y',
+                self.PrmXFieldName,
+                tr('Longitude (X) field name'),
+                defaultValue='x',
                 optional=True)
             )
         self.addParameter(
             QgsProcessingParameterString(
-                self.PrmXFieldName,
-                tr('Longitude (X) field name'),
-                defaultValue='x',
+                self.PrmYFieldName,
+                tr('Latitude (Y) & all other formats field name'),
+                defaultValue='y',
                 optional=True)
             )
         self.addParameter(
@@ -136,7 +137,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmDMSSecondPrecision,
-                tr('DMS second precision'),
+                tr('DMS second / UTM precision'),
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=0,
                 optional=True,
@@ -273,8 +274,15 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                     msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(), prec=decimalPrecision)
                 elif outputFormat == 4: # MGRS
                     msg = mgrs.toMgrs(pt.y(), pt.x(), 5)
-                else: # Plus codes
+                elif outputFormat == 5: # Plus codes
                     msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
+                else: # WGS 84 UTM  
+                    zone = int( (pt.x() + 180) / 6) + 1
+                    if pt.y() >= 0:
+                        zonestr = '{}N'.format(zone)
+                    else:
+                        zonestr = '{}S'.format(zone)
+                    msg = latLon2UtmString(zonestr, pt.y(), pt.x(), dmsPrecision)
             except:
                 msg = ''
 

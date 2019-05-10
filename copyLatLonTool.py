@@ -1,11 +1,12 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject
+from qgis.core import Qgis, QgsCoordinateTransform, QgsCoordinateReferenceSystem, QgsPointXY, QgsProject
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
 from .settings import settings
 from .LatLon import LatLon
-from .util import *
+from .util import epsg4326
+from .utm import latLon2UtmString
 from . import mgrs
 from . import olc
 #import traceback
@@ -115,6 +116,20 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 msg = olc.encode(pt4326.y(), pt4326.x(), self.settings.plusCodesLength)
             except:
                 msg = None
+        elif self.settings.captureProjIsUTM():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
+            if canvasCRS == epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
+                pt4326 = transform.transform(pt.x(), pt.y())
+            zone = int( (pt4326.x() + 180) / 6) + 1
+            if pt4326.y() >= 0:
+                zonestr = '{}N'.format(zone)
+            else:
+                zonestr = '{}S'.format(zone)
+            msg = latLon2UtmString(zonestr, pt4326.y(), pt4326.x(), self.settings.dmsPrecision)
         
         msg = '{}{}{}'.format(self.settings.capturePrefix, msg, self.settings.captureSuffix)
         return msg

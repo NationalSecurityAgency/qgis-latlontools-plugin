@@ -102,7 +102,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>DMS Second Precision: </string>
+            <string>DMS Second / UTM Precision: </string>
            </property>
           </widget>
          </item>

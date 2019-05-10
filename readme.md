@@ -8,7 +8,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
-* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Plus Codes**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**.
+* <img src="images/copyicon.png" alt="Copy coordinate"> ***Copy Latitude, Longitude*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Standard UTM**, **Plus Codes**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the Geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**.
   
 * <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. Currently Open Street Map, Google Maps, MapQuest, and Bing Maps are supported. Google Earth is supported if it is installed on the system. The desired map can be configured in **Settings**. A temporary marker can be displayed on the map at the location clicked on. To turn this on go to **Settings**.
 
@@ -77,7 +77,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     
     <div style="text-align:center"><img src="doc/field2geom.jpg" alt="Fields to point layer"></div>
     
-    * <img src="images/geom2field.png" alt="Point layer to field"> ***Point layer to fields*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two fields in the new layer. The user has a lot of flexibility as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats include GeoJSON, WKT, MGRS, and Plus Codes. 
+    * <img src="images/geom2field.png" alt="Point layer to field"> ***Point layer to fields*** - This takes a point vector layer and creates a new layer with the layer's latitude, longitude (Y, X) copied into one or two fields in the new layer. The user has a lot of flexibility as to the output format. For Wgs84 the output can be in decimal degrees or DMS. Other formats include GeoJSON, WKT, MGRS, Standard UTM, and Plus Codes. 
     
     <div style="text-align:center"><img src="doc/geom2field.jpg" alt="Point layer to Field"></div>
     
@@ -119,6 +119,7 @@ There are 5 capture projections/formats that can be selected from the ***CRS/Pro
 * **Project CRS** - This captures the coordinates using the project's specified CRS.
 * **Custom CRS** - The captures the coordinate in any coordinate reference system regardless of what the project CRS is set to. When this is selected, then the ***Custom CRS*** dialog box is activated allowing selection of any projection.
 * **Plus Codes** - This captures the coordinate in [Google Plus Codes](https://plus.codes/) format.
+* **Standard UTM** - This has the form of '12N 417159.0 4515540.6'
 
 Additional coordinate formatting can be specified with ***WGS 84 (Latitude & Longitude) Number Format***.
 
@@ -143,7 +144,7 @@ The order in which the coordinates are captured are determined by ***Coordinate 
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
     * **Space**
     * **Other** - With this selected, the contents of ***Other Delimiter*** is used.
-* ***DMS Second Precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal.
+* ***DMS Second / UTM Precision*** - Used when formatting DMS coordinates and Standard UTM coordinates and specifies the number of digits after the decimal.
 * ***Plus Codes Length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 * ***Coordinate prefix*** - This text string is added to the beginning of the captured coordinate.
 * ***Coordinate suffix*** - This text string is added to the end of the captured coordinate.
