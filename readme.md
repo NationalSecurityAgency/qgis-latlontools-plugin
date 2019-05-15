@@ -22,6 +22,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * Degree, Minute, Second: 004656S, 0093917E (ddmmss, dddmmss)- Notice the need for 0 padding in the decimal degree digits.
     * WKT: POINT(-95.265483 38.959390)
     * GeoJSON: {"type": "Point","coordinates": [-95.265483,38.959390]}
+    * Standard WGS84 UTM: 15N 303704.9 4314710.9 (zone easting northing)
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
     * Example Plus Code coordinate when **Zoom to Coordinate Type** is set to ***Plus Codes***: 86C6XP5M+QR
 
