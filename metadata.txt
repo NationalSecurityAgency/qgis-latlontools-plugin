@@ -9,7 +9,7 @@ about=
     Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS and Plus Codes support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools.
     1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map. This includes DMS, UTM, MGRS, and Plus Codes.
     2) Capture the bounding box of the canvas.
-    3) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS and Plus Codes, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
+    3) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, UTM, and Plus Codes, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
     4) Digitizing service to add points to a layer. It supports all the "Zoom to" input formats.
     5) Launch and display an external map based on the coordinate clicked on.
     6) Use a list of points for rapid zooming created from a file, direct input, or captured from the map. Create a point layer from these locations.
