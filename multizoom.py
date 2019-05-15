@@ -9,8 +9,7 @@ from qgis.core import ( QgsCoordinateTransform, QgsVectorLayer,
     QgsField, QgsFeature, QgsGeometry, QgsPointXY,
     QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject, Qgis )
 from qgis.gui import QgsVertexMarker
-from .LatLon import LatLon
-from .util import *
+from .util import epsg4326, parseDMSStringSingle, parseDMSString
 from . import mgrs
 from . import olc
 
@@ -224,8 +223,8 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     try:
                         parts = [x.strip() for x in line.split(',')]
                         if len(parts) >= 2:
-                            lat = LatLon.parseDMSStringSingle(parts[0])
-                            lon = LatLon.parseDMSStringSingle(parts[1])
+                            lat = parseDMSStringSingle(parts[0])
+                            lon = parseDMSStringSingle(parts[1])
                             label = ''
                             data = []
                             if len(parts) >= 3:
@@ -311,7 +310,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                    if there are two coordinates anyway.'''
                    
                 if self.settings.multiZoomToProjIsWgs84():
-                    lat, lon = LatLon.parseDMSString(parts[0], self.settings.multiCoordOrder)
+                    lat, lon = parseDMSString(parts[0], self.settings.multiCoordOrder)
                 else:
                     parts = re.split(r'[\s;:]+', parts[0], 1)
                     if len(parts) < 2:
@@ -328,7 +327,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                     '''Combine the coordinates back together and use parseDMSString
                        as it is more robust than parseDMSStringSingle.'''
                     str = "{}, {}".format(parts[0], parts[1])
-                    lat, lon = LatLon.parseDMSString(str, self.settings.multiCoordOrder)
+                    lat, lon = parseDMSString(str, self.settings.multiCoordOrder)
                 else:
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())

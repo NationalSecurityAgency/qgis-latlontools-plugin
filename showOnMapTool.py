@@ -1,9 +1,7 @@
 from qgis.PyQt.QtCore import Qt, QUrl
-from qgis.PyQt.QtGui import *
-from qgis.PyQt.QtWidgets import *
 from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
-from .util import *
+from .util import epsg4326
 from .settings import settings
 import os
 import webbrowser

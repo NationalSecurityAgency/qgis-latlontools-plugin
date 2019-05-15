@@ -7,8 +7,7 @@ from qgis.PyQt.QtWidgets import QDialog, QMenu, QToolButton
 from qgis.PyQt.uic import loadUiType
 from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
 from qgis.gui import QgsProjectionSelectionDialog
-from .LatLon import LatLon
-from .util import *
+from .util import epsg4326, parseDMSString
 #import traceback
 
 from . import mgrs
@@ -107,7 +106,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                     lon = float(m[0][0])
                     lat = float(m[0][1])
                 else:
-                    lat, lon = LatLon.parseDMSString(text, self.inputXYOrder)
+                    lat, lon = parseDMSString(text, self.inputXYOrder)
                 srcCrs = epsg4326
             elif self.inputProjection == 1:
                 # This is an MGRS coordinate

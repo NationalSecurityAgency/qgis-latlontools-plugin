@@ -15,8 +15,7 @@ from qgis.core import (QgsProcessing,
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
-from .LatLon import LatLon
-from .util import epsg4326
+from .util import epsg4326, parseDMSString
 from . import olc
 #import traceback
 
@@ -125,13 +124,13 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     attr_x = feature[field2_name].strip()
                     if input_crs == epsg4326:
                         text = '{} {}'.format(attr1, attr_x)
-                        lat, lon = LatLon.parseDMSString(text, 0)
+                        lat, lon = parseDMSString(text, 0)
                     else:
                         lat = float(attr1)
                         lon = float(attr_x)
                 elif field_type == 1: # Lat (y), Lon (x)
                     if input_crs == epsg4326:
-                        lat, lon = LatLon.parseDMSString(attr1, 0)
+                        lat, lon = parseDMSString(attr1, 0)
                     else:
                         coords = re.split(r'[\s,;:]+', attr1, 1)
                         if len(coords) < 2:
@@ -140,7 +139,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                         lon = float(coords[1])
                 elif field_type == 2: # Lon (x), Lat (y)
                     if input_crs == epsg4326:
-                        lat, lon = LatLon.parseDMSString(attr1, 1)
+                        lat, lon = parseDMSString(attr1, 1)
                     else:
                         coords = re.split(r'[\s,;:]+', attr1, 1)
                         if len(coords) < 2:

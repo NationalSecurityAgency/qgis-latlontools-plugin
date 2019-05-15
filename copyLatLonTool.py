@@ -4,8 +4,7 @@ from qgis.core import Qgis, QgsCoordinateTransform, QgsCoordinateReferenceSystem
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
 from .settings import settings
-from .LatLon import LatLon
-from .util import epsg4326
+from .util import epsg4326, formatDmsString
 from .utm import latLon2UtmString
 from . import mgrs
 from . import olc
@@ -23,7 +22,6 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         self.iface = iface
         self.canvas = iface.mapCanvas()
         self.settings = settings
-        self.latlon = LatLon()
         self.capture4326 = False
         self.canvasClicked.connect(self.clicked)
         self.marker = None
@@ -46,30 +44,21 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:
                 transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
                 pt4326 = transform.transform(pt.x(), pt.y())
-            self.latlon.setCoord(pt4326.y(), pt4326.x())
-            self.latlon.setPrecision(self.settings.dmsPrecision)
-            if self.latlon.isValid():
-                if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS: # DMS
-                    if self.settings.coordOrder == self.settings.OrderYX:
-                        msg = self.latlon.getDMS(delimiter)
-                    else:
-                        msg = self.latlon.getDMSLonLatOrder(delimiter)
-                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS: # DDMMSS
-                    if self.settings.coordOrder == self.settings.OrderYX:
-                        msg = self.latlon.getDDMMSS(delimiter)
-                    else:
-                        msg = self.latlon.getDDMMSSLonLatOrder(delimiter)
-                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT: # WKT
-                    msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(self.latlon.lon, self.latlon.lat, prec=self.settings.decimalDigits)
-                elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON: # GeoJSON
-                    msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(self.latlon.lon, self.latlon.lat, prec=self.settings.decimalDigits)
-                else: # decimal degrees
-                    if self.settings.coordOrder == self.settings.OrderYX:
-                        msg = '{:.{prec}f}{}{:.{prec}f}'.format(self.latlon.lat, delimiter, self.latlon.lon, prec=self.settings.decimalDigits)
-                    else:
-                        msg = '{:.{prec}f}{}{:.{prec}f}'.format(self.latlon.lon, delimiter, self.latlon.lat, prec=self.settings.decimalDigits)
-            else:
-                msg = None
+            lat = pt4326.y()
+            lon = pt4326.x()
+            if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS: # DMS
+                msg = formatDmsString(lat, lon, True, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS: # DDMMSS
+                msg = formatDmsString(lat, lon, False, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT: # WKT
+                msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt4326.x(), pt4326.y(), prec=self.settings.decimalDigits)
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON: # GeoJSON
+                msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(pt4326.x(), pt4326.y(), prec=self.settings.decimalDigits)
+            else: # decimal degrees
+                if self.settings.coordOrder == self.settings.OrderYX:
+                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt4326.y(), delimiter, pt4326.x(), prec=self.settings.decimalDigits)
+                else:
+                    msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt4326.x(), delimiter, pt4326.y(), prec=self.settings.decimalDigits)
         elif self.settings.captureProjIsProjectCRS():
             # Projection in the project CRS
             if self.settings.otherNumberFormat == 0: # Numerical
@@ -130,6 +119,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:
                 zonestr = '{}S'.format(zone)
             msg = latLon2UtmString(zonestr, pt4326.y(), pt4326.x(), self.settings.dmsPrecision)
+            if msg == '':
+                msg = None
         
         msg = '{}{}{}'.format(self.settings.capturePrefix, msg, self.settings.captureSuffix)
         return msg
@@ -172,6 +163,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 s = 'WKT'
         elif self.settings.captureProjIsMGRS():
             s = 'MGRS'
+        elif self.settings.captureProjIsUTM():
+            s = 'Standard UTM'
         elif self.settings.captureProjIsPlusCodes():
             s = 'Plus Codes'
         elif self.settings.captureProjIsCustomCRS():

@@ -5,7 +5,7 @@ from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
 from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.core import QgsCoordinateReferenceSystem
-from .util import *
+from .util import epsg4326
 
 
 

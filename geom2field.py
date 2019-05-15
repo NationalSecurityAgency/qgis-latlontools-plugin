@@ -15,8 +15,7 @@ from qgis.core import (QgsProcessing,
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
-from .LatLon import LatLon
-from .util import epsg4326
+from .util import epsg4326, convertDD2DMS, formatDmsString
 from .utm import latLon2UtmString
 from . import olc
 
@@ -168,7 +167,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         field2Name = self.parameterAsString(parameters, self.PrmXFieldName, context).strip()
         coordOrder = self.parameterAsInt(parameters, self.PrmCoordinateOrder, context)
         delimType = self.parameterAsInt(parameters, self.PrmCoordinateDelimiter, context)
-        otherDelim = self.parameterAsString(parameters, self.PrmOtherDelimiter, context).strip()
+        otherDelim = self.parameterAsString(parameters, self.PrmOtherDelimiter, context)
         crsType = self.parameterAsInt(parameters, self.PrmOutputCRSType, context)
         crsOther = self.parameterAsCrs(parameters, self.PrmCustomCRS, context)
         wgs84Format = self.parameterAsInt(parameters, self.PrmWgs84NumberFormat, context)
@@ -214,9 +213,6 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 
         if layerCRS != outCRS:
             transform = QgsCoordinateTransform(layerCRS, outCRS, QgsProject.instance())
-        
-        latlon = LatLon()
-        latlon.setPrecision(dmsPrecision)
 
         total = 100.0 / source.featureCount() if source.featureCount() else 0
 
@@ -234,13 +230,11 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                             msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
                         elif wgs84Format == 1: # DMS
-                            latlon.setCoord(pt.y(), pt.x())
-                            msg = latlon.convertDD2DMS(pt.y(), True, True)
-                            msg2 = latlon.convertDD2DMS(pt.x(), False, True)
+                            msg = convertDD2DMS(pt.y(), True, True, dmsPrecision)
+                            msg2 = convertDD2DMS(pt.x(), False, True, dmsPrecision)
                         else: #DDMMSS
-                            latlon.setCoord(pt.y(), pt.x())
-                            msg = latlon.convertDD2DMS(pt.y(), True, False)
-                            msg2 = latlon.convertDD2DMS(pt.x(), False, False)
+                            msg = convertDD2DMS(pt.y(), True, False, dmsPrecision)
+                            msg2 = convertDD2DMS(pt.x(), False, False, dmsPrecision)
                     else:
                         msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                         msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
@@ -252,17 +246,9 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             else:
                                 msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
                         elif wgs84Format == 1: # DMS
-                            latlon.setCoord(pt.y(), pt.x())
-                            if coordOrder == 0:
-                                msg = latlon.getDMS(delimiter)
-                            else:
-                                msg = latlon.getDMSLonLatOrder(delimiter)
+                            msg = formatDmsString(pt.y(), pt.x(), True, dmsPrecision, coordOrder, delimiter)
                         else: #DDMMSS
-                            latlon.setCoord(pt.y(), pt.x())
-                            if coordOrder == 0:
-                                msg = latlon.getDDMMSS(delimiter)
-                            else:
-                                msg = latlon.getDDMMSSLonLatOrder(delimiter)
+                            msg = formatDmsString(pt.y(), pt.x(), False, dmsPrecision, coordOrder, delimiter)
                     else:
                         if coordOrder == 0:
                             msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
