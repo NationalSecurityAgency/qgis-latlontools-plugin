@@ -7,8 +7,8 @@ from qgis.PyQt.QtWidgets import QDockWidget
 from qgis.PyQt.QtCore import pyqtSignal, QTextCodec
 from qgis.gui import QgsVertexMarker
 from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes
-from .LatLon import LatLon
-from .util import *
+from .util import epsg4326, parseDMSString
+from .utm import isUtm, utmString2Crs
 #import traceback
 
 from . import mgrs
@@ -97,9 +97,14 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 lat = pt.y()
                 lon = pt.x()
                 srcCrs = epsg4326
+            elif isUtm(text):
+                pt = utmString2Crs(text)
+                srcCrs = epsg4326
+                lon = pt.x()
+                lat = pt.y()
             elif self.settings.zoomToProjIsWgs84():
                 if re.search(r'POINT\(', text) == None:
-                    lat, lon = LatLon.parseDMSString(text, self.settings.zoomToCoordOrder)
+                    lat, lon = parseDMSString(text, self.settings.zoomToCoordOrder)
                 else:
                     m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:

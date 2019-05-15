@@ -1,3 +1,4 @@
+import re
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from .util import epsg4326
 
@@ -124,6 +125,60 @@ utm_epsg_codes = {
 '60S': 'EPSG:32760',
 }
 
+def utmString2Crs(utm, crs=epsg4326):
+    parts = re.split(r'[\s]+', utm.upper())
+    utmlen = len(parts)
+    if utmlen == 3:
+        m = re.findall(r'(\d+)([NS])', parts[0])
+        if len(m) != 1 or len(m[0]) != 2:
+            raise ValueError('Invalid UTM Coordinate')
+        zone = int(m[0][0])
+        hemisphere = m[0][1]
+        easting = float(parts[1])
+        northing = float(parts[2])
+    elif utmlen == 4:
+        if parts[1] != 'N' and parts[1] != 'S':
+            raise ValueError('Invalid UTM Coordinate')
+        zone = int(parts[0])
+        easting = float(parts[2])
+        northing = float(parts[3])
+    else:
+        raise ValueError('Invalid UTM Coordinate')
+    if zone < 1 or zone > 60:
+        raise ValueError('Invalid UTM Coordinate')
+
+    utmcrs = QgsCoordinateReferenceSystem(utm_epsg_codes['{}{}'.format(zone,hemisphere)])
+    pt = QgsPointXY(easting, northing)
+    utmtrans = QgsCoordinateTransform(utmcrs, crs, QgsProject.instance())
+    return(utmtrans.transform(pt))
+    
+def isUtm(utm):
+    try:
+        parts = re.split(r'[\s]+', utm.upper())
+        utmlen = len(parts)
+        if utmlen == 3:
+            m = re.findall(r'(\d+)([NS])', parts[0])
+            if len(m) != 1 or len(m[0]) != 2:
+                return(False)
+            zone = int(m[0][0])
+            hemisphere = m[0][1]
+            easting = float(parts[1])
+            northing = float(parts[2])
+        elif utmlen == 4:
+            if parts[1] != 'N' and parts[1] != 'S':
+                return(False)
+            zone = int(parts[0])
+            easting = float(parts[2])
+            northing = float(parts[3])
+        else:
+            return(False)
+        if zone < 1 or zone > 60:
+            return(False)
+    except:
+        return(False)
+        
+    return(True)
+   
 def latLon2UtmString(zone, lat, lon, precision):
     try:
         utmcrs = QgsCoordinateReferenceSystem(utm_epsg_codes[zone])
