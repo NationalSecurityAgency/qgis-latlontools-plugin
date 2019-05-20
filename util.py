@@ -33,12 +33,12 @@ def convertDD2DMS(coord, islat, isdms, prec):
     else:
         dprec = prec + 3
     if isdms:
-        s = f"{deg:.0f}\xB0{min:.0f}\'{sec:.{prec}f}\""
+        s = "{:.0f}\xB0{:.0f}\'{:.{prec}f}\"".format(deg, min, sec, prec=prec)
     else:
         if islat:
-            s = f"{deg:02.0f}{min:02.0f}{sec:0{dprec}.{prec}f}"
+            s = "{:02.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
         else:
-            s = f"{deg:03.0f}{min:02.0f}{sec:0{dprec}.{prec}f}"
+            s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
     if isdms:
         s += " "+unit
     else:
