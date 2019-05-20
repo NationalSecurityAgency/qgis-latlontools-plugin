@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes notation. Provides external map support, MGRS & Plus Codes conversion and point digitizing tools.
-version=3.2.1
+version=3.2.2
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -11,7 +11,7 @@ about=
     2) Capture the bounding box of the canvas.
     3) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, UTM, and Plus Codes, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
     4) Digitizing service to add points to a layer. It supports all the "Zoom to" input formats.
-    5) Launch and display an external map based on the coordinate clicked on.
+    5) Launch and display an external map based on the coordinate clicked on. Supported maps include Open Street Map, Google, Bing, MapQuest, Mapillary, and Google Earth.
     6) Use a list of points for rapid zooming created from a file, direct input, or captured from the map. Create a point layer from these locations.
     7) MGRS conversion routines that converts a layer with an MGRS field into a point layer, and creates an MGRS field from the point layer.
     8) Plus Code conversion routines that converts a layer with a Plus Code field into a point layer, and creates an Plus Code field from the point layer.
@@ -22,12 +22,13 @@ about=
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box
+tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box,google earth
 category=Plugins
 icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.2.2 - Changed Python 3.6 syntax to work with older versions of QGIS
     3.2.1 - Added zoom to standard UTM support - refactored DMS code
     3.2.0 - Added Standard WGS84 UTM Support
     3.1.18 - Fixed MGRS bug
