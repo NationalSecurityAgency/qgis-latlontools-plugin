@@ -179,13 +179,18 @@ def isUtm(utm):
         
     return(True)
    
-def latLon2UtmString(zone, lat, lon, precision):
+def latLon2UtmString(lat, lon, precision):
+    zone = int( (lon + 180) / 6) + 1
+    if lon >= 0:
+        zonestr = '{}N'.format(zone)
+    else:
+        zonestr = '{}S'.format(zone)
     try:
-        utmcrs = QgsCoordinateReferenceSystem(utm_epsg_codes[zone])
+        utmcrs = QgsCoordinateReferenceSystem(utm_epsg_codes[zonestr])
         utmtrans = QgsCoordinateTransform(epsg4326, utmcrs, QgsProject.instance())
         pt = QgsPointXY(lon, lat)
         utmpt = utmtrans.transform(pt)
-        msg = '{} {:.{prec}f} {:.{prec}f}'.format(zone, utmpt.x(), utmpt.y(), prec=precision)
+        msg = '{} {:.{prec}f} {:.{prec}f}'.format(zonestr, utmpt.x(), utmpt.y(), prec=precision)
     except:
         msg = ''
     return( msg )

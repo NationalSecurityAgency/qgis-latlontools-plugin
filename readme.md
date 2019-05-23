@@ -26,27 +26,6 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
     * Example Plus Code coordinate when **Zoom to Coordinate Type** is set to ***Plus Codes***: 86C6XP5M+QR
 
-* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Lat Lon Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
-    
-    <div style="text-align:center"><img src="doc/addfeature.jpg" alt="Add Feature"></div>
-    
-    Enter a coordinate in any of the ***Zoom to Latitude, Longitude*** formats and press **Enter** or click on the **Add Feature** button. If a layer contains fields then a secondary dialog box will popup to allow editing of the attributes.
-    
-    The projection of the input coordinates can be specified by the CRS drop down menu which has the following options:
-    
-    * <img src="images/wgs84Projection.png" alt="WGS84"> ***WGS84 Projection*** - This is the default specifying coordinates as latitudes and longitudes.
-    * <img src="images/mgrsProjection.png" alt="MGRS"> ***MGRS Coordinate*** - This specifies an MGRS coordinate.
-    * <img src="images/projProjection.png" alt="Project Projection"> ***Project Projection*** - With this selected, it is assumed that the input coordinates are in the projection of the project.
-    * <img src="images/customProjection.png" alt="Custome Projection"> ***New/Custom Projection*** - This allows the user to select any projection for the input coordinates.
-    * <img src="images/pluscodes.png" alt="Plus Codes"> ***Plus Codes Coordinate*** - This specifies a Plus Code coordinate.
-    
-    The next drop down menu specifies whether the coordinates are listed as **Y,X (Latitude, Longitude)** or **X,Y (Longitude, Latitude)**. If the coordinate uses **N, S, E, W** then these take presidence and this setting is ignored.
-    
-    * <img src="images/yx.png" alt="Y, X"> ***Y,X (Latitude, Longitude) Order***
-    * <img src="images/xy.png" alt="X, Y"> ***X,Y (Longitude, Latitude) Order***
-    
-    Right below the text input box is a status line that tells you exactly what CRS and coordinate order you are using.
-    
 * <img src="images/multizoom.png" alt="Multi-location Zoom"> ***Multi-location Zoom*** - Here the user can define a set of quick zoom-to locations. The user can also paste in or type in a coordinate in the ***Enter coordinate*** box to add it to the list. By default the format of the data entered is **"latitude,longitude[,label,data1,...,data10]"** where the contents in [...] are optional. Various input formats are supported and can be configured in **Settings** by selecting the input projection and coordinate order. These include:
     * **"latitude,longitude[,label,data1,...,data10]"**
     * **"longitude,latitude[,label,data1,...,data10]"**
@@ -68,6 +47,40 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     
     * The ***Show all markers*** displays markers of all locations.
 
+* <img src="doc/conversion.jpg" alt="Coordinate Conversion"> ***Coordinate Conversion Tool*** - This dialog provides a way to either type in a coordinate or grab a coordinate from the map and convert it to a number of different formats.
+    
+    <div style="text-align:center"><img src="doc/coordinateConversion.jpg" alt="Coordinate Conversion"></div>
+    
+    Type in a coordinate in any one of the formats listed and then press the enter button or click on the green check box next to the coordinate field and all the other coordinates will be populated. Here are the functions of the following icons:
+    
+    * <img src="doc/xy.jpg" alt="X, Y Coordinate Order"> / <img src="doc/yx.jpg" alt="Y, X Coordinate Order"> ***Coordinate order*** - Select whether the coordinates should be displayed in an **x,y (longitude, latitude)** or **y,x (latitude, longitude)** order.
+    * <img src="doc/converter-clear.jpg" alt="Clear all fields"> ***Clear form*** - This clears the form of all values.
+    * <img src="doc/settings.png" alt="Settings"> ***Show coordinate conversion settings*** - This shows the default settings for coordinate conversion.
+    * <img src="images/coordinate_capture.png" alt="Capture coordinate"> ***Capture coordinate*** enables the user to click on the map to capture a coordinate directly to the form and have it automatically converted.
+    * <img src="images/check.png" alt="Convert coordinate"> ***Convert coordinate*** updates all coordinate fields with values converted from this text field.
+    * <img src="doc/copy.jpg" alt="Copy to clipboard"> ***Copy to clipboard*** copies the value in the text area onto the clipboard.
+
+* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Lat Lon Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
+    
+    <div style="text-align:center"><img src="doc/addfeature.jpg" alt="Add Feature"></div>
+    
+    Enter a coordinate in any of the ***Zoom to Latitude, Longitude*** formats and press **Enter** or click on the **Add Feature** button. If a layer contains fields then a secondary dialog box will popup to allow editing of the attributes.
+    
+    The projection of the input coordinates can be specified by the CRS drop down menu which has the following options:
+    
+    * <img src="images/wgs84Projection.png" alt="WGS84"> ***WGS84 Projection*** - This is the default specifying coordinates as latitudes and longitudes.
+    * <img src="images/mgrsProjection.png" alt="MGRS"> ***MGRS Coordinate*** - This specifies an MGRS coordinate.
+    * <img src="images/projProjection.png" alt="Project Projection"> ***Project Projection*** - With this selected, it is assumed that the input coordinates are in the projection of the project.
+    * <img src="images/customProjection.png" alt="Custome Projection"> ***New/Custom Projection*** - This allows the user to select any projection for the input coordinates.
+    * <img src="images/pluscodes.png" alt="Plus Codes"> ***Plus Codes Coordinate*** - This specifies a Plus Code coordinate.
+    
+    The next drop down menu specifies whether the coordinates are listed as **Y,X (Latitude, Longitude)** or **X,Y (Longitude, Latitude)**. If the coordinate uses **N, S, E, W** then these take presidence and this setting is ignored.
+    
+    * <img src="images/yx.png" alt="Y, X"> ***Y,X (Latitude, Longitude) Order***
+    * <img src="images/xy.png" alt="X, Y"> ***X,Y (Longitude, Latitude) Order***
+    
+    Right below the text input box is a status line that tells you exactly what CRS and coordinate order you are using.
+    
 * ***Conversions***
 
     All of the conversion routines can eigher be access from the ***Lat Lon Tool*** main menu or from the ***Processing*** ***Lat Lon Tools*** toolbox.
@@ -103,8 +116,6 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 * <img src="images/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.png" alt="Help"> ***Help*** - Displays this help page.
 
-By default ***Lat Lon Tools*** follows the **Google Map** convention making it possible to copy and paste between QGIS, Google Map, Google Earth, and other on-line maps without breaking the coordinates into pieces. All tools work with latitude and longitude coordinates regardless of the QGIS project coordinate reference system. In ***Settings*** the user can choose the ***Coordinate Capture Delimiter*** used between coordinates with presets for **Comma**, **Comma Space**, **Space**, and **Tab**. **Other** allows the user to specify a delimited string which can be more than one character.
-
 ## Settings
 
 > <div style="background-color: #FFE0DD; margin: 18px; padding: 8px;">The <b>CRS</b> and <b>coordinate order</b> are set independently for the coordinate capture, zoom to, and multi-zoom to tools. Be careful when setting one of these settings, that you check the rest to make sure that they are set correctly for your needs.</div>
@@ -113,7 +124,7 @@ By default ***Lat Lon Tools*** follows the **Google Map** convention making it p
 
 <div style="text-align:center"><img src="doc/settings.jpg" alt="Capture and Display Settings"></div>
 
-There are 5 capture projections/formats that can be selected from the ***CRS/Projection of Captured Coordinate*** drop down menu. They are as follows.
+There are 6 capture projections/formats that can be selected from the ***CRS/Projection of captured coordinate*** drop down menu. They are as follows.
 
 * **WGS 84 (Latitude & Longitude)** - This captures the coordinates as a latitude and longitude regardless of what the project CRS is set to. This is the default setting.
 * **MGRS** - This captures the coordinates in the [MGRS](https://en.wikipedia.org/wiki/Military_grid_reference_system) format,
@@ -128,25 +139,26 @@ Additional coordinate formatting can be specified with ***WGS 84 (Latitude & Lon
 * **DMS** - "36&deg; 47' 24.27" N, 99&deg; 22' 9.39" W"
 * **DDMMSS** - "400210.53N, 1050824.96 W"
 * **WKT POINT** - POINT(-86.023854202 42.20391297)
+* **GeoJSON** - {"type": "Point","coordinates": [-86.02385420,42.20393450]}
 
-For ***Other CRS Number Format*** such as **Project CRS** or **Custom CRS** the coordinate formatting options are:
+For ***Other CRS number format*** such as **Project CRS** or **Custom CRS** the coordinate formatting options are:
 
 * **Normal Coordinate** - Decimal coordinate notation.
 * **WKT POINT**
 
-The order in which the coordinates are captured are determined by ***Coordinate Order (Not applicable to MGRS and WKT)*** and are one of the following:
+The order in which the coordinates are captured is determined by ***Coordinate order (Not used with MGRS, UTM, WKT, GeoJSON &amp; Plus codes)*** and are one of the following:
 
 * **Lat, Lon (Y,X) - Google Map Order**
 * **Lon, Lat (X,Y) Order**.
 
-* ***Coordinate Capture Delimiter (Not applicable to MGRS and WKT)*** - Specifies the delimiter that separates the two coordinates. The options are:
+* ***Coordinate capture delimiter (Not used with MGRS, UTM, WKT, GeoJSON &amp; Plus codes)*** - Specifies the delimiter that separates the two coordinates. The options are:
     * **Comma** - Specifies a comma separator 
     * **Comma Space** - This is a comma followed by a space. 
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
     * **Space**
-    * **Other** - With this selected, the contents of ***Other Delimiter*** is used.
-* ***DMS Second / UTM Precision*** - Used when formatting DMS coordinates and Standard UTM coordinates and specifies the number of digits after the decimal.
-* ***Plus Codes Length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
+    * **Other** - With this selected, the contents of ***Other delimiter*** is used.
+* ***DMS second / UTM precision*** - Used when formatting DMS coordinates and Standard UTM coordinates and specifies the number of digits after the decimal.
+* ***Plus codes length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 * ***Coordinate prefix*** - This text string is added to the beginning of the captured coordinate.
 * ***Coordinate suffix*** - This text string is added to the end of the captured coordinate.
 
@@ -263,4 +275,19 @@ Specify whether the captured bounding box will use WGS84 or the QGIS project's p
 
 **BBOX suffix** - This text string is added to the end of the captured bounding box string.
 
-**Significant digits after decimal** - This is the precision or number of digits after the decimal in the ouput coordinates.
+**Significant digits after decimal** - This is the precision or number of digits after the decimal in the output coordinates.
+
+### Coordinate Conversion Settings
+
+These are the default settings for the ***Coordinate Conversion*** dialog box.
+
+<div style="text-align:center"><img src="doc/settings6.jpg" alt="Coordinate Conversion Settings"></div>
+
+* ***Default custom CRS / projection*** specifies the default projection when a custom CRS is selected.
+* ***Coordinate order for decimal and DMS notations*** determines whether the coordinates will be formatted in an ***Lat, Lon (Y, X)*** or ***Lon, Lat (X, Y)*** order.
+* ***EPSG:4326 decimal degree precision*** determines the number of digits after the decimal point for a WGS 84 latitude and longitude coordinate.
+* ***Other Decimal degree precision*** is the number of digits after the decimal point for all other coordinate formats.
+* ***DMS seconds precision*** is the number of decimal digits for the second in a DMS formatted coordinate.
+* ***UTM precision*** specifies the number of decimal digits for a UTM formatted coordinate.
+* ***Plus codes length*** is the number of digits in a plus code coordinate.
+* ***Delimiter between coordinate pairs*** is the delimiter used between coordinate pairs for those representations that require a delimiter.

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>565</height>
+    <width>479</width>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,13 +24,13 @@
      </property>
      <widget class="QWidget" name="capture">
       <attribute name="title">
-       <string>Capture &amp;&amp; Display</string>
+       <string>Capture</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>CRS/Projection of Captured Coordinate</string>
+          <string>CRS/Projection of captured coordinate</string>
          </property>
         </widget>
        </item>
@@ -50,7 +50,7 @@
        <item>
         <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>WGS 84 (Latitude &amp; Longitude) Number Format</string>
+          <string>WGS 84 (Latitude &amp; Longitude) number format</string>
          </property>
         </widget>
        </item>
@@ -60,7 +60,7 @@
        <item>
         <widget class="QLabel" name="label_13">
          <property name="text">
-          <string>Other CRS Number Format</string>
+          <string>Other CRS number format</string>
          </property>
         </widget>
        </item>
@@ -70,7 +70,7 @@
        <item>
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Coordinate Order (Not applicable to MGRS and WKT)</string>
+          <string>Coordinate order (Not used with MGRS, UTM, WKT, GeoJSON, &amp; Plus Codes)</string>
          </property>
         </widget>
        </item>
@@ -80,7 +80,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Coordinate Capture Delimiter (Not applicable to MGRS and WKT)</string>
+          <string>Coordinate capture delimiter (Not used with MGRS, UTM, WKT, GeoJSON, Plus codes)</string>
          </property>
         </widget>
        </item>
@@ -92,7 +92,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Other Delimiter: </string>
+            <string>Other delimiter: </string>
            </property>
           </widget>
          </item>
@@ -102,7 +102,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>DMS Second / UTM Precision: </string>
+            <string>DMS second / UTM precision: </string>
            </property>
           </widget>
          </item>
@@ -116,7 +116,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>Plus Codes Length:</string>
+            <string>Plus codes length:</string>
            </property>
           </widget>
          </item>
@@ -136,7 +136,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label_20">
            <property name="text">
-            <string>Coordinate digitis after decimal</string>
+            <string>Decimal degree precision</string>
            </property>
           </widget>
          </item>
@@ -202,7 +202,7 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>'Zoom to' Input Coordinate CRS</string>
+          <string>'Zoom to' input coordinate CRS</string>
          </property>
         </widget>
        </item>
@@ -222,7 +222,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Zoom to Coordinate Order</string>
+          <string>Zoom to coordinate order</string>
          </property>
         </widget>
        </item>
@@ -232,7 +232,7 @@
        <item>
         <widget class="QCheckBox" name="persistentMarkerCheckBox">
          <property name="text">
-          <string>Use Persistent Marker</string>
+          <string>Use persistent marker</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -395,7 +395,16 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
           <property name="spacing">
            <number>7</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
            <number>10</number>
           </property>
           <item>
@@ -429,7 +438,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Create Vector Layer Style</string>
+          <string>Create vector layer style</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
@@ -615,6 +624,146 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Converter</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <widget class="QLabel" name="label_34">
+         <property name="text">
+          <string>Default custom CRS / projection</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QgsProjectionSelectionWidget" name="converterProjectionSelectionWidget"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_35">
+         <property name="text">
+          <string>Coordinate order for decimal and DMS notations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="converterCoordOrderComboBox"/>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout_4">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_30">
+           <property name="text">
+            <string>EPGS:4326 decimal degree precision</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="converter4326DDPrecisionSpinBox">
+           <property name="maximum">
+            <number>32</number>
+           </property>
+           <property name="value">
+            <number>8</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_31">
+           <property name="text">
+            <string>DMS seconds precision</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="converterDMSPrecisionSpinBox">
+           <property name="maximum">
+            <number>16</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_32">
+           <property name="text">
+            <string>UTM precision</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="converterUtmPrecisionSpinBox">
+           <property name="maximum">
+            <number>16</number>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_33">
+           <property name="text">
+            <string>Plus codes length</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QSpinBox" name="converterPlusCodePrecisionSpinBox">
+           <property name="minimum">
+            <number>10</number>
+           </property>
+           <property name="maximum">
+            <number>20</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_36">
+           <property name="text">
+            <string>Other decimal degree precision</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="converterDDPrecisionSpinBox">
+           <property name="maximum">
+            <number>32</number>
+           </property>
+           <property name="value">
+            <number>2</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_37">
+           <property name="text">
+            <string>Delimiter between coordinate pairs</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="converterDelimiterLineEdit">
+           <property name="text">
+            <string>,</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -633,7 +782,7 @@ Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
   <customwidget>
    <class>QgsProjectionSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>qgis.gui</header>
+   <header>qgsprojectionselectionwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

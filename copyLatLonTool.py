@@ -113,12 +113,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:
                 transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
                 pt4326 = transform.transform(pt.x(), pt.y())
-            zone = int( (pt4326.x() + 180) / 6) + 1
-            if pt4326.y() >= 0:
-                zonestr = '{}N'.format(zone)
-            else:
-                zonestr = '{}S'.format(zone)
-            msg = latLon2UtmString(zonestr, pt4326.y(), pt4326.x(), self.settings.dmsPrecision)
+            msg = latLon2UtmString(pt4326.y(), pt4326.x(), self.settings.dmsPrecision)
             if msg == '':
                 msg = None
         

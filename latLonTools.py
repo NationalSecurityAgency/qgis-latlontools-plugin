@@ -18,6 +18,7 @@ import webbrowser
 
 class LatLonTools:
     digitizerDialog = None
+    convertCoordinateDialog = None
     
     def __init__(self, iface):
         self.iface = iface
@@ -77,6 +78,14 @@ class LatLonTools:
         self.multiZoomDialog.hide()
         self.multiZoomDialog.setFloating(True)
         
+        # Create the coordinate converter menu
+        icon = QIcon(':/images/themes/default/mIconProjectionEnabled.svg')
+        self.convertCoordinatesAction = QAction(icon, "Coordinate Conversion", self.iface.mainWindow())
+        self.convertCoordinatesAction.setObjectName('latLonToolsCoordinateConversion')
+        self.convertCoordinatesAction.triggered.connect(self.convertCoordinatesTool)
+        self.toolbar.addAction(self.convertCoordinatesAction)
+        self.iface.addPluginToMenu("Lat Lon Tools", self.convertCoordinatesAction)
+
         # Create the conversions menu
         menu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.png')
@@ -162,6 +171,7 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.convertCoordinatesAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.conversionsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.settingsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.helpAction)
@@ -174,6 +184,7 @@ class LatLonTools:
         self.iface.removeToolBarIcon(self.zoomToAction)
         self.iface.removeToolBarIcon(self.externMapAction)
         self.iface.removeToolBarIcon(self.multiZoomToAction)
+        self.iface.removeToolBarIcon(self.convertCoordinatesAction)
         self.iface.removeToolBarIcon(self.digitizeAction)
         del self.toolbar
         
@@ -183,6 +194,7 @@ class LatLonTools:
         self.showMapTool = None
         self.mapTool = None
         self.digitizerDialog = None
+        self.convertCoordinateDialog = None
         QgsApplication.processingRegistry().removeProvider(self.provider)
 
     def startCapture(self):
@@ -241,6 +253,13 @@ class LatLonTools:
         '''Show the zoom to docked widget.'''
         self.zoomToDialog.show()
 
+    def convertCoordinatesTool(self):
+        '''Display the Convert Coordinate Tool Dialog box.'''
+        if self.convertCoordinateDialog == None:
+            from .coordinateConverter import CoordinateConverterWidget
+            self.convertCoordinateDialog = CoordinateConverterWidget(self, self.settingsDialog, self.iface, self.iface.mainWindow())
+        self.convertCoordinateDialog.show()
+        
     def multiZoomTo(self):
         '''Display the Multi-zoom to dialog box'''
         self.multiZoomDialog.show()

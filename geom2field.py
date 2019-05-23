@@ -263,12 +263,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 elif outputFormat == 5: # Plus codes
                     msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
                 else: # WGS 84 UTM  
-                    zone = int( (pt.x() + 180) / 6) + 1
-                    if pt.y() >= 0:
-                        zonestr = '{}N'.format(zone)
-                    else:
-                        zonestr = '{}S'.format(zone)
-                    msg = latLon2UtmString(zonestr, pt.y(), pt.x(), dmsPrecision)
+                    msg = latLon2UtmString(pt.y(), pt.x(), dmsPrecision)
             except:
                 msg = ''
 

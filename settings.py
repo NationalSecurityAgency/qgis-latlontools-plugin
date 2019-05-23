@@ -14,7 +14,8 @@ FORM_CLASS, _ = loadUiType(os.path.join(
 
 
 class Settings():
-
+    OrderYX = 0
+    OrderXY = 1
     def __init__(self):
         self.readSettings()
 
@@ -26,12 +27,16 @@ class Settings():
         
         ### CAPTURE SETTINGS ###
         self.captureShowLocation = int(qset.value('/LatLonTools/CaptureShowClickedLocation', Qt.Unchecked))
+        self.captureCustomCrsAuthId = qset.value('/LatLonTools/CaptureCustomCrsId', 'EPSG:4326')
         
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
         self.mapProvider = int(qset.value('/LatLonTools/MapProvider', 0))
         self.mapZoom = int(qset.value('/LatLonTools/MapZoom', 13))
         self.externalMapShowLocation = int(qset.value('/LatLonTools/ExternMapShowClickedLocation', Qt.Unchecked))
+        
+        ### Multi-zoom Settings ###
+        self.multiZoomCustomCrsAuthId = qset.value('/LatLonTools/MultiZoomCustomCrsId', 'EPSG:4326')
         
         ### BBOX CAPTURE SETTINGS ###
         self.bBoxCrs = int(qset.value('/LatLonTools/BBoxCrs', 0)) # Specifies WGS 84
@@ -40,6 +45,16 @@ class Settings():
         self.bBoxDigits = int(qset.value('/LatLonTools/BBoxDigits', 8))
         self.bBoxPrefix = qset.value('/LatLonTools/BBoxPrefix', '')
         self.bBoxSuffix = qset.value('/LatLonTools/BBoxSuffix', '')
+        
+        ### COORDINATE CONVERSION SETTINGS ###
+        self.converterCustomCrsAuthId = qset.value('/LatLonTools/ConverterCustomCrsId', 'EPSG:4326')
+        self.converterCoordOrder = int(qset.value('/LatLonTools/ConverterCoordOrder', self.OrderYX))
+        self.converterDDPrec = int(qset.value('/LatLonTools/ConverterDDPrecision', 2))
+        self.converter4326DDPrec = int(qset.value('/LatLonTools/Converter4326DDPrecision', 8))
+        self.converterDmsPrec = int(qset.value('/LatLonTools/ConverterDmsPrecision', 0))
+        self.converterUtmPrec = int(qset.value('/LatLonTools/ConverterUtmPrecision', 0))
+        self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
+        self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ',')
         
     def googleEarthMapProvider(self):
         if self.mapProvider >= len(mapProviders.MAP_PROVIDERS):
@@ -123,6 +138,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
             ])
         self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
         
+        ### COORDINATE CONVERSION SETTINGS ###
+        self.converterCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
+        self.converterProjectionSelectionWidget.setCrs(epsg4326)
+        
+        
         self.readSettings()
     
     def captureCustomCRS(self):
@@ -186,6 +206,16 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.bBoxSuffixLineEdit.setText('')
         self.bBoxDigitsSpinBox.setValue(8)
         
+        ### COORDINATE CONVERSION SETTINGS ###
+        self.converterCoordOrderComboBox.setCurrentIndex(0) # WGS 84
+        self.converterProjectionSelectionWidget.setCrs(epsg4326)
+        self.converter4326DDPrecisionSpinBox.setValue(8)
+        self.converterDDPrecisionSpinBox.setValue(2)
+        self.converterDMSPrecisionSpinBox.setValue(0)
+        self.converterUtmPrecisionSpinBox.setValue(0)
+        self.converterPlusCodePrecisionSpinBox.setValue(10)
+        self.converterDelimiterLineEdit.setText(',')
+        
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
         the user quits QGIS. This just loads the saved information into varialbles,
@@ -234,6 +264,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset = QSettings()
         
         ### CAPTURE SETTINGS ###
+        qset.setValue('/LatLonTools/CaptureCustomCrsId', self.captureProjectionSelectionWidget.crs().authid())
         qset.setValue('/LatLonTools/CaptureProjection', int(self.captureProjectionComboBox.currentIndex()))
             
         qset.setValue('/LatLonTools/WGS84NumberFormat', int(self.wgs84NumberFormatComboBox.currentIndex()))
@@ -271,6 +302,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/MapZoom', int(self.zoomSpinBox.value()))
         
         ### MULTI-ZOOM TO SETTINGS ###
+        qset.setValue('/LatLonTools/MultiZoomCustomCrsId', self.multiZoomToProjectionSelectionWidget.crs().authid())
         qset.setValue('/LatLonTools/MultiZoomToProjection', int(self.multiZoomToProjectionComboBox.currentIndex()))
         qset.setValue('/LatLonTools/MultiCoordOrder', int(self.multiCoordOrderComboBox.currentIndex()))
         qset.setValue('/LatLonTools/MultiZoomExtraData', int(self.extraDataSpinBox.value()))
@@ -294,6 +326,16 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/BBoxPrefix', self.bBoxPrefixLineEdit.text())
         qset.setValue('/LatLonTools/BBoxSuffix', self.bBoxSuffixLineEdit.text())
         qset.setValue('/LatLonTools/BBoxDigits', self.bBoxDigitsSpinBox.value())
+        
+        ### COORDINATE CONVERSION SETTINGS ###
+        qset.setValue('/LatLonTools/ConverterCustomCrsId', self.converterProjectionSelectionWidget.crs().authid())
+        qset.setValue('/LatLonTools/ConverterCoordOrder', int(self.converterCoordOrderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/ConverterDDPrecision', int(self.converterDDPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/Converter4326DDPrecision', int(self.converter4326DDPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterDmsPrecision', int(self.converterDMSPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterUtmPrecision', int(self.converterUtmPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
         
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -336,6 +378,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.readSettings()
         
         ### CAPTURE SETTINGS ###
+        self.captureProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(settings.captureCustomCrsAuthId))
         self.captureProjectionComboBox.setCurrentIndex(self.captureProjection)
         self.wgs84NumberFormatComboBox.setCurrentIndex(self.wgs84NumberFormat)
         self.otherNumberFormatComboBox.setCurrentIndex(self.otherNumberFormat)
@@ -377,6 +420,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomSpinBox.setValue(settings.mapZoom)
 
         ### MULTI-ZOOM CUSTOM QML STYLE ###
+        self.multiZoomToProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(settings.multiZoomCustomCrsAuthId))
         self.multiZoomToProjectionComboBox.setCurrentIndex(self.multiZoomToProjection)
         self.multiCoordOrderComboBox.setCurrentIndex(self.multiCoordOrder)
         self.extraDataSpinBox.setValue(self.multiZoomNumCol)
@@ -401,6 +445,16 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.bBoxPrefixLineEdit.setText(settings.bBoxPrefix)
         self.bBoxSuffixLineEdit.setText(settings.bBoxSuffix)
         self.bBoxDigitsSpinBox.setValue(settings.bBoxDigits)
+        
+        ### COORDINATE CONVERSION SETTINGS ###
+        self.converterProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(settings.converterCustomCrsAuthId))
+        self.converterCoordOrderComboBox.setCurrentIndex(settings.converterCoordOrder)
+        self.converterDDPrecisionSpinBox.setValue(settings.converterDDPrec)
+        self.converter4326DDPrecisionSpinBox.setValue(settings.converter4326DDPrec)
+        self.converterDMSPrecisionSpinBox.setValue(settings.converterDmsPrec)
+        self.converterUtmPrecisionSpinBox.setValue(settings.converterUtmPrec)
+        self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
+        self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
         
         self.setEnabled()
         

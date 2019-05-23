@@ -1,12 +1,12 @@
 [general]
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
-description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes notation. Provides external map support, MGRS & Plus Codes conversion and point digitizing tools.
-version=3.2.2
+description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes notation. Provides external map support, point digitizing tools, and coordinate conversion tools.
+version=3.3.0
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
-    Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS and Plus Codes support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools.
+    Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, and Plus Codes support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools.
     1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map. This includes DMS, UTM, MGRS, and Plus Codes.
     2) Capture the bounding box of the canvas.
     3) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, UTM, and Plus Codes, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
@@ -17,8 +17,7 @@ about=
     8) Plus Code conversion routines that converts a layer with a Plus Code field into a point layer, and creates an Plus Code field from the point layer.
     9) Convert a point layer geometry into a textual representation of that geometry within a field.
     10) Convert a layer containing a coordinate field or fields into a point layer.
-    
-    Lat Lon Tools makes it possible to seamlessly copy and paste between QGIS, Google Earth, and other on-line maps. The user can specify the delimiter used between coordinates and whether the coordinate order is 'Latitude, Longitude (Y,X)' or 'Longitude, Latitude (X,Y)'.
+    11) Coordinate conversion dialog.
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
@@ -28,6 +27,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.3.0 - Added coordinate converter. Fixed #32
     3.2.2 - Changed Python 3.6 syntax to work with older versions of QGIS
     3.2.1 - Added zoom to standard UTM support - refactored DMS code
     3.2.0 - Added Standard WGS84 UTM Support

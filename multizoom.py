@@ -134,8 +134,9 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     
     @pyqtSlot(QgsPointXY)
     def capturedPoint(self, pt):
-        newrow = self.addCoord(pt.y(), pt.x())
-        self.resultsTable.selectRow(newrow)
+        if self.isVisible() and self.coordCaptureButton.isChecked():
+            newrow = self.addCoord(pt.y(), pt.x())
+            self.resultsTable.selectRow(newrow)
 
     def startCapture(self):
         if self.coordCaptureButton.isChecked():
