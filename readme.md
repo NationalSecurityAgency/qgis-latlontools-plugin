@@ -1,10 +1,10 @@
 # Lat Lon Tools Plugin
 
-***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS and Plus Code coordinate support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
+***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, and Plus Code coordinate support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
 
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
-Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If for some reason the toolbar is missing, select the menu item ***View->Toolbars*** and make sure ***Lat Lon Tools Toolbar*** is enabled.
+Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If for some reason the toolbar is missing, select the menu item ***View->Toolbars*** and make sure ***Lat Lon Tools Toolbar*** is enabled. The conversion algorithms can be run from the QGIS processing toolbox.
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
