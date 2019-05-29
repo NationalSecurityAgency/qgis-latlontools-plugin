@@ -291,3 +291,4 @@ These are the default settings for the ***Coordinate Conversion*** dialog box.
 * ***UTM precision*** specifies the number of decimal digits for a UTM formatted coordinate.
 * ***Plus codes length*** is the number of digits in a plus code coordinate.
 * ***Delimiter between coordinate pairs*** is the delimiter used between coordinate pairs for those representations that require a delimiter.
+* ***DDMMSS delimiter*** is the delimiter used between DDMMSS coordinate pairs. Leave this blank if no space is desired between coordinates. The default is ", ".

@@ -54,7 +54,8 @@ class Settings():
         self.converterDmsPrec = int(qset.value('/LatLonTools/ConverterDmsPrecision', 0))
         self.converterUtmPrec = int(qset.value('/LatLonTools/ConverterUtmPrecision', 0))
         self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
-        self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ',')
+        self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
+        self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
         
     def googleEarthMapProvider(self):
         if self.mapProvider >= len(mapProviders.MAP_PROVIDERS):
@@ -215,6 +216,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterUtmPrecisionSpinBox.setValue(0)
         self.converterPlusCodePrecisionSpinBox.setValue(10)
         self.converterDelimiterLineEdit.setText(',')
+        self.converterDdmmssDelimiterLineEdit.setText(',')
         
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
@@ -336,6 +338,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterUtmPrecision', int(self.converterUtmPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
+        qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
         
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -455,6 +458,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterUtmPrecisionSpinBox.setValue(settings.converterUtmPrec)
         self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
         self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
+        self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
         
         self.setEnabled()
         

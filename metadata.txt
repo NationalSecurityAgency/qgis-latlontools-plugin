@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
-version=3.3.0
+version=3.3.1
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -27,6 +27,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.3.1 - Added separate DDMMSS delimiter for coordinate converter
     3.3.0 - Added coordinate converter. Fixed #32
     3.2.2 - Changed Python 3.6 syntax to work with older versions of QGIS
     3.2.1 - Added zoom to standard UTM support - refactored DMS code

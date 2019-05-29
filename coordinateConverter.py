@@ -202,7 +202,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
             s = formatDmsString(pt4326.y(), pt4326.x(), True, settings.converterDmsPrec, self.inputXYOrder, settings.converterDelimiter)
             self.dmsLineEdit.setText(s)
         if id != 4: # DDMMSS
-            s = formatDmsString(pt4326.y(), pt4326.x(), False, settings.converterDmsPrec, self.inputXYOrder, settings.converterDelimiter)
+            s = formatDmsString(pt4326.y(), pt4326.x(), False, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter)
             self.ddmmssLineEdit.setText(s)
         if id != 5: # UTM
             s = latLon2UtmString(pt4326.y(), pt4326.x(), settings.converterUtmPrec)
