@@ -37,7 +37,6 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     PrmXFieldName = 'XFieldName'
     PrmCoordinateOrder = 'CoordinateOrder'
     PrmCoordinateDelimiter = 'CoordinateDelimiter'
-    PrmOtherDelimiter = 'OtherDelimiter'
     PrmOutputCRSType = 'OutputCRSType'
     PrmCustomCRS = 'CustomCRS'
     PrmWgs84NumberFormat = 'Wgs84NumberFormat'
@@ -86,18 +85,10 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 optional=True)
         )
         self.addParameter(
-            QgsProcessingParameterEnum(
-                self.PrmCoordinateDelimiter,
-                tr('Coordinate delimiter when using 1 field'),
-                options=[tr('Comma'), tr('Space'), tr('Tab'), tr('Other')],
-                defaultValue=0,
-                optional=True)
-        )
-        self.addParameter(
             QgsProcessingParameterString(
-                self.PrmOtherDelimiter,
-                tr('Other delimiter when using 1 field'),
-                defaultValue='',
+                self.PrmCoordinateDelimiter,
+                tr('Delimiter between coordinates when using 1 field'),
+                defaultValue=',',
                 optional=True)
             )
         self.addParameter(
@@ -149,7 +140,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 'Plus Codes length',
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=11,
-                optional=False,
+                optional=True,
                 minValue=10,
                 maxValue=20
                 )
@@ -166,8 +157,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         field1Name = self.parameterAsString(parameters, self.PrmYFieldName, context).strip()
         field2Name = self.parameterAsString(parameters, self.PrmXFieldName, context).strip()
         coordOrder = self.parameterAsInt(parameters, self.PrmCoordinateOrder, context)
-        delimType = self.parameterAsInt(parameters, self.PrmCoordinateDelimiter, context)
-        otherDelim = self.parameterAsString(parameters, self.PrmOtherDelimiter, context)
+        delimiter = self.parameterAsString(parameters, self.PrmCoordinateDelimiter, context)
         crsType = self.parameterAsInt(parameters, self.PrmOutputCRSType, context)
         crsOther = self.parameterAsCrs(parameters, self.PrmCustomCRS, context)
         wgs84Format = self.parameterAsInt(parameters, self.PrmWgs84NumberFormat, context)
@@ -175,15 +165,6 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         dmsPrecision = self.parameterAsInt(parameters, self.PrmDMSSecondPrecision, context)
         plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
         
-        if delimType == 0:
-            delimiter = ','
-        elif delimType == 1:
-            delimiter = ' '
-        elif delimType == 2:
-            delimiter = '\t'
-        else:
-            delimiter = otherDelim
-            
         layerCRS = source.sourceCrs()
         # For the first condition, the user has either EPSG:4326 selected or
         # or have chosen GeoJSON or WKT which will be 4326 as well
