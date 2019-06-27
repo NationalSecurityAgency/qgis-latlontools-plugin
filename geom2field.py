@@ -2,9 +2,10 @@ import os
 
 from qgis.PyQt.QtCore import QVariant, QCoreApplication, QUrl
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.core import QgsFields, QgsField, QgsFeature, QgsCoordinateTransform, QgsProject
 
-from qgis.core import (QgsProcessing,
+from qgis.core import (
+    QgsProcessing,
     QgsProcessingException,
     QgsProcessingAlgorithm,
     QgsProcessingParameterEnum,
@@ -22,7 +23,7 @@ from . import olc
 
 def tr(string):
     return QCoreApplication.translate('Processing', string)
-        
+
 
 class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     """
@@ -44,7 +45,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     PrmDMSSecondPrecision = 'DMSSecondPrecision'
     PrmPlusCodesLength = 'PlusCodesLength'
     PrmOutputLayer = 'OutputLayer'
-    
+
     def initAlgorithm(self, config):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
@@ -56,9 +57,11 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmOutputFormat,
                 tr('Output format'),
-                options=[tr('Coordinates in 2 fields'),
+                options=[
+                    tr('Coordinates in 2 fields'),
                     tr('Coordinates in 1 field'),
-                    'GeoJSON', 'WKT', 'MGRS', 'Plus Codes', 'Standard UTM'],
+                    tr('GeoJSON'), tr('WKT'), tr('MGRS'),
+                    tr('Plus Codes'), tr('Standard UTM')],
                 defaultValue=0,
                 optional=True)
         )
@@ -68,14 +71,14 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 tr('Longitude (X) field name'),
                 defaultValue='x',
                 optional=True)
-            )
+        )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmYFieldName,
                 tr('Latitude (Y) & all other formats field name'),
                 defaultValue='y',
                 optional=True)
-            )
+        )
         self.addParameter(
             QgsProcessingParameterEnum(
                 self.PrmCoordinateOrder,
@@ -90,7 +93,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 tr('Delimiter between coordinates when using 1 field'),
                 defaultValue=',',
                 optional=True)
-            )
+        )
         self.addParameter(
             QgsProcessingParameterEnum(
                 self.PrmOutputCRSType,
@@ -121,9 +124,8 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=8,
                 optional=True,
-                minValue=0
-                )
-            )
+                minValue=0)
+        )
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmDMSSecondPrecision,
@@ -131,26 +133,24 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=0,
                 optional=True,
-                minValue=0
-                )
-            )
+                minValue=0)
+        )
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmPlusCodesLength,
-                'Plus Codes length',
+                tr('Plus Codes length'),
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=11,
                 optional=True,
                 minValue=10,
-                maxValue=20
-                )
-            )
+                maxValue=20)
+        )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output layer')
-            )
-    
+                tr('Output layer'))
+        )
+
     def processAlgorithm(self, parameters, context, feedback):
         source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
         outputFormat = self.parameterAsInt(parameters, self.PrmOutputFormat, context)
@@ -164,34 +164,35 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         decimalPrecision = self.parameterAsInt(parameters, self.PrmCoordinatePrecision, context)
         dmsPrecision = self.parameterAsInt(parameters, self.PrmDMSSecondPrecision, context)
         plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
-        
+
         layerCRS = source.sourceCrs()
         # For the first condition, the user has either EPSG:4326 selected or
         # or have chosen GeoJSON or WKT which will be 4326 as well
-        if crsType == 0 or outputFormat >= 2: # Forced WGS 84
+        if crsType == 0 or outputFormat >= 2:  # Forced WGS 84
             outCRS = epsg4326
-        elif crsType == 1: # Layer CRS
+        elif crsType == 1:  # Layer CRS
             outCRS = layerCRS
-        elif crsType == 2: # Project CRS
+        elif crsType == 2:  # Project CRS
             outCRS = QgsProject.instance().crs()
         else:
             outCRS = crsOther
-            
+
         fieldsout = QgsFields(source.fields())
-        
-        if fieldsout.append(QgsField(field1Name, QVariant.String)) == False:
+
+        if fieldsout.append(QgsField(field1Name, QVariant.String)) is False:
             msg = "Field names must be unique. There is already a field named '{}'".format(field1Name)
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
-        if outputFormat == 0: # Two fields for coordinates
-            if fieldsout.append(QgsField(field2Name, QVariant.String)) == False:
+        if outputFormat == 0:  # Two fields for coordinates
+            if fieldsout.append(QgsField(field2Name, QVariant.String)) is False:
                 msg = "Field names must be unique. There is already a field named '{}'".format(field2Name)
                 feedback.reportError(msg)
                 raise QgsProcessingException(msg)
-        
-        (sink, dest_id) = self.parameterAsSink(parameters, self.PrmOutputLayer,
-                context, fieldsout, source.wkbType(), layerCRS)
-                
+
+        (sink, dest_id) = self.parameterAsSink(
+            parameters, self.PrmOutputLayer,
+            context, fieldsout, source.wkbType(), layerCRS)
+
         if layerCRS != outCRS:
             transform = QgsCoordinateTransform(layerCRS, outCRS, QgsProject.instance())
 
@@ -205,90 +206,90 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             if layerCRS != outCRS:
                 pt = transform.transform(pt)
             try:
-                if outputFormat == 0: # Two fields for coordinates
+                if outputFormat == 0:  # Two fields for coordinates
                     if outCRS == epsg4326:
-                        if wgs84Format == 0: # Decimal Degrees
+                        if wgs84Format == 0:  # Decimal Degrees
                             msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                             msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
-                        elif wgs84Format == 1: # DMS
+                        elif wgs84Format == 1:  # DMS
                             msg = convertDD2DMS(pt.y(), True, True, dmsPrecision)
                             msg2 = convertDD2DMS(pt.x(), False, True, dmsPrecision)
-                        else: #DDMMSS
+                        else:  # DDMMSS
                             msg = convertDD2DMS(pt.y(), True, False, dmsPrecision)
                             msg2 = convertDD2DMS(pt.x(), False, False, dmsPrecision)
                     else:
                         msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                         msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
-                elif outputFormat == 1: # One field for coordinate
+                elif outputFormat == 1:  # One field for coordinate
                     if outCRS == epsg4326:
-                        if wgs84Format == 0: # Decimal Degrees
+                        if wgs84Format == 0:  # Decimal Degrees
                             if coordOrder == 0:
                                 msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
                             else:
                                 msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
-                        elif wgs84Format == 1: # DMS
+                        elif wgs84Format == 1:  # DMS
                             msg = formatDmsString(pt.y(), pt.x(), True, dmsPrecision, coordOrder, delimiter)
-                        else: #DDMMSS
+                        else:  # DDMMSS
                             msg = formatDmsString(pt.y(), pt.x(), False, dmsPrecision, coordOrder, delimiter)
                     else:
                         if coordOrder == 0:
                             msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
                         else:
                             msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
-                elif outputFormat == 2: # GeoJSON
+                elif outputFormat == 2:  # GeoJSON
                     msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(pt.x(), pt.y(), prec=decimalPrecision)
-                elif outputFormat == 3: # WKT
+                elif outputFormat == 3:  # WKT
                     msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt.x(), pt.y(), prec=decimalPrecision)
-                elif outputFormat == 4: # MGRS
+                elif outputFormat == 4:  # MGRS
                     msg = mgrs.toMgrs(pt.y(), pt.x(), 5)
-                elif outputFormat == 5: # Plus codes
+                elif outputFormat == 5:  # Plus codes
                     msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
-                else: # WGS 84 UTM  
+                else:  # WGS 84 UTM
                     msg = latLon2UtmString(pt.y(), pt.x(), dmsPrecision)
-            except:
+            except Exception:
                 msg = ''
 
             f = QgsFeature()
             f.setGeometry(feature.geometry())
-            if outputFormat == 0: # Two fields for coordinates
-                f.setAttributes(feature.attributes()+[msg, msg2])
+            if outputFormat == 0:  # Two fields for coordinates
+                f.setAttributes(feature.attributes() + [msg, msg2])
             else:
-                f.setAttributes(feature.attributes()+[msg])
+                f.setAttributes(feature.attributes() + [msg])
             sink.addFeature(f)
-            
+
             if cnt % 100 == 0:
                 feedback.setProgress(int(cnt * total))
-            
+
         return {self.PrmOutputLayer: dest_id}
-        
+
     def name(self):
         return 'geom2field'
 
     def icon(self):
         return QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
-    
+
     def displayName(self):
         return 'Point layer to fields'
-    
+
     def group(self):
         return 'Vector conversion'
-        
+
     def groupId(self):
         return 'vectorconversion'
-        
+
     def helpUrl(self):
-        file = os.path.dirname(__file__)+'/index.html'
+        file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
         return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
-    
+
     def shortHelpString(self):
-        file = os.path.dirname(__file__)+'/doc/geom2fields.help'
+        file = os.path.dirname(__file__) + '/doc/geom2fields.help'
         if not os.path.exists(file):
             return ''
         with open(file) as helpf:
             help = helpf.read()
         return help
-        
+
     def createInstance(self):
         return Geom2FieldAlgorithm()

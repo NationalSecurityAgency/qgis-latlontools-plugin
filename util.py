@@ -1,12 +1,12 @@
 import math
 import re
-from qgis.core import QgsCoordinateReferenceSystem, QgsPoint
+from qgis.core import QgsCoordinateReferenceSystem
 
 epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
 
 def formatDmsString(lat, lon, isdms=False, prec=0, order=0, delimiter=', '):
     '''Return a DMS formated string.'''
-    if order == 0: # Y, X or Lat, Lon
+    if order == 0:  # Y, X or Lat, Lon
         return convertDD2DMS(lat, True, isdms, prec) + str(delimiter) + convertDD2DMS(lon, False, isdms, prec)
     else:
         return convertDD2DMS(lon, False, isdms, prec) + str(delimiter) + convertDD2DMS(lat, True, isdms, prec)
@@ -40,20 +40,20 @@ def convertDD2DMS(coord, islat, isdms, prec):
         else:
             s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
     if isdms:
-        s += " "+unit
+        s += " " + unit
     else:
         s += unit
     return(s)
-    
+
 def parseDMSString(str, order=0):
     '''Parses a pair of coordinates that are in the order of
     "latitude, longitude". The string can be in DMS or decimal
     degree notation. If order is 0 then then decimal coordinates are assumed to
     be in Lat Lon order otherwise they are in Lon Lat order. For DMS coordinates
     it does not matter the order.'''
-    str = str.strip().upper() # Make it all upper case
+    str = str.strip().upper()  # Make it all upper case
     try:
-        if re.search(r"[NSEW]", str) == None:
+        if re.search(r"[NSEW]", str) is None:
             # There were no annotated dms coordinates so assume decimal degrees
             # Remove any characters that are not digits and decimal
             str = re.sub(r"[^\d.+-]+", " ", str).strip()
@@ -68,7 +68,7 @@ def parseDMSString(str, order=0):
                 lat = float(coords[1])
         else:
             # We should have a DMS coordinate
-            if re.search(r'[NSEW]\s*\d+.+[NSEW]\s*\d+', str) == None:
+            if re.search(r'[NSEW]\s*\d+.+[NSEW]\s*\d+', str) is None:
                 # We assume that the cardinal directions occur after the digits
                 m = re.findall(r'(.+)\s*([NS])[\s,;:]*(.+)\s*([EW])', str)
                 if len(m) != 1 or len(m[0]) != 4:
@@ -102,10 +102,10 @@ def parseDMSString(str, order=0):
                     # The coordinates are in lat, lon order
                     lat = parseDMS(m[0][1], m[0][0])
                     lon = parseDMS(m[0][3], m[0][2])
-    
-    except:
+
+    except Exception:
         raise ValueError('Invalid Coordinates')
-        
+
     return lat, lon
 
 def parseDMSStringSingle(str):
@@ -114,11 +114,11 @@ def parseDMSStringSingle(str):
     as to whether it is latitude or longitude'''
     str = str.strip().upper()
     try:
-        if re.search(r"[NSEW]", str) == None:
+        if re.search(r"[NSEW]", str) is None:
             coord = float(str)
         else:
             # We should have a DMS coordinate
-            if re.search(r'[NSEW]\s*\d+', str) == None:
+            if re.search(r'[NSEW]\s*\d+', str) is None:
                 # We assume that the cardinal directions occur after the digits
                 m = re.findall(r'(.+)\s*([NSEW])', str)
                 if len(m) != 1 or len(m[0]) != 2:
@@ -130,7 +130,7 @@ def parseDMSStringSingle(str):
                 if len(m) != 1 or len(m[0]) != 2:
                     raise ValueError('Invalid DMS Coordinate')
                 coord = parseDMS(m[0][1], m[0][0])
-    except:
+    except Exception:
         raise ValueError('Invalid Coordinates')
     return coord
 
@@ -140,25 +140,25 @@ def parseDMS(str, hemisphere):
     parts = re.split(r'[\s]+', str)
     dmslen = len(parts)
     if dmslen == 3:
-        deg = float(parts[0]) + float(parts[1])/60.0 + float(parts[2])/3600.0
+        deg = float(parts[0]) + float(parts[1]) / 60.0 + float(parts[2]) / 3600.0
     elif dmslen == 2:
-        deg = float(parts[0]) + float(parts[1])/60.0
+        deg = float(parts[0]) + float(parts[1]) / 60.0
     elif dmslen == 1:
         dms = parts[0]
         if hemisphere == 'N' or hemisphere == 'S':
             dms = '0' + dms
         # Find the length up to the first decimal
-        l = dms.find('.')
-        if l == -1:
+        ll = dms.find('.')
+        if ll == -1:
             # No decimal point found so just return the length of the string
-            l = len(dms)
-        if l >= 7:
+            ll = len(dms)
+        if ll >= 7:
             deg = float(dms[0:3]) + float(dms[3:5]) / 60.0 + float(dms[5:]) / 3600.0
-        elif l == 6: # A leading 0 was left off but we can still work with 6 digits
-             deg = float(dms[0:2]) + float(dms[2:4]) / 60.0 + float(dms[4:]) / 3600.0
-        elif l == 5:
+        elif ll == 6:  # A leading 0 was left off but we can still work with 6 digits
+            deg = float(dms[0:2]) + float(dms[2:4]) / 60.0 + float(dms[4:]) / 3600.0
+        elif ll == 5:
             deg = float(dms[0:3]) + float(dms[3:]) / 60.0
-        elif l == 4: # Leading 0's were left off
+        elif ll == 4:  # Leading 0's were left off
             deg = float(dms[0:2]) + float(dms[2:]) / 60.0
         else:
             deg = float(dms)

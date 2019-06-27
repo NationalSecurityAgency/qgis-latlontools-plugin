@@ -1,5 +1,5 @@
 from qgis.PyQt.QtCore import Qt, QUrl
-from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.core import Qgis, QgsCoordinateTransform, QgsProject
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 from .util import epsg4326
 from .settings import settings
@@ -19,14 +19,14 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         self.canvas = iface.mapCanvas()
         self.canvasClicked.connect(self.clicked)
         self.marker = None
-        
+
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
         self.canvas.setCursor(Qt.CrossCursor)
-    
+
     def deactivate(self):
         self.removeMarker()
-    
+
     def clicked(self, pt, b):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
@@ -38,8 +38,8 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
                 self.marker.setIconType(QgsVertexMarker.ICON_CROSS)
             self.marker.setCenter(pt)
         else:
-            self.removeMarker();
-            
+            self.removeMarker()
+
         canvasCRS = self.canvas.mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
         pt4326 = transform.transform(pt.x(), pt.y())
@@ -71,7 +71,7 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
             url = QUrl(mapprovider).toString()
             webbrowser.open(url, new=2)
             self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat, lon), level=Qgis.Info, duration=3)
-    
+
     def removeMarker(self):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)

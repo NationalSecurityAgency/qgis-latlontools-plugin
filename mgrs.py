@@ -195,7 +195,7 @@ def _upsToMgrs(hemisphere, easting, northing, precision):
         letters[2] = letters[2] + 1
 
     gridEasting = easting
-    gridEasting = gridEasting - falseEasting;
+    gridEasting = gridEasting - falseEasting
     letters[1] = ltr2LowValue + int(gridEasting / ONEHT)
 
     if easting < TWOMIL:
@@ -382,7 +382,7 @@ def _mgrsToUtm(mgrs):
     # Check that the second letter of the MGRS string is within the range
     # of valid second letter values. Also check that the third letter is valid
     if (letters[1] < ltr2LowValue) or (letters[1] > ltr2HighValue) or (letters[2] > ALPHABET['V']):
-        raise  MgrsException('An MGRS string error: string too long, too short, or badly formed')
+        raise MgrsException('An MGRS string error: string too long, too short, or badly formed')
 
     rowLetterNorthing = float(letters[2] * ONEHT)
     gridEasting = float((letters[1] - ltr2LowValue + 1) * ONEHT)
@@ -424,7 +424,7 @@ def _mgrsString(zone, letters, easting, northing, precision):
     @param precision - precision level of MGRS string
     @returns - MGRS coordinate string
     """
-    mrgs = ''
+    mgrs = ''
     if zone:
         tmp = str(zone)
         mgrs = tmp.zfill(3 - len(tmp))
