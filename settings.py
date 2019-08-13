@@ -84,9 +84,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
     Wgs84TypeWKT = 3
     Wgs84TypeGeoJSON = 4
     ProjectionTypeWgs84 = 0
-    ProjectionTypeMGRS = 1
-    ProjectionTypeProjectCRS = 2
-    ProjectionTypeCustomCRS = 3
+    ProjectionTypeProjectCRS = 1
+    ProjectionTypeCustomCRS = 2
+    ProjectionTypeMGRS = 3
     ProjectionTypePlusCodes = 4
     ProjectionTypeUTM = 5
     OrderYX = 0
@@ -102,7 +102,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes', 'Standard UTM'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -111,7 +111,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
 
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
+        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -120,7 +120,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.mapProviderComboBox.addItems(mapProviders.mapProviderNames())
 
         ### MULTI-ZOOM ###
-        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'MGRS', 'Project CRS', 'Custom CRS', 'Plus Codes'])
+        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
         self.multiZoomToProjectionComboBox.activated.connect(self.setEnabled)
         self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
@@ -364,12 +364,12 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         # Simple Zoom to Enables
         zoomToProjection = int(self.zoomToProjectionComboBox.currentIndex())
-        self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and (zoomToProjection != self.ProjectionTypePlusCodes))
+        self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and (zoomToProjection != self.ProjectionTypePlusCodes) and (zoomToProjection != self.ProjectionTypeUTM))
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
 
         # MULTI Zoom
         zoomToProjection = int(self.multiZoomToProjectionComboBox.currentIndex())
-        self.multiZoomToProjectionSelectionWidget.setEnabled(zoomToProjection == 3)
+        self.multiZoomToProjectionSelectionWidget.setEnabled(zoomToProjection == 2)
 
     def showTab(self, tab):
         self.tabWidget.setCurrentIndex(tab)
@@ -408,11 +408,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
 
         ### ZOOM TO SETTINGS ###
+        self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
         if self.zoomToCustomCrsAuthId == 'EPSG:4326':
-            self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
             self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         else:
-            self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
             self.zoomToProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(self.zoomToCustomCrsAuthId))
         self.zoomToCoordOrderComboBox.setCurrentIndex(self.zoomToCoordOrder)
         self.persistentMarkerCheckBox.setCheckState(self.persistentMarker)
@@ -525,8 +524,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
             return True
         return False
 
+    def zoomToProjIsStandardUtm(self):
+        if self.zoomToProjection == self.ProjectionTypeUTM:
+            return True
+        return False
+
     def multiZoomToProjIsMGRS(self):
-        if self.multiZoomToProjection == 1:  # MGRS
+        if self.multiZoomToProjection == 3:  # MGRS
             return True
         return False
 
@@ -535,13 +539,18 @@ class SettingsWidget(QDialog, FORM_CLASS):
             return True
         return False
 
+    def multiZoomToProjIsUtm(self):
+        if self.multiZoomToProjection == 5:  # Standard UTM
+            return True
+        return False
+
     def multiZoomToProjIsWgs84(self):
         if self.multiZoomToProjection == 0:  # Wgs84
             return True
-        if self.multiZoomToProjection == 2:  # Project CRS
+        if self.multiZoomToProjection == 1:  # Project CRS
             if self.canvas.mapSettings().destinationCrs() == epsg4326:
                 return True
-        if self.multiZoomToProjection == 3:  # Custom CRS
+        if self.multiZoomToProjection == 2:  # Custom CRS
             if self.multiZoomToCustomCRS() == epsg4326:
                 return True
         return False
@@ -549,7 +558,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     def multiZoomToCRS(self):
         if self.multiZoomToProjection == 0:  # Wgs84
             return self.epse4326
-        if self.multiZoomToProjection == 2:  # Project CRS
+        if self.multiZoomToProjection == 1:  # Project CRS
             return self.canvas.mapSettings().destinationCrs()
-        if self.multiZoomToProjection == 3:  # Custom CRS
+        if self.multiZoomToProjection == 2:  # Custom CRS
             return self.multiZoomToCustomCRS()

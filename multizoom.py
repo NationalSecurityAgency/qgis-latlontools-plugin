@@ -11,6 +11,7 @@ from qgis.core import (
     QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject, Qgis)
 from qgis.gui import QgsVertexMarker
 from .util import epsg4326, parseDMSStringSingle, parseDMSString
+from .utm import utmString2Crs
 from . import mgrs
 from . import olc
 
@@ -86,6 +87,8 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             self.label.setText("Enter coordinate ('mgrs,...)")
         elif self.settings.multiZoomToProjIsPlusCodes():
             self.label.setText("Enter coordinate ('Plus code,...)")
+        elif self.settings.multiZoomToProjIsUtm():
+            self.label.setText("Enter coordinate ('Standard UTM,...)")
         else:
             if self.settings.multiCoordOrder == self.settings.OrderYX:
                 self.label.setText("Enter coordinate ({} Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
@@ -305,6 +308,14 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 coord = olc.decode(parts[0])
                 lat = coord.latitudeCenter
                 lon = coord.longitudeCenter
+                if numFields >= 2:
+                    label = parts[1]
+                if numFields >= 3:
+                    data = parts[2:]
+            elif self.settings.multiZoomToProjIsUtm():
+                pt = utmString2Crs(parts[0])
+                lat = pt.y()
+                lon = pt.x()
                 if numFields >= 2:
                     label = parts[1]
                 if numFields >= 3:
