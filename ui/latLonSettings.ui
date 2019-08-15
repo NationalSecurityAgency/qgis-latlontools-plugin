@@ -250,13 +250,17 @@
          <property name="plainText">
           <string>Supported 'Zoom to' formats (See help for more details):
 
-WGS 84 - Decimal, DMS, &amp; WKT degrees
+WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes, Standard UTM
+
+Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 
 MGRS - Only MGRS coordinates
 
 Plus Codes - Only Plus Codes coordinates
 
-Project &amp; Other CRS - Decimal &amp; WKT coordinates</string>
+Standard UTM - Only Standard UTM coordinates
+
+</string>
          </property>
         </widget>
        </item>

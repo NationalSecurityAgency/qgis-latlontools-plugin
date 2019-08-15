@@ -1,6 +1,7 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
+from qgis.PyQt.QtGui import QColor
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject
+from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject, QgsSettings
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
 from .settings import settings
@@ -24,13 +25,16 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         self.capture4326 = False
         self.canvasClicked.connect(self.clicked)
         self.marker = None
+        self.vertex = None
 
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
         self.canvas.setCursor(Qt.CrossCursor)
+        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.magenta ) )
 
     def deactivate(self):
         self.removeMarker()
+        self.removeVertexMarker()
 
     def formatCoord(self, pt, delimiter):
         '''Format the coordinate string according to the settings from
@@ -122,8 +126,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     def canvasMoveEvent(self, event):
         '''Capture the coordinate as the user moves the mouse over
         the canvas. Show it in the status bar.'''
+        pt = self.snappoint(event.pos())
         try:
-            pt = self.toMapCoordinates(event.pos())
             msg = self.formatCoord(pt, ', ')
             formatString = self.coordFormatString()
             if msg is None:
@@ -132,6 +136,21 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 self.iface.statusBarIface().showMessage("{} - {}".format(msg, formatString), 4000)
         except Exception:
             self.iface.statusBarIface().showMessage("")
+
+    def snappoint(self, point):
+        match = self.canvas.snappingUtils().snapToMap(point)
+        if match.isValid():
+            if self.vertex is None:
+                self.vertex = QgsVertexMarker(self.canvas)
+                self.vertex.setIconSize(12)
+                self.vertex.setPenWidth(2)
+                self.vertex.setColor(self.snapcolor)
+                self.vertex.setIconType(QgsVertexMarker.ICON_BOX)
+            self.vertex.setCenter(match.point())
+            return match.point()
+        else:
+            self.removeVertexMarker()
+            return self.toMapCoordinates(point)
 
     def coordFormatString(self):
         if self.settings.captureProjIsWgs84():
@@ -176,6 +195,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     def clicked(self, pt, b):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
+        pt = self.snappoint(pt)
+        self.removeVertexMarker()
         if settings.captureShowLocation:
             if self.marker is None:
                 self.marker = QgsVertexMarker(self.canvas)
@@ -206,3 +227,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
+
+    def removeVertexMarker(self):
+        if self.vertex is not None:
+            self.canvas.scene().removeItem(self.vertex)
+            self.vertex = None

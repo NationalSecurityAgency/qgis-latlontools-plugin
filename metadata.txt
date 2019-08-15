@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
-version=3.3.2
+version=3.3.3
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -27,6 +27,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.3.3 - When snapping is enabled, Copy Latitude, Longitude will snap to and copy the associated vertex
     3.3.2 - Made the zoom-to and multi-zoom-to tools more flexible.
     3.3.1 - Added separate DDMMSS delimiter for coordinate converter
     3.3.0 - Added coordinate converter. Fixed #32
@@ -52,9 +53,3 @@ changelog=
     3.1.2 - Added multipoint fix for digitizer
     3.1.1 - Additional Plus Code support and moved toolbar icons to its own toolbar
     3.1.0 - Added Plus Codes coordinate support & Mapillary support
-    3.0.16 - Merge pull request for bug fix
-    3.0.15 - Refactored MGRS conversion code into processing algorithms
-    3.0.14 - Digitizer CRS bug fix
-    3.0.13 - Added menu action object names.
-    3.0.12 - Bug fix in multi-zoom settings
-    3.0.11 - Added geometry to text fields conversion 
