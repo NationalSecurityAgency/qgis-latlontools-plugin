@@ -23,7 +23,6 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         self.canvas = iface.mapCanvas()
         self.settings = settings
         self.capture4326 = False
-        self.canvasClicked.connect(self.clicked)
         self.marker = None
         self.vertex = None
 
@@ -126,7 +125,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     def canvasMoveEvent(self, event):
         '''Capture the coordinate as the user moves the mouse over
         the canvas. Show it in the status bar.'''
-        pt = self.snappoint(event.pos())
+        pt = self.snappoint(event.originalPixelPoint()) # input is QPoint
         try:
             msg = self.formatCoord(pt, ', ')
             formatString = self.coordFormatString()
@@ -138,6 +137,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             self.iface.statusBarIface().showMessage("")
 
     def snappoint(self, point):
+        # point - QPoint
         match = self.canvas.snappingUtils().snapToMap(point)
         if match.isValid():
             if self.vertex is None:
@@ -147,10 +147,10 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 self.vertex.setColor(self.snapcolor)
                 self.vertex.setIconType(QgsVertexMarker.ICON_BOX)
             self.vertex.setCenter(match.point())
-            return match.point()
+            return (match.point()) # Returns QgsPointXY
         else:
             self.removeVertexMarker()
-            return self.toMapCoordinates(point)
+            return self.toMapCoordinates(point) # QPoint input, returns QgsPointXY
 
     def coordFormatString(self):
         if self.settings.captureProjIsWgs84():
@@ -192,10 +192,10 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             s = ''
         return s
 
-    def clicked(self, pt, b):
+    def canvasReleaseEvent(self, event):
         '''Capture the coordinate when the mouse button has been released,
-        format it, and copy it to the clipboard.'''
-        pt = self.snappoint(pt)
+        format it, and copy it to the clipboard. pt is QgsPointXY'''
+        pt = self.snappoint(event.originalPixelPoint())
         self.removeVertexMarker()
         if settings.captureShowLocation:
             if self.marker is None:
