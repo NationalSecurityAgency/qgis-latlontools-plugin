@@ -136,9 +136,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         except Exception:
             self.iface.statusBarIface().showMessage("")
 
-    def snappoint(self, point):
-        # point - QPoint
-        match = self.canvas.snappingUtils().snapToMap(point)
+    def snappoint(self, qpoint):
+        match = self.canvas.snappingUtils().snapToMap(qpoint)
         if match.isValid():
             if self.vertex is None:
                 self.vertex = QgsVertexMarker(self.canvas)
@@ -150,7 +149,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             return (match.point()) # Returns QgsPointXY
         else:
             self.removeVertexMarker()
-            return self.toMapCoordinates(point) # QPoint input, returns QgsPointXY
+            return self.toMapCoordinates(qpoint) # QPoint input, returns QgsPointXY
 
     def coordFormatString(self):
         if self.settings.captureProjIsWgs84():
