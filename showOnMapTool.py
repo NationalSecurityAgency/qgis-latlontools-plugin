@@ -1,5 +1,6 @@
 from qgis.PyQt.QtCore import Qt, QUrl
-from qgis.core import Qgis, QgsCoordinateTransform, QgsProject
+from qgis.PyQt.QtGui import QColor
+from qgis.core import Qgis, QgsCoordinateTransform, QgsProject, QgsSettings
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 from .util import epsg4326
 from .settings import settings
@@ -17,19 +18,23 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         QgsMapToolEmitPoint.__init__(self, iface.mapCanvas())
         self.iface = iface
         self.canvas = iface.mapCanvas()
-        self.canvasClicked.connect(self.clicked)
         self.marker = None
+        self.vertex = None
 
     def activate(self):
         '''When activated set the cursor to a crosshair.'''
         self.canvas.setCursor(Qt.CrossCursor)
+        self.snapcolor = QgsSettings().value( "/qgis/digitizing/snap_color" , QColor( Qt.magenta ) )
 
     def deactivate(self):
         self.removeMarker()
+        self.removeVertexMarker()
 
-    def clicked(self, pt, b):
+    def canvasPressEvent(self, event):
         '''Capture the coordinate when the mouse button has been released,
         format it, and copy it to the clipboard.'''
+        pt = self.snappoint(event.originalPixelPoint())
+        self.removeVertexMarker()
         if settings.externalMapShowLocation:
             if self.marker is None:
                 self.marker = QgsVertexMarker(self.canvas)
@@ -72,7 +77,31 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
             webbrowser.open(url, new=2)
             self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat, lon), level=Qgis.Info, duration=3)
 
+    def canvasMoveEvent(self, event):
+        '''Show when the user mouses over a vector vertex in snapping mode.'''
+        self.snappoint(event.originalPixelPoint()) # input is QPoint
+
+    def snappoint(self, qpoint):
+        match = self.canvas.snappingUtils().snapToMap(qpoint)
+        if match.isValid():
+            if self.vertex is None:
+                self.vertex = QgsVertexMarker(self.canvas)
+                self.vertex.setIconSize(12)
+                self.vertex.setPenWidth(2)
+                self.vertex.setColor(self.snapcolor)
+                self.vertex.setIconType(QgsVertexMarker.ICON_BOX)
+            self.vertex.setCenter(match.point())
+            return (match.point()) # Returns QgsPointXY
+        else:
+            self.removeVertexMarker()
+            return self.toMapCoordinates(qpoint) # QPoint input, returns QgsPointXY
+
     def removeMarker(self):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
+
+    def removeVertexMarker(self):
+        if self.vertex is not None:
+            self.canvas.scene().removeItem(self.vertex)
+            self.vertex = None
