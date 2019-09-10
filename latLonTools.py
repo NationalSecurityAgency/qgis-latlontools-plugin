@@ -38,7 +38,7 @@ class LatLonTools:
 
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
-        self.copyAction = QAction(icon, "Copy Latitude, Longitude", self.iface.mainWindow())
+        self.copyAction = QAction(icon, "Copy/Display Coordinate", self.iface.mainWindow())
         self.copyAction.setObjectName('latLonToolsCopy')
         self.copyAction.triggered.connect(self.startCapture)
         self.copyAction.setCheckable(True)
@@ -56,7 +56,7 @@ class LatLonTools:
 
         # Add Interface for Zoom to Coordinate
         icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
-        self.zoomToAction = QAction(icon, "Zoom To Latitude, Longitude", self.iface.mainWindow())
+        self.zoomToAction = QAction(icon, "Zoom To Coordinate", self.iface.mainWindow())
         self.zoomToAction.setObjectName('latLonToolsZoom')
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
         self.toolbar.addAction(self.zoomToAction)

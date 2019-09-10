@@ -2,12 +2,12 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
-version=3.3.5
+version=3.3.6
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
     Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, and Plus Codes support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools.
-    1) Capture coordinates to the clipboard (in any projection) when the user clicks on the map. This includes DMS, UTM, MGRS, and Plus Codes.
+    1) Capture/Display coordinates to the clipboard (in any projection) when the user clicks on the map. This includes DMS, UTM, MGRS, and Plus Codes.
     2) Capture the bounding box of the canvas.
     3) Zoom to and highlight a point on the map using coordinates from any projection, including MGRS, UTM, and Plus Codes, and can format the coordinates in decimal, DMS, WKT POINT, or GeoJSON notation.
     4) Digitizing service to add points to a layer. It supports all the "Zoom to" input formats.
@@ -27,6 +27,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.3.6 - Rename some of the tools for clarity.
     3.3.5 - Enabled snapping with the Show in External Map tool.
     3.3.4 - Bug fix
     3.3.3 - When snapping is enabled, Copy Latitude, Longitude will snap to and copy the associated vertex
