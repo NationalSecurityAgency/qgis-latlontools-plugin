@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
-version=3.3.6
+version=3.3.7
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -27,6 +27,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.3.7 - Enhanced Show in External Map capabilities
     3.3.6 - Rename some of the tools for clarity.
     3.3.5 - Enabled snapping with the Show in External Map tool.
     3.3.4 - Bug fix

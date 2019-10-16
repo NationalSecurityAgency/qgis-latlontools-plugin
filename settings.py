@@ -32,6 +32,7 @@ class Settings():
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
         self.mapProvider = int(qset.value('/LatLonTools/MapProvider', 0))
+        self.mapProviderRight = int(qset.value('/LatLonTools/MapProviderRight', 0))
         self.mapZoom = int(qset.value('/LatLonTools/MapZoom', 13))
         self.externalMapShowLocation = int(qset.value('/LatLonTools/ExternMapShowClickedLocation', Qt.Unchecked))
 
@@ -57,21 +58,30 @@ class Settings():
         self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
 
-    def googleEarthMapProvider(self):
-        if self.mapProvider >= len(mapProviders.MAP_PROVIDERS):
-            return True
+    def googleEarthMapProvider(self, button=0):
+        if button == 2:
+            if self.mapProviderRight >= len(mapProviders.MAP_PROVIDERS):
+                return True
+        else:
+            if self.mapProvider >= len(mapProviders.MAP_PROVIDERS):
+                return True
         return False
 
-    def getMapProviderString(self, lat, lon):
-        if self.showPlacemark:
-            ms = mapProviders.MAP_PROVIDERS[self.mapProvider][2]
+    def getMapProviderString(self, lat, lon, button=0):
+        if button == 2:
+            if self.showPlacemark:
+                ms = mapProviders.MAP_PROVIDERS[self.mapProviderRight][2]
+            else:
+                ms = mapProviders.MAP_PROVIDERS[self.mapProviderRight][1]
         else:
-            ms = mapProviders.MAP_PROVIDERS[self.mapProvider][1]
+            if self.showPlacemark:
+                ms = mapProviders.MAP_PROVIDERS[self.mapProvider][2]
+            else:
+                ms = mapProviders.MAP_PROVIDERS[self.mapProvider][1]
         ms = ms.replace('@LAT@', str(lat))
         ms = ms.replace('@LON@', str(lon))
         ms = ms.replace('@Z@', str(self.mapZoom))
         return ms
-
 
 settings = Settings()
 
@@ -118,6 +128,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### EXTERNAL MAP ###
         self.mapProviderComboBox.addItems(mapProviders.mapProviderNames())
+        self.mapProviderRComboBox.addItems(mapProviders.mapProviderNames())
 
         ### MULTI-ZOOM ###
         self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
@@ -187,6 +198,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### EXTERNAL MAP ###
         self.showPlacemarkCheckBox.setCheckState(Qt.Checked)
         self.mapProviderComboBox.setCurrentIndex(0)
+        self.mapProviderRComboBox.setCurrentIndex(0)
         self.zoomSpinBox.setValue(13)
         self.showLocationCheckBox.setCheckState(Qt.Unchecked)
 
@@ -301,6 +313,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
         qset.setValue('/LatLonTools/ExternMapShowClickedLocation', self.showLocationCheckBox.checkState())
         qset.setValue('/LatLonTools/MapProvider', int(self.mapProviderComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/MapProviderRight', int(self.mapProviderRComboBox.currentIndex()))
         qset.setValue('/LatLonTools/MapZoom', int(self.zoomSpinBox.value()))
 
         ### MULTI-ZOOM TO SETTINGS ###
@@ -420,6 +433,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.showPlacemarkCheckBox.setCheckState(settings.showPlacemark)
         self.showLocationCheckBox.setCheckState(settings.externalMapShowLocation)
         self.mapProviderComboBox.setCurrentIndex(settings.mapProvider)
+        self.mapProviderRComboBox.setCurrentIndex(settings.mapProviderRight)
         self.zoomSpinBox.setValue(settings.mapZoom)
 
         ### MULTI-ZOOM CUSTOM QML STYLE ###

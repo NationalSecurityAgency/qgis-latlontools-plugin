@@ -287,12 +287,22 @@ Standard UTM - Only Standard UTM coordinates
        <item>
         <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>Select an External Map Provider</string>
+          <string>Select an External Map Provider for Left Mouse</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QComboBox" name="mapProviderComboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_39">
+         <property name="text">
+          <string>Select an External Map Provider for Right Mouse</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="mapProviderRComboBox"/>
        </item>
        <item>
         <widget class="QLabel" name="label_9">

@@ -45,12 +45,14 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
         else:
             self.removeMarker()
 
+        button = event.button()
+
         canvasCRS = self.canvas.mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
         pt4326 = transform.transform(pt.x(), pt.y())
         lat = pt4326.y()
         lon = pt4326.x()
-        if settings.googleEarthMapProvider():
+        if settings.googleEarthMapProvider(button):
             f = tempfile.NamedTemporaryFile(mode='w', suffix=".kml", delete=False)
             f.write('<?xml version="1.0" encoding="UTF-8"?>')
             f.write('<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">')
@@ -72,7 +74,7 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
                 webbrowser.open(f.name)
             self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in Google Earth" % (lat, lon), level=Qgis.Info, duration=3)
         else:
-            mapprovider = settings.getMapProviderString(lat, lon)
+            mapprovider = settings.getMapProviderString(lat, lon, button)
             url = QUrl(mapprovider).toString()
             webbrowser.open(url, new=2)
             self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat, lon), level=Qgis.Info, duration=3)
