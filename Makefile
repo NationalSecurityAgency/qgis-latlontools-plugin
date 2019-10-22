@@ -11,6 +11,6 @@ deploy:
 	cp -vfr ui $(PLUGINS)
 	cp -vfr doc $(PLUGINS)
 	cp -vf helphead.html $(PLUGINS)/index.html
-	python -m markdown -x markdown.extensions.headerid readme.md >> $(PLUGINS)/index.html
+	python -m markdown readme.md >> $(PLUGINS)/index.html
 	echo '</body>' >> $(PLUGINS)/index.html
 
