@@ -19,7 +19,7 @@ from . import mgrs
 from .util import epsg4326, convertDD2DMS, formatDmsString
 from .utm import latLon2UtmString
 from . import olc
-
+from . import geohash
 
 def tr(string):
     return QCoreApplication.translate('Processing', string)
@@ -44,6 +44,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     PrmCoordinatePrecision = 'CoordinatePrecision'
     PrmDMSSecondPrecision = 'DMSSecondPrecision'
     PrmPlusCodesLength = 'PlusCodesLength'
+    PrmGeohashPrecision = 'PrmGeohashPrecision'
     PrmOutputLayer = 'OutputLayer'
 
     def initAlgorithm(self, config):
@@ -61,22 +62,22 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                     tr('Coordinates in 2 fields'),
                     tr('Coordinates in 1 field'),
                     tr('GeoJSON'), tr('WKT'), tr('MGRS'),
-                    tr('Plus Codes'), tr('Standard UTM')],
+                    tr('Plus Codes'), tr('Geohash'), tr('Standard UTM')],
                 defaultValue=0,
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterString(
-                self.PrmXFieldName,
-                tr('Longitude (X) field name'),
-                defaultValue='x',
+                self.PrmYFieldName,
+                tr('Name of latitude (Y) field & all other single field coordinates'),
+                defaultValue='y',
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterString(
-                self.PrmYFieldName,
-                tr('Latitude (Y) & all other formats field name'),
-                defaultValue='y',
+                self.PrmXFieldName,
+                tr('Name of longitude (X) field when coordinates are in two fields'),
+                defaultValue='x',
                 optional=True)
         )
         self.addParameter(
@@ -146,6 +147,16 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 maxValue=20)
         )
         self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmGeohashPrecision,
+                tr('Geohash precision'),
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=12,
+                optional=True,
+                minValue=1,
+                maxValue=30)
+        )
+        self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
                 tr('Output layer'))
@@ -164,6 +175,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         decimalPrecision = self.parameterAsInt(parameters, self.PrmCoordinatePrecision, context)
         dmsPrecision = self.parameterAsInt(parameters, self.PrmDMSSecondPrecision, context)
         plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
+        geohashPrecision = self.parameterAsInt(parameters, self.PrmGeohashPrecision, context)
 
         layerCRS = source.sourceCrs()
         # For the first condition, the user has either EPSG:4326 selected or
@@ -178,7 +190,6 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             outCRS = crsOther
 
         fieldsout = QgsFields(source.fields())
-
         if fieldsout.append(QgsField(field1Name, QVariant.String)) is False:
             msg = "Field names must be unique. There is already a field named '{}'".format(field1Name)
             feedback.reportError(msg)
@@ -244,6 +255,8 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                     msg = mgrs.toMgrs(pt.y(), pt.x(), 5)
                 elif outputFormat == 5:  # Plus codes
                     msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
+                elif outputFormat == 6:  # Geohash
+                    msg = geohash.encode(pt.y(), pt.x(), geohashPrecision)
                 else:  # WGS 84 UTM
                     msg = latLon2UtmString(pt.y(), pt.x(), dmsPrecision)
             except Exception:

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>414</width>
-    <height>501</height>
+    <height>555</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,7 +83,7 @@
    <item>
     <widget class="QLabel" name="wgs84Label">
      <property name="text">
-      <string>WGS 84 (Latitude, Longitude)</string>
+      <string>Decimal Degrees (Latitude, Longitude)</string>
      </property>
     </widget>
    </item>
@@ -348,6 +348,34 @@
        <property name="toolTip">
         <string>Copy to clipboard</string>
        </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Geohash</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_11">
+     <item>
+      <widget class="QLineEdit" name="geohashLineEdit"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="geohashCommitButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="geohashCopyButton">
        <property name="text">
         <string>...</string>
        </property>

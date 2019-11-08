@@ -9,6 +9,7 @@ from .util import epsg4326, formatDmsString
 from .utm import latLon2UtmString
 from . import mgrs
 from . import olc
+from . import geohash
 # import traceback
 
 class CopyLatLonTool(QgsMapToolEmitPoint):
@@ -118,6 +119,17 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             msg = latLon2UtmString(pt4326.y(), pt4326.x(), self.settings.dmsPrecision)
             if msg == '':
                 msg = None
+        elif self.settings.captureProjIsGeohash():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
+            if canvasCRS == epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
+                pt4326 = transform.transform(pt.x(), pt.y())
+            msg = geohash.encode(pt4326.y(), pt4326.x(), settings.captureGeohashPrecision)
+            if msg == '':
+                msg = None
 
         msg = '{}{}{}'.format(self.settings.capturePrefix, msg, self.settings.captureSuffix)
         return msg
@@ -179,6 +191,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             s = 'Standard UTM'
         elif self.settings.captureProjIsPlusCodes():
             s = 'Plus Codes'
+        elif self.settings.captureProjIsGeohash():
+            s = 'Geohash'
         elif self.settings.captureProjIsCustomCRS():
             if self.settings.otherNumberFormat == 0:  # Numerical
                 if self.settings.coordOrder == self.settings.OrderYX:

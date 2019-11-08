@@ -28,6 +28,7 @@ class Settings():
         ### CAPTURE SETTINGS ###
         self.captureShowLocation = int(qset.value('/LatLonTools/CaptureShowClickedLocation', Qt.Unchecked))
         self.captureCustomCrsAuthId = qset.value('/LatLonTools/CaptureCustomCrsId', 'EPSG:4326')
+        self.captureGeohashPrecision = int(qset.value('/LatLonTools/CaptureGeohashPrecision', 12))
 
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
@@ -55,6 +56,7 @@ class Settings():
         self.converterDmsPrec = int(qset.value('/LatLonTools/ConverterDmsPrecision', 0))
         self.converterUtmPrec = int(qset.value('/LatLonTools/ConverterUtmPrecision', 0))
         self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
+        self.converterGeohashPrecision = int(qset.value('/LatLonTools/ConverterGeohashPrecision', 12))
         self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
 
@@ -99,6 +101,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeMGRS = 3
     ProjectionTypePlusCodes = 4
     ProjectionTypeUTM = 5
+    ProjectionTypeGeohash = 6
     OrderYX = 0
     OrderXY = 1
 
@@ -112,7 +115,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -121,7 +124,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
 
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
+        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -182,6 +185,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.otherTxt.setText("")
         self.delimComboBox.setCurrentIndex(1)
         self.precisionSpinBox.setValue(0)
+        self.captureGeohashSpinBox.setValue(12)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
         self.digitsSpinBox.setValue(8)
@@ -227,6 +231,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDMSPrecisionSpinBox.setValue(0)
         self.converterUtmPrecisionSpinBox.setValue(0)
         self.converterPlusCodePrecisionSpinBox.setValue(10)
+        self.converterGeohashSpinBox.setValue(12)
         self.converterDelimiterLineEdit.setText(',')
         self.converterDdmmssDelimiterLineEdit.setText(',')
 
@@ -297,6 +302,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
             qset.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
 
         qset.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureGeohashPrecision', self.captureGeohashSpinBox.value())
         qset.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
         qset.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         qset.setValue('/LatLonTools/CapturePrefix', self.capturePrefixLineEdit.text())
@@ -350,6 +356,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterDmsPrecision', int(self.converterDMSPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterUtmPrecision', int(self.converterUtmPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterGeohashPrecision', int(self.converterGeohashSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
 
@@ -416,6 +423,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         self.digitsSpinBox.setValue(self.decimalDigits)
         self.precisionSpinBox.setValue(self.dmsPrecision)
+        self.captureGeohashSpinBox.setValue(settings.captureGeohashPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
         self.captureSuffixLineEdit.setText(self.captureSuffix)
         self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
@@ -471,6 +479,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDMSPrecisionSpinBox.setValue(settings.converterDmsPrec)
         self.converterUtmPrecisionSpinBox.setValue(settings.converterUtmPrec)
         self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
+        self.converterGeohashSpinBox.setValue(settings.converterGeohashPrecision)
         self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
 
@@ -512,6 +521,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
             return True
         return False
 
+    def captureProjIsGeohash(self):
+        if self.captureProjection == self.ProjectionTypeGeohash:
+            return True
+        return False
+
     def zoomToProjIsWgs84(self):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
             return True
@@ -540,6 +554,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def zoomToProjIsStandardUtm(self):
         if self.zoomToProjection == self.ProjectionTypeUTM:
+            return True
+        return False
+
+    def zoomToProjIsGeohash(self):
+        if self.zoomToProjection == self.ProjectionTypeGeohash:
             return True
         return False
 

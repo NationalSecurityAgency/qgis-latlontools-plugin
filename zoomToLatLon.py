@@ -13,6 +13,7 @@ from .utm import isUtm, utmString2Crs
 
 from . import mgrs
 from . import olc
+from . import geohash
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -63,6 +64,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.label.setText("Enter MGRS Coordinate")
         elif self.settings.zoomToProjIsPlusCodes():
             self.label.setText("Enter Plus Codes")
+        elif self.settings.zoomToProjIsGeohash():
+            self.label.setText("Enter Geohash")
         elif self.settings.zoomToProjIsStandardUtm():
             self.label.setText("Enter Standard UTM")
         elif self.settings.zoomToProjIsWgs84():
@@ -105,6 +108,12 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 # if it is not a valid utm coordinate.
                 pt = utmString2Crs(text)
                 return(pt.y(), pt.x(), epsg4326)
+
+            if self.settings.zoomToProjIsGeohash():
+                # A Geohash coordinate has been selected. This will result in an exception
+                # if it is not a valid Geohash coordinate.
+                (lat, lon) = geohash.decode(text)
+                return(float(lat), float(lon), epsg4326)
 
             # Check for other formats
             if text[0] == '{':  # This may be a GeoJSON point

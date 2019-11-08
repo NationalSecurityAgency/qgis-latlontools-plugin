@@ -18,6 +18,8 @@ from qgis.core import (
 from . import mgrs
 from .util import epsg4326, parseDMSString
 from . import olc
+from . import geohash
+from .utm import isUtm, utmString2Crs
 # import traceback
 
 
@@ -49,12 +51,12 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 self.PrmInputField1Type,
-                tr('First field coordinate type '),
+                tr('Coordinate type found in the first field'),
                 options=[
                     tr('Latitude (Y)'),
                     tr('Latitude (Y), Longitude (X)'),
                     tr('Longitude (X), Latitude (Y)'),
-                    tr('MGRS'), tr('Plus Codes')],
+                    tr('MGRS'), tr('Plus Codes'), tr('Geohash'), tr('Standard UTM')],
                 defaultValue=0,
                 optional=False)
         )
@@ -69,7 +71,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmField2,
-                tr('Select second field longitude (x) coordinate'),
+                tr('Select second field Longitude (X) coordinate if applicable'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.String,
                 optional=True)
@@ -77,7 +79,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterCrs(
                 self.PrmInputCRS,
-                tr('Input CRS - Not applicable for MGRS and Plus Codes'),
+                tr('Input CRS - Not applicable to MGRS, Plus Codes, Geohash, & UTM'),
                 'EPSG:4326',
                 optional=True)
         )
@@ -106,7 +108,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
 
         fieldsout = QgsFields(source.fields())
 
-        if field_type >= 3:  # For MGRS and Plus Codes force the CRS to be 4326
+        if field_type >= 3:  # For MGRS, Plus Codes, UTM and Geohash force the CRS to be 4326
             input_crs = epsg4326
 
         (sink, dest_id) = self.parameterAsSink(
@@ -155,6 +157,14 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     coord = olc.decode(attr1)
                     lat = coord.latitudeCenter
                     lon = coord.longitudeCenter
+                elif field_type == 5:  # Geohash
+                    (lat, lon) = geohash.decode(attr1)
+                    lat = float(lat)
+                    lon = float(lon)
+                elif field_type == 6:  # UTM
+                    pt = utmString2Crs(attr1)
+                    lat = pt.y()
+                    lon = pt.x()
 
                 f = QgsFeature()
                 f.setAttributes(feature.attributes())

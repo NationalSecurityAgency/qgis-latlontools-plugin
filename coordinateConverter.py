@@ -13,6 +13,7 @@ from .settings import settings
 from . import mgrs
 from . import olc
 from .utm import latLon2UtmString, isUtm, utmString2Crs
+from . import geohash
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/coordinateConverter.ui'))
@@ -64,6 +65,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.utmCommitButton.setIcon(icon)
         self.mgrsCommitButton.setIcon(icon)
         self.plusCommitButton.setIcon(icon)
+        self.geohashCommitButton.setIcon(icon)
 
         self.wgs84CommitButton.clicked.connect(self.commitWgs84)
         self.wgs84LineEdit.returnPressed.connect(self.commitWgs84)
@@ -81,6 +83,8 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.mgrsLineEdit.returnPressed.connect(self.commitMgrs)
         self.plusCommitButton.clicked.connect(self.commitPlus)
         self.plusLineEdit.returnPressed.connect(self.commitPlus)
+        self.geohashCommitButton.clicked.connect(self.commitGeohash)
+        self.geohashLineEdit.returnPressed.connect(self.commitGeohash)
 
         icon = QIcon(':/images/themes/default/mActionEditCopy.svg')
         self.wgs84CopyButton.setIcon(icon)
@@ -91,6 +95,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.utmCopyButton.setIcon(icon)
         self.mgrsCopyButton.setIcon(icon)
         self.plusCopyButton.setIcon(icon)
+        self.geohashCopyButton.setIcon(icon)
 
         self.wgs84CopyButton.clicked.connect(self.copyWgs84)
         self.projCopyButton.clicked.connect(self.copyProject)
@@ -100,6 +105,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.utmCopyButton.clicked.connect(self.copyUtm)
         self.mgrsCopyButton.clicked.connect(self.copyMgrs)
         self.plusCopyButton.clicked.connect(self.copyPlus)
+        self.geohashCopyButton.clicked.connect(self.copyGeohash)
 
         self.customProjectionSelectionWidget.setCrs(epsg4326)
         self.customProjectionSelectionWidget.crsChanged.connect(self.customCrsChanged)
@@ -138,6 +144,8 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
             self.mgrsLineEdit.setText('Invalid')
         if id != 7:
             self.plusLineEdit.setText('Invalid')
+        if id != 8:
+            self.geohashLineEdit.setText('Invalid')
 
     def clearForm(self):
         self.origPt = None
@@ -149,6 +157,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.utmLineEdit.setText('')
         self.mgrsLineEdit.setText('')
         self.plusLineEdit.setText('')
+        self.geohashLineEdit.setText('')
 
     def updateCoordinates(self, id, pt, crs):
         self.origPt = pt
@@ -217,6 +226,12 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
             except Exception:
                 s = 'Invalid'
             self.plusLineEdit.setText(s)
+        if id != 8: # GEOHASH
+            try:
+                s = geohash.encode(pt4326.y(), pt4326.x(), settings.converterGeohashPrecision)
+            except Exception:
+                s = 'Invalid'
+            self.geohashLineEdit.setText(s)
 
     def commitWgs84(self):
         text = self.wgs84LineEdit.text().strip()
@@ -308,7 +323,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         try:
             lat, lon = mgrs.toWgs(text)
             pt = QgsPoint(lon, lat)
-            self.updateCoordinates(5, pt, epsg4326)
+            self.updateCoordinates(6, pt, epsg4326)
         except Exception:
             self.showInvalid(6)
 
@@ -323,6 +338,15 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
             self.updateCoordinates(7, pt, epsg4326)
         except Exception:
             self.showInvalid(7)
+
+    def commitGeohash(self):
+        text = self.geohashLineEdit.text().strip()
+        try:
+            (lat, lon) = geohash.decode(text)
+            pt = QgsPoint(float(lon), float(lat))
+            self.updateCoordinates(8, pt, epsg4326)
+        except Exception:
+            self.showInvalid(8)
 
     def updateLabel(self):
         if self.inputXYOrder == 0:  # Y, X
@@ -339,7 +363,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
             label = 'Project CRS - {} {}'.format(crs.authid(), xy)
         self.projectLabel.setText(label)
 
-        label = 'WGS 84 {}'.format(latlon)
+        label = 'Decimal Degrees {}'.format(latlon)
         self.wgs84Label.setText(label)
 
         crs = self.customProjectionSelectionWidget.crs()
@@ -393,6 +417,11 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
 
     def copyPlus(self):
         s = self.plusLineEdit.text()
+        self.clipboard.setText(s)
+        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+
+    def copyGeohash(self):
+        s = self.geohashLineEdit.text()
         self.clipboard.setText(s)
         self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
 
