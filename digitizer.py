@@ -12,6 +12,7 @@ from .util import epsg4326, parseDMSString
 
 from . import mgrs
 from . import olc
+from .utm import utmString2Crs
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/digitizer.ui'))
@@ -55,6 +56,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
         a = self.crsmenu.addAction(icon, "Plus Codes")
         a.setData(4)
+        icon = QIcon(os.path.dirname(__file__) + '/images/utm.png')
+        a = self.crsmenu.addAction(icon, "UTM")
+        a.setData(5)
         self.crsButton.setIconSize(QSize(24, 24))
         self.crsButton.setIcon(icon)
         self.crsButton.setMenu(self.crsmenu)
@@ -119,6 +123,12 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 lat = coord.latitudeCenter
                 lon = coord.longitudeCenter
                 srcCrs = epsg4326
+            elif self.inputProjection == 5:
+                text = text.strip()
+                pt = utmString2Crs(text, epsg4326)
+                lat = pt.y()
+                lon = pt.x()
+                srcCrs = epsg4326
             else:  # Is either the project or custom CRS
                 if re.search(r'POINT\(', text) is None:
                     coords = re.split(r'[\s,;:]+', text, 1)
@@ -167,6 +177,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
             return
         if self.inputProjection == 4:  # Plus Codes projection
             self.infoLabel.setText('Input Coordinate: Plus Codes')
+            return
+        if self.inputProjection == 5:  # UTM
+            self.infoLabel.setText('Input Coordinate: UTM')
             return
         if self.isWgs84():
             if self.inputXYOrder == 0:
