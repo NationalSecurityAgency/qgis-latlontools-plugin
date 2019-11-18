@@ -4,7 +4,7 @@ from qgis.core import QgsCoordinateReferenceSystem
 
 epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
 
-def formatDmsString(lat, lon, isdms=False, prec=0, order=0, delimiter=', '):
+def formatDmsString(lat, lon, isdms=0, prec=0, order=0, delimiter=', '):
     '''Return a DMS formated string.'''
     if order == 0:  # Y, X or Lat, Lon
         return convertDD2DMS(lat, True, isdms, prec) + str(delimiter) + convertDD2DMS(lon, False, isdms, prec)
@@ -32,14 +32,19 @@ def convertDD2DMS(coord, islat, isdms, prec):
         dprec = 2
     else:
         dprec = prec + 3
-    if isdms:
-        s = "{:.0f}\xB0{:.0f}\'{:.{prec}f}\"".format(deg, min, sec, prec=prec)
-    else:
+    if isdms==0:
+        s = "{:.0f}\xB0{:.0f}\'{:.{prec}f}\"".format(deg, min, sec, prec=prec)        
+    elif isdms==1:
         if islat:
             s = "{:02.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
         else:
             s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
-    if isdms:
+    elif isdms==2:
+        if islat:
+            s = "{:.0f}\xB0{:.0{prec}f}\'".format(deg, dmin, prec=prec)      
+        else:
+            s = "{:.0f}\xB0{:.0{prec}f}\'".format(deg, dmin, prec=prec)      
+    if isdms==0:
         s += " " + unit
     else:
         s += unit

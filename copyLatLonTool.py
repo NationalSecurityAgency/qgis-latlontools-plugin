@@ -50,9 +50,11 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             lat = pt4326.y()
             lon = pt4326.x()
             if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS:  # DMS
-                msg = formatDmsString(lat, lon, True, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+                msg = formatDmsString(lat, lon, 0, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS:  # DDMMSS
-                msg = formatDmsString(lat, lon, False, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+                msg = formatDmsString(lat, lon, 1, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMM:  # DDMMSS
+                msg = formatDmsString(lat, lon, 2, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:  # WKT
                 msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt4326.x(), pt4326.y(), prec=self.settings.decimalDigits)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:  # GeoJSON
@@ -174,6 +176,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 s = 'WKT'
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:
                 s = 'GeoJSON'
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMM:
+                s= 'DM.MM'
             else:
                 s = 'DMS'
         elif self.settings.captureProjIsProjectCRS():
