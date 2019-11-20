@@ -29,6 +29,9 @@ class Settings():
         self.captureShowLocation = int(qset.value('/LatLonTools/CaptureShowClickedLocation', Qt.Unchecked))
         self.captureCustomCrsAuthId = qset.value('/LatLonTools/CaptureCustomCrsId', 'EPSG:4326')
         self.captureGeohashPrecision = int(qset.value('/LatLonTools/CaptureGeohashPrecision', 12))
+        self.captureDmmPrecision =  int(qset.value('/LatLonTools/CaptureDmmPrecision', 4))
+        self.captureUtmPrecision =  int(qset.value('/LatLonTools/CaptureUtmPrecision', 0))
+        self.captureAddDmsSpace = int(qset.value('/LatLonTools/CaptureAddDmsSpace', Qt.Checked))
 
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
@@ -54,11 +57,13 @@ class Settings():
         self.converterDDPrec = int(qset.value('/LatLonTools/ConverterDDPrecision', 2))
         self.converter4326DDPrec = int(qset.value('/LatLonTools/Converter4326DDPrecision', 8))
         self.converterDmsPrec = int(qset.value('/LatLonTools/ConverterDmsPrecision', 0))
+        self.converterDmmPrec = int(qset.value('/LatLonTools/ConverterDmmPrecision', 4))
         self.converterUtmPrec = int(qset.value('/LatLonTools/ConverterUtmPrecision', 0))
         self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
         self.converterGeohashPrecision = int(qset.value('/LatLonTools/ConverterGeohashPrecision', 12))
         self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
+        self.converterAddDmsSpace = int(qset.value('/LatLonTools/ConverterAddDmsSpace', Qt.Checked))
 
     def googleEarthMapProvider(self, button=0):
         if button == 2:
@@ -186,6 +191,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.otherTxt.setText("")
         self.delimComboBox.setCurrentIndex(1)
         self.precisionSpinBox.setValue(0)
+        self.captureDmmPrecisionSpinBox.setValue(4)
+        self.captureUtmPrecisionSpinBox.setValue(0)
         self.captureGeohashSpinBox.setValue(12)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
@@ -193,6 +200,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.capturePrefixLineEdit.setText('')
         self.captureSuffixLineEdit.setText('')
         self.captureMarkerCheckBox.setCheckState(Qt.Unchecked)
+        self.captureAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
 
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
@@ -230,11 +238,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converter4326DDPrecisionSpinBox.setValue(8)
         self.converterDDPrecisionSpinBox.setValue(2)
         self.converterDMSPrecisionSpinBox.setValue(0)
+        self.converterDmmPrecisionSpinBox.setValue(4)
         self.converterUtmPrecisionSpinBox.setValue(0)
         self.converterPlusCodePrecisionSpinBox.setValue(10)
         self.converterGeohashSpinBox.setValue(12)
         self.converterDelimiterLineEdit.setText(',')
         self.converterDdmmssDelimiterLineEdit.setText(',')
+        self.converterAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
 
     def readSettings(self):
         '''Load the user selected settings. The settings are retained even when
@@ -303,12 +313,15 @@ class SettingsWidget(QDialog, FORM_CLASS):
             qset.setValue('/LatLonTools/Delimiter', self.otherTxt.text())
 
         qset.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureDmmPrecision', self.captureDmmPrecisionSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureUtmPrecision', self.captureUtmPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/CaptureGeohashPrecision', self.captureGeohashSpinBox.value())
         qset.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
         qset.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         qset.setValue('/LatLonTools/CapturePrefix', self.capturePrefixLineEdit.text())
         qset.setValue('/LatLonTools/CaptureSuffix', self.captureSuffixLineEdit.text())
         qset.setValue('/LatLonTools/CaptureShowClickedLocation', self.captureMarkerCheckBox.checkState())
+        qset.setValue('/LatLonTools/CaptureAddDmsSpace', self.captureAddDmsSpaceCheckBox.checkState())
 
         ### ZOOM TO SETTINGS ###
         qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
@@ -355,11 +368,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterDDPrecision', int(self.converterDDPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/Converter4326DDPrecision', int(self.converter4326DDPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDmsPrecision', int(self.converterDMSPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterDmmPrecision', int(self.converterDmmPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterUtmPrecision', int(self.converterUtmPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterGeohashPrecision', int(self.converterGeohashSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
+        qset.setValue('/LatLonTools/ConverterAddDmsSpace', self.converterAddDmsSpaceCheckBox.checkState())
 
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -385,7 +400,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         # Simple Zoom to Enables
         zoomToProjection = int(self.zoomToProjectionComboBox.currentIndex())
-        self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and (zoomToProjection != self.ProjectionTypePlusCodes) and (zoomToProjection != self.ProjectionTypeUTM))
+        self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and
+                (zoomToProjection != self.ProjectionTypePlusCodes) and (zoomToProjection != self.ProjectionTypeUTM) and
+                (zoomToProjection != self.ProjectionTypeGeohash))
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
 
         # MULTI Zoom
@@ -424,10 +441,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         self.digitsSpinBox.setValue(self.decimalDigits)
         self.precisionSpinBox.setValue(self.dmsPrecision)
+        self.captureDmmPrecisionSpinBox.setValue(settings.captureDmmPrecision)
+        self.captureUtmPrecisionSpinBox.setValue(settings.captureUtmPrecision)
         self.captureGeohashSpinBox.setValue(settings.captureGeohashPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
         self.captureSuffixLineEdit.setText(self.captureSuffix)
         self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
+        self.captureAddDmsSpaceCheckBox.setCheckState(settings.captureAddDmsSpace)
 
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
@@ -478,11 +498,13 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDDPrecisionSpinBox.setValue(settings.converterDDPrec)
         self.converter4326DDPrecisionSpinBox.setValue(settings.converter4326DDPrec)
         self.converterDMSPrecisionSpinBox.setValue(settings.converterDmsPrec)
+        self.converterDMSPrecisionSpinBox.setValue(settings.converterDmmPrec)
         self.converterUtmPrecisionSpinBox.setValue(settings.converterUtmPrec)
         self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
         self.converterGeohashSpinBox.setValue(settings.converterGeohashPrecision)
         self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
+        self.converterAddDmsSpaceCheckBox.setCheckState(settings.converterAddDmsSpace)
 
         self.setEnabled()
 

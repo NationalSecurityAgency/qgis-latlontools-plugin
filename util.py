@@ -4,14 +4,14 @@ from qgis.core import QgsCoordinateReferenceSystem
 
 epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
 
-def formatDmsString(lat, lon, isdms=0, prec=0, order=0, delimiter=', '):
+def formatDmsString(lat, lon, dms_mode=0, prec=0, order=0, delimiter=', ', useDmsSpace=True):
     '''Return a DMS formated string.'''
     if order == 0:  # Y, X or Lat, Lon
-        return convertDD2DMS(lat, True, isdms, prec) + str(delimiter) + convertDD2DMS(lon, False, isdms, prec)
+        return convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace) + str(delimiter) + convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace)
     else:
-        return convertDD2DMS(lon, False, isdms, prec) + str(delimiter) + convertDD2DMS(lat, True, isdms, prec)
+        return convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace) + str(delimiter) + convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace)
 
-def convertDD2DMS(coord, islat, isdms, prec):
+def convertDD2DMS(coord, islat, dms_mode, prec, useDmsSpace=True):
     '''Convert decimal degrees to DMS'''
     if islat:
         if coord < 0:
@@ -23,6 +23,7 @@ def convertDD2DMS(coord, islat, isdms, prec):
             unit = 'E'
         else:
             unit = 'W'
+    dmsSpace = " " if useDmsSpace else ""
     coord = math.fabs(coord)
     deg = math.floor(coord)
     dmin = (coord - deg) * 60.0
@@ -32,22 +33,39 @@ def convertDD2DMS(coord, islat, isdms, prec):
         dprec = 2
     else:
         dprec = prec + 3
-    if isdms==0:
-        s = "{:.0f}\xB0{:.0f}\'{:.{prec}f}\"".format(deg, min, sec, prec=prec)        
-    elif isdms==1:
+    s = ""
+    if dms_mode==0: # D M S
+        # Properly handle rounding based on the digit precision
+        d = "{:.{prec}f}".format(sec, prec=prec)
+        if float(d) == 60:
+            min += 1
+            sec = 0
+            if min == 60:
+                deg += 1
+                min = 0
+        s = "{:.0f}\xB0{}{:.0f}\'{}{:.{prec}f}\"{}{}".format(deg, dmsSpace, min, dmsSpace, sec, dmsSpace, unit, prec=prec)
+    elif dms_mode==1: # DDMMS
+        # Properly handle rounding based on the digit precision
+        d = "{:.{prec}f}".format(sec, prec=prec)
+        if float(d) == 60:
+            min += 1
+            sec = 0
+            if min == 60:
+                deg += 1
+                min = 0
         if islat:
-            s = "{:02.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
+            s = "{:02.0f}{:02.0f}{:0{dprec}.{prec}f}{}".format(deg, min, sec, unit, dprec=dprec, prec=prec)
         else:
-            s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
-    elif isdms==2:
+            s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}{}".format(deg, min, sec, unit, dprec=dprec, prec=prec)
+    elif dms_mode==2: # DM.MM
+        d = "{:.{prec}f}".format(dmin, prec=prec)
+        if float(d) == 60:
+            deg += 1
+            dmin = 0
         if islat:
-            s = "{:.0f}\xB0{:.0{prec}f}\'".format(deg, dmin, prec=prec)      
+            s = "{:.0f}\xB0{}{:.0{prec}f}\'{}{}".format(deg, dmsSpace, dmin, dmsSpace, unit, prec=prec)
         else:
-            s = "{:.0f}\xB0{:.0{prec}f}\'".format(deg, dmin, prec=prec)      
-    if isdms==0:
-        s += " " + unit
-    else:
-        s += unit
+            s = "{:.0f}\xB0{}{:.0{prec}f}\'{}{}".format(deg, dmsSpace, dmin, dmsSpace, unit, prec=prec)
     return(s)
 
 def parseDMSString(str, order=0):

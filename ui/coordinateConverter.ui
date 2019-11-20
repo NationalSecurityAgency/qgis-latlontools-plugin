@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>414</width>
-    <height>555</height>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -220,9 +220,37 @@
     </layout>
    </item>
    <item>
+    <widget class="QLabel" name="dmLabel">
+     <property name="text">
+      <string>D° M.MM'</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_12">
+     <item>
+      <widget class="QLineEdit" name="dmLineEdit"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="dmCommitButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="dmCopyButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QLabel" name="ddmmssLabel">
      <property name="text">
-      <string>DMS</string>
+      <string>DDMMSS</string>
      </property>
     </widget>
    </item>

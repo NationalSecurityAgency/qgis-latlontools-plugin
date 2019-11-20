@@ -8,7 +8,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
-* <img src="images/copyicon.png" alt="Copy/Display coordinate"> ***Copy/Display Coordinate*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **MGRS**, **Standard UTM**, **Plus Codes**, **Geohash**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**. If snapping is enabled under QGIS ***Project->Snapping Options...*** menu, then *Copy/Display Coordinate* will snap to any close vector vertices according to the parameters set in the snapping options.
+* <img src="images/copyicon.png" alt="Copy/Display coordinate"> ***Copy/Display Coordinate*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **Degrees Minutes**, **MGRS**, **Standard UTM**, **Plus Codes**, **Geohash**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**. If snapping is enabled under QGIS ***Project->Snapping Options...*** menu, then *Copy/Display Coordinate* will snap to any close vector vertices according to the parameters set in the snapping options.
   
 * <img src="images/mapicon.png" alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. The left and right mouse buttons can be configured to show different maps. Currently Open Street Map, Google Maps, MapQuest, Mapillary, Open Street Map iD Editor, and Bing Maps are supported. Google Earth is supported if it is installed on the system. The desired maps can be configured in **Settings**. A temporary marker can be displayed on the map at the location clicked on. To turn this on go to **Settings**. If snapping is enabled, then the clicked location will snap to any close vector vertices according to the parameters set in the snapping options.
 
@@ -140,6 +140,7 @@ Additional coordinate formatting can be specified with ***WGS 84 (Latitude & Lon
 
 * **Decimal Degrees** - "42.20391297, -86.023854202"
 * **DMS** - "36&deg; 47' 24.27" N, 99&deg; 22' 9.39" W"
+* **D&deg;MM'** - "42&deg; 12.2348' N, 86&deg; 1.4313' W"
 * **DDMMSS** - "400210.53N, 1050824.96 W"
 * **WKT POINT** - POINT(-86.023854202 42.20391297)
 * **GeoJSON** - {"type": "Point","coordinates": [-86.02385420,42.20393450]}
@@ -160,10 +161,13 @@ The order in which the coordinates are captured is determined by ***Coordinate o
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
     * **Space**
     * **Other** - With this selected, the contents of ***Other delimiter*** is used.
-* ***DMS second / UTM precision*** - Used when formatting DMS coordinates and Standard UTM coordinates and specifies the number of digits after the decimal.
+* ***DMS second precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal.
+* ***D&deg;MM' precision*** - Used when formatting D&deg;MM' coordinates and specifies the number of digits after the decimal for the minutes.
+* ***UTM precision*** - Used when formatting UtM coordinates and specifies the number of digits after the decimal.
 * ***Plus codes length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 * ***Coordinate prefix*** - This text string is added to the beginning of the captured coordinate.
 * ***Coordinate suffix*** - This text string is added to the end of the captured coordinate.
+* ***Add space between D&deg; M' S" and D&deg; M.MM' numbers*** - When checked a space will be added between each pair of numbers.
 
 ### Zoom to Settings
 
@@ -298,8 +302,10 @@ These are the default settings for the ***Coordinate Conversion*** dialog box.
 * ***EPSG:4326 decimal degree precision*** determines the number of digits after the decimal point for a WGS 84 latitude and longitude coordinate.
 * ***Other Decimal degree precision*** is the number of digits after the decimal point for all other coordinate formats.
 * ***DMS seconds precision*** is the number of decimal digits for the second in a DMS formatted coordinate.
+* ***D&deg;MM' precision*** is the number of decimal digits for the minute in a D&deg;MM' formatted coordinate.
 * ***UTM precision*** specifies the number of decimal digits for a UTM formatted coordinate.
 * ***Plus codes length*** is the number of digits in a plus code coordinate.
 * ***Geohash precision*** is the number of digits in a geohash coordinate.
 * ***Delimiter between coordinate pairs*** is the delimiter used between coordinate pairs for those representations that require a delimiter.
 * ***DDMMSS delimiter*** is the delimiter used between DDMMSS coordinate pairs. Leave this blank if no space is desired between coordinates. The default is ", ".
+* ***Add space between D&deg; M' S" and D&deg; M.MM' numbers*** - When checked a space will be added between each pair of numbers.

@@ -61,6 +61,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.projCommitButton.setIcon(icon)
         self.customCommitButton.setIcon(icon)
         self.dmsCommitButton.setIcon(icon)
+        self.dmCommitButton.setIcon(icon)
         self.ddmmssCommitButton.setIcon(icon)
         self.utmCommitButton.setIcon(icon)
         self.mgrsCommitButton.setIcon(icon)
@@ -75,6 +76,8 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.customLineEdit.returnPressed.connect(self.commitCustom)
         self.dmsCommitButton.clicked.connect(self.commitDms)
         self.dmsLineEdit.returnPressed.connect(self.commitDms)
+        self.dmCommitButton.clicked.connect(self.commitDm)
+        self.dmLineEdit.returnPressed.connect(self.commitDm)
         self.ddmmssCommitButton.clicked.connect(self.commitDdmmss)
         self.ddmmssLineEdit.returnPressed.connect(self.commitDdmmss)
         self.utmCommitButton.clicked.connect(self.commitUtm)
@@ -91,6 +94,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.projCopyButton.setIcon(icon)
         self.customCopyButton.setIcon(icon)
         self.dmsCopyButton.setIcon(icon)
+        self.dmCopyButton.setIcon(icon)
         self.ddmmssCopyButton.setIcon(icon)
         self.utmCopyButton.setIcon(icon)
         self.mgrsCopyButton.setIcon(icon)
@@ -101,6 +105,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.projCopyButton.clicked.connect(self.copyProject)
         self.customCopyButton.clicked.connect(self.copyCustom)
         self.dmsCopyButton.clicked.connect(self.copyDms)
+        self.dmCopyButton.clicked.connect(self.copyDm)
         self.ddmmssCopyButton.clicked.connect(self.copyDdmmss)
         self.utmCopyButton.clicked.connect(self.copyUtm)
         self.mgrsCopyButton.clicked.connect(self.copyMgrs)
@@ -137,14 +142,16 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         if id != 3:
             self.dmsLineEdit.setText('Invalid')
         if id != 4:
-            self.ddmmssLineEdit.setText('Invalid')
+            self.dmLineEdit.setText('Invalid')
         if id != 5:
-            self.utmLineEdit.setText('Invalid')
+            self.ddmmssLineEdit.setText('Invalid')
         if id != 6:
-            self.mgrsLineEdit.setText('Invalid')
+            self.utmLineEdit.setText('Invalid')
         if id != 7:
-            self.plusLineEdit.setText('Invalid')
+            self.mgrsLineEdit.setText('Invalid')
         if id != 8:
+            self.plusLineEdit.setText('Invalid')
+        if id != 9:
             self.geohashLineEdit.setText('Invalid')
 
     def clearForm(self):
@@ -153,6 +160,7 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.projLineEdit.setText('')
         self.customLineEdit.setText('')
         self.dmsLineEdit.setText('')
+        self.dmLineEdit.setText('')
         self.ddmmssLineEdit.setText('')
         self.utmLineEdit.setText('')
         self.mgrsLineEdit.setText('')
@@ -206,27 +214,32 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
                 s = '{:.{prec}f}{}{:.{prec}f}'.format(newpt.x(), settings.converterDelimiter, newpt.y(), prec=precision)
             self.customLineEdit.setText(s)
         if id != 3:  # D M' S"
-            s = formatDmsString(pt4326.y(), pt4326.x(), True, settings.converterDmsPrec, self.inputXYOrder, settings.converterDelimiter)
+            s = formatDmsString(pt4326.y(), pt4326.x(), 0, settings.converterDmsPrec, self.inputXYOrder,
+                    settings.converterDelimiter, settings.converterAddDmsSpace)
             self.dmsLineEdit.setText(s)
-        if id != 4:  # DDMMSS
-            s = formatDmsString(pt4326.y(), pt4326.x(), False, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter)
+        if id != 4:  # D M.MM'
+            s = formatDmsString(pt4326.y(), pt4326.x(), 2, settings.converterDmmPrec, self.inputXYOrder,
+                    settings.converterDelimiter, settings.converterAddDmsSpace)
+            self.dmLineEdit.setText(s)
+        if id != 5:  # DDMMSS
+            s = formatDmsString(pt4326.y(), pt4326.x(), 1, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter)
             self.ddmmssLineEdit.setText(s)
-        if id != 5:  # UTM
+        if id != 6:  # UTM
             s = latLon2UtmString(pt4326.y(), pt4326.x(), settings.converterUtmPrec)
             self.utmLineEdit.setText(s)
-        if id != 6:  # MGRS
+        if id != 7:  # MGRS
             try:
                 s = mgrs.toMgrs(pt4326.y(), pt4326.x())
             except Exception:
                 s = 'Invalid'
             self.mgrsLineEdit.setText(s)
-        if id != 7:  # Plus Codes
+        if id != 8:  # Plus Codes
             try:
                 s = olc.encode(pt4326.y(), pt4326.x(), settings.converterPlusCodeLength)
             except Exception:
                 s = 'Invalid'
             self.plusLineEdit.setText(s)
-        if id != 8: # GEOHASH
+        if id != 9: # GEOHASH
             try:
                 s = geohash.encode(pt4326.y(), pt4326.x(), settings.converterGeohashPrecision)
             except Exception:
@@ -300,8 +313,8 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         except Exception:
             self.showInvalid(3)
 
-    def commitDdmmss(self):
-        text = self.ddmmssLineEdit.text().strip()
+    def commitDm(self):
+        text = self.dmLineEdit.text().strip()
         try:
             lat, lon = parseDMSString(text, self.inputXYOrder)
             pt = QgsPoint(lon, lat)
@@ -309,13 +322,22 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         except Exception:
             self.showInvalid(4)
 
+    def commitDdmmss(self):
+        text = self.ddmmssLineEdit.text().strip()
+        try:
+            lat, lon = parseDMSString(text, self.inputXYOrder)
+            pt = QgsPoint(lon, lat)
+            self.updateCoordinates(5, pt, epsg4326)
+        except Exception:
+            self.showInvalid(5)
+
     def commitUtm(self):
         text = self.utmLineEdit.text().strip()
         if isUtm(text):
             pt = utmString2Crs(text, epsg4326)
-            self.updateCoordinates(5, QgsPoint(pt), epsg4326)
+            self.updateCoordinates(6, QgsPoint(pt), epsg4326)
         else:
-            self.showInvalid(5)
+            self.showInvalid(6)
 
     def commitMgrs(self):
         text = self.mgrsLineEdit.text().strip()
@@ -323,9 +345,9 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         try:
             lat, lon = mgrs.toWgs(text)
             pt = QgsPoint(lon, lat)
-            self.updateCoordinates(6, pt, epsg4326)
+            self.updateCoordinates(7, pt, epsg4326)
         except Exception:
-            self.showInvalid(6)
+            self.showInvalid(7)
 
     def commitPlus(self):
         text = self.plusLineEdit.text().strip()
@@ -335,18 +357,18 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
             lat = coord.latitudeCenter
             lon = coord.longitudeCenter
             pt = QgsPoint(lon, lat)
-            self.updateCoordinates(7, pt, epsg4326)
+            self.updateCoordinates(8, pt, epsg4326)
         except Exception:
-            self.showInvalid(7)
+            self.showInvalid(8)
 
     def commitGeohash(self):
         text = self.geohashLineEdit.text().strip()
         try:
             (lat, lon) = geohash.decode(text)
             pt = QgsPoint(float(lon), float(lat))
-            self.updateCoordinates(8, pt, epsg4326)
+            self.updateCoordinates(9, pt, epsg4326)
         except Exception:
-            self.showInvalid(8)
+            self.showInvalid(9)
 
     def updateLabel(self):
         if self.inputXYOrder == 0:  # Y, X
@@ -376,6 +398,9 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         label = 'D° M\' S" {}'.format(latlon)
         self.dmsLabel.setText(label)
 
+        label = 'D° M.MM\' {}'.format(latlon)
+        self.dmLabel.setText(label)
+
         label = 'DDMMSS {}'.format(latlon)
         self.ddmmssLabel.setText(label)
 
@@ -395,10 +420,16 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
 
     def copyDms(self):
-        s = self.projLineEdit.text()
+        s = self.dmsLineEdit.text()
         self.clipboard.setText(s)
         self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
         self.clipboard.setText(self.dmsLineEdit.text())
+
+    def copyDm(self):
+        s = self.dmLineEdit.text()
+        self.clipboard.setText(s)
+        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.clipboard.setText(self.dmLineEdit.text())
 
     def copyDdmmss(self):
         s = self.ddmmssLineEdit.text()

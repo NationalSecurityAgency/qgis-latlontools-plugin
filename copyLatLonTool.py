@@ -50,11 +50,11 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             lat = pt4326.y()
             lon = pt4326.x()
             if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS:  # DMS
-                msg = formatDmsString(lat, lon, 0, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+                msg = formatDmsString(lat, lon, 0, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS:  # DDMMSS
                 msg = formatDmsString(lat, lon, 1, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
-            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMM:  # DDMMSS
-                msg = formatDmsString(lat, lon, 2, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+            elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMM:  # DM.MM
+                msg = formatDmsString(lat, lon, 2, settings.captureDmmPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:  # WKT
                 msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt4326.x(), pt4326.y(), prec=self.settings.decimalDigits)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:  # GeoJSON
@@ -97,6 +97,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             try:
                 msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
             except Exception:
+                # traceback.print_exc()
                 msg = None
         elif self.settings.captureProjIsPlusCodes():
             # Make sure the coordinate is transformed to EPSG:4326
@@ -118,7 +119,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:
                 transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
                 pt4326 = transform.transform(pt.x(), pt.y())
-            msg = latLon2UtmString(pt4326.y(), pt4326.x(), self.settings.dmsPrecision)
+            msg = latLon2UtmString(pt4326.y(), pt4326.x(), settings.captureUtmPrecision)
             if msg == '':
                 msg = None
         elif self.settings.captureProjIsGeohash():

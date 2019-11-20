@@ -8,6 +8,7 @@ from qgis.core import (
     QgsProcessing,
     QgsProcessingException,
     QgsProcessingAlgorithm,
+    QgsProcessingParameterBoolean,
     QgsProcessingParameterEnum,
     QgsProcessingParameterString,
     QgsProcessingParameterNumber,
@@ -46,6 +47,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     PrmPlusCodesLength = 'PlusCodesLength'
     PrmGeohashPrecision = 'PrmGeohashPrecision'
     PrmOutputLayer = 'OutputLayer'
+    PrmDmsAddSpace = 'DmsAddSpace'
 
     def initAlgorithm(self, config):
         self.addParameter(
@@ -114,8 +116,15 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmWgs84NumberFormat,
                 tr('Select Decimal or DMS degress for WGS 84 numbers'),
-                options=[tr('Decimal degrees'), tr('DMS'), tr('DDMMSS')],
+                options=[tr('Decimal degrees'), tr('D° M\' S"'), tr('D° M.MM'), tr('DDMMSS')],
                 defaultValue=0,
+                optional=True)
+        )
+        self.addParameter(
+            QgsProcessingParameterBoolean(
+                self.PrmDmsAddSpace,
+                tr('Add space between DMS and D M.MM numbers'),
+                False,
                 optional=True)
         )
         self.addParameter(
@@ -130,7 +139,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmDMSSecondPrecision,
-                tr('DMS second / UTM precision'),
+                tr('DMS / Degrees Minutes / UTM precision'),
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=0,
                 optional=True,
@@ -176,6 +185,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         dmsPrecision = self.parameterAsInt(parameters, self.PrmDMSSecondPrecision, context)
         plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
         geohashPrecision = self.parameterAsInt(parameters, self.PrmGeohashPrecision, context)
+        use_dms_space = self.parameterAsBool(parameters, self.PrmDmsAddSpace, context)
 
         layerCRS = source.sourceCrs()
         # For the first condition, the user has either EPSG:4326 selected or
@@ -223,11 +233,14 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                             msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
                         elif wgs84Format == 1:  # DMS
-                            msg = convertDD2DMS(pt.y(), True, True, dmsPrecision)
-                            msg2 = convertDD2DMS(pt.x(), False, True, dmsPrecision)
+                            msg = convertDD2DMS(pt.y(), True, 0, dmsPrecision, use_dms_space)
+                            msg2 = convertDD2DMS(pt.x(), False, 0, dmsPrecision, use_dms_space)
+                        elif wgs84Format == 2:  # D M.MM
+                            msg = convertDD2DMS(pt.y(), True, 2, dmsPrecision, use_dms_space)
+                            msg2 = convertDD2DMS(pt.x(), False, 2, dmsPrecision, use_dms_space)
                         else:  # DDMMSS
-                            msg = convertDD2DMS(pt.y(), True, False, dmsPrecision)
-                            msg2 = convertDD2DMS(pt.x(), False, False, dmsPrecision)
+                            msg = convertDD2DMS(pt.y(), True, 1, dmsPrecision, use_dms_space)
+                            msg2 = convertDD2DMS(pt.x(), False, 1, dmsPrecision, use_dms_space)
                     else:
                         msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                         msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
@@ -239,9 +252,11 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             else:
                                 msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
                         elif wgs84Format == 1:  # DMS
-                            msg = formatDmsString(pt.y(), pt.x(), True, dmsPrecision, coordOrder, delimiter)
+                            msg = formatDmsString(pt.y(), pt.x(), 0, dmsPrecision, coordOrder, delimiter, use_dms_space)
+                        elif wgs84Format == 2:  # D M.MM
+                            msg = formatDmsString(pt.y(), pt.x(), 2, dmsPrecision, coordOrder, delimiter, use_dms_space)
                         else:  # DDMMSS
-                            msg = formatDmsString(pt.y(), pt.x(), False, dmsPrecision, coordOrder, delimiter)
+                            msg = formatDmsString(pt.y(), pt.x(), 1, dmsPrecision, coordOrder, delimiter, use_dms_space)
                     else:
                         if coordOrder == 0:
                             msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
