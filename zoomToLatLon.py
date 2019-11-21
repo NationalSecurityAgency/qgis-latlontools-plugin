@@ -218,4 +218,4 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.coordTxt.clear()
 
     def showSettings(self):
-        self.settings.showTab(0)
+        self.settings.showTab(1)
