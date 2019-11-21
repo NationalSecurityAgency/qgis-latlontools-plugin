@@ -30,6 +30,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         self.clearToolButton.setIcon(QIcon(':/images/themes/default/mIconClearText.svg'))
         self.zoomToolButton.clicked.connect(self.zoomToPressed)
         self.clearToolButton.clicked.connect(self.removeMarker)
+        self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
+        self.optionsButton.clicked.connect(self.showSettings)
         self.lltools = lltools
         self.settings = lltools.settingsDialog
         self.iface = iface
@@ -214,3 +216,6 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
             self.coordTxt.clear()
+
+    def showSettings(self):
+        self.settings.showTab(0)
