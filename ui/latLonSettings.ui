@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>479</width>
-    <height>640</height>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -321,6 +321,7 @@ Plus Codes - Only Plus Codes coordinates
 
 Standard UTM - Only Standard UTM coordinates
 
+Geohash - Only geohash coordinates are recognized
 </string>
          </property>
         </widget>
