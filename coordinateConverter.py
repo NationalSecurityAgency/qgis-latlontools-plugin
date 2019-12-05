@@ -2,7 +2,7 @@ import os
 import re
 from qgis.PyQt.QtCore import QSize
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QDialog, QMenu, QApplication
+from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QApplication
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.uic import loadUiType
 from qgis.core import QgsCoordinateTransform, QgsPoint, QgsPointXY, QgsProject
@@ -18,7 +18,7 @@ from . import geohash
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/coordinateConverter.ui'))
 
-class CoordinateConverterWidget(QDialog, FORM_CLASS):
+class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     inputProjection = 0
     origPt = None
     origCrs = epsg4326
@@ -52,9 +52,10 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.clearFormButton.clicked.connect(self.clearForm)
         self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordinate_capture.png"))
         self.coordCaptureButton.clicked.connect(self.startCapture)
+        self.zoomButton.setIcon(QIcon(':/images/themes/default/mActionZoomIn.svg'))
+        self.zoomButton.clicked.connect(self.zoomTo)
         self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
         self.optionsButton.clicked.connect(self.showSettings)
-        self.closeButton.clicked.connect(self.closeEvent)
 
         icon = QIcon(os.path.dirname(__file__) + "/images/check.png")
         self.wgs84CommitButton.setIcon(icon)
@@ -119,10 +120,6 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
         self.inputXYOrder = settings.converterCoordOrder
         self.xyButton.setDefaultAction(self.xymenu.actions()[settings.converterCoordOrder])
         self.updateLabel()
-
-    def closeEvent(self, e):
-        self.stopCapture()
-        self.hide()
 
     def xyTriggered(self, action):
         self.xyButton.setDefaultAction(action)
@@ -479,3 +476,11 @@ class CoordinateConverterWidget(QDialog, FORM_CLASS):
 
     def showSettings(self):
         self.settings.showTab(5)
+
+    def zoomTo(self):
+        text = self.wgs84LineEdit.text().strip()
+        try:
+            lat, lon = parseDMSString(text, self.inputXYOrder)
+            pt = self.lltools.zoomTo(epsg4326, lat, lon)
+        except Exception:
+            pass

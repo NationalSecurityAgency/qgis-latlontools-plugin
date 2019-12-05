@@ -58,6 +58,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * <img src="doc/xy.jpg" alt="X, Y Coordinate Order"> / <img src="doc/yx.jpg" alt="Y, X Coordinate Order"> ***Coordinate order*** - Select whether the coordinates should be displayed in an **x,y (longitude, latitude)** or **y,x (latitude, longitude)** order.
     * <img src="doc/converter-clear.jpg" alt="Clear all fields"> ***Clear form*** - This clears the form of all values.
     * <img src="doc/settings.png" alt="Settings"> ***Show coordinate conversion settings*** - This shows the default settings for coordinate conversion.
+    * <img src="doc/zoomtool.jpg" alt="Zoom to"> ***Zoom to*** will zoom to the  coordinate in the Decimal Degrees field.
     * <img src="images/coordinate_capture.png" alt="Capture coordinate"> ***Capture coordinate*** enables the user to click on the map to capture a coordinate directly to the form and have it automatically converted.
     * <img src="images/check.png" alt="Convert coordinate"> ***Convert coordinate*** updates all coordinate fields with values converted from this text field.
     * <img src="doc/copy.jpg" alt="Copy to clipboard"> ***Copy to clipboard*** copies the value in the text area onto the clipboard.

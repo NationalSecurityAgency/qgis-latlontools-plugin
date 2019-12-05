@@ -257,6 +257,7 @@ class LatLonTools:
         if self.convertCoordinateDialog is None:
             from .coordinateConverter import CoordinateConverterWidget
             self.convertCoordinateDialog = CoordinateConverterWidget(self, self.settingsDialog, self.iface, self.iface.mainWindow())
+            self.convertCoordinateDialog.setFloating(True)
         self.convertCoordinateDialog.show()
 
     def multiZoomTo(self):

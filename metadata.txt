@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.0
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, Geohash, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
-version=3.3.11
+version=3.3.12
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -27,6 +27,7 @@ icon=images/copyicon.png
 experimental=False
 deprecated=False
 changelog=
+    3.3.12 - Made coordinate conversion dialog box dockable & added zoom to button.
     3.3.11 - Fix bug
     3.3.10 - Added 'degree minute' capture and to coordinate conversion dialog box.
     3.3.9 - Added geohash support
