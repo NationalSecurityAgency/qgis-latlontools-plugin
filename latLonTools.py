@@ -141,21 +141,23 @@ class LatLonTools:
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
 
         self.iface.currentLayerChanged.connect(self.currentLayerChanged)
-        self.canvas.mapToolSet.connect(self.unsetTool)
+        self.canvas.mapToolSet.connect(self.resetTools)
         self.enableDigitizeTool()
 
         # Add the processing provider
         QgsApplication.processingRegistry().addProvider(self.provider)
 
-    def unsetTool(self, tool):
+    def resetTools(self, newtool, oldtool):
         '''Uncheck the Copy Lat Lon tool'''
         try:
-            if not isinstance(tool, CopyLatLonTool):
+            if oldtool is self.mapTool:
                 self.copyAction.setChecked(False)
-                self.multiZoomDialog.stopCapture()
-                self.mapTool.capture4326 = False
-            if not isinstance(tool, ShowOnMapTool):
+            if oldtool is self.showMapTool:
                 self.externMapAction.setChecked(False)
+            if newtool is self.mapTool:
+                self.copyAction.setChecked(True)
+            if newtool is self.showMapTool:
+                self.externMapAction.setChecked(True)
         except Exception:
             pass
 
@@ -197,8 +199,7 @@ class LatLonTools:
         QgsApplication.processingRegistry().removeProvider(self.provider)
 
     def startCapture(self):
-        '''Set the focus of the copy coordinate tool and check it'''
-        self.copyAction.setChecked(True)
+        '''Set the focus of the copy coordinate tool'''
         self.canvas.setMapTool(self.mapTool)
 
     def copyCanvas(self):
@@ -244,8 +245,7 @@ class LatLonTools:
         self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
 
     def setShowMapTool(self):
-        '''Set the focus of the external map tool and check it'''
-        self.externMapAction.setChecked(True)
+        '''Set the focus of the external map tool.'''
         self.canvas.setMapTool(self.showMapTool)
 
     def showZoomToDialog(self):

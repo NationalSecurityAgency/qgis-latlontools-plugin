@@ -16,14 +16,13 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     '''Class to interact with the map canvas to capture the coordinate
     when the mouse button is pressed and to display the coordinate in
     in the status bar.'''
-    capturesig = pyqtSignal(QgsPointXY)
+    captureStopped = pyqtSignal()
 
     def __init__(self, settings, iface):
         QgsMapToolEmitPoint.__init__(self, iface.mapCanvas())
         self.iface = iface
         self.canvas = iface.mapCanvas()
         self.settings = settings
-        self.capture4326 = False
         self.marker = None
         self.vertex = None
 
@@ -35,6 +34,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     def deactivate(self):
         self.removeMarker()
         self.removeVertexMarker()
+        self.captureStopped.emit()
 
     def formatCoord(self, pt, delimiter):
         '''Format the coordinate string according to the settings from
@@ -226,12 +226,6 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             self.removeMarker()
 
         try:
-            if self.capture4326:
-                canvasCRS = self.canvas.mapSettings().destinationCrs()
-                transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
-                pt4326 = transform.transform(pt.x(), pt.y())
-                self.capturesig.emit(pt4326)
-                return
             msg = self.formatCoord(pt, self.settings.delimiter)
             formatString = self.coordFormatString()
             if msg is not None:

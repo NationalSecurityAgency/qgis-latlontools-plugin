@@ -10,6 +10,7 @@ from qgis.core import (
     QgsField, QgsFeature, QgsGeometry, QgsPointXY,
     QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject, Qgis)
 from qgis.gui import QgsVertexMarker
+from .captureCoordinate  import CaptureCoordinate
 from .util import epsg4326, parseDMSStringSingle, parseDMSString
 from .utm import utmString2Crs
 from . import mgrs
@@ -34,9 +35,12 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.iface = lltools.iface
         self.canvas = self.iface.mapCanvas()
         self.lltools = lltools
+        self.savedMapTool = None
 
         # Set up a connection with the coordinate capture tool
-        self.lltools.mapTool.capturesig.connect(self.capturedPoint)
+        self.captureCoordinate = CaptureCoordinate(self.canvas)
+        self.captureCoordinate.capturePoint.connect(self.capturedPoint)
+        self.captureCoordinate.captureStopped.connect(self.stopCapture)
 
         self.addButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/check.png"))
         self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordinate_capture.png"))
@@ -118,9 +122,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     def closeEvent(self, e):
         '''Called when the dialog box is being closed. We want to clear selected features and remove
            all the markers.'''
+        if self.savedMapTool:
+            self.canvas.setMapTool(self.savedMapTool)
+            self.savedMapTool = None
         self.resultsTable.clearSelection()
         self.removeMarkers()
-        self.stopCapture()
         self.hide()
 
     def showEvent(self, e):
@@ -145,13 +151,15 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
 
     def startCapture(self):
         if self.coordCaptureButton.isChecked():
-            self.lltools.mapTool.capture4326 = True
-            self.lltools.startCapture()
+            self.savedMapTool = self.canvas.mapTool()
+            self.canvas.setMapTool(self.captureCoordinate)
         else:
-            self.lltools.mapTool.capture4326 = False
+            if self.savedMapTool:
+                self.canvas.setMapTool(self.savedMapTool)
+                self.savedMapTool = None
 
+    @pyqtSlot()
     def stopCapture(self):
-        self.lltools.mapTool.capture4326 = False
         self.coordCaptureButton.setChecked(False)
 
     def clearAll(self):

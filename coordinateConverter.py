@@ -9,6 +9,7 @@ from qgis.core import QgsCoordinateTransform, QgsPoint, QgsPointXY, QgsProject
 from .util import epsg4326, parseDMSString, formatDmsString
 # import traceback
 
+from .captureCoordinate  import CaptureCoordinate
 from .settings import settings
 from . import mgrs
 from . import olc
@@ -30,11 +31,14 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.canvas = iface.mapCanvas()
         self.lltools = lltools
         self.settings = settingsDialog
+        self.savedMapTool = None
 
         self.clipboard = QApplication.clipboard()
 
         # Set up a connection with the coordinate capture tool
-        self.lltools.mapTool.capturesig.connect(self.capturedPoint)
+        self.captureCoordinate = CaptureCoordinate(self.canvas)
+        self.captureCoordinate.capturePoint.connect(self.capturedPoint)
+        self.captureCoordinate.captureStopped.connect(self.stopCapture)
 
         self.xymenu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/yx.png')
@@ -120,6 +124,11 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.inputXYOrder = settings.converterCoordOrder
         self.xyButton.setDefaultAction(self.xymenu.actions()[settings.converterCoordOrder])
         self.updateLabel()
+
+    def closeEvent(self, e):
+        if self.savedMapTool:
+            self.canvas.setMapTool(self.savedMapTool)
+            self.savedMapTool = None
 
     def xyTriggered(self, action):
         self.xyButton.setDefaultAction(action)
@@ -465,13 +474,15 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
 
     def startCapture(self):
         if self.coordCaptureButton.isChecked():
-            self.lltools.mapTool.capture4326 = True
-            self.lltools.startCapture()
+            self.savedMapTool = self.canvas.mapTool()
+            self.canvas.setMapTool(self.captureCoordinate)
         else:
-            self.lltools.mapTool.capture4326 = False
-
+            if self.savedMapTool:
+                self.canvas.setMapTool(self.savedMapTool)
+                self.savedMapTool = None
+        
+    @pyqtSlot()
     def stopCapture(self):
-        self.lltools.mapTool.capture4326 = False
         self.coordCaptureButton.setChecked(False)
 
     def showSettings(self):
