@@ -27,12 +27,33 @@ __revision__ = '$Format:%H$'
 
 
 import os
+import sys
 import re
 import math
 import itertools
 import logging
 
-from osgeo import osr
+HAVE_OSR = False
+# Force using proj for transformations by setting MGRSPY_USE_PROJ env var
+if os.environ.get('MGRSPY_USE_PROJ', None) is None:
+    try:
+        from osgeo import osr
+        HAVE_OSR = True
+    except ImportError:
+        pass
+
+PYPROJ_VER = 0
+if not HAVE_OSR:
+    try:
+        from pyproj import Transformer, CRS, __version__ as pyproj_ver
+        PYPROJ_VER = 2
+        if float(pyproj_ver[:3]) < 2.2:
+            raise Exception('Unsupported pyproj version (need >= 2.2)')
+    except ImportError:
+        from pyproj import Proj, transform, __version__ as pyproj_ver
+        if float(pyproj_ver[:3]) < 1.9 or int(pyproj_ver[4]) < 5:
+            raise Exception('Unsupported pyproj version (need >= 1.9.5)')
+        PYPROJ_VER = 1
 
 LOG_LEVEL = os.environ.get('PYTHON_LOG_LEVEL', 'WARNING').upper()
 FORMAT = "%(levelname)s [%(name)s:%(lineno)s  %(funcName)s()] %(message)s"
@@ -99,6 +120,82 @@ class MgrsException(Exception):
     pass
 
 
+def _log_proj_crs(proj_crs, proj_desc='', espg=''):
+    if proj_desc:
+        proj_desc = '{0} '.format(str(proj_desc))
+    if espg:
+        espg = 'espg:{0} '.format(str(espg))
+    definition = ''
+    if HAVE_OSR:
+        definition = proj_crs.ExportToPrettyWkt()
+    if PYPROJ_VER == 1:
+        definition = proj_crs.definition_string()
+    elif PYPROJ_VER == 2:
+        definition = proj_crs.to_wkt(pretty=True)
+    log.debug('{0}proj: {1}{2}{3}'.format(
+        proj_desc, espg, os.linesep, definition))
+
+
+def _transform_proj(x1, y1, epsg_src, epsg_dst, polar=False):
+    if PYPROJ_VER == 1:
+        proj_src = Proj(init='epsg:{0}'.format(epsg_src))
+        _log_proj_crs(proj_src, proj_desc='src', espg=epsg_src)
+        proj_dst = Proj(init='epsg:{0}'.format(epsg_dst))
+        _log_proj_crs(proj_dst, proj_desc='dst', espg=epsg_dst)
+        x2, y2 = transform(proj_src, proj_dst, x1, y1)
+    elif PYPROJ_VER == 2:
+        # With PROJ 6+ input axis ordering needs honored per projection, even
+        #   though always_xy should fix it (doesn't seem to work for UPS)
+        crs_src = CRS.from_epsg(epsg_src)
+        _log_proj_crs(crs_src, proj_desc='src', espg=epsg_src)
+        crs_dst = CRS.from_epsg(epsg_dst)
+        _log_proj_crs(crs_dst, proj_desc='dst', espg=epsg_dst)
+        ct = Transformer.from_crs(crs_src, crs_dst, always_xy=(not polar))
+        if polar:
+            y2, x2 = ct.transform(y1, x1)
+        else:
+            x2, y2 = ct.transform(x1, y1)
+    else:
+        raise MgrsException('pyproj version unsupported')
+
+    return x2, y2
+
+
+def _transform_osr(x1, y1, epsg_src, epsg_dst, polar=False):
+    src = osr.SpatialReference()
+    # Check if we are using osgeo.osr linked against PROJ 6+
+    # If so, input axis ordering needs honored per projection, even though
+    #   OAMS_TRADITIONAL_GIS_ORDER should fix it (doesn't seem to work for UPS)
+    # See GDAL/OGR migration guide for 2.4 to 3.0
+    # https://github.com/OSGeo/gdal/blob/master/gdal/MIGRATION_GUIDE.TXT and
+    # https://trac.osgeo.org/gdal/wiki/rfc73_proj6_wkt2_srsbarn#Axisorderissues
+    osr_proj6 = hasattr(src, 'SetAxisMappingStrategy')
+    if not polar and osr_proj6:
+        src.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+    src.ImportFromEPSG(epsg_src)
+    _log_proj_crs(src, proj_desc='src', espg=epsg_src)
+    dst = osr.SpatialReference()
+    if not polar and osr_proj6:
+        dst.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+    dst.ImportFromEPSG(epsg_dst)
+    _log_proj_crs(dst, proj_desc='dst', espg=epsg_dst)
+    ct = osr.CoordinateTransformation(src, dst)
+    if polar and osr_proj6:
+        # only supported with osgeo.osr v3.0.0+
+        y2, x2, _ = ct.TransformPoint(y1, x1)
+    else:
+        x2, y2, _ = ct.TransformPoint(x1, y1)
+
+    return x2, y2
+
+
+def _transform(x1, y1, epsg_src, epsg_dst, polar=False):
+    if HAVE_OSR:
+        return _transform_osr(x1, y1, epsg_src, epsg_dst, polar=polar)
+    else:
+        return _transform_proj(x1, y1, epsg_src, epsg_dst, polar=polar)
+
+
 def toMgrs(latitude, longitude, precision=5):
     """ Converts geodetic (latitude and longitude) coordinates to an MGRS
     coordinate string, according to the current ellipsoid parameters.
@@ -110,9 +207,11 @@ def toMgrs(latitude, longitude, precision=5):
     """
 
     # To avoid precision issues, which appear when using more than
-    # 6 decimal places
-    latitude = round(latitude, 6)
-    longitude = round(longitude, 6)
+    # 9 decimal places
+    # This may no longer be an issue for Python >= 3
+    if sys.version_info.major < 3:
+        latitude = round(latitude, 9)
+        longitude = round(longitude, 9)
 
     if math.fabs(latitude) > 90:
         raise MgrsException(
@@ -126,12 +225,8 @@ def toMgrs(latitude, longitude, precision=5):
         raise MgrsException('The precision must be between 0 and 5 inclusive.')
 
     hemisphere, zone, epsg = _epsgForWgs(latitude, longitude)
-    src = osr.SpatialReference()
-    src.ImportFromEPSG(4326)
-    dst = osr.SpatialReference()
-    dst.ImportFromEPSG(epsg)
-    ct = osr.CoordinateTransformation(src, dst)
-    x, y, z = ct.TransformPoint(longitude, latitude)
+
+    x, y = _transform(longitude, latitude, 4326, epsg, polar=(zone == 61))
 
     if (latitude < -80) or (latitude > 84):
         # Convert to UPS
@@ -154,7 +249,8 @@ def toWgs(mgrs):
     mgrs = _clean_mgrs_str(mgrs)
     log.debug('in: {0}'.format(mgrs))
 
-    if _checkZone(mgrs):
+    utm = _checkZone(mgrs)
+    if utm:
         zone, hemisphere, easting, northing = _mgrsToUtm(mgrs)
     else:
         zone, hemisphere, easting, northing = _mgrsToUps(mgrs)
@@ -162,13 +258,11 @@ def toWgs(mgrs):
     log.debug('e: {0}, n: {1}'.format(easting, northing))
 
     epsg = _epsgForUtm(zone, hemisphere)
-    src = osr.SpatialReference()
-    src.ImportFromEPSG(epsg)
-    dst = osr.SpatialReference()
-    dst.ImportFromEPSG(4326)
-    ct = osr.CoordinateTransformation(src, dst)
-    longitude, latitude, z = ct.TransformPoint(easting, northing)
 
+    longitude, latitude = \
+        _transform(easting, northing, epsg, 4326, polar=(not utm))
+
+    # Note y, x axis order for output
     log.debug('lat: {0}, lon: {1}'.format(latitude, longitude))
 
     return latitude, longitude
@@ -347,7 +441,9 @@ def _utmToMgrs(zone, hemisphere, latitude, longitude,
     """
     # FIXME: do we really need this?
     # Special check for rounding to (truncated) eastern edge of zone 31V
-    # if (zone == 31) and (((latitude >= 56.0) and (latitude < 64.0)) and ((longitude >= 3.0) or (easting >= 500000.0))):
+    # if (zone == 31) \
+    #         and (((latitude >= 56.0) and (latitude < 64.0))
+    #              and ((longitude >= 3.0) or (easting >= 500000.0))):
     #    # Reconvert to UTM zone 32
     #    override = 32
     #    lat = int(latitude)
@@ -360,11 +456,13 @@ def _utmToMgrs(zone, hemisphere, latitude, longitude,
     #        if (zone - 2 <= override) and (override <= zone + 2):
     #            zone = override
     #        else:
-    #            raise MgrsException('Zone outside of valid range (1 to 60) and within 1 of "natural" zone')
+    #            raise MgrsException('Zone outside of valid range (1 to 60) '
+    #                                'and within 1 of "natural" zone')
     #    elif (zone - 1 <= override) and (override <= zone + 1):
     #        zone = override
     #    else:
-    #        raise MgrsException('Zone outside of valid range (1 to 60) and within 1 of "natural" zone')
+    #        raise MgrsException('Zone outside of valid range (1 to 60) and '
+    #                            'within 1 of "natural" zone')
     #
     #    epsg = _epsgForUtm(zone, hemisphere)
     #
@@ -640,7 +738,7 @@ def _checkZone(mgrs):
     """ Checks if MGRS coordinate string contains UTM zone definition
 
     @param mgrs - MGRS coordinate string
-    @returns - True if zone is given, False otherwise
+    @returns - True if zone is given, False otherwise (or for UPS)
     """
     mgrs = _clean_mgrs_str(mgrs)  # should always set two zone digits, even UPS
     count = sum(1 for _ in itertools.takewhile(str.isdigit, mgrs))
