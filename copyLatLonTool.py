@@ -50,11 +50,11 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             lat = pt4326.y()
             lon = pt4326.x()
             if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS:  # DMS
-                msg = formatDmsString(lat, lon, 0, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace)
+                msg = formatDmsString(lat, lon, 0, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace, settings.capturePadZeroes)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS:  # DDMMSS
-                msg = formatDmsString(lat, lon, 1, self.settings.dmsPrecision, self.settings.coordOrder, delimiter)
+                msg = formatDmsString(lat, lon, 1, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.capturePadZeroes)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMM:  # DM.MM
-                msg = formatDmsString(lat, lon, 2, settings.captureDmmPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace)
+                msg = formatDmsString(lat, lon, 2, settings.captureDmmPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace, settings.capturePadZeroes)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:  # WKT
                 msg = 'POINT({:.{prec}f} {:.{prec}f})'.format(pt4326.x(), pt4326.y(), prec=self.settings.decimalDigits)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:  # GeoJSON
