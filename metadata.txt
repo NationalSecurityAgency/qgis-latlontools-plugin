@@ -24,6 +24,7 @@ homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#read
 tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box,google earth,geohash
 category=Plugins
 icon=images/copyicon.png
+hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
