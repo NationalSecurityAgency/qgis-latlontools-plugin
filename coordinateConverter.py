@@ -221,11 +221,11 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             self.customLineEdit.setText(s)
         if id != 3:  # D M' S"
             s = formatDmsString(pt4326.y(), pt4326.x(), 0, settings.converterDmsPrec, self.inputXYOrder,
-                    settings.converterDelimiter, settings.converterAddDmsSpace)
+                    settings.converterDelimiter, settings.converterAddDmsSpace, settings.converterPadZeroes)
             self.dmsLineEdit.setText(s)
         if id != 4:  # D M.MM'
             s = formatDmsString(pt4326.y(), pt4326.x(), 2, settings.converterDmmPrec, self.inputXYOrder,
-                    settings.converterDelimiter, settings.converterAddDmsSpace)
+                    settings.converterDelimiter, settings.converterAddDmsSpace, settings.converterPadZeroes)
             self.dmLineEdit.setText(s)
         if id != 5:  # DDMMSS
             s = formatDmsString(pt4326.y(), pt4326.x(), 1, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter)
