@@ -32,7 +32,7 @@ class Settings():
         self.captureDmmPrecision =  int(qset.value('/LatLonTools/CaptureDmmPrecision', 4))
         self.captureUtmPrecision =  int(qset.value('/LatLonTools/CaptureUtmPrecision', 0))
         self.captureAddDmsSpace = int(qset.value('/LatLonTools/CaptureAddDmsSpace', Qt.Checked))
-        self.capturePadZeroes = int(qset.value('/LatLonTools/PadZeroes', Qt.Checked))
+        self.capturePadZeroes = int(qset.value('/LatLonTools/CapturePadZeroes', Qt.Unchecked))
 
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
@@ -65,7 +65,7 @@ class Settings():
         self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
         self.converterAddDmsSpace = int(qset.value('/LatLonTools/ConverterAddDmsSpace', Qt.Checked))
-        self.capturePadZeroes = int(qset.value('/LatLonTools/PadZeroes', Qt.Checked))
+        self.converterPadZeroes = int(qset.value('/LatLonTools/ConverterPadZeroes', Qt.Unchecked))
 
     def googleEarthMapProvider(self, button=0):
         if button == 2:
@@ -248,6 +248,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDelimiterLineEdit.setText(',')
         self.converterDdmmssDelimiterLineEdit.setText(',')
         self.converterAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
+        self.converterPadZeroesCheckBox.setCheckState(Qt.Unchecked)
+
 
 
     def readSettings(self):
@@ -326,7 +328,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/CaptureSuffix', self.captureSuffixLineEdit.text())
         qset.setValue('/LatLonTools/CaptureShowClickedLocation', self.captureMarkerCheckBox.checkState())
         qset.setValue('/LatLonTools/CaptureAddDmsSpace', self.captureAddDmsSpaceCheckBox.checkState())
-        qset.setValue('/LatLonTools/PadZeroes', self.capturePadZeroesCheckBox.checkState())
+        qset.setValue('/LatLonTools/CapturePadZeroes', self.capturePadZeroesCheckBox.checkState())
 
         ### ZOOM TO SETTINGS ###
         qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
@@ -380,6 +382,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterAddDmsSpace', self.converterAddDmsSpaceCheckBox.checkState())
+        qset.setValue('/LatLonTools/ConverterPadZeroes', self.converterPadZeroesCheckBox.checkState())
 
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -511,6 +514,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
         self.converterAddDmsSpaceCheckBox.setCheckState(settings.converterAddDmsSpace)
+        self.converterPadZeroesCheckBox.setCheckState(settings.converterPadZeroes)
 
         self.setEnabled()
 
