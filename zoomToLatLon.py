@@ -14,6 +14,7 @@ from .utm import isUtm, utmString2Crs
 from . import mgrs
 from . import olc
 from . import geohash
+from . import maidenhead
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -70,6 +71,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.label.setText("Enter Geohash")
         elif self.settings.zoomToProjIsStandardUtm():
             self.label.setText("Enter Standard UTM")
+        elif self.settings.zoomToProjIsMaidenhead():
+            self.label.setText("Enter Maidenhead Grid")
         elif self.settings.zoomToProjIsWgs84():
             if self.settings.zoomToCoordOrder == 0:
                 self.label.setText("Enter 'Latitude, Longitude'")
@@ -115,6 +118,12 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 # A Geohash coordinate has been selected. This will result in an exception
                 # if it is not a valid Geohash coordinate.
                 (lat, lon) = geohash.decode(text)
+                return(float(lat), float(lon), epsg4326)
+
+            if self.settings.zoomToProjIsMaidenhead():
+                # A Maidenhead grid coordinate has been selected. This will result in an exception
+                # if it is not a valid maidenhead coordinate.
+                (lat, lon) = maidenhead.toGridCenter(text)
                 return(float(lat), float(lon), epsg4326)
 
             # Check for other formats

@@ -33,6 +33,7 @@ class Settings():
         self.captureUtmPrecision =  int(qset.value('/LatLonTools/CaptureUtmPrecision', 0))
         self.captureAddDmsSpace = int(qset.value('/LatLonTools/CaptureAddDmsSpace', Qt.Checked))
         self.capturePadZeroes = int(qset.value('/LatLonTools/CapturePadZeroes', Qt.Unchecked))
+        self.captureMaidenheadPrecision = int(qset.value('/LatLonTools/CaptureMaidenheadPrecision', 3))
 
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
@@ -62,6 +63,7 @@ class Settings():
         self.converterUtmPrec = int(qset.value('/LatLonTools/ConverterUtmPrecision', 0))
         self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
         self.converterGeohashPrecision = int(qset.value('/LatLonTools/ConverterGeohashPrecision', 12))
+        self.converterMaidenheadPrecision = int(qset.value('/LatLonTools/ConverterMaidenheadPrecision', 3))
         self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
         self.converterAddDmsSpace = int(qset.value('/LatLonTools/ConverterAddDmsSpace', Qt.Checked))
@@ -110,6 +112,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypePlusCodes = 4
     ProjectionTypeUTM = 5
     ProjectionTypeGeohash = 6
+    ProjectionTypeMaidenhead = 7
     OrderYX = 0
     OrderXY = 1
 
@@ -123,7 +126,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash','Maidenhead Grid Locator'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'DMS', 'DDMMSS', 'DM.MM', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -132,7 +135,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
 
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash'])
+        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash','Maidenhead Grid'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -196,6 +199,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureDmmPrecisionSpinBox.setValue(4)
         self.captureUtmPrecisionSpinBox.setValue(0)
         self.captureGeohashSpinBox.setValue(12)
+        self.captureMaidenheadPrecisionSpinBox.setValue(3)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
         self.digitsSpinBox.setValue(8)
@@ -245,6 +249,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterUtmPrecisionSpinBox.setValue(0)
         self.converterPlusCodePrecisionSpinBox.setValue(10)
         self.converterGeohashSpinBox.setValue(12)
+        self.converterMaidenheadPrecisionSpinBox.setValue(3)
         self.converterDelimiterLineEdit.setText(',')
         self.converterDdmmssDelimiterLineEdit.setText(',')
         self.converterAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
@@ -322,6 +327,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/CaptureDmmPrecision', self.captureDmmPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/CaptureUtmPrecision', self.captureUtmPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/CaptureGeohashPrecision', self.captureGeohashSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureMaidenheadPrecision', self.captureMaidenheadPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
         qset.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         qset.setValue('/LatLonTools/CapturePrefix', self.capturePrefixLineEdit.text())
@@ -379,6 +385,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterUtmPrecision', int(self.converterUtmPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterGeohashPrecision', int(self.converterGeohashSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterMaidenheadPrecision', int(self.converterMaidenheadPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterAddDmsSpace', self.converterAddDmsSpaceCheckBox.checkState())
@@ -410,7 +417,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         zoomToProjection = int(self.zoomToProjectionComboBox.currentIndex())
         self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and
                 (zoomToProjection != self.ProjectionTypePlusCodes) and (zoomToProjection != self.ProjectionTypeUTM) and
-                (zoomToProjection != self.ProjectionTypeGeohash))
+                (zoomToProjection != self.ProjectionTypeGeohash) and (zoomToProjection != self.ProjectionTypeMaidenhead))
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
 
         # MULTI Zoom
@@ -452,6 +459,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureDmmPrecisionSpinBox.setValue(settings.captureDmmPrecision)
         self.captureUtmPrecisionSpinBox.setValue(settings.captureUtmPrecision)
         self.captureGeohashSpinBox.setValue(settings.captureGeohashPrecision)
+        self.captureMaidenheadPrecisionSpinBox.setValue(settings.captureMaidenheadPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
         self.captureSuffixLineEdit.setText(self.captureSuffix)
         self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
@@ -511,6 +519,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterUtmPrecisionSpinBox.setValue(settings.converterUtmPrec)
         self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
         self.converterGeohashSpinBox.setValue(settings.converterGeohashPrecision)
+        self.converterMaidenheadPrecisionSpinBox.setValue(settings.converterMaidenheadPrecision)
         self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
         self.converterAddDmsSpaceCheckBox.setCheckState(settings.converterAddDmsSpace)
@@ -559,6 +568,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
             return True
         return False
 
+    def captureProjIsMaidenhead(self):
+        if self.captureProjection == self.ProjectionTypeMaidenhead:
+            return True
+        return False
+
     def zoomToProjIsWgs84(self):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
             return True
@@ -592,6 +606,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def zoomToProjIsGeohash(self):
         if self.zoomToProjection == self.ProjectionTypeGeohash:
+            return True
+        return False
+
+    def zoomToProjIsMaidenhead(self):
+        if self.zoomToProjection == self.ProjectionTypeMaidenhead:
             return True
         return False
 

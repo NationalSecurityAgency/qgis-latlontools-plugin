@@ -15,6 +15,7 @@ from . import mgrs
 from . import olc
 from .utm import latLon2UtmString, isUtm, utmString2Crs
 from . import geohash
+from . import maidenhead
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/coordinateConverter.ui'))
@@ -72,6 +73,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.mgrsCommitButton.setIcon(icon)
         self.plusCommitButton.setIcon(icon)
         self.geohashCommitButton.setIcon(icon)
+        self.maidenheadCommitButton.setIcon(icon)
 
         self.wgs84CommitButton.clicked.connect(self.commitWgs84)
         self.wgs84LineEdit.returnPressed.connect(self.commitWgs84)
@@ -93,6 +95,8 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.plusLineEdit.returnPressed.connect(self.commitPlus)
         self.geohashCommitButton.clicked.connect(self.commitGeohash)
         self.geohashLineEdit.returnPressed.connect(self.commitGeohash)
+        self.maidenheadCommitButton.clicked.connect(self.commitMaidenhead)
+        self.maidenheadLineEdit.returnPressed.connect(self.commitMaidenhead)
 
         icon = QIcon(':/images/themes/default/mActionEditCopy.svg')
         self.wgs84CopyButton.setIcon(icon)
@@ -105,6 +109,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.mgrsCopyButton.setIcon(icon)
         self.plusCopyButton.setIcon(icon)
         self.geohashCopyButton.setIcon(icon)
+        self.maidenheadCopyButton.setIcon(icon)
 
         self.wgs84CopyButton.clicked.connect(self.copyWgs84)
         self.projCopyButton.clicked.connect(self.copyProject)
@@ -116,6 +121,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.mgrsCopyButton.clicked.connect(self.copyMgrs)
         self.plusCopyButton.clicked.connect(self.copyPlus)
         self.geohashCopyButton.clicked.connect(self.copyGeohash)
+        self.maidenheadCopyButton.clicked.connect(self.copyMaidenhead)
 
         self.customProjectionSelectionWidget.setCrs(epsg4326)
         self.customProjectionSelectionWidget.crsChanged.connect(self.customCrsChanged)
@@ -159,6 +165,8 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             self.plusLineEdit.setText('Invalid')
         if id != 9:
             self.geohashLineEdit.setText('Invalid')
+        if id != 10:
+            self.maidenheadLineEdit.setText('Invalid')
 
     def clearForm(self):
         self.origPt = None
@@ -172,6 +180,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.mgrsLineEdit.setText('')
         self.plusLineEdit.setText('')
         self.geohashLineEdit.setText('')
+        self.maidenheadLineEdit.setText('')
 
     def updateCoordinates(self, id, pt, crs):
         self.origPt = pt
@@ -251,6 +260,12 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             except Exception:
                 s = 'Invalid'
             self.geohashLineEdit.setText(s)
+        if id != 10: # Maidenhead
+            try:
+                s = maidenhead.toMaiden(pt4326.y(), pt4326.x(), precision=settings.converterMaidenheadPrecision)
+            except Exception:
+                s = 'Invalid'
+            self.maidenheadLineEdit.setText(s)
 
     def commitWgs84(self):
         text = self.wgs84LineEdit.text().strip()
@@ -376,6 +391,15 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         except Exception:
             self.showInvalid(9)
 
+    def commitMaidenhead(self):
+        text = self.maidenheadLineEdit.text().strip()
+        try:
+            (lat, lon) = maidenhead.toGridCenter(text)
+            pt = QgsPoint(float(lon), float(lat))
+            self.updateCoordinates(10, pt, epsg4326)
+        except Exception:
+            self.showInvalid(10)
+
     def updateLabel(self):
         if self.inputXYOrder == 0:  # Y, X
             xy = '(Y, X)'
@@ -459,6 +483,11 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
 
     def copyGeohash(self):
         s = self.geohashLineEdit.text()
+        self.clipboard.setText(s)
+        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+
+    def copyMaidenhead(self):
+        s = self.maidenheadLineEdit.text()
         self.clipboard.setText(s)
         self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
 
