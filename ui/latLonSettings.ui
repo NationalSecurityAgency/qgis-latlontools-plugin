@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
-    <height>727</height>
+    <width>529</width>
+    <height>741</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>488</width>
-        <height>678</height>
+        <width>509</width>
+        <height>692</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -117,7 +117,7 @@
              <item row="2" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
-                <string>DMS second precision: </string>
+                <string>D°M'S&quot; second precision: </string>
                </property>
               </widget>
              </item>
@@ -271,7 +271,7 @@
            <item>
             <widget class="QCheckBox" name="capturePadZeroesCheckBox">
              <property name="text">
-              <string>Pad DMS and DM.MM output coordinates with leading zeroes</string>
+              <string>Pad D°M'S&quot; and D° M.MM' output coordinates with leading zeroes</string>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -793,12 +793,12 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
              <item row="2" column="0">
               <widget class="QLabel" name="label_31">
                <property name="text">
-                <string>DMS seconds precision</string>
+                <string>D°M'S&quot; seconds precision</string>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QSpinBox" name="converterDMSPrecisionSpinBox">
+              <widget class="QSpinBox" name="converterDmsPrecisionSpinBox">
                <property name="maximum">
                 <number>16</number>
                </property>
@@ -952,7 +952,7 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
            <item>
             <widget class="QCheckBox" name="converterPadZeroesCheckBox">
              <property name="text">
-              <string>Pad DMS and DM.MM output coordinates with leading zeroes</string>
+              <string>Pad D°M'S&quot; and D° M.MM' output coordinates with leading zeroes</string>
              </property>
             </widget>
            </item>

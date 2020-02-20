@@ -116,14 +116,14 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterEnum(
                 self.PrmWgs84NumberFormat,
                 tr('Select Decimal or DMS degress for WGS 84 numbers'),
-                options=[tr('Decimal degrees'), tr('D° M\' S"'), tr('D° M.MM'), tr('DDMMSS')],
+                options=[tr('Decimal degrees'), tr('D°M\'S"'), tr('D°M.MM\''), tr('DDMMSS')],
                 defaultValue=0,
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmDmsAddSpace,
-                tr('Add space between DMS and D M.MM numbers'),
+                tr('Add space between D° M\' S" and D° M.MM\' numbers'),
                 False,
                 optional=True)
         )
