@@ -20,6 +20,7 @@ from .util import epsg4326, parseDMSString
 from . import olc
 from . import geohash
 from .utm import isUtm, utmString2Crs
+from .maidenhead import maidenGridCenter
 # import traceback
 
 
@@ -51,19 +52,19 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 self.PrmInputField1Type,
-                tr('Coordinate type found in the first field'),
+                tr('Coordinate format found in the first field'),
                 options=[
                     tr('Latitude (Y)'),
                     tr('Latitude (Y), Longitude (X)'),
                     tr('Longitude (X), Latitude (Y)'),
-                    tr('MGRS'), tr('Plus Codes'), tr('Geohash'), tr('Standard UTM')],
+                    tr('MGRS'), tr('Plus Codes'), tr('Geohash'), tr('Standard UTM'), tr('Maidenhead grid locator')],
                 defaultValue=0,
                 optional=False)
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmField1,
-                tr('Select first field coordinate (latitude, y, or both coordinates)'),
+                tr('Select the first field containing both coordinates or the Y (latitude) coordinate'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.String,
                 optional=False)
@@ -71,7 +72,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmField2,
-                tr('Select second field Longitude (X) coordinate if applicable'),
+                tr('Select the field containing the X or longitude coordinate if applicable'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.String,
                 optional=True)
@@ -79,7 +80,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterCrs(
                 self.PrmInputCRS,
-                tr('Input CRS - Not applicable to MGRS, Plus Codes, Geohash, & UTM'),
+                tr('Input CRS - Not applicable to MGRS, Plus Codes, Geohash, UTM, & Maidenhead'),
                 'EPSG:4326',
                 optional=True)
         )
@@ -108,7 +109,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
 
         fieldsout = QgsFields(source.fields())
 
-        if field_type >= 3:  # For MGRS, Plus Codes, UTM and Geohash force the CRS to be 4326
+        if field_type >= 3:  # For MGRS, Plus Codes, UTM, Geohash and Maidenhead force the CRS to be 4326
             input_crs = epsg4326
 
         (sink, dest_id) = self.parameterAsSink(
@@ -165,6 +166,10 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     pt = utmString2Crs(attr1)
                     lat = pt.y()
                     lon = pt.x()
+                elif field_type == 7:  # Maidenhead Grid Locator
+                    (lat, lon) = maidenGridCenter(attr1)
+                    lat = float(lat)
+                    lon = float(lon)
 
                 f = QgsFeature()
                 f.setAttributes(feature.attributes())

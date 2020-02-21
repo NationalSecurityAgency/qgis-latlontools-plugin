@@ -21,6 +21,7 @@ from .util import epsg4326, convertDD2DMS, formatDmsString
 from .utm import latLon2UtmString
 from . import olc
 from . import geohash
+from .maidenhead import toMaiden
 
 def tr(string):
     return QCoreApplication.translate('Processing', string)
@@ -43,11 +44,13 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     PrmCustomCRS = 'CustomCRS'
     PrmWgs84NumberFormat = 'Wgs84NumberFormat'
     PrmCoordinatePrecision = 'CoordinatePrecision'
-    PrmDMSSecondPrecision = 'DMSSecondPrecision'
+    PrmDmsSecondPrecision = 'DMSSecondPrecision'
     PrmPlusCodesLength = 'PlusCodesLength'
     PrmGeohashPrecision = 'PrmGeohashPrecision'
     PrmOutputLayer = 'OutputLayer'
     PrmDmsAddSpace = 'DmsAddSpace'
+    PrmDmsPadWithSpace = 'DmsPadWithSpace'
+    PrmMaidenheadPrecision = 'MaidenheadPrecision'
 
     def initAlgorithm(self, config):
         self.addParameter(
@@ -59,26 +62,27 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 self.PrmOutputFormat,
-                tr('Output format'),
+                tr('Output coordinate format'),
                 options=[
                     tr('Coordinates in 2 fields'),
                     tr('Coordinates in 1 field'),
                     tr('GeoJSON'), tr('WKT'), tr('MGRS'),
-                    tr('Plus Codes'), tr('Geohash'), tr('Standard UTM')],
+                    tr('Plus Codes'), tr('Geohash'), tr('Standard UTM'),
+                    tr('Maidenhead grid locator')],
                 defaultValue=0,
-                optional=True)
+                optional=False)
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmYFieldName,
-                tr('Name of latitude (Y) field & all other single field coordinates'),
+                tr('Name for the field containing both coordinates, or the Y (latitude) coordinate'),
                 defaultValue='y',
-                optional=True)
+                optional=False)
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmXFieldName,
-                tr('Name of longitude (X) field when coordinates are in two fields'),
+                tr('Name of the field containing the X (longitude) portion of the coordinate'),
                 defaultValue='x',
                 optional=True)
         )
@@ -128,6 +132,13 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 optional=True)
         )
         self.addParameter(
+            QgsProcessingParameterBoolean(
+                self.PrmDmsPadWithSpace,
+                tr('Pad D°M\'S" and D°M.MM\' ccoordinates with leading zeros'),
+                False,
+                optional=True)
+        )
+        self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmCoordinatePrecision,
                 tr('Decimal number precision'),
@@ -138,7 +149,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterNumber(
-                self.PrmDMSSecondPrecision,
+                self.PrmDmsSecondPrecision,
                 tr('DMS / Degrees Minutes / UTM precision'),
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=0,
@@ -166,6 +177,16 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 maxValue=30)
         )
         self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmMaidenheadPrecision,
+                tr('Maidenhead grid locator precision'),
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=3,
+                optional=True,
+                minValue=1,
+                maxValue=4)
+        )
+        self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
                 tr('Output layer'))
@@ -182,10 +203,12 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         crsOther = self.parameterAsCrs(parameters, self.PrmCustomCRS, context)
         wgs84Format = self.parameterAsInt(parameters, self.PrmWgs84NumberFormat, context)
         decimalPrecision = self.parameterAsInt(parameters, self.PrmCoordinatePrecision, context)
-        dmsPrecision = self.parameterAsInt(parameters, self.PrmDMSSecondPrecision, context)
+        dmsPrecision = self.parameterAsInt(parameters, self.PrmDmsSecondPrecision, context)
         plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
         geohashPrecision = self.parameterAsInt(parameters, self.PrmGeohashPrecision, context)
+        maidenPrecision = self.parameterAsInt(parameters, self.PrmMaidenheadPrecision, context)
         use_dms_space = self.parameterAsBool(parameters, self.PrmDmsAddSpace, context)
+        dms_pad_with_space = self.parameterAsBool(parameters, self.PrmDmsPadWithSpace, context)
 
         layerCRS = source.sourceCrs()
         # For the first condition, the user has either EPSG:4326 selected or
@@ -233,14 +256,14 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                             msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
                         elif wgs84Format == 1:  # DMS
-                            msg = convertDD2DMS(pt.y(), True, 0, dmsPrecision, use_dms_space)
-                            msg2 = convertDD2DMS(pt.x(), False, 0, dmsPrecision, use_dms_space)
+                            msg = convertDD2DMS(pt.y(), True, 0, dmsPrecision, use_dms_space, dms_pad_with_space)
+                            msg2 = convertDD2DMS(pt.x(), False, 0, dmsPrecision, use_dms_space, dms_pad_with_space)
                         elif wgs84Format == 2:  # D M.MM
-                            msg = convertDD2DMS(pt.y(), True, 2, dmsPrecision, use_dms_space)
-                            msg2 = convertDD2DMS(pt.x(), False, 2, dmsPrecision, use_dms_space)
+                            msg = convertDD2DMS(pt.y(), True, 2, dmsPrecision, use_dms_space, dms_pad_with_space)
+                            msg2 = convertDD2DMS(pt.x(), False, 2, dmsPrecision, use_dms_space, dms_pad_with_space)
                         else:  # DDMMSS
-                            msg = convertDD2DMS(pt.y(), True, 1, dmsPrecision, use_dms_space)
-                            msg2 = convertDD2DMS(pt.x(), False, 1, dmsPrecision, use_dms_space)
+                            msg = convertDD2DMS(pt.y(), True, 1, dmsPrecision, use_dms_space, dms_pad_with_space)
+                            msg2 = convertDD2DMS(pt.x(), False, 1, dmsPrecision, use_dms_space, dms_pad_with_space)
                     else:
                         msg = '{:.{prec}f}'.format(pt.y(), prec=decimalPrecision)
                         msg2 = '{:.{prec}f}'.format(pt.x(), prec=decimalPrecision)
@@ -252,11 +275,11 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                             else:
                                 msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=decimalPrecision)
                         elif wgs84Format == 1:  # DMS
-                            msg = formatDmsString(pt.y(), pt.x(), 0, dmsPrecision, coordOrder, delimiter, use_dms_space)
+                            msg = formatDmsString(pt.y(), pt.x(), 0, dmsPrecision, coordOrder, delimiter, use_dms_space, dms_pad_with_space)
                         elif wgs84Format == 2:  # D M.MM
-                            msg = formatDmsString(pt.y(), pt.x(), 2, dmsPrecision, coordOrder, delimiter, use_dms_space)
+                            msg = formatDmsString(pt.y(), pt.x(), 2, dmsPrecision, coordOrder, delimiter, use_dms_space, dms_pad_with_space)
                         else:  # DDMMSS
-                            msg = formatDmsString(pt.y(), pt.x(), 1, dmsPrecision, coordOrder, delimiter, use_dms_space)
+                            msg = formatDmsString(pt.y(), pt.x(), 1, dmsPrecision, coordOrder, delimiter, use_dms_space, dms_pad_with_space)
                     else:
                         if coordOrder == 0:
                             msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=decimalPrecision)
@@ -272,10 +295,13 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                     msg = olc.encode(pt.y(), pt.x(), plusCodesLength)
                 elif outputFormat == 6:  # Geohash
                     msg = geohash.encode(pt.y(), pt.x(), geohashPrecision)
-                else:  # WGS 84 UTM
+                elif outputFormat == 7:  # WGS 84 UTM
                     msg = latLon2UtmString(pt.y(), pt.x(), dmsPrecision)
+                else:  # Maidenhead grid
+                    msg = toMaiden(pt.y(), pt.x(), maidenPrecision)
             except Exception:
                 msg = ''
+                msg2 = ''
 
             f = QgsFeature()
             f.setGeometry(feature.geometry())

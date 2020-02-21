@@ -14,7 +14,7 @@ from .utm import isUtm, utmString2Crs
 from . import mgrs
 from . import olc
 from . import geohash
-from . import maidenhead
+from .maidenhead import maidenGridCenter
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -123,7 +123,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if self.settings.zoomToProjIsMaidenhead():
                 # A Maidenhead grid coordinate has been selected. This will result in an exception
                 # if it is not a valid maidenhead coordinate.
-                (lat, lon) = maidenhead.toGridCenter(text)
+                (lat, lon) = maidenGridCenter(text)
                 return(float(lat), float(lon), epsg4326)
 
             # Check for other formats

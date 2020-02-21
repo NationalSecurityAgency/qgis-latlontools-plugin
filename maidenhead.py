@@ -1,5 +1,5 @@
 
-def toGridCenter(maiden):
+def maidenGridCenter(maiden):
     """
         maiden is a string the is even and between 2 to 8 characters
         It returns the center point of a maiden grid and throws an exception
