@@ -394,7 +394,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     def commitMaidenhead(self):
         text = self.maidenheadLineEdit.text().strip()
         try:
-            (lat, lon) = maidenhead.toGridCenter(text)
+            (lat, lon) = maidenhead.maidenGridCenter(text)
             pt = QgsPoint(float(lon), float(lat))
             self.updateCoordinates(10, pt, epsg4326)
         except Exception:
