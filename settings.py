@@ -89,9 +89,9 @@ class Settings():
                 ms = mapProviders.MAP_PROVIDERS[self.mapProvider][2]
             else:
                 ms = mapProviders.MAP_PROVIDERS[self.mapProvider][1]
-        ms = ms.replace('@LAT@', str(lat))
-        ms = ms.replace('@LON@', str(lon))
-        ms = ms.replace('@Z@', str(self.mapZoom))
+        ms = ms.replace('{lat}', str(lat))
+        ms = ms.replace('{lon}', str(lon))
+        ms = ms.replace('{z}', str(self.mapZoom))
         return ms
 
 settings = Settings()

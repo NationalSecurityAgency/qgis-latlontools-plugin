@@ -223,7 +223,7 @@ You can ***Select an External Map Provider for Left Mouse***. The options are:
 
 ***Map Hints*** are desired attributes you would like to see in the resulting map. 
 
-* **Show placemark** - When checked the external map shows a placemark at the location clicked on in the QGIS map. If this is not checked then the external map centers itself around clicked location, but will not display the placemark.
+* **Show placemark** - When checked the external map shows a placemark at the location clicked on in the QGIS map. If this is not checked then the external map centers itself around clicked location, but will not display the placemark. Depending on the map service, this may or may not be available.
 * **Map Zoom Level** - This is the desired default zoom level in the external map when it is launched.
 
 Enable the following if a temporary marker is desired to be displayed at the location click on:
