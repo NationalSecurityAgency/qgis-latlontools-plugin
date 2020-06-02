@@ -477,6 +477,82 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>Add additional external map providers</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_12">
+              <item>
+               <widget class="QLabel" name="label_47">
+                <property name="text">
+                 <string>Use {lat},  {lon}, &amp; {zoom} to specify latitude, longitude, &amp; zoom.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QFormLayout" name="formLayout_5">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_48">
+                  <property name="text">
+                   <string>Provider Name: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="userProviderNameLineEdit">
+                  <property name="placeholderText">
+                   <string>Open Street Map</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_49">
+                  <property name="text">
+                   <string>Provider URL: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="userProviderUrlLineEdit">
+                  <property name="placeholderText">
+                   <string>http://www.openstreetmap.org/#map={zoom}/{lat}/{lon}</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QPushButton" name="addProviderButton">
+                  <property name="text">
+                   <string>Add Provider</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="deleteProviderButton">
+                  <property name="text">
+                   <string>Delete Provider</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_50">
+                <property name="text">
+                 <string>User added providers - once added these will appear in the above Map Provider lists.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="userMapProviderComboBox"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_3">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
