@@ -7,18 +7,17 @@ import processing
 
 from .zoomToLatLon import ZoomToLatLon
 from .multizoom import MultiZoomWidget
-from .copyLatLonTool import CopyLatLonTool
-from .showOnMapTool import ShowOnMapTool
 from .settings import SettingsWidget, settings
 from .provider import LatLonToolsProvider
 from .util import epsg4326
 import os
-import webbrowser
 
 
 class LatLonTools:
     digitizerDialog = None
     convertCoordinateDialog = None
+    mapTool = None
+    showMapTool = None
 
     def __init__(self, iface):
         self.iface = iface
@@ -33,8 +32,6 @@ class LatLonTools:
         '''Initialize Lot Lon Tools GUI.'''
         # Initialize the Settings Dialog box
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
-        self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
-        self.showMapTool = ShowOnMapTool(self.iface)
 
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
@@ -150,9 +147,9 @@ class LatLonTools:
     def resetTools(self, newtool, oldtool):
         '''Uncheck the Copy Lat Lon tool'''
         try:
-            if oldtool is self.mapTool:
+            if self.mapTool and (oldtool is self.mapTool):
                 self.copyAction.setChecked(False)
-            if oldtool is self.showMapTool:
+            if self.showMapTool and (oldtool is self.showMapTool):
                 self.externMapAction.setChecked(False)
             if newtool is self.mapTool:
                 self.copyAction.setChecked(True)
@@ -165,8 +162,10 @@ class LatLonTools:
         '''Unload LatLonTools from the QGIS interface'''
         self.zoomToDialog.removeMarker()
         self.multiZoomDialog.removeMarkers()
-        self.canvas.unsetMapTool(self.mapTool)
-        self.canvas.unsetMapTool(self.showMapTool)
+        if self.mapTool:
+            self.canvas.unsetMapTool(self.mapTool)
+        if self.showMapTool:
+            self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyCanvasAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
@@ -200,6 +199,9 @@ class LatLonTools:
 
     def startCapture(self):
         '''Set the focus of the copy coordinate tool'''
+        if self.mapTool is None:
+            from .copyLatLonTool import CopyLatLonTool
+            self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         self.canvas.setMapTool(self.mapTool)
 
     def copyCanvas(self):
@@ -246,6 +248,9 @@ class LatLonTools:
 
     def setShowMapTool(self):
         '''Set the focus of the external map tool.'''
+        if self.showMapTool is None:
+            from .showOnMapTool import ShowOnMapTool
+            self.showMapTool = ShowOnMapTool(self.iface)
         self.canvas.setMapTool(self.showMapTool)
 
     def showZoomToDialog(self):
@@ -292,6 +297,7 @@ class LatLonTools:
 
     def help(self):
         '''Display a help page'''
+        import webbrowser
         url = QUrl.fromLocalFile(os.path.dirname(__file__) + "/index.html").toString()
         webbrowser.open(url, new=2)
 
