@@ -15,7 +15,7 @@ FORM_CLASS, _ = loadUiType(os.path.join(
 class Settings():
     OrderYX = 0
     OrderXY = 1
-    userMapProviders = {}
+    userMapProviders = []
 
     def __init__(self):
         self.readSettings()
@@ -43,7 +43,7 @@ class Settings():
         self.mapProviderRight = int(qset.value('/LatLonTools/MapProviderRight', 0))
         self.mapZoom = int(qset.value('/LatLonTools/MapZoom', 13))
         self.externalMapShowLocation = int(qset.value('/LatLonTools/ExternMapShowClickedLocation', Qt.Unchecked))
-        self.userMapProviders = qset.value('/LatLonTools/UserMapProviders', {})
+        self.userMapProviders = qset.value('/LatLonTools/UserMapProviders', [])
 
         ### Multi-zoom Settings ###
         self.multiZoomCustomCrsAuthId = qset.value('/LatLonTools/MultiZoomCustomCrsId', 'EPSG:4326')
@@ -77,8 +77,8 @@ class Settings():
         for x in mapProviders.MAP_PROVIDERS:
             plist.append(x[0])
         plist.append('Google Earth (If Installed)')
-        for name in self.userMapProviders.keys():
-            plist.append(name)
+        for entry in self.userMapProviders:
+            plist.append(entry[0])
         return plist
 
     def googleEarthMapProvider(self, button=0):
@@ -94,8 +94,7 @@ class Settings():
         if button == 2:
             if self.mapProviderRight > self.externalBasemapCnt:
                 # These are the optional user basemaps
-                name = list(self.userMapProviders.keys())[self.mapProviderRight - self.externalBasemapCnt - 1]
-                ms = self.userMapProviders[name]
+                ms = self.userMapProviders[self.mapProviderRight - self.externalBasemapCnt - 1][1]
             else:
                 if self.showPlacemark:
                     ms = mapProviders.MAP_PROVIDERS[self.mapProviderRight][2]
@@ -104,8 +103,7 @@ class Settings():
         else:
             if self.mapProvider > self.externalBasemapCnt:
                 # These are the optional user basemaps
-                name = list(self.userMapProviders.keys())[self.mapProvider - self.externalBasemapCnt - 1]
-                ms = self.userMapProviders[name]
+                ms = self.userMapProviders[self.mapProvider - self.externalBasemapCnt - 1][1]
             else:
                 if self.showPlacemark:
                     ms = mapProviders.MAP_PROVIDERS[self.mapProvider][2]
@@ -440,21 +438,28 @@ class SettingsWidget(QDialog, FORM_CLASS):
         name = self.userProviderNameLineEdit.text().strip()
         url = self.userProviderUrlLineEdit.text().strip()
         if name and url:
-            settings.userMapProviders[name] = url
-            keys = settings.userMapProviders.keys()
+            settings.userMapProviders.append([name, url])
+            names = []
+            for item in settings.userMapProviders:
+                names.append(item[0])
             self.userMapProviderComboBox.clear()
-            self.userMapProviderComboBox.addItems(keys)
+            self.userMapProviderComboBox.addItems(names)
             self.updateMapProviderComboBoxes()
 
     def deleteUserProvider(self):
         if self.userMapProviderComboBox.count() > 0:
-            name = self.userMapProviderComboBox.currentText()
             index = self.userMapProviderComboBox.currentIndex()
-            if name in settings.userMapProviders:
-                del settings.userMapProviders[name]
+            if index >= 0:
+                del settings.userMapProviders[index]
+            names = []
+            for item in settings.userMapProviders:
+                names.append(item[0])
             self.userMapProviderComboBox.clear()
-            keys = settings.userMapProviders.keys()
-            self.userMapProviderComboBox.addItems(keys)
+            self.userMapProviderComboBox.addItems(names)
+            # Since we deleted an entry just reset the selected map to
+            # be the first one - Open Street Map
+            settings.mapProvider = 0
+            settings.mapProviderRight = 0
             self.updateMapProviderComboBoxes()
 
     def qmlOpenDialog(self):
@@ -541,9 +546,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomSpinBox.setValue(settings.mapZoom)
         # self.mapProviderComboBox.setCurrentIndex(settings.mapProvider)
         # self.mapProviderRComboBox.setCurrentIndex(settings.mapProviderRight)
-        keys = settings.userMapProviders.keys()
+        names = []
+        for item in settings.userMapProviders:
+            names.append(item[0])
         self.userMapProviderComboBox.clear()
-        self.userMapProviderComboBox.addItems(keys)
+        self.userMapProviderComboBox.addItems(names)
         self.updateMapProviderComboBoxes()
 
         ### MULTI-ZOOM CUSTOM QML STYLE ###
