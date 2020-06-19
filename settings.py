@@ -190,6 +190,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterProjectionSelectionWidget.setCrs(epsg4326)
 
         self.readSettings()
+        # This has been added because the coordinate capture uses it
+        self.captureProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(settings.captureCustomCrsAuthId))
 
     def captureCustomCRS(self):
         return self.captureProjectionSelectionWidget.crs()
