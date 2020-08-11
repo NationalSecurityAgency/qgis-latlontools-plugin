@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, Geohash, Maidenhead grid, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
-version=3.3.20
+version=3.3.21
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -28,6 +28,7 @@ hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.3.21 - Added scroll area to conversion dialogbox so it is dockable in smaller spaces
     3.3.20 - Fix bug #46
     3.3.19 - Allow users to input their own URLs for external maps.
     3.3.18 - Updated external map URL parameters for MapQuest and Mapillary
