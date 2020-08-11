@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>650</height>
+    <width>366</width>
+    <height>631</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,452 +16,458 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QToolButton" name="xyButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="clearFormButton">
-        <property name="toolTip">
-         <string>Clear form</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="optionsButton">
-        <property name="toolTip">
-         <string>Settings</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="zoomButton">
-        <property name="toolTip">
-         <string>Zoom to coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="coordCaptureButton">
-        <property name="toolTip">
-         <string>Capture coordinates by clicking on map</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="wgs84Label">
-      <property name="text">
-       <string>Decimal Degrees (Latitude, Longitude)</string>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
       </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>346</width>
+         <height>589</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QToolButton" name="xyButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="popupMode">
+             <enum>QToolButton::MenuButtonPopup</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="clearFormButton">
+            <property name="toolTip">
+             <string>Clear form</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="optionsButton">
+            <property name="toolTip">
+             <string>Settings</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="zoomButton">
+            <property name="toolTip">
+             <string>Zoom to coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="coordCaptureButton">
+            <property name="toolTip">
+             <string>Capture coordinates by clicking on map</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="wgs84Label">
+          <property name="text">
+           <string>Decimal Degrees (Latitude, Longitude)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLineEdit" name="wgs84LineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="wgs84CommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="wgs84CopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="projectLabel">
+          <property name="text">
+           <string>Project CRS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLineEdit" name="projLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="projCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="projCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="customLabel">
+          <property name="text">
+           <string>Custom CRS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QgsProjectionSelectionWidget" name="customProjectionSelectionWidget"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLineEdit" name="customLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="customCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="customCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="dmsLabel">
+          <property name="text">
+           <string>D° M' S&quot;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLineEdit" name="dmsLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="dmsCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="dmsCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="dmLabel">
+          <property name="text">
+           <string>D° M.MM'</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QLineEdit" name="dmLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="dmCommitButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="dmCopyButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="ddmmssLabel">
+          <property name="text">
+           <string>DDMMSS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QLineEdit" name="ddmmssLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="ddmmssCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="ddmmssCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Standard UTM</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLineEdit" name="utmLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="utmCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="utmCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>MGRS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QLineEdit" name="mgrsLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="mgrsCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="mgrsCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Plus Code</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QLineEdit" name="plusLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="plusCommitButton">
+            <property name="toolTip">
+             <string>Convert coordinate</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="plusCopyButton">
+            <property name="toolTip">
+             <string>Copy to clipboard</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Geohash</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QLineEdit" name="geohashLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="geohashCommitButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="geohashCopyButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Maidenhead Grid Locator</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="maidenheadLineEdit"/>
+          </item>
+          <item>
+           <widget class="QToolButton" name="maidenheadCommitButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="maidenheadCopyButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QLineEdit" name="wgs84LineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="wgs84CommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="wgs84CopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="projectLabel">
-      <property name="text">
-       <string>Project CRS</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <widget class="QLineEdit" name="projLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="projCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="projCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="customLabel">
-      <property name="text">
-       <string>Custom CRS</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QgsProjectionSelectionWidget" name="customProjectionSelectionWidget"/>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
-      <item>
-       <widget class="QLineEdit" name="customLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="customCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="customCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="dmsLabel">
-      <property name="text">
-       <string>D° M' S&quot;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
-      <item>
-       <widget class="QLineEdit" name="dmsLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="dmsCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="dmsCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="dmLabel">
-      <property name="text">
-       <string>D° M.MM'</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_12">
-      <item>
-       <widget class="QLineEdit" name="dmLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="dmCommitButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="dmCopyButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="ddmmssLabel">
-      <property name="text">
-       <string>DDMMSS</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
-      <item>
-       <widget class="QLineEdit" name="ddmmssLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="ddmmssCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="ddmmssCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Standard UTM</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
-      <item>
-       <widget class="QLineEdit" name="utmLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="utmCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="utmCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>MGRS</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_10">
-      <item>
-       <widget class="QLineEdit" name="mgrsLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="mgrsCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="mgrsCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Plus Code</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_11">
-      <item>
-       <widget class="QLineEdit" name="plusLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="plusCommitButton">
-        <property name="toolTip">
-         <string>Convert coordinate</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="plusCopyButton">
-        <property name="toolTip">
-         <string>Copy to clipboard</string>
-        </property>
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Geohash</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_13">
-      <item>
-       <widget class="QLineEdit" name="geohashLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="geohashCommitButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="geohashCopyButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Maidenhead Grid Locator</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLineEdit" name="maidenheadLineEdit"/>
-      </item>
-      <item>
-       <widget class="QToolButton" name="maidenheadCommitButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="maidenheadCopyButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
    </layout>
   </widget>
