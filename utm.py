@@ -181,7 +181,7 @@ def isUtm(utm):
 
 def latLon2UtmString(lat, lon, precision):
     zone = int((lon + 180) / 6) + 1
-    if lon >= 0:
+    if lat >= 0:
         zonestr = '{}N'.format(zone)
     else:
         zonestr = '{}S'.format(zone)
