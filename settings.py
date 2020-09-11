@@ -43,7 +43,9 @@ class Settings():
         self.mapProviderRight = int(qset.value('/LatLonTools/MapProviderRight', 0))
         self.mapZoom = int(qset.value('/LatLonTools/MapZoom', 13))
         self.externalMapShowLocation = int(qset.value('/LatLonTools/ExternMapShowClickedLocation', Qt.Unchecked))
-        self.userMapProviders = qset.value('/LatLonTools/UserMapProviders', [])
+        self.userMapProviders = qset.value('/LatLonTools/UserMapProviders', 0)
+        if not isinstance(self.userMapProviders, list):
+            self.userMapProviders = []
 
         ### Multi-zoom Settings ###
         self.multiZoomCustomCrsAuthId = qset.value('/LatLonTools/MultiZoomCustomCrsId', 'EPSG:4326')
@@ -369,7 +371,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ExternMapShowClickedLocation', self.showLocationCheckBox.checkState())
         qset.setValue('/LatLonTools/MapProvider', int(self.mapProviderComboBox.currentIndex()))
         qset.setValue('/LatLonTools/MapProviderRight', int(self.mapProviderRComboBox.currentIndex()))
-        qset.setValue('/LatLonTools/UserMapProviders',settings.userMapProviders)
+        if settings.userMapProviders:
+            qset.setValue('/LatLonTools/UserMapProviders', settings.userMapProviders)
+        else:
+            qset.setValue('/LatLonTools/UserMapProviders', 0)
         qset.setValue('/LatLonTools/MapZoom', int(self.zoomSpinBox.value()))
 
         ### MULTI-ZOOM TO SETTINGS ###
