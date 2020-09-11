@@ -5,6 +5,7 @@ from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle
 from qgis.gui import QgsRubberBand
 import processing
 
+from .latLonFunctions import InitLatLonFunctions, UnloadLatLonFunctions
 from .zoomToLatLon import ZoomToLatLon
 from .multizoom import MultiZoomWidget
 from .settings import SettingsWidget, settings
@@ -143,6 +144,7 @@ class LatLonTools:
 
         # Add the processing provider
         QgsApplication.processingRegistry().addProvider(self.provider)
+        InitLatLonFunctions()
 
     def resetTools(self, newtool, oldtool):
         '''Uncheck the Copy Lat Lon tool'''
@@ -196,6 +198,7 @@ class LatLonTools:
         self.digitizerDialog = None
         self.convertCoordinateDialog = None
         QgsApplication.processingRegistry().removeProvider(self.provider)
+        UnloadLatLonFunctions()
 
     def startCapture(self):
         '''Set the focus of the copy coordinate tool'''
