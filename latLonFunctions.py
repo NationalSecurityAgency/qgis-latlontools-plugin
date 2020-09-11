@@ -1,4 +1,5 @@
-from qgis.core import QgsExpression, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+import re
+from qgis.core import QgsPointXY, QgsGeometry, QgsExpression, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.utils import qgsfunction
 # from qgis.gui import *
 from . import mgrs as mg
@@ -13,17 +14,45 @@ def transform_coords(y, x, crs):
 
 def InitLatLonFunctions():
     QgsExpression.registerFunction(mgrs)
-    QgsExpression.registerFunction(mgrs_gzd)
     QgsExpression.registerFunction(mgrs_100km)
     QgsExpression.registerFunction(mgrs_east)
+    QgsExpression.registerFunction(mgrs_gzd)
     QgsExpression.registerFunction(mgrs_north)
+    QgsExpression.registerFunction(mgrs_to_point)
 
 def UnloadLatLonFunctions():
     QgsExpression.unregisterFunction('mgrs')
-    QgsExpression.unregisterFunction('mgrs_gzd')
     QgsExpression.unregisterFunction('mgrs_100km')
     QgsExpression.unregisterFunction('mgrs_east')
+    QgsExpression.unregisterFunction('mgrs_gzd')
     QgsExpression.unregisterFunction('mgrs_north')
+    QgsExpression.unregisterFunction('mgrs_to_point')
+
+@qgsfunction(args='auto', group='Lat Lon Tools')
+def mgrs_to_point(mgrs, feature, parent):
+    """
+    Convert an MGRS string into a point geometry feature.
+
+    <h4>Syntax</h4>
+    <p><b>mgrs_to_point</b>( <i>mgrs_str</i> )</p>
+    
+    <h4>Arguments</h4>
+    <p><i>mgrs_str</i> &rarr; an MGRS formatted string.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>mgrs_to_point</b>('32TKS7626020357') &rarr; returns a point geometry</li>
+      <li><b>geom_to_wkt</b>(<b>mgrs_to_point</b>('32TKS7626020357')) &rarr; Point (6.09999238 46.19999307)</li>
+    </ul>
+    """
+    try:
+        mgrs = re.sub(r'\s+', '', str(mgrs))  # Remove all white space
+        lat, lon = mg.toWgs(mgrs)
+        pt = QgsPointXY(lon, lat)
+        return(QgsGeometry.fromPointXY(pt))
+    except Exception:
+        parent.setEvalErrorString("Error: invalid MGRS coordinate")
+        return
 
 @qgsfunction(-1, group='Lat Lon Tools')
 def mgrs(values, feature, parent):
