@@ -12,7 +12,7 @@ from qgis.core import (
 from qgis.gui import QgsVertexMarker
 from .captureCoordinate  import CaptureCoordinate
 from .util import epsg4326, parseDMSStringSingle, parseDMSString
-from .utm import utmString2Crs
+from .utm import utm2Point
 from . import mgrs
 from . import olc
 
@@ -321,7 +321,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 if numFields >= 3:
                     data = parts[2:]
             elif self.settings.multiZoomToProjIsUtm():
-                pt = utmString2Crs(parts[0])
+                pt = utm2Point(parts[0])
                 lat = pt.y()
                 lon = pt.x()
                 if numFields >= 2:

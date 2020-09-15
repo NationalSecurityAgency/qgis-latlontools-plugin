@@ -8,7 +8,7 @@ from qgis.PyQt.QtCore import QTextCodec
 from qgis.gui import QgsVertexMarker
 from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes
 from .util import epsg4326, parseDMSString
-from .utm import isUtm, utmString2Crs
+from .utm import isUtm, utm2Point
 # import traceback
 
 from . import mgrs
@@ -111,7 +111,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if self.settings.zoomToProjIsStandardUtm():
                 # A Standard UTM coordinate has been selected. This will result in an exception
                 # if it is not a valid utm coordinate.
-                pt = utmString2Crs(text)
+                pt = utm2Point(text)
                 return(pt.y(), pt.x(), epsg4326)
 
             if self.settings.zoomToProjIsGeohash():
@@ -142,7 +142,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
             # Check to see if it is standard UTM
             if isUtm(text):
-                pt = utmString2Crs(text)
+                pt = utm2Point(text)
                 return(pt.y(), pt.x(), epsg4326)
 
             # Check to see if it is an MGRS coordinate

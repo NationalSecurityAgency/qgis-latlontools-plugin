@@ -13,7 +13,7 @@ from .captureCoordinate  import CaptureCoordinate
 from .settings import settings
 from . import mgrs
 from . import olc
-from .utm import latLon2UtmString, isUtm, utmString2Crs
+from .utm import latLon2Utm, isUtm, utm2Point
 from . import geohash
 from . import maidenhead
 
@@ -240,7 +240,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             s = formatDmsString(pt4326.y(), pt4326.x(), 1, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter)
             self.ddmmssLineEdit.setText(s)
         if id != 6:  # UTM
-            s = latLon2UtmString(pt4326.y(), pt4326.x(), settings.converterUtmPrec)
+            s = latLon2Utm(pt4326.y(), pt4326.x(), settings.converterUtmPrec)
             self.utmLineEdit.setText(s)
         if id != 7:  # MGRS
             try:
@@ -355,7 +355,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     def commitUtm(self):
         text = self.utmLineEdit.text().strip()
         if isUtm(text):
-            pt = utmString2Crs(text, epsg4326)
+            pt = utm2Point(text, epsg4326)
             self.updateCoordinates(6, QgsPoint(pt), epsg4326)
         else:
             self.showInvalid(6)

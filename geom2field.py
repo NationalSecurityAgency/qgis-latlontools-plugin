@@ -18,7 +18,7 @@ from qgis.core import (
 
 from . import mgrs
 from .util import epsg4326, convertDD2DMS, formatDmsString
-from .utm import latLon2UtmString
+from .utm import latLon2Utm
 from . import olc
 from . import geohash
 from .maidenhead import toMaiden
@@ -296,7 +296,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 elif outputFormat == 6:  # Geohash
                     msg = geohash.encode(pt.y(), pt.x(), geohashPrecision)
                 elif outputFormat == 7:  # WGS 84 UTM
-                    msg = latLon2UtmString(pt.y(), pt.x(), dmsPrecision)
+                    msg = latLon2Utm(pt.y(), pt.x(), dmsPrecision)
                 else:  # Maidenhead grid
                     msg = toMaiden(pt.y(), pt.x(), maidenPrecision)
             except Exception:

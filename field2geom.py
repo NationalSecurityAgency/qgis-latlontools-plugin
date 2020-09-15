@@ -19,7 +19,7 @@ from . import mgrs
 from .util import epsg4326, parseDMSString
 from . import olc
 from . import geohash
-from .utm import isUtm, utmString2Crs
+from .utm import isUtm, utm2Point
 from .maidenhead import maidenGridCenter
 # import traceback
 
@@ -163,7 +163,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     lat = float(lat)
                     lon = float(lon)
                 elif field_type == 6:  # UTM
-                    pt = utmString2Crs(attr1)
+                    pt = utm2Point(attr1)
                     lat = pt.y()
                     lon = pt.x()
                 elif field_type == 7:  # Maidenhead Grid Locator

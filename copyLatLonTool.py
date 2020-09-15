@@ -6,7 +6,7 @@ from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
 from .settings import settings
 from .util import epsg4326, formatDmsString
-from .utm import latLon2UtmString
+from .utm import latLon2Utm
 from . import mgrs
 from . import olc
 from . import geohash
@@ -120,7 +120,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:
                 transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
                 pt4326 = transform.transform(pt.x(), pt.y())
-            msg = latLon2UtmString(pt4326.y(), pt4326.x(), settings.captureUtmPrecision)
+            msg = latLon2Utm(pt4326.y(), pt4326.x(), settings.captureUtmPrecision)
             if msg == '':
                 msg = None
         elif self.settings.captureProjIsGeohash():

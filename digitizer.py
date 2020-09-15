@@ -12,7 +12,7 @@ from .util import epsg4326, parseDMSString
 
 from . import mgrs
 from . import olc
-from .utm import utmString2Crs
+from .utm import utm2Point
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/digitizer.ui'))
@@ -125,7 +125,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 srcCrs = epsg4326
             elif self.inputProjection == 5:
                 text = text.strip()
-                pt = utmString2Crs(text, epsg4326)
+                pt = utm2Point(text, epsg4326)
                 lat = pt.y()
                 lon = pt.x()
                 srcCrs = epsg4326
