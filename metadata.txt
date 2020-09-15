@@ -1,7 +1,7 @@
 [general]
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
-description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, Geohash, Maidenhead grid, and Plus Codes formats. Provides external map support, point digitizing tools, and coordinate conversion tools.
+description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, Geohash, Maidenhead grid, and Plus Codes formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
 version=3.4.1
 author=C Hamilton
 email=adenaculture@gmail.com
@@ -18,10 +18,11 @@ about=
     9) Convert a point layer geometry into a textual representation of that geometry within a field.
     10) Convert a layer containing a coordinate field or fields into a point layer.
     11) Coordinate conversion dialog.
+    12) Conversion functions for the field calculator
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box,google earth,geohash,maidenhead grid,amateur radio grid
+tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box,google earth,geohash,maidenhead grid,amateur radio grid,function,functions
 category=Plugins
 icon=images/copyicon.png
 hasProcessingProvider=yes

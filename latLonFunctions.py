@@ -3,7 +3,9 @@ from qgis.core import QgsPointXY, QgsGeometry, QgsExpression, QgsCoordinateRefer
 from qgis.utils import qgsfunction
 # from qgis.gui import *
 from . import mgrs as mg
+from .utm import latLon2Utm, utm2Point, latLon2UtmZone, utmGetEpsg
 
+group_name = 'Lat Lon Tools'
 epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
 
 def transform_coords(y, x, crs):
@@ -19,6 +21,11 @@ def InitLatLonFunctions():
     QgsExpression.registerFunction(mgrs_gzd)
     QgsExpression.registerFunction(mgrs_north)
     QgsExpression.registerFunction(mgrs_to_point)
+    QgsExpression.registerFunction(utm)
+    QgsExpression.registerFunction(utm_epsg)
+    QgsExpression.registerFunction(utm_hemisphere)
+    QgsExpression.registerFunction(utm_to_point)
+    QgsExpression.registerFunction(utm_zone)
 
 def UnloadLatLonFunctions():
     QgsExpression.unregisterFunction('mgrs')
@@ -27,11 +34,16 @@ def UnloadLatLonFunctions():
     QgsExpression.unregisterFunction('mgrs_gzd')
     QgsExpression.unregisterFunction('mgrs_north')
     QgsExpression.unregisterFunction('mgrs_to_point')
+    QgsExpression.unregisterFunction('utm')
+    QgsExpression.unregisterFunction('utm_epsg')
+    QgsExpression.unregisterFunction('utm_hemisphere')
+    QgsExpression.unregisterFunction('utm_to_point')
+    QgsExpression.unregisterFunction('utm_zone')
 
-@qgsfunction(args='auto', group='Lat Lon Tools')
+@qgsfunction(args='auto', group=group_name)
 def mgrs_to_point(mgrs, feature, parent):
     """
-    Convert an MGRS string into a point geometry feature.
+    Convert an MGRS string into a WGS 84 (EPSG:4326) point geometry feature.
 
     <h4>Syntax</h4>
     <p><b>mgrs_to_point</b>( <i>mgrs_str</i> )</p>
@@ -42,7 +54,7 @@ def mgrs_to_point(mgrs, feature, parent):
     <h4>Example usage</h4>
     <ul>
       <li><b>mgrs_to_point</b>('32TKS7626020357') &rarr; returns a point geometry</li>
-      <li><b>geom_to_wkt</b>(<b>mgrs_to_point</b>('32TKS7626020357')) &rarr; Point (6.09999238 46.19999307)</li>
+      <li><b>geom_to_wkt</b>(<b>mgrs_to_point</b>('32TKS7626020357')) &rarr; 'Point (6.09999238 46.19999307)'</li>
     </ul>
     """
     try:
@@ -54,10 +66,10 @@ def mgrs_to_point(mgrs, feature, parent):
         parent.setEvalErrorString("Error: invalid MGRS coordinate")
         return
 
-@qgsfunction(-1, group='Lat Lon Tools')
+@qgsfunction(-1, group=group_name)
 def mgrs(values, feature, parent):
     """
-    Calculate the MGRS coordinate from decimal latitude and longitude.
+    Calculate the MGRS coordinate from y, x (latitude, longitude) coordinates.
 
     <h4>Syntax</h4>
     <p><b>mgrs</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
@@ -69,8 +81,8 @@ def mgrs(values, feature, parent):
 
     <h4>Example usage</h4>
     <ul>
-      <li><b>mgrs</b>(46.2, 6.1) &rarr; 32TKS7626020357</li>
-      <li><b>mgrs</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; 32TKS7626020357</li>
+      <li><b>mgrs</b>(46.2, 6.1) &rarr; '32TKS7626020357'</li>
+      <li><b>mgrs</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; '32TKS7626020357'</li>
     </ul>
     """
     if len(values) < 2 or len(values) > 3:
@@ -89,10 +101,10 @@ def mgrs(values, feature, parent):
         return
     return full_mgrs
     
-@qgsfunction(-1, group='Lat Lon Tools')
+@qgsfunction(-1, group=group_name)
 def mgrs_gzd(values, feature, parent):
     """
-    Calculate the one or three digit Grid Zone Designator (GZD) from decimal latitude and longitude. Between and including latitudes 80&deg;S and 84&deg;N this is a three digit value with the first two characters representing the UTM zone and the third characater representing the band of latitude. In the polar regions outside of the UTM area this is a one character field with A and B used near the south pole, and Y and Z used near the north pole.
+    Calculate the one or three digit Grid Zone Designator (GZD) from y, x (latitude, longitude) coordinates. Between and including latitudes 80&deg;S and 84&deg;N this is a three digit value with the first two characters representing the UTM zone and the third characater representing the band of latitude. In the polar regions outside of the UTM area this is a one character field with A and B used near the south pole, and Y and Z used near the north pole.
 
     <h4>Syntax</h4>
     <p><b>mgrs_gzd</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
@@ -104,8 +116,8 @@ def mgrs_gzd(values, feature, parent):
 
     <h4>Example usage</h4>
     <ul>
-      <li><b>mgrs_gzd</b>(46.2, 6.1) &rarr; 32T</li>
-      <li><b>mgrs_gzd</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; 32T</li>
+      <li><b>mgrs_gzd</b>(46.2, 6.1) &rarr; '32T'</li>
+      <li><b>mgrs_gzd</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; '32T'</li>
     </ul>
     """
     if len(values) < 2 or len(values) > 3:
@@ -128,11 +140,11 @@ def mgrs_gzd(values, feature, parent):
         return
     return gzd
     
-@qgsfunction(-1, group='Lat Lon Tools')
+@qgsfunction(-1, group=group_name)
 def mgrs_100km(values, feature, parent):
     """
     Calculate the MGRS 100,000 meter grid squares (BIGRAM)
-    from decimal latitude and longitude.
+    from y, x (latitude, longitude) coordinates.
 
     <h4>Syntax</h4>
     <p><b>mgrs_100km</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
@@ -144,8 +156,8 @@ def mgrs_100km(values, feature, parent):
 
     <h4>Example usage</h4>
     <ul>
-      <li><b>mgrs_100km</b>(46.2, 6.1) &rarr; KS</li>
-      <li><b>mgrs_100km</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; KS</li>
+      <li><b>mgrs_100km</b>(46.2, 6.1) &rarr; 'KS'</li>
+      <li><b>mgrs_100km</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; 'KS'</li>
     </ul>
     """
     if len(values) < 2 or len(values) > 3:
@@ -168,10 +180,10 @@ def mgrs_100km(values, feature, parent):
         return
     return ups
     
-@qgsfunction(-1, group='Lat Lon Tools')
+@qgsfunction(-1, group=group_name)
 def mgrs_east(values, feature, parent):
     """
-    Calculate the MGRS easting part value from decimal latitude and longitude.
+    Calculate the MGRS easting part value from y, x (latitude, longitude) coordinates.
 
     <h4>Syntax</h4>
     <p><b>mgrs_east</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
@@ -207,10 +219,10 @@ def mgrs_east(values, feature, parent):
         return
     return east
 
-@qgsfunction(-1, group='Lat Lon Tools')
+@qgsfunction(-1, group=group_name)
 def mgrs_north(values, feature, parent):
     """
-    Calculate the MGRS northing part value from decimal latitude and longitude.
+    Calculate the MGRS northing part value from y, x (latitude, longitude) coordinates.
 
     <h4>Syntax</h4>
     <p><b>mgrs_north</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
@@ -245,3 +257,177 @@ def mgrs_north(values, feature, parent):
         parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
         return
     return north
+
+
+@qgsfunction(args='auto', group=group_name)
+def utm_to_point(utm_str, feature, parent):
+    """
+    Convert a UTM string into a WGS 84 (EPSG:4326) point geometry feature.
+
+    <h4>Syntax</h4>
+    <p><b>utm_to_point</b>( <i>utm_str</i> )</p>
+    
+    <h4>Arguments</h4>
+    <p><i>utm_str</i> &rarr; a UTM formatted string.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm_to_point</b>('13N 278501 4486692') &rarr; returns a point geometry</li>
+      <li><b>geom_to_wkt</b>(<b>utm_to_point</b>('13N 278501 4486692')) &rarr; 'Point (-107.61396588 40.50139194)'</li>
+    </ul>
+    """
+    try:
+        pt = utm2Point(utm_str)
+        return(QgsGeometry.fromPointXY(pt))
+    except Exception:
+        parent.setEvalErrorString("Error: invalid MGRS coordinate")
+        return
+
+@qgsfunction(-1, group=group_name)
+def utm(values, feature, parent):
+    """
+    Calculate the Standard UTM coordinate from y, x (latitude, longitude) coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>utm</b>( <i>y, x[, precision=0, crs='EPSG:4326']</i> )</p>
+    
+    <h4>Arguments</h4>
+    <p><i>y</i> &rarr; the y or latitude coordinate.</p>
+    <p><i>x</i> &rarr; the x or longitude coordinate.</p>
+    <p><i>precision</i> &rarr; number of decimal digits. Unless more precision is needed 0 is a good starting point.
+    <p><i>crs</i> &rarr; optional coordinate reference system. Default value is 'EPSG:4326' if not specified.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm</b>(46.2, 6.1) &rarr; '32N 276261 512035'</li>
+      <li><b>utm</b>(46.2, 6.1, 2) &rarr; '32N 276260.62 5120357.75'</li>
+      <li><b>utm</b>(5812456.38,679048.05, 0, 'EPSG:3857') &rarr; '32N 276260 5120357'</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 4:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        num_args = len(values)
+        y = values[0]
+        x = values[1]
+        if num_args >= 3:
+            precision = int(values[2])
+            if precision < 0:
+                parent.setEvalErrorString("Error: invalid precision")
+                return
+        else:
+            precision = 0
+        if num_args == 4:
+            crs = values[3]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        utm_str = latLon2Utm(y, x, precision)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
+        return
+    return utm_str
+
+@qgsfunction(-1, group=group_name)
+def utm_zone(values, feature, parent):
+    """
+    Calculate the Standard UTM zone from y, x (latitude, longitude) coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>utm_zone</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
+    
+    <h4>Arguments</h4>
+    <p><i>y</i> &rarr; the y or latitude coordinate.</p>
+    <p><i>x</i> &rarr; the x or longitude coordinate.</p>
+    <p><i>crs</i> &rarr; optional coordinate reference system. Default value is 'EPSG:4326' if not specified.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm_zone</b>(46.2, 6.1) &rarr; 32</li>
+      <li><b>utm_zone</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; 32</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 3:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        y = values[0]
+        x = values[1]
+        if len(values) == 3:
+            crs = values[2]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        zone, hemisphere = latLon2UtmZone(y, x)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
+        return
+    return zone
+
+@qgsfunction(-1, group=group_name)
+def utm_hemisphere(values, feature, parent):
+    """
+    Calculate the Standard UTM hemisphere ('N' or 'S') from y, x (latitude, longitude) coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>utm_hemisphere</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
+    
+    <h4>Arguments</h4>
+    <p><i>y</i> &rarr; the y or latitude coordinate.</p>
+    <p><i>x</i> &rarr; the x or longitude coordinate.</p>
+    <p><i>crs</i> &rarr; optional coordinate reference system. Default value is 'EPSG:4326' if not specified.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm_hemisphere</b>(46.2, 6.1) &rarr; 'N'</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 3:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        y = values[0]
+        x = values[1]
+        if len(values) == 3:
+            crs = values[2]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        zone, hemisphere = latLon2UtmZone(y, x)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
+        return
+    return hemisphere
+
+@qgsfunction(-1, group=group_name)
+def utm_epsg(values, feature, parent):
+    """
+    Returns the UTM EPSG code which the y, x (latitude, longitude) coordinates are in.
+
+    <h4>Syntax</h4>
+    <p><b>utm_epsg</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
+    
+    <h4>Arguments</h4>
+    <p><i>y</i> &rarr; the y or latitude coordinate.</p>
+    <p><i>x</i> &rarr; the x or longitude coordinate.</p>
+    <p><i>crs</i> &rarr; optional coordinate reference system. Default value is 'EPSG:4326' if not specified.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm_epsg</b>(46.2, 6.1) &rarr; 'EPSG:32632'</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 3:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        y = values[0]
+        x = values[1]
+        if len(values) == 3:
+            crs = values[2]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        zone, hemisphere = latLon2UtmZone(y, x)
+        epsg_code = utmGetEpsg(hemisphere, zone)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
+        return
+    return epsg_code
