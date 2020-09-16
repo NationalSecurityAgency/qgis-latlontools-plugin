@@ -53,7 +53,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMS:  # DMS
                 msg = formatDmsString(lat, lon, 0, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace, settings.capturePadZeroes)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDDMMSS:  # DDMMSS
-                msg = formatDmsString(lat, lon, 1, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.capturePadZeroes)
+                msg = formatDmsString(lat, lon, 1, self.settings.dmsPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace, settings.capturePadZeroes)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDMM:  # DM.MM
                 msg = formatDmsString(lat, lon, 2, settings.captureDmmPrecision, self.settings.coordOrder, delimiter, settings.captureAddDmsSpace, settings.capturePadZeroes)
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeWKT:  # WKT
