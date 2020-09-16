@@ -4,6 +4,8 @@ from qgis.utils import qgsfunction
 # from qgis.gui import *
 from . import mgrs as mg
 from .utm import latLon2Utm, utm2Point, latLon2UtmZone, utmGetEpsg
+from .util import formatDmsString
+# import traceback
 
 group_name = 'Lat Lon Tools'
 epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -15,6 +17,8 @@ def transform_coords(y, x, crs):
     return(pt.y(), pt.x())
 
 def InitLatLonFunctions():
+    QgsExpression.registerFunction(dms)
+    QgsExpression.registerFunction(ddmmss)
     QgsExpression.registerFunction(mgrs)
     QgsExpression.registerFunction(mgrs_100km)
     QgsExpression.registerFunction(mgrs_east)
@@ -28,6 +32,8 @@ def InitLatLonFunctions():
     QgsExpression.registerFunction(utm_zone)
 
 def UnloadLatLonFunctions():
+    QgsExpression.unregisterFunction('dms')
+    QgsExpression.unregisterFunction('ddmmss')
     QgsExpression.unregisterFunction('mgrs')
     QgsExpression.unregisterFunction('mgrs_100km')
     QgsExpression.unregisterFunction('mgrs_east')
@@ -431,3 +437,88 @@ def utm_epsg(values, feature, parent):
         parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
         return
     return epsg_code
+
+@qgsfunction(-1, group=group_name)
+def dms(values, feature, parent):
+    """
+    Convert a coordinate to a DMS string.
+
+    <h4>Syntax</h4>
+    <p><b>dms</b>( <i>lat, lon, order, precision[,add_space=False, pad_zero=False, delimiter=', ']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>lat</i> &rarr; a latitude value.</p>
+    <p><i>lon</i> &rarr; a longitude value.</p>
+    <p><i>order</i> &rarr; specify either 'yx' or 'xy' for latitude, longitude or longitude, latitude.
+    <p><i>precision</i> &rarr; specifies the number of digits after the seconds decimal point.</p>
+    <p><i>add_space</i> &rarr; when True a space will be added between d m s values. Default value is False.
+    <p><i>pad_zero</i> &rarr; pad values with leading zeros. Default value is False.
+    <p><i>delimiter</i> &rarr; specifies the delimiter between the dms latitude, longitude pairs. The default value is ', '.
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>dms</b>(28.41870950, -81.58118645, 'yx', 0) &rarr; 28°25'7"N, 81°34'52"W</li>
+      <li><b>dms</b>(28.41870950, -81.58118645, 'xy', 0) &rarr; 81°34'52"W, 28°25'7"N</li>
+      <li><b>dms</b>(28.41870950, -81.58118645, 'yx', 0, True) &rarr; 28° 25' 7" N, 81° 34' 52" W</li>
+      <li><b>dms</b>(28.41870950, -81.58118645, 'yx', 2, False, True) &rarr; 28°25'07.35"N, 081°34'52.27"W</li>
+      <li><b>dms</b>(28.41870950, -81.58118645, 'yx', 0, False, True, ' : ') &rarr; 28°25'07"N : 081°34'52"W</li>
+    </ul>
+    """
+    num_args = len(values)
+    if num_args < 4 or num_args > 7:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        lat = float(values[0])
+        lon = float(values[1])
+        order = 0 if values[2] == 'yx' else 1
+        precision = int(values[3])
+        addspace = values[4] if num_args > 4 else False
+        pad_zero = values[5] if num_args > 5 else False
+        delimiter = values[6] if num_args > 6 else ', '
+
+        dms_str = formatDmsString(lat, lon, 0, precision, order, delimiter, addspace, pad_zero)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude, longitude, or parameters")
+        return
+    return dms_str
+
+@qgsfunction(-1, group=group_name)
+def ddmmss(values, feature, parent):
+    """
+    Convert a coordinate to a DDMMSS string.
+
+    <h4>Syntax</h4>
+    <p><b>ddmmss</b>( <i>lat, lon, order, precision[, delimiter=', ']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>lat</i> &rarr; a latitude value.</p>
+    <p><i>lon</i> &rarr; a longitude value.</p>
+    <p><i>order</i> &rarr; specify either 'yx' or 'xy' for latitude, longitude or longitude, latitude.
+    <p><i>precision</i> &rarr; specifies the number of digits after the seconds decimal point.</p>
+    <p><i>delimiter</i> &rarr; specifies the delimiter between the ddmmss latitude, longitude pairs. The default value is ', '.
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>ddmmss</b>(28.41870950, -81.58118645, 'yx', 0) &rarr; 282507N, 0813452W</li>
+      <li><b>ddmmss</b>(28.41870950, -81.58118645, 'xy', 0) &rarr; 0813452W, 282507N</li>
+      <li><b>ddmmss</b>(28.41870950, -81.58118645, 'yx', 2) &rarr; 282507.35N, 0813452.27W</li>
+      <li><b>ddmmss</b>(28.41870950, -81.58118645, 'yx', 0, ' : ') &rarr; 282507N : 0813452W</li>
+    </ul>
+    """
+    num_args = len(values)
+    if num_args < 4 or num_args > 5:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        lat = float(values[0])
+        lon = float(values[1])
+        order = 0 if values[2] == 'yx' else 1
+        precision = int(values[3])
+        delimiter = values[4] if num_args > 4 else ', '
+
+        dms_str = formatDmsString(lat, lon, 1, precision, order, delimiter, False, False)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude, longitude, or parameters")
+        return
+    return dms_str
