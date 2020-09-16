@@ -8,7 +8,7 @@ def formatDmsString(lat, lon, dms_mode=0, prec=0, order=0, delimiter=', ', useDm
     '''Return a DMS formated string.'''
     if order == 0:  # Y, X or Lat, Lon
         return convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace, padZeros) + str(delimiter) + convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace, padZeros)
-    else:
+    else:  # X, Y or Lon, Lat
         return convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace, padZeros) + str(delimiter) + convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace, padZeros)
 
 def convertDD2DMS(coord, islat, dms_mode, prec, useDmsSpace=True, padZeros=False):
