@@ -65,15 +65,19 @@ def latLon2UtmZone(lat, lon):
         hemisphere = 'N'
     return(zone, hemisphere)
 
+def latLon2UtmParameters(lat, lon):
+    zone, hemisphere = latLon2UtmZone(lat, lon)
+    epsg = utmGetEpsg(hemisphere, zone)
+    utmcrs = QgsCoordinateReferenceSystem(epsg)
+    utmtrans = QgsCoordinateTransform(epsg4326, utmcrs, QgsProject.instance())
+    pt = QgsPointXY(lon, lat)
+    utmpt = utmtrans.transform(pt)
+    return(zone, hemisphere, utmpt.x(), utmpt.y())
+
 def latLon2Utm(lat, lon, precision):
     try:
-        zone, hemisphere = latLon2UtmZone(lat, lon)
-        epsg = utmGetEpsg(hemisphere, zone)
-        utmcrs = QgsCoordinateReferenceSystem(epsg)
-        utmtrans = QgsCoordinateTransform(epsg4326, utmcrs, QgsProject.instance())
-        pt = QgsPointXY(lon, lat)
-        utmpt = utmtrans.transform(pt)
-        msg = '{}{} {:.{prec}f} {:.{prec}f}'.format(zone, hemisphere, utmpt.x(), utmpt.y(), prec=precision)
+        zone, hemisphere, utmx, utmy = latLon2UtmParameters(lat, lon)
+        msg = '{}{} {:.{prec}f} {:.{prec}f}'.format(zone, hemisphere, utmx, utmy, prec=precision)
     except Exception:
         msg = ''
     return(msg)
