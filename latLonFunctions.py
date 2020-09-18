@@ -3,7 +3,7 @@ from qgis.core import QgsPointXY, QgsGeometry, QgsExpression, QgsCoordinateRefer
 from qgis.utils import qgsfunction
 # from qgis.gui import *
 from . import mgrs as mg
-from .utm import latLon2Utm, utm2Point, latLon2UtmZone, utmGetEpsg
+from .utm import latLon2Utm, utm2Point, latLon2UtmZone, utmGetEpsg, latLon2UtmParameters
 from .util import formatDmsString
 # import traceback
 
@@ -13,10 +13,11 @@ epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
 def transform_coords(y, x, crs):
     coord_crs = QgsCoordinateReferenceSystem(crs)
     transform = QgsCoordinateTransform(coord_crs, epsg4326, QgsProject.instance())
-    pt = transform.transform(x,y)
+    pt = transform.transform(x, y)
     return(pt.y(), pt.x())
 
 def InitLatLonFunctions():
+    QgsExpression.registerFunction(dm)
     QgsExpression.registerFunction(dms)
     QgsExpression.registerFunction(ddmmss)
     QgsExpression.registerFunction(mgrs)
@@ -26,12 +27,15 @@ def InitLatLonFunctions():
     QgsExpression.registerFunction(mgrs_north)
     QgsExpression.registerFunction(mgrs_to_point)
     QgsExpression.registerFunction(utm)
+    QgsExpression.registerFunction(utm_east)
     QgsExpression.registerFunction(utm_epsg)
     QgsExpression.registerFunction(utm_hemisphere)
+    QgsExpression.registerFunction(utm_north)
     QgsExpression.registerFunction(utm_to_point)
     QgsExpression.registerFunction(utm_zone)
 
 def UnloadLatLonFunctions():
+    QgsExpression.unregisterFunction('dm')
     QgsExpression.unregisterFunction('dms')
     QgsExpression.unregisterFunction('ddmmss')
     QgsExpression.unregisterFunction('mgrs')
@@ -41,8 +45,10 @@ def UnloadLatLonFunctions():
     QgsExpression.unregisterFunction('mgrs_north')
     QgsExpression.unregisterFunction('mgrs_to_point')
     QgsExpression.unregisterFunction('utm')
+    QgsExpression.unregisterFunction('utm_east')
     QgsExpression.unregisterFunction('utm_epsg')
     QgsExpression.unregisterFunction('utm_hemisphere')
+    QgsExpression.unregisterFunction('utm_north')
     QgsExpression.unregisterFunction('utm_to_point')
     QgsExpression.unregisterFunction('utm_zone')
 
@@ -53,7 +59,7 @@ def mgrs_to_point(mgrs, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>mgrs_to_point</b>( <i>mgrs_str</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>mgrs_str</i> &rarr; an MGRS formatted string.</p>
 
@@ -79,7 +85,7 @@ def mgrs(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>mgrs</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -106,7 +112,7 @@ def mgrs(values, feature, parent):
         parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
         return
     return full_mgrs
-    
+
 @qgsfunction(-1, group=group_name)
 def mgrs_gzd(values, feature, parent):
     """
@@ -114,7 +120,7 @@ def mgrs_gzd(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>mgrs_gzd</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -145,7 +151,7 @@ def mgrs_gzd(values, feature, parent):
         parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
         return
     return gzd
-    
+
 @qgsfunction(-1, group=group_name)
 def mgrs_100km(values, feature, parent):
     """
@@ -154,7 +160,7 @@ def mgrs_100km(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>mgrs_100km</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -185,7 +191,7 @@ def mgrs_100km(values, feature, parent):
         parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
         return
     return ups
-    
+
 @qgsfunction(-1, group=group_name)
 def mgrs_east(values, feature, parent):
     """
@@ -193,7 +199,7 @@ def mgrs_east(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>mgrs_east</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -232,7 +238,7 @@ def mgrs_north(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>mgrs_north</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -264,7 +270,6 @@ def mgrs_north(values, feature, parent):
         return
     return north
 
-
 @qgsfunction(args='auto', group=group_name)
 def utm_to_point(utm_str, feature, parent):
     """
@@ -272,7 +277,7 @@ def utm_to_point(utm_str, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>utm_to_point</b>( <i>utm_str</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>utm_str</i> &rarr; a UTM formatted string.</p>
 
@@ -296,12 +301,12 @@ def utm(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>utm</b>( <i>y, x[, precision=0, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
     <p><i>precision</i> &rarr; number of decimal digits. Unless more precision is needed 0 is a good starting point.
-    <p><i>crs</i> &rarr; optional coordinate reference system. Default value is 'EPSG:4326' if not specified.</p>
+    <p><i>crs</i> &rarr; optional coordinate reference system of the y, x coordinates. Default value is 'EPSG:4326' if not specified.</p>
 
     <h4>Example usage</h4>
     <ul>
@@ -341,7 +346,7 @@ def utm_zone(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>utm_zone</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -376,7 +381,7 @@ def utm_hemisphere(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>utm_hemisphere</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -410,7 +415,7 @@ def utm_epsg(values, feature, parent):
 
     <h4>Syntax</h4>
     <p><b>utm_epsg</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
-    
+
     <h4>Arguments</h4>
     <p><i>y</i> &rarr; the y or latitude coordinate.</p>
     <p><i>x</i> &rarr; the x or longitude coordinate.</p>
@@ -439,9 +444,127 @@ def utm_epsg(values, feature, parent):
     return epsg_code
 
 @qgsfunction(-1, group=group_name)
+def utm_east(values, feature, parent):
+    """
+    Calculate the UTM easting value from y, x (latitude, longitude) coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>utm_east</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>y</i> &rarr; the y or latitude coordinate.</p>
+    <p><i>x</i> &rarr; the x or longitude coordinate.</p>
+    <p><i>crs</i> &rarr; optional coordinate reference system of the y, x coordinates. Default value is 'EPSG:4326'.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm_east</b>(46.2, 6.1) &rarr; '276260.6162769337'</li>
+      <li><b>utm_east</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; 276260.00339285017</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 3:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        num_args = len(values)
+        y = values[0]
+        x = values[1]
+        if num_args == 3:
+            crs = values[2]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        zone, hemisphere, east, north = latLon2UtmParameters(y, x)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
+        return
+    return east
+
+@qgsfunction(-1, group=group_name)
+def utm_north(values, feature, parent):
+    """
+    Calculate the UTM northing value from y, x (latitude, longitude) coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>utm_north</b>( <i>y, x[, crs='EPSG:4326']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>y</i> &rarr; the y or latitude coordinate.</p>
+    <p><i>x</i> &rarr; the x or longitude coordinate.</p>
+    <p><i>crs</i> &rarr; optional coordinate reference system of the y, x coordinates. Default value is 'EPSG:4326'.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>utm_north</b>(46.2, 6.1) &rarr; 5120357.748034837</li>
+      <li><b>utm_north</b>(5812456.38,679048.05, 'EPSG:3857') &rarr; 5120357.001692174</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 3:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        num_args = len(values)
+        y = values[0]
+        x = values[1]
+        if num_args == 3:
+            crs = values[2]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        zone, hemisphere, east, north = latLon2UtmParameters(y, x)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
+        return
+    return north
+
+@qgsfunction(-1, group=group_name)
+def dm(values, feature, parent):
+    """
+    Convert a coordinate to a Degree, Minute (DM) string.
+
+    <h4>Syntax</h4>
+    <p><b>dm</b>( <i>lat, lon, order, precision[,add_space=False, pad_zero=False, delimiter=', ']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>lat</i> &rarr; a latitude value.</p>
+    <p><i>lon</i> &rarr; a longitude value.</p>
+    <p><i>order</i> &rarr; specify either 'yx' or 'xy' for latitude, longitude or longitude, latitude.
+    <p><i>precision</i> &rarr; specifies the number of digits after the minutes decimal point.</p>
+    <p><i>add_space</i> &rarr; when True a space will be added between D M values. Default value is False.
+    <p><i>pad_zero</i> &rarr; pad values with leading zeros. Default value is False.
+    <p><i>delimiter</i> &rarr; specifies the delimiter between the dm latitude, longitude pairs. The default value is ', '.
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>dm</b>(28.41870950, -81.58118645, 'yx', 0) &rarr; 28°25'N, 81°35'W'</li>
+      <li><b>dm</b>(28.41870950, -81.58118645, 'xy', 0) &rarr; 81°35'W, 28°25'N</li>
+      <li><b>dm</b>(28.41870950, -81.58118645, 'yx', 0, True) &rarr; '28° 25' N, 81° 35' W'</li>
+      <li><b>dm</b>(28.41870950, -81.58118645, 'yx', 2, False, True) &rarr; 28°25.12'N, 081°34.87'W</li>
+      <li><b>dm</b>(28.41870950, -81.58118645, 'yx', 0, False, True, ' : ') &rarr; 28°25'N : 081°35'W</li>
+    </ul>
+    """
+    num_args = len(values)
+    if num_args < 4 or num_args > 7:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        lat = float(values[0])
+        lon = float(values[1])
+        order = 0 if values[2] == 'yx' else 1
+        precision = int(values[3])
+        addspace = values[4] if num_args > 4 else False
+        pad_zero = values[5] if num_args > 5 else False
+        delimiter = values[6] if num_args > 6 else ', '
+
+        dms_str = formatDmsString(lat, lon, 2, precision, order, delimiter, addspace, pad_zero)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude, longitude, or parameters")
+        return
+    return dms_str
+
+
+@qgsfunction(-1, group=group_name)
 def dms(values, feature, parent):
     """
-    Convert a coordinate to a DMS string.
+    Convert a coordinate to a Degree, Minute, Second (DMS) string.
 
     <h4>Syntax</h4>
     <p><b>dms</b>( <i>lat, lon, order, precision[,add_space=False, pad_zero=False, delimiter=', ']</i> )</p>
@@ -451,7 +574,7 @@ def dms(values, feature, parent):
     <p><i>lon</i> &rarr; a longitude value.</p>
     <p><i>order</i> &rarr; specify either 'yx' or 'xy' for latitude, longitude or longitude, latitude.
     <p><i>precision</i> &rarr; specifies the number of digits after the seconds decimal point.</p>
-    <p><i>add_space</i> &rarr; when True a space will be added between d m s values. Default value is False.
+    <p><i>add_space</i> &rarr; when True a space will be added between D M S values. Default value is False.
     <p><i>pad_zero</i> &rarr; pad values with leading zeros. Default value is False.
     <p><i>delimiter</i> &rarr; specifies the delimiter between the dms latitude, longitude pairs. The default value is ', '.
 
