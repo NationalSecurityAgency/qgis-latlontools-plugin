@@ -54,7 +54,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
                 defaultValue=11,
                 optional=False,
                 minValue=10,
-                maxValue=20)
+                maxValue=olc.MAX_DIGIT_COUNT_)
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(

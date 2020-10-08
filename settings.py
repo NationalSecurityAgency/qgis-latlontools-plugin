@@ -148,7 +148,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash','Maidenhead Grid Locator'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -157,7 +157,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
 
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM','Geohash','Maidenhead Grid'])
+        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -167,7 +167,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.deleteProviderButton.clicked.connect(self.deleteUserProvider)
 
         ### MULTI-ZOOM ###
-        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes', 'Standard UTM'])
+        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM'])
         self.multiZoomToProjectionComboBox.activated.connect(self.setEnabled)
         self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)

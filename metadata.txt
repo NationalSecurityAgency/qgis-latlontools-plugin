@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, Geohash, Maidenhead grid, and Plus Codes formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
-version=3.4.2
+version=3.4.3
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -29,6 +29,7 @@ hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.4.3 - Updatd open location code (Plus Code) library
     3.4.2 - Added UTM and additional DMS field calculator functions
     3.4.1 - Finished MGRS Field Calculator functions
     3.4.0 - Initial release of MGRS Field Calculator functions
@@ -55,24 +56,3 @@ changelog=
     3.3.2 - Made the zoom-to and multi-zoom-to tools more flexible.
     3.3.1 - Added separate DDMMSS delimiter for coordinate converter
     3.3.0 - Added coordinate converter. Fixed #32
-    3.2.2 - Changed Python 3.6 syntax to work with older versions of QGIS
-    3.2.1 - Added zoom to standard UTM support - refactored DMS code
-    3.2.0 - Added Standard WGS84 UTM Support
-    3.1.18 - Fixed MGRS bug
-    3.1.17 - Added MGRS & Plus Code coordinate input to multi-location zoom
-    3.1.16 - Added show marker setting for coordinate capture and external map
-    3.1.15 - Added Google Earth to external map support.
-    3.1.14 - Added field to point layer conversion.
-    3.1.13 - Fix Zoom To persistent bug
-    3.1.12 - Made Zoom To custom CRS persistent
-    3.1.11 - Bug fix
-    3.1.10 - Added comma without a space as a default to the copy coordinate function
-    3.1.9 - Added a prefix and suffix setting for point capture
-    3.1.8 - Added more flexibility to the bounding box format
-    3.1.7 - Capture the bounding box of the canvas
-    3.1.6 - Bug fix
-    3.1.5 - Enhancement to DDMMSS parsing
-    3.1.4 - Multizoom bug fix
-    3.1.3 - Moved Geometry 2 field to processing & added decimal settings precision
-    3.1.2 - Added multipoint fix for digitizer
-    3.1.1 - Additional Plus Code support and moved toolbar icons to its own toolbar

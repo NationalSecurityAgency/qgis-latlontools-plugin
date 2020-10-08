@@ -141,7 +141,7 @@
                 <number>10</number>
                </property>
                <property name="maximum">
-                <number>20</number>
+                <number>15</number>
                </property>
                <property name="value">
                 <number>10</number>
@@ -356,13 +356,13 @@
              <property name="plainText">
               <string>Supported 'Zoom to' formats (See help for more details):
 
-WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes, Standard UTM
+WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM
 
 Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 
 MGRS - Only MGRS coordinates
 
-Plus Codes - Only Plus Codes coordinates
+Plus Codes - Only Plus Codes (Open Location Code) coordinates
 
 Standard UTM - Only Standard UTM coordinates
 
@@ -897,7 +897,7 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
              <item row="5" column="0">
               <widget class="QLabel" name="label_33">
                <property name="text">
-                <string>Plus codes length</string>
+                <string>Plus codes (Open Location Code) length</string>
                </property>
               </widget>
              </item>
@@ -907,7 +907,7 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
                 <number>10</number>
                </property>
                <property name="maximum">
-                <number>20</number>
+                <number>15</number>
                </property>
                <property name="value">
                 <number>10</number>
