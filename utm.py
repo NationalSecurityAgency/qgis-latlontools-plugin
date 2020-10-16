@@ -7,7 +7,7 @@ class UtmException(Exception):
 
 def utmParse(utm_str):
     utm = utm_str.strip().upper()
-    m = re.match(r'(\d+)\s*([NS])\s+([\d\.]+)\s+([\d\s]+)', utm).groups()
+    m = re.match(r'(\d+)\s*([NS])\s+(\d+\.?\d*)\s+(\d+\.?\d*)', utm).groups()
     if len(m) != 4:
         raise UtmException('Invalid UTM Coordinate')
     zone = int(m[0])
