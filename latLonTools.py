@@ -125,10 +125,12 @@ class LatLonTools:
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyCanvasAction)
 
         # Initialize the Settings Dialog Box
-        settingsicon = QIcon(os.path.dirname(__file__) + '/images/settings.png')
+        settingsicon = QIcon(':/images/themes/default/mActionOptions.svg')
         self.settingsAction = QAction(settingsicon, "Settings", self.iface.mainWindow())
         self.settingsAction.setObjectName('latLonToolsSettings')
+        self.settingsAction.setToolTip('Lat Lon Tools Settings')
         self.settingsAction.triggered.connect(self.settings)
+        self.toolbar.addAction(self.settingsAction)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
 
         # Help

@@ -117,7 +117,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 * <img src="images/copycanvas.png" alt="Copy canvas bounding box"> ***Copy Canvas Bounding Box*** - Copy the canvas bounding box to the clipboard using one of the formats in settings.
 
-* <img src="images/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
+* <img src="doc/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.png" alt="Help"> ***Help*** - Displays this help page.
 
 ## Settings
