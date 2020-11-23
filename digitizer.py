@@ -5,7 +5,7 @@ from qgis.PyQt.QtCore import QSize, QSettings, QTextCodec
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QMenu
 from qgis.PyQt.uic import loadUiType
-from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsFeature, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject
+from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject, QgsVectorLayerUtils
 from qgis.gui import QgsProjectionSelectionDialog
 from .util import epsg4326, parseDMSString
 # import traceback
@@ -161,8 +161,8 @@ class DigitizerWidget(QDialog, FORM_CLASS):
             transform = QgsCoordinateTransform(srcCrs, destCRS, QgsProject.instance())
             # Transform the input coordinate projection to the layer CRS
             x, y = transform.transform(float(lon), float(lat))
-            feat = QgsFeature(layer.fields())
-            feat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(x, y)))
+            geom = QgsGeometry.fromPointXY(QgsPointXY(x, y))
+            feat = QgsVectorLayerUtils.createFeature(layer, geom, {}, layer.createExpressionContext() )
             if layer.fields().count() == 0:
                 layer.addFeature(feat)
                 self.lltools.zoomTo(srcCrs, lat, lon)
