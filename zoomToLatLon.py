@@ -117,8 +117,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if self.settings.zoomToProjIsGeohash():
                 # A Geohash coordinate has been selected. This will result in an exception
                 # if it is not a valid Geohash coordinate.
-                (lat, lon) = geohash.decode(text)
-                return(float(lat), float(lon), epsg4326)
+                (lat, lon, lat_err, lon_err) = geohash.decode_exactly(text)
+                return(lat, lon, epsg4326)
 
             if self.settings.zoomToProjIsMaidenhead():
                 # A Maidenhead grid coordinate has been selected. This will result in an exception

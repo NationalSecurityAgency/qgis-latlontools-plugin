@@ -385,8 +385,8 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     def commitGeohash(self):
         text = self.geohashLineEdit.text().strip()
         try:
-            (lat, lon) = geohash.decode(text)
-            pt = QgsPoint(float(lon), float(lat))
+            (lat, lon, lat_err, lon_err) = geohash.decode_exactly(text)
+            pt = QgsPoint(lon, lat)
             self.updateCoordinates(9, pt, epsg4326)
         except Exception:
             self.showInvalid(9)

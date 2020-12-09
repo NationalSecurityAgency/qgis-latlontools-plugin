@@ -159,9 +159,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     lat = coord.latitudeCenter
                     lon = coord.longitudeCenter
                 elif field_type == 5:  # Geohash
-                    (lat, lon) = geohash.decode(attr1)
-                    lat = float(lat)
-                    lon = float(lon)
+                    (lat, lon, lat_err, lon_err) = geohash.decode_exactly(attr1)
                 elif field_type == 6:  # UTM
                     pt = utm2Point(attr1)
                     lat = pt.y()
