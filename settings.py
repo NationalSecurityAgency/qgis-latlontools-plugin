@@ -178,13 +178,14 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### BBOX CAPTURE SETTINGS ###
         self.bBoxCrsComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS'])
         self.bBoxFormatComboBox.addItems([
-            '"xmin,ymin,xmax,ymax" - Using the selected delimiter',
-            '"xmin,xmax,ymin,ymax" - Using the selected delimiter',
+            '"minX,minY,maxX,maxY (W,S,E,N)" - Using the selected delimiter',
+            '"minX,maxX,minY,maxY (W,E,S,N)" - Using the selected delimiter',
+            '"minY,minX,maxY,maxX (S,W,N,E)" - Using the selected delimiter',
             '"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Polygon format',
             '"x1,y1 x2,y2 x3,y3 x4,y4 x1,y1" - Alternate polgyon format',
             'WKT Polygon',
-            '"bbox: [xmin, ymin, xmax, ymax]" - MapProxy',
-            '"bbox=xmin,ymin,xmax,ymax" - GeoServer WFS, WMS'])
+            '"bbox: [minX, minY, maxX, maxY]" - MapProxy',
+            '"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS'])
         self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
 
         ### COORDINATE CONVERSION SETTINGS ###

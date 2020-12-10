@@ -286,8 +286,9 @@ Specify whether the captured bounding box will use WGS84 or the QGIS project's p
 
 **Format of the captured bounding box** specifies the format of the bounding box captured on the clipboard. It can be one of the following formats.
 
-* ***minX,minY,maxX,maxY*** - Using the selected delimiter
-* ***minX,maxX,minY,maxY*** - Using the selected delimiter
+* ***minX,minY,maxX,maxY (W,S,E,N)*** - Using the selected delimiter
+* ***minX,maxX,minY,maxY (W,E,S,N)*** - Using the selected delimiter
+* ***minY,minX,maxY,maxX (S,W,N,E)*** - Using the selected delimiter
 * ***x1 y1,x2 y2,x3 y3,x4 y4,x1 y1*** - Polygon format
 * ***x1,y1 x2,y2 x3,y3 x4,y4, x1,y1*** - Alternate polygon format
 * ***WKT Polygon***

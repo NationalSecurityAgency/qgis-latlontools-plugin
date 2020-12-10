@@ -232,18 +232,21 @@ class LatLonTools:
         elif settings.bBoxFormat == 1:  # minX,maxX,minY,maxY - Using the selected delimiter'
             outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
                 minX, delim, maxX, delim, minY, delim, maxY, prec=precision)
-        elif settings.bBoxFormat == 2:  # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
+        elif settings.bBoxFormat == 2:  # minY,minX,maxY,maxX - using the delimiter
+            outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
+                minY, delim, minX, delim, maxY, delim, maxX, prec=precision)
+        elif settings.bBoxFormat == 3:  # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
             outStr = '{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f}'.format(
                 minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
-        elif settings.bBoxFormat == 3:  # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
+        elif settings.bBoxFormat == 4:  # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
             outStr = '{:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f}'.format(
                 minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
-        elif settings.bBoxFormat == 4:  # WKT Polygon
+        elif settings.bBoxFormat == 5:  # WKT Polygon
             outStr = extent.asWktPolygon()
-        elif settings.bBoxFormat == 5:  # bbox: [minX, minY, maxX, maxY] - MapProxy
+        elif settings.bBoxFormat == 6:  # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox: [{}, {}, {}, {}]'.format(
                 minX, minY, maxX, maxY)
-        elif settings.bBoxFormat == 6:  # bbox: [minX, minY, maxX, maxY] - MapProxy
+        elif settings.bBoxFormat == 7:  # bbox: [minX, minY, maxX, maxY] - MapProxy
             outStr = 'bbox={},{},{},{}'.format(
                 minX, minY, maxX, maxY)
         outStr = '{}{}{}'.format(prefix, outStr, suffix)
