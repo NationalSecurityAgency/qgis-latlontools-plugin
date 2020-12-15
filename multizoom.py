@@ -13,6 +13,7 @@ from qgis.gui import QgsVertexMarker
 from .captureCoordinate  import CaptureCoordinate
 from .util import epsg4326, parseDMSStringSingle, parseDMSString
 from .utm import utm2Point
+from .settings import CoordOrder
 from . import mgrs
 from . import olc
 
@@ -83,7 +84,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
 
     def initLabel(self):
         if self.settings.multiZoomToProjIsWgs84():
-            if self.settings.multiCoordOrder == self.settings.OrderYX:
+            if self.settings.multiCoordOrder == CoordOrder.OrderYX:
                 self.label.setText("Enter coordinate ('lat,lon,...)")
             else:
                 self.label.setText("Enter coordinate ('lon,lat,...)")
@@ -94,7 +95,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         elif self.settings.multiZoomToProjIsUtm():
             self.label.setText("Enter coordinate ('Standard UTM,...)")
         else:
-            if self.settings.multiCoordOrder == self.settings.OrderYX:
+            if self.settings.multiCoordOrder == CoordOrder.OrderYX:
                 self.label.setText("Enter coordinate ({} Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
             else:
                 self.label.setText("Enter coordinate ({} X,Y,...)".format(self.settings.multiZoomToCRS().authid()))
@@ -340,7 +341,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                         return
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())
-                    if self.settings.multiCoordOrder == self.settings.OrderYX:
+                    if self.settings.multiCoordOrder == CoordOrder.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
                         lon, lat = transform.transform(float(parts[0]), float(parts[1]))
@@ -353,7 +354,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 else:
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())
-                    if self.settings.multiCoordOrder == self.settings.OrderYX:
+                    if self.settings.multiCoordOrder == CoordOrder.OrderYX:
                         lon, lat = transform.transform(float(parts[1]), float(parts[0]))
                     else:
                         lon, lat = transform.transform(float(parts[0]), float(parts[1]))

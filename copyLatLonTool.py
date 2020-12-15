@@ -4,7 +4,7 @@ from qgis.PyQt.QtWidgets import QApplication
 from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject, QgsSettings
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
-from .settings import settings
+from .settings import settings, CoordOrder
 from .util import epsg4326, formatDmsString
 from .utm import latLon2Utm
 from . import mgrs
@@ -61,14 +61,14 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             elif self.settings.wgs84NumberFormat == self.settings.Wgs84TypeGeoJSON:  # GeoJSON
                 msg = '{{"type": "Point","coordinates": [{:.{prec}f},{:.{prec}f}]}}'.format(pt4326.x(), pt4326.y(), prec=self.settings.decimalDigits)
             else:  # decimal degrees
-                if self.settings.coordOrder == self.settings.OrderYX:
+                if self.settings.coordOrder == CoordOrder.OrderYX:
                     msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt4326.y(), delimiter, pt4326.x(), prec=self.settings.decimalDigits)
                 else:
                     msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt4326.x(), delimiter, pt4326.y(), prec=self.settings.decimalDigits)
         elif self.settings.captureProjIsProjectCRS():
             # Projection in the project CRS
             if self.settings.otherNumberFormat == 0:  # Numerical
-                if self.settings.coordOrder == self.settings.OrderYX:
+                if self.settings.coordOrder == CoordOrder.OrderYX:
                     msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=self.settings.decimalDigits)
                 else:
                     msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=self.settings.decimalDigits)
@@ -81,7 +81,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             transform = QgsCoordinateTransform(canvasCRS, customCRS, QgsProject.instance())
             pt = transform.transform(pt.x(), pt.y())
             if self.settings.otherNumberFormat == 0:  # Numerical
-                if self.settings.coordOrder == self.settings.OrderYX:
+                if self.settings.coordOrder == CoordOrder.OrderYX:
                     msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.y(), delimiter, pt.x(), prec=self.settings.decimalDigits)
                 else:
                     msg = '{:.{prec}f}{}{:.{prec}f}'.format(pt.x(), delimiter, pt.y(), prec=self.settings.decimalDigits)
@@ -182,7 +182,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
     def coordFormatString(self):
         if self.settings.captureProjIsWgs84():
             if self.settings.wgs84NumberFormat == self.settings.Wgs84TypeDecimal:
-                if self.settings.coordOrder == self.settings.OrderYX:
+                if self.settings.coordOrder == CoordOrder.OrderYX:
                     s = 'Lat Lon'
                 else:
                     s = 'Lon Lat'
@@ -197,7 +197,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
         elif self.settings.captureProjIsProjectCRS():
             crsID = self.canvas.mapSettings().destinationCrs().authid()
             if self.settings.otherNumberFormat == 0:  # Numerical
-                if self.settings.coordOrder == self.settings.OrderYX:
+                if self.settings.coordOrder == CoordOrder.OrderYX:
                     s = '{} - Y,X'.format(crsID)
                 else:
                     s = '{} - X,Y'.format(crsID)
@@ -215,7 +215,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             s = 'Maidenhead Grid Locator'
         elif self.settings.captureProjIsCustomCRS():
             if self.settings.otherNumberFormat == 0:  # Numerical
-                if self.settings.coordOrder == self.settings.OrderYX:
+                if self.settings.coordOrder == CoordOrder.OrderYX:
                     s = '{} - Y,X'.format(self.settings.captureCustomCRSID())
                 else:
                     s = '{} - X,Y'.format(self.settings.captureCustomCRSID())

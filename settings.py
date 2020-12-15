@@ -1,4 +1,5 @@
 import os
+import enum
 from . import mapProviders
 
 from qgis.PyQt.uic import loadUiType
@@ -11,10 +12,24 @@ from .util import epsg4326
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/latLonSettings.ui'))
 
+@enum.unique
+class CopyExtent(enum.IntEnum):
+    WSEN = 0
+    WESN = 1
+    SWNE = 2
+    Poly1 = 3
+    Poly2 = 4
+    PolyWkt = 5
+    MapProxy = 6
+    GeoServer = 7
 
-class Settings():
+@enum.unique
+class CoordOrder(enum.IntEnum):
     OrderYX = 0
     OrderXY = 1
+
+
+class Settings():
     userMapProviders = []
 
     def __init__(self):
@@ -52,7 +67,7 @@ class Settings():
 
         ### BBOX CAPTURE SETTINGS ###
         self.bBoxCrs = int(qset.value('/LatLonTools/BBoxCrs', 0))  # Specifies WGS 84
-        self.bBoxFormat = int(qset.value('/LatLonTools/BBoxFormat', 0))
+        self.bBoxFormat = int(qset.value('/LatLonTools/BBoxFormat', CopyExtent.WSEN))
         self.bBoxDelimiter = qset.value('/LatLonTools/BBoxDelimiter', ',')
         self.bBoxDigits = int(qset.value('/LatLonTools/BBoxDigits', 8))
         self.bBoxPrefix = qset.value('/LatLonTools/BBoxPrefix', '')
@@ -60,7 +75,7 @@ class Settings():
 
         ### COORDINATE CONVERSION SETTINGS ###
         self.converterCustomCrsAuthId = qset.value('/LatLonTools/ConverterCustomCrsId', 'EPSG:4326')
-        self.converterCoordOrder = int(qset.value('/LatLonTools/ConverterCoordOrder', self.OrderYX))
+        self.converterCoordOrder = int(qset.value('/LatLonTools/ConverterCoordOrder', CoordOrder.OrderYX))
         self.converterDDPrec = int(qset.value('/LatLonTools/ConverterDDPrecision', 2))
         self.converter4326DDPrec = int(qset.value('/LatLonTools/Converter4326DDPrecision', 8))
         self.converterDmsPrec = int(qset.value('/LatLonTools/ConverterDmsPrecision', 0))
@@ -135,8 +150,6 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeUTM = 5
     ProjectionTypeGeohash = 6
     ProjectionTypeMaidenhead = 7
-    OrderYX = 0
-    OrderXY = 1
 
     def __init__(self, lltools, iface, parent):
         super(SettingsWidget, self).__init__(parent)
@@ -217,7 +230,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
         self.wgs84NumberFormatComboBox.setCurrentIndex(0)
         self.otherNumberFormatComboBox.setCurrentIndex(0)
-        self.coordOrderComboBox.setCurrentIndex(self.OrderYX)
+        self.coordOrderComboBox.setCurrentIndex(CoordOrder.OrderYX)
         self.otherTxt.setText("")
         self.delimComboBox.setCurrentIndex(1)
         self.precisionSpinBox.setValue(0)
@@ -236,7 +249,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
-        self.zoomToCoordOrderComboBox.setCurrentIndex(self.OrderYX)
+        self.zoomToCoordOrderComboBox.setCurrentIndex(CoordOrder.OrderYX)
         self.persistentMarkerCheckBox.setCheckState(Qt.Checked)
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
 
@@ -250,7 +263,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### Multi-zoom Settings ###
         self.multiZoomToProjectionComboBox.setCurrentIndex(0)  # WGS 84
         self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
-        self.multiCoordOrderComboBox.setCurrentIndex(self.OrderYX)
+        self.multiCoordOrderComboBox.setCurrentIndex(CoordOrder.OrderYX)
         self.qmlLineEdit.setText('')
         self.markerStyleComboBox.setCurrentIndex(0)
         self.extraDataSpinBox.setValue(0)
@@ -292,7 +305,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureProjection = int(qset.value('/LatLonTools/CaptureProjection', self.ProjectionTypeWgs84))
         self.delimiter = qset.value('/LatLonTools/Delimiter', ', ')
         self.dmsPrecision = int(qset.value('/LatLonTools/DMSPrecision', 0))
-        self.coordOrder = int(qset.value('/LatLonTools/CoordOrder', self.OrderYX))
+        self.coordOrder = int(qset.value('/LatLonTools/CoordOrder', CoordOrder.OrderYX))
         self.wgs84NumberFormat = int(qset.value('/LatLonTools/WGS84NumberFormat', 0))
         self.otherNumberFormat = int(qset.value('/LatLonTools/OtherNumberFormat', 0))
         self.plusCodesLength = int(qset.value('/LatLonTools/PlusCodesLength', 10))
@@ -301,7 +314,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureSuffix = qset.value('/LatLonTools/CaptureSuffix', '')
 
         ### ZOOM TO SETTINGS ###
-        self.zoomToCoordOrder = int(qset.value('/LatLonTools/ZoomToCoordOrder', self.OrderYX))
+        self.zoomToCoordOrder = int(qset.value('/LatLonTools/ZoomToCoordOrder', CoordOrder.OrderYX))
         self.zoomToProjection = int(qset.value('/LatLonTools/ZoomToCoordType', 0))
         self.persistentMarker = int(qset.value('/LatLonTools/PersistentMarker', Qt.Checked))
         self.zoomToCustomCrsAuthId = qset.value('/LatLonTools/ZoomToCustomCrsId', 'EPSG:4326')
@@ -309,7 +322,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### MULTI-ZOOM CUSTOM QML STYLE ###
         self.multiZoomToProjection = int(qset.value('/LatLonTools/MultiZoomToProjection', 0))
-        self.multiCoordOrder = int(qset.value('/LatLonTools/MultiCoordOrder', self.OrderYX))
+        self.multiCoordOrder = int(qset.value('/LatLonTools/MultiCoordOrder', CoordOrder.OrderYX))
         self.multiZoomNumCol = int(qset.value('/LatLonTools/MultiZoomExtraData', 0))
         self.multiZoomStyleID = int(qset.value('/LatLonTools/MultiZoomStyleID', 0))
         self.qmlStyle = qset.value('/LatLonTools/QmlStyle', '')

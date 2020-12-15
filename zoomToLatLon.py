@@ -8,6 +8,7 @@ from qgis.PyQt.QtCore import QTextCodec
 from qgis.gui import QgsVertexMarker
 from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes
 from .util import epsg4326, parseDMSString
+from .settings import CoordOrder
 from .utm import isUtm, utm2Point
 # import traceback
 
@@ -186,7 +187,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             coords = re.split(r'[\s,;:]+', text, 1)
             if len(coords) < 2:
                 raise ValueError('Invalid Coordinates')
-            if self.settings.zoomToCoordOrder == self.settings.OrderYX:
+            if self.settings.zoomToCoordOrder == CoordOrder.OrderYX:
                 lat = float(coords[0])
                 lon = float(coords[1])
             else:
