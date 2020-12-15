@@ -40,6 +40,9 @@ code {
 <p><strong><em>Lat Lon Tools</em></strong> makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, Geohash, and Plus Code (Open Location Code) coordinate support to QGIS. When working with <strong>Google Earth</strong>, <strong>Google Maps</strong> or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default <strong><em>Lat Lon Tools</em></strong> uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in <strong><em>Lat Lon Tools</em></strong>.</p>
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
+<p>Here are the expanded <strong><em>Copy Extents to Clipboard</em></strong> menu items.</p>
+<div style="text-align:center"><img src="doc/menu2.jpg" alt="Lat Lon Tools Plugin"></div>
+
 <p>Some of the functions can be accessed from the <strong><em>Lat Lon Tools</em></strong> toolbar. If for some reason the toolbar is missing, select the menu item <strong><em>View-&gt;Toolbars</em></strong> and make sure <strong><em>Lat Lon Tools Toolbar</em></strong> is enabled. The conversion algorithms can be run from the QGIS Processing Toolbox.</p>
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
@@ -90,6 +93,15 @@ code {
 <p><div style="text-align:center"><img src="doc/multizoom.jpg" alt="Multi-location Zoom"></div></p>
 <ul>
 <li>The <strong><em>Show all markers</em></strong> displays markers of all locations.</li>
+</ul>
+</li>
+<li>
+<p><strong><em>Copy Extents to Clipboard</em></strong> - There are four tools used to copy a bounding box extent to the clipboard. The bounding box format is determined in settings dialog. The output CRS for the bounding box extent is either that of the QGIS project or EPSG:4326. The four copy extent tools are:</p>
+<ul>
+<li><img src="images/copycanvas.png" alt="Copy canvas bounding box"> - Copy the canvas bounding box extent to the clipboard.</li>
+<li><img src="images/copyextent.png" alt="Copy selected area to an extent"> - Interactively select a region on the map to extract its bounding box extent and copy it to the clipboard.</li>
+<li><img src="images/copylayerextent.png" alt="Copy selected area to an extent"> - Copy the selected layer's extent. In some vector layers, this value may be estimated and not exact depending on how the layer was imported into QGIS.</li>
+<li><img src="images/copyselectedlayerextent.png" alt="Copy selected area to an extent"> - Copy the bounding box extent of selected features in a vector layer. If no features are selected then nothing will be copied. If the layer is not a vector layer, then the bounding box extent of the layer will be copied. In some vector layers, the bounding box extent may be estimated and not exact depending on how the layer was imported into QGIS.</li>
 </ul>
 </li>
 <li>
@@ -153,9 +165,6 @@ code {
 <li><img src="images/pluscodes.png" alt="Plus Codes"> <strong><em>Point layer to Plus Codes</em></strong> - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.</li>
 </ul>
 <p><div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div></p>
-</li>
-<li>
-<p><img src="images/copycanvas.png" alt="Copy canvas bounding box"> <strong><em>Copy Canvas Bounding Box</em></strong> - Copy the canvas bounding box to the clipboard using one of the formats in settings.</p>
 </li>
 <li>
 <p><img src="doc/settings.png" alt="Settings"> <strong><em>Settings</em></strong> - Displays the settings dialog box (see below).</p>
@@ -307,7 +316,7 @@ code {
 <ul>
 <li><strong><em>Number of extra data fields</em></strong> - Besides <em>Latitude</em>, <em>Longitude</em>, and <em>Label</em>, the user can add up to 10 additional data fields which are labeled as <em>Data1</em>, <em>Data2</em>, ... <em>Data10</em>. By default this is set to 0.</li>
 </ul>
-<h3>BBox Capture Settings</h3>
+<h3>BBox (Bounding Box Extent) Capture Settings</h3>
 <div style="text-align:center"><img src="doc/settings5.jpg" alt="BBOX Capture Settings"></div>
 
 <p>These are the settings for the bounding box capture to clipboard tool.</p>

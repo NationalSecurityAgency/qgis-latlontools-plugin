@@ -1,6 +1,6 @@
 from qgis.PyQt.QtCore import Qt, QTimer, QUrl
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMenu, QApplication
+from qgis.PyQt.QtWidgets import QAction, QMenu, QApplication, QToolButton
 from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
 from qgis.gui import QgsRubberBand
 import processing
@@ -11,6 +11,7 @@ from .multizoom import MultiZoomWidget
 from .settings import SettingsWidget, settings
 from .provider import LatLonToolsProvider
 from .util import epsg4326
+from .captureExtent import getExtentString
 import os
 
 
@@ -19,6 +20,7 @@ class LatLonTools:
     convertCoordinateDialog = None
     mapTool = None
     showMapTool = None
+    copyExtentTool = None
 
     def __init__(self, iface):
         self.iface = iface
@@ -76,6 +78,39 @@ class LatLonTools:
         self.multiZoomDialog.hide()
         self.multiZoomDialog.setFloating(True)
 
+        menu = QMenu()
+        # Add Interface for copying the canvas extent
+        icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.png")
+        self.copyCanvasAction = menu.addAction(icon, 'Copy Canvas Extent', self.copyCanvas)
+        self.copyCanvasAction.setObjectName('latLonToolsCopyCanvasExtent')
+        # Add Interface for copying an interactive extent
+        icon = QIcon(os.path.dirname(__file__) + "/images/copyextent.png")
+        self.copyExtentAction = menu.addAction(icon, 'Copy Selected Area Extent', self.copyExtent)
+        self.copyExtentAction.setCheckable(True)
+        self.copyExtentAction.setObjectName('latLonToolsCopySelectedAreaExtent')
+        # Add Interface for copying a layer extent
+        icon = QIcon(os.path.dirname(__file__) + "/images/copylayerextent.png")
+        self.copyLayerExtentAction = menu.addAction(icon, 'Copy Layer Extent', self.copyLayerExtent)
+        self.copyLayerExtentAction.setObjectName('latLonToolsCopyLayerExtent')
+        # Add Interface for copying the extent of selected features
+        icon = QIcon(os.path.dirname(__file__) + "/images/copyselectedlayerextent.png")
+        self.copySelectedFeaturesExtentAction = menu.addAction(icon, 'Copy Selected Features Extent', self.copySelectedFeaturesExtent)
+        self.copySelectedFeaturesExtentAction.setObjectName('latLonToolsCopySelectedFeaturesExtent')
+        
+        # Add the copy extent tools to the menu
+        icon = QIcon(os.path.dirname(__file__) + '/images/copylayerextent.png')
+        self.copyExtentsAction = QAction(icon, 'Copy Extents to Clipboard', self.iface.mainWindow())
+        self.copyExtentsAction.setMenu(menu)
+        self.iface.addPluginToMenu('Lat Lon Tools', self.copyExtentsAction)
+
+        # Add the copy extent tools to the toolbar
+        self.copyExtentButton = QToolButton()
+        self.copyExtentButton.setMenu(menu)
+        self.copyExtentButton.setDefaultAction(self.copyCanvasAction)
+        self.copyExtentButton.setPopupMode(QToolButton.MenuButtonPopup)
+        self.copyExtentButton.triggered.connect(self.copyExtentTriggered)
+        self.copyExtentToolbar = self.toolbar.addWidget(self.copyExtentButton)
+
         # Create the coordinate converter menu
         icon = QIcon(':/images/themes/default/mIconProjectionEnabled.svg')
         self.convertCoordinatesAction = QAction(icon, "Coordinate Conversion", self.iface.mainWindow())
@@ -115,14 +150,6 @@ class LatLonTools:
         self.digitizeAction.setEnabled(False)
         self.toolbar.addAction(self.digitizeAction)
         self.iface.addPluginToMenu('Lat Lon Tools', self.digitizeAction)
-
-        # Add Interface for copying the canvas extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.png")
-        self.copyCanvasAction = QAction(icon, "Copy Canvas Bounding Box", self.iface.mainWindow())
-        self.copyCanvasAction.setObjectName('latLonToolsCopyCanvas')
-        self.copyCanvasAction.triggered.connect(self.copyCanvas)
-        self.toolbar.addAction(self.copyCanvasAction)
-        self.iface.addPluginToMenu("Lat Lon Tools", self.copyCanvasAction)
 
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(':/images/themes/default/mActionOptions.svg')
@@ -171,7 +198,7 @@ class LatLonTools:
         if self.showMapTool:
             self.canvas.unsetMapTool(self.showMapTool)
         self.iface.removePluginMenu('Lat Lon Tools', self.copyAction)
-        self.iface.removePluginMenu('Lat Lon Tools', self.copyCanvasAction)
+        self.iface.removePluginMenu('Lat Lon Tools', self.copyExtentsAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.externMapAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.zoomToAction)
         self.iface.removePluginMenu('Lat Lon Tools', self.multiZoomToAction)
@@ -184,7 +211,7 @@ class LatLonTools:
         self.iface.removeDockWidget(self.multiZoomDialog)
         # Remove Toolbar Icons
         self.iface.removeToolBarIcon(self.copyAction)
-        self.iface.removeToolBarIcon(self.copyCanvasAction)
+        self.iface.removeToolBarIcon(self.copyExtentToolbar)
         self.iface.removeToolBarIcon(self.zoomToAction)
         self.iface.removeToolBarIcon(self.externMapAction)
         self.iface.removeToolBarIcon(self.multiZoomToAction)
@@ -209,47 +236,69 @@ class LatLonTools:
             self.mapTool = CopyLatLonTool(self.settingsDialog, self.iface)
         self.canvas.setMapTool(self.mapTool)
 
+    def copyExtentTriggered(self, action):
+        self.copyExtentButton.setDefaultAction(action)
+        
+    def copyExtent(self):
+        if self.copyExtentTool is None:
+            from .captureExtent import CaptureExtentTool
+            self.copyExtentTool = CaptureExtentTool(self.iface, self)
+            self.copyExtentTool.setAction(self.copyExtentAction)
+        self.canvas.setMapTool(self.copyExtentTool)
+
+    def copyLayerExtent(self):
+        layer = self.iface.activeLayer()
+        if not layer or not layer.isValid():
+            return
+        if isinstance(layer, QgsVectorLayer) and (layer.featureCount() == 0):
+            self.iface.messageBar().pushMessage("", "This layer has no features - A bounding box cannot be calculated.", level=Qgis.Warning, duration=4)
+            return
+        src_crs = layer.crs()
+        extent = layer.extent()
+        if settings.bBoxCrs == 0:
+            dst_crs = epsg4326
+        else:
+            dst_crs = self.canvas.mapSettings().destinationCrs()
+        
+        outStr = getExtentString(extent, src_crs, dst_crs)
+        clipboard = QApplication.clipboard()
+        clipboard.setText(outStr)
+        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+
+    def copySelectedFeaturesExtent(self):
+        layer = self.iface.activeLayer()
+        if not layer or not layer.isValid():
+            return
+        if isinstance(layer, QgsVectorLayer) and (layer.featureCount() == 0):
+            self.iface.messageBar().pushMessage("", "This layer has no features - A bounding box cannot be calculated.", level=Qgis.Warning, duration=4)
+            return
+        if isinstance(layer, QgsVectorLayer):
+            extent = layer.boundingBoxOfSelected()
+            if extent.isNull():
+                self.iface.messageBar().pushMessage("", "No features were selected.", level=Qgis.Warning, duration=4)
+                return
+        else:
+            extent = layer.extent()
+        src_crs = layer.crs()
+        if settings.bBoxCrs == 0:
+            dst_crs = epsg4326
+        else:
+            dst_crs = self.canvas.mapSettings().destinationCrs()
+        
+        outStr = getExtentString(extent, src_crs, dst_crs)
+        clipboard = QApplication.clipboard()
+        clipboard.setText(outStr)
+        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+
     def copyCanvas(self):
         extent = self.iface.mapCanvas().extent()
-        canvasCrs = self.canvas.mapSettings().destinationCrs()
-        if settings.bBoxCrs == 0 and canvasCrs != epsg4326:
-            transform = QgsCoordinateTransform(canvasCrs, epsg4326, QgsProject.instance())
-            p1x, p1y = transform.transform(float(extent.xMinimum()), float(extent.yMinimum()))
-            p2x, p2y = transform.transform(float(extent.xMaximum()), float(extent.yMaximum()))
-            extent.set(p1x, p1y, p2x, p2y)
-        delim = settings.bBoxDelimiter
-        prefix = settings.bBoxPrefix
-        suffix = settings.bBoxSuffix
-        precision = settings.bBoxDigits
-        outStr = ''
-        minX = extent.xMinimum()
-        minY = extent.yMinimum()
-        maxX = extent.xMaximum()
-        maxY = extent.yMaximum()
-        if settings.bBoxFormat == 0:  # minX,minY,maxX,maxY - using the delimiter
-            outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
-                minX, delim, minY, delim, maxX, delim, maxY, prec=precision)
-        elif settings.bBoxFormat == 1:  # minX,maxX,minY,maxY - Using the selected delimiter'
-            outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
-                minX, delim, maxX, delim, minY, delim, maxY, prec=precision)
-        elif settings.bBoxFormat == 2:  # minY,minX,maxY,maxX - using the delimiter
-            outStr = '{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}{}{:.{prec}f}'.format(
-                minY, delim, minX, delim, maxY, delim, maxX, prec=precision)
-        elif settings.bBoxFormat == 3:  # x1 y1,x2 y2,x3 y3,x4 y4,x1 y1 - Polygon format
-            outStr = '{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f}'.format(
-                minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
-        elif settings.bBoxFormat == 4:  # x1,y1 x2,y2 x3,y3 x4,y4 x1,y1 - Polygon format
-            outStr = '{:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f} {:.{prec}f},{:.{prec}f}'.format(
-                minX, minY, minX, maxY, maxX, maxY, maxX, minY, minX, minY, prec=precision)
-        elif settings.bBoxFormat == 5:  # WKT Polygon
-            outStr = extent.asWktPolygon()
-        elif settings.bBoxFormat == 6:  # bbox: [minX, minY, maxX, maxY] - MapProxy
-            outStr = 'bbox: [{}, {}, {}, {}]'.format(
-                minX, minY, maxX, maxY)
-        elif settings.bBoxFormat == 7:  # bbox: [minX, minY, maxX, maxY] - MapProxy
-            outStr = 'bbox={},{},{},{}'.format(
-                minX, minY, maxX, maxY)
-        outStr = '{}{}{}'.format(prefix, outStr, suffix)
+        canvas_crs = self.canvas.mapSettings().destinationCrs()
+        if settings.bBoxCrs == 0:
+            dst_crs = epsg4326
+        else:
+            dst_crs = canvas_crs
+        
+        outStr = getExtentString(extent, canvas_crs, dst_crs)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
         self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
@@ -314,9 +363,9 @@ class LatLonTools:
         self.zoomToDialog.configure()
         self.multiZoomDialog.settingsChanged()
 
-    def zoomTo(self, srcCrs, lat, lon):
-        canvasCrs = self.canvas.mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(srcCrs, canvasCrs, QgsProject.instance())
+    def zoomTo(self, src_crs, lat, lon):
+        canvas_crs = self.canvas.mapSettings().destinationCrs()
+        transform = QgsCoordinateTransform(src_crs, canvas_crs, QgsProject.instance())
         x, y = transform.transform(float(lon), float(lat))
 
         rect = QgsRectangle(x, y, x, y)

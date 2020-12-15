@@ -4,6 +4,10 @@
 
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
+Here are the expanded ***Copy Extents to Clipboard*** menu items.
+
+<div style="text-align:center"><img src="doc/menu2.jpg" alt="Lat Lon Tools Plugin"></div>
+
 Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If for some reason the toolbar is missing, select the menu item ***View->Toolbars*** and make sure ***Lat Lon Tools Toolbar*** is enabled. The conversion algorithms can be run from the QGIS Processing Toolbox.
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
@@ -49,6 +53,13 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     <div style="text-align:center"><img src="doc/multizoom.jpg" alt="Multi-location Zoom"></div>
     
     * The ***Show all markers*** displays markers of all locations.
+
+* ***Copy Extents to Clipboard*** - There are four tools used to copy a bounding box extent to the clipboard. The bounding box format is determined in settings dialog. The output CRS for the bounding box extent is either that of the QGIS project or EPSG:4326. The four copy extent tools are:
+
+    * <img src="images/copycanvas.png" alt="Copy canvas bounding box"> - Copy the canvas bounding box extent to the clipboard.
+    * <img src="images/copyextent.png" alt="Copy selected area to an extent"> - Interactively select a region on the map to extract its bounding box extent and copy it to the clipboard.
+    * <img src="images/copylayerextent.png" alt="Copy selected area to an extent"> - Copy the selected layer's extent. In some vector layers, this value may be estimated and not exact depending on how the layer was imported into QGIS.
+    * <img src="images/copyselectedlayerextent.png" alt="Copy selected area to an extent"> - Copy the bounding box extent of selected features in a vector layer. If no features are selected then nothing will be copied. If the layer is not a vector layer, then the bounding box extent of the layer will be copied. In some vector layers, the bounding box extent may be estimated and not exact depending on how the layer was imported into QGIS.
 
 * <img src="doc/conversion.jpg" alt="Coordinate Conversion"> ***Coordinate Conversion Tool*** - This dialog provides a way to either type in a coordinate or grab a coordinate from the map and convert it to a number of different formats.
     
@@ -114,8 +125,6 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * <img src="images/pluscodes.png" alt="Plus Codes"> ***Point layer to Plus Codes*** - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.
 
     <div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div>
-
-* <img src="images/copycanvas.png" alt="Copy canvas bounding box"> ***Copy Canvas Bounding Box*** - Copy the canvas bounding box to the clipboard using one of the formats in settings.
 
 * <img src="doc/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.png" alt="Help"> ***Help*** - Displays this help page.
@@ -271,7 +280,7 @@ The ***Browse*** button allows selection of the .qml style file. When a .qml fil
     
 * ***Number of extra data fields*** - Besides *Latitude*, *Longitude*, and *Label*, the user can add up to 10 additional data fields which are labeled as *Data1*, *Data2*, ... *Data10*. By default this is set to 0.
 
-### BBox Capture Settings
+### BBox (Bounding Box Extent) Capture Settings
 
 <div style="text-align:center"><img src="doc/settings5.jpg" alt="BBOX Capture Settings"></div>
 

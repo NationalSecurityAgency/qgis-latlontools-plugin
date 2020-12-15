@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, Geohash, Maidenhead grid, and Plus Codes formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
-version=3.4.8
+version=3.5.0
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -29,6 +29,7 @@ hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.5.0 - Added the ability to copy different bounding box extents to the clipboard.
     3.4.8 - Added additional canvas capture bounding box format
     3.4.7 - Implemented more precise geohash algorithm
     3.4.6 - Implemented feature request #52
