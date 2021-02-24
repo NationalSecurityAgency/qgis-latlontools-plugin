@@ -56,10 +56,10 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 * ***Copy Extents to Clipboard*** - There are four tools used to copy a bounding box extent to the clipboard. The bounding box format is determined in settings dialog. The output CRS for the bounding box extent is either that of the QGIS project or EPSG:4326. The four copy extent tools are:
 
-    * <img src="images/copycanvas.png" alt="Copy canvas bounding box"> - Copy the canvas bounding box extent to the clipboard.
-    * <img src="images/copyextent.png" alt="Copy selected area to an extent"> - Interactively select a region on the map to extract its bounding box extent and copy it to the clipboard.
-    * <img src="images/copylayerextent.png" alt="Copy selected area to an extent"> - Copy the selected layer's extent. In some vector layers, this value may be estimated and not exact depending on how the layer was imported into QGIS.
-    * <img src="images/copyselectedlayerextent.png" alt="Copy selected area to an extent"> - Copy the bounding box extent of selected features in a vector layer. If no features are selected then nothing will be copied. If the layer is not a vector layer, then the bounding box extent of the layer will be copied. In some vector layers, the bounding box extent may be estimated and not exact depending on how the layer was imported into QGIS.
+    * <img src="images/copycanvas.svg" alt="Copy canvas bounding box"> - Copy the canvas bounding box extent to the clipboard.
+    * <img src="images/copyextent.svg" alt="Copy selected area to an extent"> - Interactively select a region on the map to extract its bounding box extent and copy it to the clipboard.
+    * <img src="images/copylayerextent.svg" alt="Copy selected area to an extent"> - Copy the selected layer's extent. In some vector layers, this value may be estimated and not exact depending on how the layer was imported into QGIS.
+    * <img src="images/copyselectedlayerextent.svg" alt="Copy selected area to an extent"> - Copy the bounding box extent of selected features in a vector layer. If no features are selected then nothing will be copied. If the layer is not a vector layer, then the bounding box extent of the layer will be copied. In some vector layers, the bounding box extent may be estimated and not exact depending on how the layer was imported into QGIS.
 
 * <img src="doc/conversion.jpg" alt="Coordinate Conversion"> ***Coordinate Conversion Tool*** - This dialog provides a way to either type in a coordinate or grab a coordinate from the map and convert it to a number of different formats.
     
@@ -75,7 +75,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * <img src="images/check.png" alt="Convert coordinate"> ***Convert coordinate*** updates all coordinate fields with values converted from this text field.
     * <img src="doc/copy.jpg" alt="Copy to clipboard"> ***Copy to clipboard*** copies the value in the text area onto the clipboard.
 
-* <img src="images/latLonDigitize.png" alt="Digitizing Tool"> ***Lat Lon Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
+* <img src="images/latLonDigitize.svg" alt="Digitizing Tool"> ***Lat Lon Digitizing Tool*** - This tool digitizes points and add features the selcted layer using the same coordinate input formats as the ***Zoom, to Latitude, Longitude***. A point vector layer must be selected and be edit mode for this tool to be enabled. When the user clicks on the tool, the following dialog is displayed.
     
     <div style="text-align:center"><img src="doc/addfeature.jpg" alt="Add Feature"></div>
     
@@ -84,10 +84,10 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     The projection of the input coordinates can be specified by the CRS drop down menu which has the following options:
     
     * <img src="images/wgs84Projection.png" alt="WGS84"> ***WGS84 Projection*** - This is the default specifying coordinates as latitudes and longitudes.
-    * <img src="images/mgrsProjection.png" alt="MGRS"> ***MGRS Coordinate*** - This specifies an MGRS coordinate.
-    * <img src="images/projProjection.png" alt="Project Projection"> ***Project Projection*** - With this selected, it is assumed that the input coordinates are in the projection of the project.
-    * <img src="images/customProjection.png" alt="Custome Projection"> ***New/Custom Projection*** - This allows the user to select any projection for the input coordinates.
-    * <img src="images/pluscodes.png" alt="Plus Codes"> ***Plus Codes Coordinate*** - This specifies a Plus Code coordinate.
+    * <img src="images/mgrsProjection.svg" alt="MGRS"> ***MGRS Coordinate*** - This specifies an MGRS coordinate.
+    * <img src="images/projProjection.svg" alt="Project Projection"> ***Project Projection*** - With this selected, it is assumed that the input coordinates are in the projection of the project.
+    * <img src="images/customProjection.svg" alt="Custome Projection"> ***New/Custom Projection*** - This allows the user to select any projection for the input coordinates.
+    * <img src="images/pluscodes.svg" alt="Plus Codes"> ***Plus Codes Coordinate*** - This specifies a Plus Code coordinate.
     
     The next drop down menu specifies whether the coordinates are listed as **Y,X (Latitude, Longitude)** or **X,Y (Longitude, Latitude)**. If the coordinate uses **N, S, E, W** then these take presidence and this setting is ignored.
     
@@ -118,11 +118,11 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     
     <div style="text-align:center"><img src="doc/geom2mgrs.jpg" alt="MGRS to Geometry"></div>
 
-    * <img src="images/pluscodes.png" alt="Plus Codes to point layer"> ***Plus Codes to point layer*** - Convert a Plus Codes field from a table or vector layer into a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
+    * <img src="images/pluscodes.svg" alt="Plus Codes to point layer"> ***Plus Codes to point layer*** - Convert a Plus Codes field from a table or vector layer into a new point vector layer where each record is converted to WGS 84 (EPSG:4326) geometry.
 
     <div style="text-align:center"><img src="doc/pluscodes2geom.jpg" alt="Plus Codes to point layer"></div>
 
-    * <img src="images/pluscodes.png" alt="Plus Codes"> ***Point layer to Plus Codes*** - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.
+    * <img src="images/pluscodes.svg" alt="Plus Codes"> ***Point layer to Plus Codes*** - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.
 
     <div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div>
 

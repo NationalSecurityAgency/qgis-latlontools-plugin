@@ -13,7 +13,7 @@
    version="1.1"
    id="svg4566"
    sodipodi:docname="latLonDigitize.svg"
-   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
    inkscape:export-filename="C:\Users\cjhamil\Documents\GitHub\qgis-latlontools-plugin\images\latLonDigitize.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -47,10 +47,11 @@
      inkscape:zoom="26"
      inkscape:cx="8.4041679"
      inkscape:cy="10.25601"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-x="-8"
+     inkscape:window-y="6"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g4564" />
+     inkscape:current-layer="g4564"
+     inkscape:document-rotation="0" />
   <linearGradient
      gradientUnits="userSpaceOnUse"
      x1="-10"
@@ -71,17 +72,18 @@
   <g
      transform="translate(0,-8)"
      id="g4564">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#8cbe8c;fill-opacity:1;stroke:#4c4d4c;stroke-width:0.37795275;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.93333333"
-       x="3.3076923"
-       y="17.923077"
-       id="text4576"><tspan
-         sodipodi:role="line"
-         id="tspan4574"
-         x="3.3076923"
-         y="17.923077"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.33333302px;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, Bold';fill:#8cbe8c;fill-opacity:1;stroke:#4c4d4c;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.93333333">X,Y</tspan></text>
+    <path
+       d="M 3.8942791,16.345933 5.7093779,13.695225 4.1820386,11.33781 Q 3.966219,10.994712 3.8555422,10.751223 3.7503993,10.5022 3.7503993,10.275313 q 0,-0.232421 0.204752,-0.4150379 0.2102858,-0.1881505 0.5091131,-0.1881505 0.3430979,0 0.5312484,0.204752 0.1936843,0.1992184 0.5312484,0.7470684 l 1.2174443,1.970046 1.3004519,-1.970046 q 0.1604813,-0.249023 0.271158,-0.426106 0.1162106,-0.177083 0.2213535,-0.2932932 0.1051429,-0.1162106 0.2324212,-0.171549 0.1328121,-0.060872 0.3043611,-0.060872 0.3098949,0 0.5035792,0.1881505 0.1992182,0.1826167 0.1992182,0.4371727 0,0.370767 -0.4261055,1.007159 l -1.5992791,2.390618 1.7210235,2.650708 q 0.2324212,0.348632 0.3375641,0.581053 0.1051429,0.226887 0.1051429,0.431639 0,0.193685 -0.094075,0.354166 -0.094075,0.160481 -0.2656242,0.254556 -0.171549,0.09408 -0.3873687,0.09408 -0.2324212,0 -0.3929024,-0.09961 Q 8.6146427,17.867738 8.5150336,17.723858 8.4154245,17.579979 8.1442665,17.164941 L 6.7165363,14.918203 5.2002648,17.231347 q -0.1770828,0.276692 -0.2545565,0.387369 -0.07194,0.110676 -0.1770829,0.215819 -0.1051429,0.105143 -0.2490227,0.166015 -0.1438797,0.06087 -0.3375641,0.06087 -0.2988272,0 -0.4980453,-0.182617 -0.1936844,-0.182617 -0.1936844,-0.531248 0,-0.409504 0.4039702,-1.001625 z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.3333px;line-height:125%;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, Bold';letter-spacing:0px;word-spacing:0px;fill:#8cbe8c;fill-opacity:1;stroke:#4c4d4c;stroke-width:0.377953;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.933333"
+       id="path840" />
+    <path
+       d="m 11.957081,18.07249 q -0.365233,0 -0.630858,-0.221353 -0.265624,-0.226888 -0.265624,-0.630858 0,-0.348632 0.26009,-0.586587 0.260091,-0.237955 0.614256,-0.237955 0.265625,0 0.481444,0.14388 0.21582,0.14388 0.337564,0.426106 0.121745,0.276692 0.121745,0.686196 0,0.54785 -0.232421,1.02376 -0.232422,0.481443 -0.569986,0.758135 -0.33203,0.282226 -0.603188,0.282226 -0.171549,0 -0.282226,-0.116211 -0.105143,-0.110676 -0.105143,-0.26009 0,-0.226887 0.226888,-0.365233 0.647459,-0.3597 0.647459,-0.902016 z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.3333px;line-height:125%;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, Bold';letter-spacing:0px;word-spacing:0px;fill:#8cbe8c;fill-opacity:1;stroke:#4c4d4c;stroke-width:0.377953;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.933333"
+       id="path842" />
+    <path
+       d="m 16.395219,17.059798 v -2.573235 l -1.981114,-3.07128 q -0.26009,-0.415037 -0.370767,-0.647459 -0.105143,-0.232421 -0.105143,-0.40397 0,-0.282225 0.21582,-0.4869774 0.221353,-0.204752 0.542316,-0.204752 0.337564,0 0.509113,0.1936843 0.177083,0.1881501 0.525714,0.7581361 l 1.516272,2.462557 1.532873,-2.462557 q 0.138346,-0.226888 0.232421,-0.381835 0.09408,-0.154948 0.204752,-0.2877597 0.116211,-0.1383459 0.254557,-0.2102858 0.138346,-0.07194 0.337564,-0.07194 0.309895,0 0.514647,0.204752 0.210285,0.1992185 0.210285,0.4648425 0,0.21582 -0.105142,0.431639 -0.105143,0.21582 -0.3597,0.597655 l -2.030918,3.11555 v 2.573235 q 0,0.503579 -0.232422,0.752602 -0.232421,0.249023 -0.59212,0.249023 -0.365233,0 -0.592121,-0.243489 -0.226887,-0.249023 -0.226887,-0.758136 z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.3333px;line-height:125%;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, Bold';letter-spacing:0px;word-spacing:0px;fill:#8cbe8c;fill-opacity:1;stroke:#4c4d4c;stroke-width:0.377953;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.933333"
+       id="path844" />
     <g
        transform="translate(33,8)"
        id="g4556">

@@ -112,7 +112,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         return 'point2pluscodes'
 
     def icon(self):
-        return QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
+        return QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
 
     def displayName(self):
         return 'Point layer to Plus Codes'
@@ -220,7 +220,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
         return 'pluscodes2point'
 
     def icon(self):
-        return QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
+        return QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
 
     def displayName(self):
         return 'Plus Codes to point layer'

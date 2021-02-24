@@ -80,25 +80,25 @@ class LatLonTools:
 
         menu = QMenu()
         # Add Interface for copying the canvas extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.png")
+        icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.svg")
         self.copyCanvasAction = menu.addAction(icon, 'Copy Canvas Extent', self.copyCanvas)
         self.copyCanvasAction.setObjectName('latLonToolsCopyCanvasExtent')
         # Add Interface for copying an interactive extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copyextent.png")
+        icon = QIcon(os.path.dirname(__file__) + "/images/copyextent.svg")
         self.copyExtentAction = menu.addAction(icon, 'Copy Selected Area Extent', self.copyExtent)
         self.copyExtentAction.setCheckable(True)
         self.copyExtentAction.setObjectName('latLonToolsCopySelectedAreaExtent')
         # Add Interface for copying a layer extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copylayerextent.png")
+        icon = QIcon(os.path.dirname(__file__) + "/images/copylayerextent.svg")
         self.copyLayerExtentAction = menu.addAction(icon, 'Copy Layer Extent', self.copyLayerExtent)
         self.copyLayerExtentAction.setObjectName('latLonToolsCopyLayerExtent')
         # Add Interface for copying the extent of selected features
-        icon = QIcon(os.path.dirname(__file__) + "/images/copyselectedlayerextent.png")
+        icon = QIcon(os.path.dirname(__file__) + "/images/copyselectedlayerextent.svg")
         self.copySelectedFeaturesExtentAction = menu.addAction(icon, 'Copy Selected Features Extent', self.copySelectedFeaturesExtent)
         self.copySelectedFeaturesExtentAction.setObjectName('latLonToolsCopySelectedFeaturesExtent')
         
         # Add the copy extent tools to the menu
-        icon = QIcon(os.path.dirname(__file__) + '/images/copylayerextent.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/copylayerextent.svg')
         self.copyExtentsAction = QAction(icon, 'Copy Extents to Clipboard', self.iface.mainWindow())
         self.copyExtentsAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.copyExtentsAction)
@@ -127,7 +127,7 @@ class LatLonTools:
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
         action = menu.addAction(icon, "Point layer to fields", self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
-        icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
         action = menu.addAction(icon, "Plus Codes to point layer", self.PlusCodestoLayer)
         action.setObjectName('latLonToolsPlusCodes2Geom')
         action = menu.addAction(icon, "Point layer to Plus Codes", self.toPlusCodes)
@@ -143,7 +143,7 @@ class LatLonTools:
         self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
 
         # Add to Digitize Toolbar
-        icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.svg')
         self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
         self.digitizeAction.setObjectName('latLonToolsDigitize')
         self.digitizeAction.triggered.connect(self.digitizeClicked)
