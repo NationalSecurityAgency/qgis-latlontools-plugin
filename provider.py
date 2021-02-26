@@ -22,7 +22,7 @@ class LatLonToolsProvider(QgsProcessingProvider):
         self.addAlgorithm(Field2GeomAlgorithm())
 
     def icon(self):
-        return QIcon(os.path.dirname(__file__) + '/images/copyicon.png')
+        return QIcon(os.path.dirname(__file__) + '/images/copyicon.svg')
 
     def id(self):
         return 'latlontools'

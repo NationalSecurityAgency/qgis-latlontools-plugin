@@ -55,14 +55,14 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.inputXYOrder = settings.converterCoordOrder
         self.clearFormButton.setIcon(QIcon(':/images/themes/default/mIconClearText.svg'))
         self.clearFormButton.clicked.connect(self.clearForm)
-        self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordinate_capture.png"))
+        self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordCapture.svg"))
         self.coordCaptureButton.clicked.connect(self.startCapture)
         self.zoomButton.setIcon(QIcon(':/images/themes/default/mActionZoomIn.svg'))
         self.zoomButton.clicked.connect(self.zoomTo)
         self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
         self.optionsButton.clicked.connect(self.showSettings)
 
-        icon = QIcon(os.path.dirname(__file__) + "/images/check.png")
+        icon = QIcon(':/images/themes/default/algorithms/mAlgorithmCheckGeometry.svg')
         self.wgs84CommitButton.setIcon(icon)
         self.projCommitButton.setIcon(icon)
         self.customCommitButton.setIcon(icon)

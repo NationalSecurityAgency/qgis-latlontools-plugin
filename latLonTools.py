@@ -37,7 +37,7 @@ class LatLonTools:
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
 
         # Add Interface for Coordinate Capturing
-        icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.png")
+        icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.svg")
         self.copyAction = QAction(icon, "Copy/Display Coordinate", self.iface.mainWindow())
         self.copyAction.setObjectName('latLonToolsCopy')
         self.copyAction.triggered.connect(self.startCapture)
@@ -55,7 +55,7 @@ class LatLonTools:
         self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
 
         # Add Interface for Zoom to Coordinate
-        icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.png")
+        icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.svg")
         self.zoomToAction = QAction(icon, "Zoom To Coordinate", self.iface.mainWindow())
         self.zoomToAction.setObjectName('latLonToolsZoom')
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
@@ -67,7 +67,7 @@ class LatLonTools:
         self.zoomToDialog.hide()
 
         # Add Interface for Multi point zoom
-        icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.svg')
         self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
         self.multiZoomToAction.setObjectName('latLonToolsMultiZoom')
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)

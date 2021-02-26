@@ -43,8 +43,8 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         self.captureCoordinate.capturePoint.connect(self.capturedPoint)
         self.captureCoordinate.captureStopped.connect(self.stopCapture)
 
-        self.addButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/check.png"))
-        self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordinate_capture.png"))
+        self.addButton.setIcon(QIcon(':/images/themes/default/algorithms/mAlgorithmCheckGeometry.svg'))
+        self.coordCaptureButton.setIcon(QIcon(os.path.dirname(__file__) + "/images/coordCapture.svg"))
         self.coordCaptureButton.clicked.connect(self.startCapture)
         self.openButton.setIcon(QIcon(':/images/themes/default/mActionFileOpen.svg'))
         self.saveButton.setIcon(QIcon(':/images/themes/default/mActionFileSave.svg'))
