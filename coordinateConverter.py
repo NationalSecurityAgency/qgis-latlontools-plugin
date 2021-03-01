@@ -42,10 +42,10 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.captureCoordinate.captureStopped.connect(self.stopCapture)
 
         self.xymenu = QMenu()
-        icon = QIcon(os.path.dirname(__file__) + '/images/yx.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/yx.svg')
         a = self.xymenu.addAction(icon, "Y, X (Lat, Lon) Order")
         a.setData(0)
-        icon = QIcon(os.path.dirname(__file__) + '/images/xy.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/xy.svg')
         a = self.xymenu.addAction(icon, "X, Y (Lon, Lat) Order")
         a.setData(1)
         self.xyButton.setIconSize(QSize(16, 16))

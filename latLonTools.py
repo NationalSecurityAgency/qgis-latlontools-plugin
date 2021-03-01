@@ -121,10 +121,10 @@ class LatLonTools:
 
         # Create the conversions menu
         menu = QMenu()
-        icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.svg')
         action = menu.addAction(icon, "Fields to point layer", self.field2geom)
         action.setObjectName('latLonToolsField2Geom')
-        icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.svg')
         action = menu.addAction(icon, "Point layer to fields", self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
@@ -132,10 +132,10 @@ class LatLonTools:
         action.setObjectName('latLonToolsPlusCodes2Geom')
         action = menu.addAction(icon, "Point layer to Plus Codes", self.toPlusCodes)
         action.setObjectName('latLonToolsGeom2PlusCodes')
-        icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.svg')
         action = menu.addAction(icon, "MGRS to point layer", self.MGRStoLayer)
         action.setObjectName('latLonToolsMGRS2Geom')
-        icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.svg')
         action = menu.addAction(icon, "Point layer to MGRS", self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
         self.conversionsAction = QAction(icon, "Conversions", self.iface.mainWindow())
@@ -161,7 +161,7 @@ class LatLonTools:
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
 
         # Help
-        icon = QIcon(os.path.dirname(__file__) + '/images/help.png')
+        icon = QIcon(os.path.dirname(__file__) + '/images/help.svg')
         self.helpAction = QAction(icon, "Help", self.iface.mainWindow())
         self.helpAction.setObjectName('latLonToolsHelp')
         self.helpAction.triggered.connect(self.help)

@@ -320,7 +320,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         return 'geom2field'
 
     def icon(self):
-        return QIcon(os.path.dirname(__file__) + '/images/geom2field.png')
+        return QIcon(os.path.dirname(__file__) + '/images/geom2field.svg')
 
     def displayName(self):
         return 'Point layer to fields'

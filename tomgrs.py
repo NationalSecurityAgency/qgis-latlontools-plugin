@@ -106,7 +106,7 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         return 'point2mgrs'
 
     def icon(self):
-        return QIcon(os.path.dirname(__file__) + '/images/point2mgrs.png')
+        return QIcon(os.path.dirname(__file__) + '/images/point2mgrs.svg')
 
     def displayName(self):
         return 'Point layer to MGRS'

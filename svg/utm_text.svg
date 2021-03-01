@@ -16,7 +16,7 @@
    version="1.1"
    id="svg907"
    sodipodi:docname="utm.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    inkscape:export-filename="W:\My Documents\GitHub\qgis-latlontools-plugin\images\utm.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -98,7 +98,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1003"
+     inkscape:window-height="918"
      id="namedview909"
      showgrid="false"
      inkscape:zoom="33.75"
@@ -107,8 +107,7 @@
      inkscape:window-x="-8"
      inkscape:window-y="6"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg907"
-     inkscape:document-rotation="0" />
+     inkscape:current-layer="svg907" />
   <linearGradient
      id="a"
      gradientUnits="userSpaceOnUse"
@@ -188,21 +187,18 @@
      id="path893"
      inkscape:connector-curvature="0"
      style="fill:none;stroke:#4774b4;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round" />
-  <g
-     aria-label="UTM"
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:12px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.37795276;stroke-miterlimit:4;stroke-dasharray:none;paint-order:normal;stroke-linejoin:round;"
+     x="0.029629679"
+     y="11.525926"
      id="text5048"
-     style="font-style:normal;font-weight:normal;font-size:12px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.377953;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal">
-    <path
-       d="M 0.87338234,8.3696657 V 4.6977791 q 0,-0.4687515 0.20833396,-0.7031273 0.2135424,-0.2343757 0.5572935,-0.2343757 0.3593761,0 0.5677101,0.2343757 0.2135423,0.2343758 0.2135423,0.7031273 v 3.7552202 q 0,0.640627 0.1406255,1.07292 0.1458338,0.4270847 0.5104183,0.6666687 0.3645844,0.234376 1.0208365,0.234376 0.9062529,0 1.2812541,-0.4791683 Q 5.7483977,9.4634191 5.7483977,8.4842494 V 4.6977791 q 0,-0.4739599 0.208334,-0.7031273 0.208334,-0.2343757 0.5572935,-0.2343757 0.3489594,0 0.5625017,0.2343757 0.2187507,0.2291674 0.2187507,0.7031273 v 3.6718866 q 0,0.8958361 -0.1770839,1.4947964 -0.1718755,0.5989599 -0.656252,1.0520869 -0.416668,0.385418 -0.9687531,0.562501 -0.5520851,0.177084 -1.2916707,0.177084 -0.8802112,0 -1.5156298,-0.1875 Q 2.0504694,11.275925 1.6494265,10.88009 1.2483835,10.479047 1.0608829,9.8592537 0.87338234,9.2342517 0.87338234,8.3696657 Z"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, ';fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.377953;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-       id="path858" />
-    <path
-       d="m 13.925507,5.1665305 h -1.687505 v 5.5468925 q 0,0.479168 -0.213542,0.713544 -0.213543,0.229167 -0.552085,0.229167 -0.343751,0 -0.562502,-0.234375 -0.213542,-0.234376 -0.213542,-0.708336 V 5.1665305 H 9.0088252 q -0.3958346,0 -0.5885435,-0.1718755 -0.192709,-0.1770839 -0.192709,-0.4635431 0,-0.296876 0.1979173,-0.4687515 0.2031256,-0.1718756 0.5833352,-0.1718756 h 4.9166818 q 0.401043,0 0.593752,0.1770839 0.197918,0.1770839 0.197918,0.4635432 0,0.2864592 -0.197918,0.4635431 -0.197917,0.1718755 -0.593752,0.1718755 z"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, ';fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.377953;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-       id="path860" />
-    <path
-       d="M 18.211979,10.37488 16.988017,5.5102816 v 5.2708504 q 0,0.437501 -0.197917,0.656252 -0.192709,0.21875 -0.515627,0.21875 -0.312501,0 -0.510418,-0.213542 -0.197917,-0.218751 -0.197917,-0.66146 V 4.7394459 q 0,-0.5000016 0.260417,-0.6718772 0.260418,-0.1770839 0.703128,-0.1770839 h 0.479168 q 0.432293,0 0.625002,0.078125 0.197917,0.078125 0.291667,0.2812509 0.09375,0.2031256 0.213543,0.6614604 L 19.248441,9.093626 20.35782,4.9113211 q 0.119792,-0.4583348 0.213542,-0.6614604 0.09375,-0.2031257 0.286459,-0.2812509 0.197917,-0.078125 0.630211,-0.078125 H 21.9672 q 0.442709,0 0.703127,0.1770839 0.260417,0.1718756 0.260417,0.6718772 v 6.0416861 q 0,0.437501 -0.197917,0.656252 -0.192709,0.21875 -0.520835,0.21875 -0.307293,0 -0.50521,-0.21875 -0.197917,-0.218751 -0.197917,-0.656252 V 5.5102816 L 20.284903,10.37488 q -0.119792,0.47396 -0.197918,0.697919 -0.07292,0.218751 -0.276042,0.401043 -0.203126,0.182292 -0.562502,0.182292 -0.270834,0 -0.458335,-0.119792 -0.1875,-0.114583 -0.291667,-0.296876 -0.104167,-0.182292 -0.166667,-0.401043 -0.05729,-0.223959 -0.119793,-0.463543 z"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, ';fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.377953;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-       id="path862" />
-  </g>
+     inkscape:export-filename="W:\My Documents\GitHub\qgis-latlontools-plugin\images\text5048.png"
+     inkscape:export-xdpi="96"
+     inkscape:export-ydpi="96"><tspan
+       sodipodi:role="line"
+       id="tspan5046"
+       x="0.029629679"
+       y="11.525926"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.66666698px;font-family:'Arial Rounded MT Bold';-inkscape-font-specification:'Arial Rounded MT Bold, ';stroke:#000000;stroke-opacity:1;stroke-width:0.37795276;stroke-miterlimit:4;stroke-dasharray:none;paint-order:normal;stroke-linejoin:round;fill:#000000;fill-opacity:1;">UTM</tspan></text>
 </svg>

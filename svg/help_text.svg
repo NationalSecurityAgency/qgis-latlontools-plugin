@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="192"
+   inkscape:export-xdpi="192"
+   inkscape:export-filename="W:\My Documents\GitHub\qgis-kmltools-plugin\icons\help.png"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
+   sodipodi:docname="help_text.svg"
+   id="svg14"
+   version="1.1"
+   width="24"
+   height="24">
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:current-layer="svg14"
+     inkscape:window-maximized="0"
+     inkscape:window-y="38"
+     inkscape:window-x="107"
+     inkscape:cy="15.918668"
+     inkscape:cx="13.896963"
+     inkscape:zoom="16.932306"
+     showgrid="false"
+     id="namedview16"
+     inkscape:window-height="1026"
+     inkscape:window-width="1349"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke:#497db4;stroke-width:1.74097;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.680315;stroke-opacity:1;paint-order:normal"
+     id="path840"
+     cx="12.004747"
+     cy="12.004747"
+     r="11.007354" />
+  <circle
+     style="fill:#497db4;fill-opacity:1;stroke:none;stroke-width:2.80703;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.680315;stroke-opacity:1;paint-order:stroke fill markers"
+     id="circle842"
+     cx="12.004747"
+     cy="12.004747"
+     r="8.3049202" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.6667px;line-height:1.25;font-family:Elephant;-inkscape-font-specification:Elephant;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
+     x="8.868742"
+     y="18.864759"
+     id="text846"><tspan
+       sodipodi:role="line"
+       id="tspan844"
+       x="8.868742"
+       y="18.864759">i</tspan></text>
+</svg>

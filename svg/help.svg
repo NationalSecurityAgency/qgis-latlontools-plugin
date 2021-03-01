@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="192"
+   inkscape:export-xdpi="192"
+   inkscape:export-filename="W:\My Documents\GitHub\qgis-kmltools-plugin\icons\help.png"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
+   sodipodi:docname="help.svg"
+   id="svg14"
+   version="1.1"
+   width="24"
+   height="24">
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:current-layer="svg14"
+     inkscape:window-maximized="0"
+     inkscape:window-y="38"
+     inkscape:window-x="107"
+     inkscape:cy="15.918668"
+     inkscape:cx="13.896963"
+     inkscape:zoom="16.932306"
+     showgrid="false"
+     id="namedview16"
+     inkscape:window-height="1026"
+     inkscape:window-width="1349"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke:#497db4;stroke-width:1.74097;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.680315;stroke-opacity:1;paint-order:normal"
+     id="path840"
+     cx="12.004747"
+     cy="12.004747"
+     r="11.007354" />
+  <circle
+     style="fill:#497db4;fill-opacity:1;stroke:none;stroke-width:2.80703;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.680315;stroke-opacity:1;paint-order:stroke fill markers"
+     id="circle842"
+     cx="12.004747"
+     cy="12.004747"
+     r="8.3049202" />
+  <g
+     aria-label="i"
+     id="text846"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.6667px;line-height:1.25;font-family:Elephant;-inkscape-font-specification:Elephant;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none">
+    <path
+       d="M 15.066087,18.864759 H 9.0180756 v -0.298667 l 0.4480008,-0.01867 q 0.5413346,-0.056 0.6533346,-0.261334 0.112,-0.205334 0.112,-0.896002 l 0.01867,-0.858668 v -4.461341 l -0.01867,-0.765335 q -0.03733,-0.448001 -0.112,-0.672001 Q 10.044741,10.40874 9.4474097,10.35274 L 8.9434088,10.31541 v -0.298668 h 4.8906752 v 6.514679 l 0.01867,0.858668 q 0,0.672001 0.112,0.896002 0.112,0.205333 0.653335,0.261334 l 0.448001,0.01867 z M 10.212744,6.8994045 q 0,-0.7280013 0.522668,-1.2320022 0.541334,-0.5226676 1.288002,-0.5226676 0.765335,0 1.288003,0.5040009 0.541334,0.4853342 0.541334,1.2506689 0,0.746668 -0.541334,1.2693356 -0.522668,0.5040009 -1.288003,0.5040009 -0.746668,0 -1.288002,-0.5040009 -0.522668,-0.5226676 -0.522668,-1.2693356 z"
+       id="path838" />
+  </g>
+</svg>
