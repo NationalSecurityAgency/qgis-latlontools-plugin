@@ -3,7 +3,7 @@ import re
 
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QDockWidget
+from qgis.PyQt.QtWidgets import QDockWidget, QApplication
 from qgis.PyQt.QtCore import QTextCodec
 from qgis.gui import QgsVertexMarker
 from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes
@@ -28,10 +28,13 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         self.setupUi(self)
         self.canvas = iface.mapCanvas()
         self.marker = None
+        self.clipboard = QApplication.clipboard()
         self.zoomToolButton.setIcon(QIcon(':/images/themes/default/mActionZoomIn.svg'))
         self.clearToolButton.setIcon(QIcon(':/images/themes/default/mIconClearText.svg'))
+        self.pasteButton.setIcon(QIcon(':/images/themes/default/mActionEditPaste.svg'))
         self.zoomToolButton.clicked.connect(self.zoomToPressed)
         self.clearToolButton.clicked.connect(self.removeMarker)
+        self.pasteButton.clicked.connect(self.pasteCoordinate)
         self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
         self.optionsButton.clicked.connect(self.showSettings)
         self.lltools = lltools
@@ -221,11 +224,16 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             self.iface.messageBar().pushMessage("", "Invalid Coordinate", level=Qgis.Warning, duration=2)
             return
 
+    def pasteCoordinate(self):
+        text = self.clipboard.text().strip()
+        self.coordTxt.clear()
+        self.coordTxt.setText(text)
+        
     def removeMarker(self):
         if self.marker is not None:
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
-            self.coordTxt.clear()
+        self.coordTxt.clear()
 
     def showSettings(self):
         self.settings.showTab(1)
