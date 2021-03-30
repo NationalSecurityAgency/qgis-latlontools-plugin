@@ -196,12 +196,6 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
     def displayName(self):
         return 'Fields to point layer'
 
-    def group(self):
-        return 'Vector conversion'
-
-    def groupId(self):
-        return 'vectorconversion'
-
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):

@@ -117,12 +117,6 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
     def displayName(self):
         return 'Point layer to Plus Codes'
 
-    def group(self):
-        return 'Vector conversion'
-
-    def groupId(self):
-        return 'vectorconversion'
-
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
@@ -224,12 +218,6 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
 
     def displayName(self):
         return 'Plus Codes to point layer'
-
-    def group(self):
-        return 'Vector conversion'
-
-    def groupId(self):
-        return 'vectorconversion'
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
