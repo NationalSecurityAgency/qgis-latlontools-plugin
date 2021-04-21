@@ -218,6 +218,10 @@ class LatLonTools:
         self.iface.removeToolBarIcon(self.convertCoordinatesAction)
         self.iface.removeToolBarIcon(self.digitizeAction)
         del self.toolbar
+        
+        if self.convertCoordinateDialog:
+            self.iface.removeDockWidget(self.convertCoordinateDialog)
+            self.convertCoordinateDialog = None
 
         self.zoomToDialog = None
         self.multiZoomDialog = None
@@ -225,7 +229,6 @@ class LatLonTools:
         self.showMapTool = None
         self.mapTool = None
         self.digitizerDialog = None
-        self.convertCoordinateDialog = None
         QgsApplication.processingRegistry().removeProvider(self.provider)
         UnloadLatLonFunctions()
 
@@ -320,6 +323,7 @@ class LatLonTools:
             from .coordinateConverter import CoordinateConverterWidget
             self.convertCoordinateDialog = CoordinateConverterWidget(self, self.settingsDialog, self.iface, self.iface.mainWindow())
             self.convertCoordinateDialog.setFloating(True)
+            self.iface.addDockWidget(Qt.RightDockWidgetArea, self.convertCoordinateDialog)
         self.convertCoordinateDialog.show()
 
     def multiZoomTo(self):
