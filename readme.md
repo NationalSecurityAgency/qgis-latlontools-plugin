@@ -12,11 +12,11 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
-* <img src="images/copyicon.svg" alt="Copy/Display coordinate"> ***Copy/Display Coordinate*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **Degrees Minutes**, **MGRS**, **Standard UTM**, **Plus Codes (Open Location Code)**, **Geohash**, **Maidenhead Grid Locator**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**. If snapping is enabled under QGIS ***Project->Snapping Options...*** menu, then *Copy/Display Coordinate* will snap to any close vector vertices according to the parameters set in the snapping options.
+* <img src="images/copyicon.svg" alt="Copy/Display coordinate"> ***Copy/Display Coordinate*** - This captures coordinates onto the clipboard when the user clicks on the map, using the standard Google Map format or a format specified in ***Settings***. If the user specifies a **Tab** separator, then the coordinate can be pasted into a spreadsheet in separate columns. While this tool is selected, the coordinate the mouse is over is shown in the lower left-hand corner either in **decimal degrees**, **DMS**, **Degrees Minutes**, **MGRS**, **Standard UTM**, **UPS**, **Plus Codes (Open Location Code)**, **Geohash**, **Maidenhead Grid Locator**, **WKT POINT**, or **GeoJSON** notation depending on the **Settings**. By default it uses the geographic Latitude and Longitude to snapshot the coordinate, but this can be configured in **Settings** to use the project CRS or any other projection desired. See the **Settings** section for more details on the all the possibilities. An additional prefix or suffix can be added to the coordinate and is configured in **Settings**. If snapping is enabled under QGIS ***Project->Snapping Options...*** menu, then *Copy/Display Coordinate* will snap to any close vector vertices according to the parameters set in the snapping options.
   
 * <img src="images/mapicon.png" width=24 height=24 alt="Show in External Map"> ***Show in External Map*** - With this tool, the user can click on the QGIS map which launches an external browser and displays the location on an external map. The left and right mouse buttons can be configured to show different maps. Currently Open Street Map, Google Maps, MapQuest, Mapillary, Open Street Map iD Editor, and Bing Maps are supported along with Google Earth if it is installed on the system. The desired map that is displayed can be configured in ***Settings*** along with additional user added map services. A temporary marker can be displayed on the map at the location clicked on. To turn this on go to **Settings**. If snapping is enabled, then the clicked location will snap to any close vector vertices according to the parameters set in the snapping options.
 
-* <img src="images/zoomicon.svg" alt="Zoom-to"> ***Zoom to Coordinate*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. Pressing <img src="doc/pastecoord.jpg" alt="paste coordinate"> **Paste Coordinate from Clipboard** button pastes the contents of the clipboard into the text area. If the default **WGS 84** (EPSG:4326 - latitude/longitude) coordinate system is specified, ***Zoom to Coordinate*** can interpret **decimal degrees**, **DMS**, **WKT POINT**, **Standard UTM**, **MGRS**, **Plus Codes (Open Location Code)**, or **GeoJSON** coordinates. It can also zoom to **Geohash** coordinates, amateur radio Maidenhead grid coordinates, or any other projection when configured in **Settings**. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. The behavior and coordinate types that are interpreted can be configured by pressing the **Settings** button <img src="doc/settings.png">.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
+* <img src="images/zoomicon.svg" alt="Zoom-to"> ***Zoom to Coordinate*** - With this tool, type or paste a coordinate into the text area and hit **Enter**. QGIS centers the map on the coordinate, highlights the location and creates a temporary marker at the location. Pressing the <img src="doc/zoomtool.jpg" alt="Zoom button"> also causes QGIS to zoom to that location. The marker can be removed with the <img src="doc/cleartool.jpg" alt="Clear marker"> button. Pressing <img src="doc/pastecoord.jpg" alt="paste coordinate"> **Paste Coordinate from Clipboard** button pastes the contents of the clipboard into the text area. If the default **WGS 84** (EPSG:4326 - latitude/longitude) coordinate system is specified, ***Zoom to Coordinate*** can interpret **decimal degrees**, **DMS**, **WKT POINT**, **Standard UTM**, **UPS**, **MGRS**, **Plus Codes (Open Location Code)**, or **GeoJSON** coordinates. It can also zoom to **Geohash** coordinates, amateur radio Maidenhead grid coordinates, or any other projection when configured in **Settings**. The ***Coordinate Order*** in ***Settings*** dictates whether the order is latitude followed by longitude (Y,X) or longitude followed by latitude (X,Y). By default the order is "Latitude, Longitude", the format used by Google Maps. The behavior and coordinate types that are interpreted can be configured by pressing the **Settings** button <img src="doc/settings.png">.<br /><div style="text-align:center"><img src="doc/zoomto.jpg" alt="Zoom to Latitude, Longitude"></div><br />The following are acceptable coordinate formats when the ***Settings*** **Zoom to Coordinate Type** is set to ***WGS 84 (Latitude & Longitude)***. When the letters "N, S, E, W" are used, then the coordinate order is not important. These letters can be used before or after the coordinates. As long as the coordinate is understandable, punctuation, spaces, and &deg; ' " are optional. In these examples "d" represents degree digits, "m" minutes, and "s" seconds. Here are some example input formats:
 
     * Decimal Degree: 38.959390&deg;, -95.265483&deg; / 38.959390, -95.265483 / 38.959390N, 95.265483 W (d.dddd, d.dddd)
     * Degree, Minute: 38&deg; 57.5634'N 95&deg; 15.92890'W (d m.mmmm, d m.mmmm)
@@ -26,7 +26,14 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
     * Degree, Minute, Second: 004656S, 0093917E (ddmmss, dddmmss)- Notice the need for 0 padding in the decimal degree digits.
     * WKT: POINT(-95.265483 38.959390)
     * GeoJSON: {"type": "Point","coordinates": [-95.265483,38.959390]}
-    * Standard WGS84 UTM: 15N 303704.9 4314710.9 (zone easting northing)
+    * Standard WGS84 UTM: Note that the UTM standard does not include the MGRS latitude band which some use. Lat Lon Tools uses the proper UTM standard with zone and hemisphere where hemisphere is either N (north of the equator) or S (south of the equator). UTM is valid from - 80&deg;S to 84&deg;N.
+        * 15N 303704.9 4314710.9 (ZoneHemisphere Easting Northing)
+        * 303704.9,4314710.9,15N (Easting,Northing,ZoneHemisphere)
+        * 303704.9mE,4314710.9mN,15N (Easting,Northing,ZoneHemisphere)
+        * 303704.9mE,4314710.9mN,15,N (Easting,Northing,Zone,Hemisphere)
+    * UPS (Universal Polar Stereographic): This is the equavalent to UTM except for the polar regions. It is defined north of 84&deg; and south of -80&deg;
+        * Z 2426773mE 1530125mN
+        * Z2426773E1530125N
     * Example MGRS coordinate when **Zoom to Coordinate Type** is set to ***MGRS***: 15S UD 03704 14710
     * Example Plus Code coordinate when **Zoom to Coordinate Type** is set to ***Plus Codes***: 86C6XP5M+QR
     * Example Geohash coordinate when **Zoom to Coordinate Type** is set to ***Geohash***: 9yum8hmfckem
@@ -139,7 +146,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 <div style="text-align:center"><img src="doc/settings.jpg" alt="Capture and Display Settings"></div>
 
-There are 6 capture projections/formats that can be selected from the ***CRS/Projection of captured coordinate*** drop down menu. They are as follows.
+There are 7 capture projections/formats that can be selected from the ***CRS/Projection of captured coordinate*** drop down menu. They are as follows.
 
 * **WGS 84 (Latitude & Longitude)** - This captures the coordinates as a latitude and longitude regardless of what the project CRS is set to. This is the default setting.
 * **Project CRS** - This captures the coordinates using the project's specified CRS.
@@ -149,6 +156,7 @@ There are 6 capture projections/formats that can be selected from the ***CRS/Pro
 * **Standard UTM** - This has the form of '12N 417159.0 4515540.6'
 * **Geohash** - This has the form of '9zpnbf0w9yuf'
 * Amateur Radio **Maidenhead Grid Locator** - This has the form of 'EM28ix'
+* **UPS** (Universal Polar Stereographic) - The string form of this format is one of the following: 'Z 2426773mE 1530125mN' or 'Z2426773E1530125N'
 
 Additional coordinate formatting can be specified with ***WGS 84 (Latitude & Longitude) Number Format***.
 
@@ -164,12 +172,12 @@ For ***Other CRS number format*** such as **Project CRS** or **Custom CRS** the 
 * **Normal Coordinate** - Decimal coordinate notation.
 * **WKT POINT**
 
-The order in which the coordinates are captured is determined by ***Coordinate order (Not used with MGRS, UTM, WKT, GeoJSON &amp; Plus codes)*** and are one of the following:
+The order in which the coordinates are captured is determined by ***Coordinate order (Not used with MGRS, UTM, UPS, WKT, GeoJSON &amp; Plus codes)*** and are one of the following:
 
 * **Lat, Lon (Y,X) - Google Map Order**
 * **Lon, Lat (X,Y) Order**.
 
-* ***Coordinate capture delimiter (Not used with MGRS, UTM, WKT, GeoJSON &amp; Plus codes)*** - Specifies the delimiter that separates the two coordinates. The options are:
+* ***Coordinate capture delimiter (Not used with MGRS, UTM, UPS, WKT, GeoJSON &amp; Plus codes)*** - Specifies the delimiter that separates the two coordinates. The options are:
     * **Comma** - Specifies a comma separator 
     * **Comma Space** - This is a comma followed by a space. 
     * **Tab** - This useful if you are pasting the coordinates into two columns of a spreadsheet.
@@ -177,7 +185,14 @@ The order in which the coordinates are captured is determined by ***Coordinate o
     * **Other** - With this selected, the contents of ***Other delimiter*** is used.
 * ***DMS second precision*** - Used when formatting DMS coordinates and specifies the number of digits after the decimal.
 * ***D&deg;MM' precision*** - Used when formatting D&deg;MM' coordinates and specifies the number of digits after the decimal for the minutes.
-* ***UTM precision*** - Used when formatting UtM coordinates and specifies the number of digits after the decimal.
+* ***UTM precision*** - Used when formatting UTM coordinates and specifies the number of digits after the decimal.
+* ***UTM format*** - This specifies a UTM string format and is one of the following:
+    * '15N 755631 4283168'
+    * '755631,4283168,15N'
+    * '755631mE,4283168mN,15N'
+    * '755631mE,4283168mN,15,N'
+* **UPS precision** - Used when formatting UPS coordinates and specifies the number of digits after the decimal.
+* **UPS format** - This specifies a UPS string format and is one of the following: 'Z 2426773mE 1530125mN' or 'Z2426773E1530125N'
 * ***Plus codes length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 * ***Geohash precision*** - Used when formatting Geohash coordinates.
 * ***Maidenhead grid precision*** - Used when formatting Amateur Radio Maidenhead grid coordinates.The value ranges from 1 to 4.
@@ -193,7 +208,7 @@ The order in which the coordinates are captured is determined by ***Coordinate o
 
 The ***Zoom to Latitude, Longitude*** tool accepts the following input coordinates as specified by ***Zoom to Coordinate Type***:
 
-* **WGS 84 (Latitude & Longitude) / Auto Detect Format** - Input coordinates can be either in decimal degrees, DMS degrees, WKT, or GeoJSON. For decimal and DMS formats, the order of the coordinates are determined by ***Zoom to Coordinate Order***. It also auto detects MGRS, Plus Codes, and Standard UTM formats so it is generally unnecessary to specify them separately.
+* **WGS 84 (Latitude & Longitude) / Auto Detect Format** - Input coordinates can be either in decimal degrees, DMS degrees, WKT, or GeoJSON. For decimal and DMS formats, the order of the coordinates are determined by ***Zoom to Coordinate Order***. It also auto detects MGRS, Plus Codes, Standard UTM, and UPS formats so it is generally unnecessary to specify them separately.
 * **Project CRS** - This accepts coordinates formatted in the CRS of the QGIS project. The numbers can be formatted in decimal or WKT notation.
 * **Custom CRS** - You can specify any CRS for the input coordinates and QGIS zooms to that coordinate regardless of the project CRS. The numbers can be formatted in decimal or WKT notation.
 * **MGRS** - This only accepts [MGRS](https://en.wikipedia.org/wiki/Military_grid_reference_system) coordinates as input.
@@ -327,6 +342,9 @@ These are the default settings for the ***Coordinate Conversion*** dialog box.
 * ***DMS seconds precision*** is the number of decimal digits for the second in a DMS formatted coordinate.
 * ***D&deg;MM' precision*** is the number of decimal digits for the minute in a D&deg;MM' formatted coordinate.
 * ***UTM precision*** specifies the number of decimal digits for a UTM formatted coordinate.
+* ***UTM format*** specifies one of these formats to be displayed: '15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', or '755631mE,4283168mN,15,N'.
+* ***UPS precision*** specifies the number of decimal digits for a UPS formatted coordinate.
+* ***UPS format*** specifies one of these formats to be displayed: 'Z 2426773mE 1530125mN', or 'Z2426773E1530125N'.
 * ***Plus codes length*** is the number of digits in a plus code coordinate.
 * ***Geohash precision*** is the number of digits in a geohash coordinate.
 * ***Delimiter between coordinate pairs*** is the delimiter used between coordinate pairs for those representations that require a delimiter.

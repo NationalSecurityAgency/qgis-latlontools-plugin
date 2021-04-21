@@ -64,7 +64,13 @@ code {
 <li>Degree, Minute, Second: 004656S, 0093917E (ddmmss, dddmmss)- Notice the need for 0 padding in the decimal degree digits.</li>
 <li>WKT: POINT(-95.265483 38.959390)</li>
 <li>GeoJSON: {"type": "Point","coordinates": [-95.265483,38.959390]}</li>
-<li>Standard WGS84 UTM: 15N 303704.9 4314710.9 (zone easting northing)</li>
+<li>Standard WGS84 UTM: Note that the UTM standard does not include the MGRS latitude band which some use. Lat Lon Tools uses the proper UTM standard with zone and hemisphere where hemisphere is either N (north of the equator) or S (south of the equator).<ul>
+<li>15N 303704.9 4314710.9 (ZoneHemisphere Easting Northing)</li>
+<li>303704.9,4314710.9,15N (Easting,Northing,ZoneHemisphere)</li>
+<li>303704.9mE,4314710.9mN,15N (Easting,Northing,ZoneHemisphere)</li>
+<li>303704.9mE,4314710.9mN,15,N (Easting,Northing,Zone,Hemisphere)</li>
+</ul>
+</li>
 <li>Example MGRS coordinate when <strong>Zoom to Coordinate Type</strong> is set to <strong><em>MGRS</em></strong>: 15S UD 03704 14710</li>
 <li>Example Plus Code coordinate when <strong>Zoom to Coordinate Type</strong> is set to <strong><em>Plus Codes</em></strong>: 86C6XP5M+QR</li>
 <li>Example Geohash coordinate when <strong>Zoom to Coordinate Type</strong> is set to <strong><em>Geohash</em></strong>: 9yum8hmfckem</li>
