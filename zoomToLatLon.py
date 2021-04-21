@@ -10,6 +10,7 @@ from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes
 from .util import epsg4326, parseDMSString
 from .settings import CoordOrder
 from .utm import isUtm, utm2Point
+from .ups import isUps, ups2Point
 # import traceback
 
 from . import mgrs
@@ -147,6 +148,11 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             # Check to see if it is standard UTM
             if isUtm(text):
                 pt = utm2Point(text)
+                return(pt.y(), pt.x(), epsg4326)
+
+            # Check to see if it is a UPS coordinate
+            if isUps(text):
+                pt = ups2Point(text)
                 return(pt.y(), pt.x(), epsg4326)
 
             # Check to see if it is an MGRS coordinate

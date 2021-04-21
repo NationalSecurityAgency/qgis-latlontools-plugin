@@ -48,6 +48,9 @@ class Settings():
         self.captureGeohashPrecision = int(qset.value('/LatLonTools/CaptureGeohashPrecision', 12))
         self.captureDmmPrecision =  int(qset.value('/LatLonTools/CaptureDmmPrecision', 4))
         self.captureUtmPrecision =  int(qset.value('/LatLonTools/CaptureUtmPrecision', 0))
+        self.captureUtmFormat = int(qset.value('/LatLonTools/CaptureUtmFormat', 0))
+        self.captureUpsPrecision =  int(qset.value('/LatLonTools/CaptureUpsPrecision', 0))
+        self.captureUpsFormat = int(qset.value('/LatLonTools/CaptureUpsFormat', 0))
         self.captureAddDmsSpace = int(qset.value('/LatLonTools/CaptureAddDmsSpace', Qt.Checked))
         self.capturePadZeroes = int(qset.value('/LatLonTools/CapturePadZeroes', Qt.Unchecked))
         self.captureMaidenheadPrecision = int(qset.value('/LatLonTools/CaptureMaidenheadPrecision', 3))
@@ -81,6 +84,9 @@ class Settings():
         self.converterDmsPrec = int(qset.value('/LatLonTools/ConverterDmsPrecision', 0))
         self.converterDmmPrec = int(qset.value('/LatLonTools/ConverterDmmPrecision', 4))
         self.converterUtmPrec = int(qset.value('/LatLonTools/ConverterUtmPrecision', 0))
+        self.converterUtmFormat = int(qset.value('/LatLonTools/ConverterUtmFormat', 0))
+        self.converterUpsPrec = int(qset.value('/LatLonTools/ConverterUpsPrecision', 0))
+        self.converterUpsFormat = int(qset.value('/LatLonTools/ConverterUpsFormat', 0))
         self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
         self.converterGeohashPrecision = int(qset.value('/LatLonTools/ConverterGeohashPrecision', 12))
         self.converterMaidenheadPrecision = int(qset.value('/LatLonTools/ConverterMaidenheadPrecision', 3))
@@ -150,6 +156,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeUTM = 5
     ProjectionTypeGeohash = 6
     ProjectionTypeMaidenhead = 7
+    ProjectionTypeUPS = 8
 
     def __init__(self, lltools, iface, parent):
         super(SettingsWidget, self).__init__(parent)
@@ -161,13 +168,15 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
         self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.delimComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
+        self.captureUtmFormatComboBox.addItems(['15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', '755631mE,4283168mN,15,N'])
+        self.captureUpsFormatComboBox.addItems(['Z 2426773mE 1530125mN', 'Z2426773E1530125N'])
 
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
@@ -203,6 +212,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### COORDINATE CONVERSION SETTINGS ###
         self.converterCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
+        self.converterUtmFormatComboBox.addItems(['15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', '755631mE,4283168mN,15,N'])
+        self.converterUpsFormatComboBox.addItems(['Z 2426773mE 1530125mN', 'Z2426773E1530125N'])
         self.converterProjectionSelectionWidget.setCrs(epsg4326)
 
         self.readSettings()
@@ -236,6 +247,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.precisionSpinBox.setValue(0)
         self.captureDmmPrecisionSpinBox.setValue(4)
         self.captureUtmPrecisionSpinBox.setValue(0)
+        self.captureUtmFormatComboBox.setCurrentIndex(0)
+        self.captureUpsPrecisionSpinBox.setValue(0)
+        self.captureUpsFormatComboBox.setCurrentIndex(0)
         self.captureGeohashSpinBox.setValue(12)
         self.captureMaidenheadPrecisionSpinBox.setValue(3)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
@@ -285,6 +299,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDmsPrecisionSpinBox.setValue(0)
         self.converterDmmPrecisionSpinBox.setValue(4)
         self.converterUtmPrecisionSpinBox.setValue(0)
+        self.converterUtmFormatComboBox.setCurrentIndex(0)
+        self.converterUpsPrecisionSpinBox.setValue(0)
+        self.converterUpsFormatComboBox.setCurrentIndex(0)
         self.converterPlusCodePrecisionSpinBox.setValue(10)
         self.converterGeohashSpinBox.setValue(12)
         self.converterMaidenheadPrecisionSpinBox.setValue(3)
@@ -364,6 +381,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/DMSPrecision', self.precisionSpinBox.value())
         qset.setValue('/LatLonTools/CaptureDmmPrecision', self.captureDmmPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/CaptureUtmPrecision', self.captureUtmPrecisionSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureUtmFormat', int(self.captureUtmFormatComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/CaptureUpsPrecision', self.captureUpsPrecisionSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureUpsFormat', int(self.captureUpsFormatComboBox.currentIndex()))
         qset.setValue('/LatLonTools/CaptureGeohashPrecision', self.captureGeohashSpinBox.value())
         qset.setValue('/LatLonTools/CaptureMaidenheadPrecision', self.captureMaidenheadPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
@@ -425,6 +445,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterDmsPrecision', int(self.converterDmsPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDmmPrecision', int(self.converterDmmPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterUtmPrecision', int(self.converterUtmPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterUtmFormat', int(self.converterUtmFormatComboBox.currentIndex()))
+        qset.setValue('/LatLonTools/ConverterUpsPrecision', int(self.converterUpsPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterUpsFormat', int(self.converterUpsFormatComboBox.currentIndex()))
         qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterGeohashPrecision', int(self.converterGeohashSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterMaidenheadPrecision', int(self.converterMaidenheadPrecisionSpinBox.value()))
@@ -544,6 +567,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.precisionSpinBox.setValue(self.dmsPrecision)
         self.captureDmmPrecisionSpinBox.setValue(settings.captureDmmPrecision)
         self.captureUtmPrecisionSpinBox.setValue(settings.captureUtmPrecision)
+        self.captureUtmFormatComboBox.setCurrentIndex(settings.captureUtmFormat)
+        self.captureUpsPrecisionSpinBox.setValue(settings.captureUpsPrecision)
+        self.captureUpsFormatComboBox.setCurrentIndex(settings.captureUpsFormat)
         self.captureGeohashSpinBox.setValue(settings.captureGeohashPrecision)
         self.captureMaidenheadPrecisionSpinBox.setValue(settings.captureMaidenheadPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
@@ -609,6 +635,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDmsPrecisionSpinBox.setValue(settings.converterDmsPrec)
         self.converterDmmPrecisionSpinBox.setValue(settings.converterDmmPrec)
         self.converterUtmPrecisionSpinBox.setValue(settings.converterUtmPrec)
+        self.converterUtmFormatComboBox.setCurrentIndex(settings.converterUtmFormat)
+        self.converterUpsPrecisionSpinBox.setValue(settings.converterUpsPrec)
+        self.converterUpsFormatComboBox.setCurrentIndex(settings.converterUpsFormat)
         self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
         self.converterGeohashSpinBox.setValue(settings.converterGeohashPrecision)
         self.converterMaidenheadPrecisionSpinBox.setValue(settings.converterMaidenheadPrecision)
@@ -652,6 +681,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def captureProjIsUTM(self):
         if self.captureProjection == self.ProjectionTypeUTM:
+            return True
+        return False
+
+    def captureProjIsUPS(self):
+        if self.captureProjection == self.ProjectionTypeUPS:
             return True
         return False
 

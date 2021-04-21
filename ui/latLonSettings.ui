@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
-    <height>741</height>
+    <width>510</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>509</width>
-        <height>692</height>
+        <width>490</width>
+        <height>701</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -42,6 +42,9 @@
            <string>Capture</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>4</number>
+           </property>
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
@@ -104,6 +107,9 @@
            </item>
            <item>
             <layout class="QFormLayout" name="formLayout_2">
+             <property name="verticalSpacing">
+              <number>4</number>
+             </property>
              <item row="0" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
@@ -128,14 +134,14 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
+             <item row="8" column="0">
               <widget class="QLabel" name="label_18">
                <property name="text">
                 <string>Plus codes length:</string>
                </property>
               </widget>
              </item>
-             <item row="5" column="1">
+             <item row="8" column="1">
               <widget class="QSpinBox" name="plusCodesSpinBox">
                <property name="minimum">
                 <number>10</number>
@@ -165,34 +171,34 @@
                </property>
               </widget>
              </item>
-             <item row="8" column="0">
+             <item row="11" column="0">
               <widget class="QLabel" name="label_28">
                <property name="text">
                 <string>Coordinate prefix</string>
                </property>
               </widget>
              </item>
-             <item row="9" column="0">
+             <item row="12" column="0">
               <widget class="QLabel" name="label_29">
                <property name="text">
                 <string>Coordinate suffix</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="1">
+             <item row="11" column="1">
               <widget class="QLineEdit" name="capturePrefixLineEdit"/>
              </item>
-             <item row="9" column="1">
+             <item row="12" column="1">
               <widget class="QLineEdit" name="captureSuffixLineEdit"/>
              </item>
-             <item row="6" column="0">
+             <item row="9" column="0">
               <widget class="QLabel" name="label_41">
                <property name="text">
                 <string>Geohash precision</string>
                </property>
               </widget>
              </item>
-             <item row="6" column="1">
+             <item row="9" column="1">
               <widget class="QSpinBox" name="captureGeohashSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -236,14 +242,14 @@
                </property>
               </widget>
              </item>
-             <item row="7" column="0">
+             <item row="10" column="0">
               <widget class="QLabel" name="label_45">
                <property name="text">
                 <string>Maidenhead grid precision</string>
                </property>
               </widget>
              </item>
-             <item row="7" column="1">
+             <item row="10" column="1">
               <widget class="QSpinBox" name="captureMaidenheadPrecisionSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -255,6 +261,40 @@
                 <number>3</number>
                </property>
               </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_52">
+               <property name="text">
+                <string>UTM format</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QComboBox" name="captureUtmFormatComboBox"/>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_55">
+               <property name="text">
+                <string>UPS precision</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QSpinBox" name="captureUpsPrecisionSpinBox">
+               <property name="maximum">
+                <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_56">
+               <property name="text">
+                <string>UPS format</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QComboBox" name="captureUpsFormatComboBox"/>
              </item>
             </layout>
            </item>
@@ -356,7 +396,7 @@
              <property name="plainText">
               <string>Supported 'Zoom to' formats (See help for more details):
 
-WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM
+WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS
 
 Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 
@@ -894,14 +934,14 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
+             <item row="8" column="0">
               <widget class="QLabel" name="label_33">
                <property name="text">
                 <string>Plus codes (Open Location Code) length</string>
                </property>
               </widget>
              </item>
-             <item row="5" column="1">
+             <item row="8" column="1">
               <widget class="QSpinBox" name="converterPlusCodePrecisionSpinBox">
                <property name="minimum">
                 <number>10</number>
@@ -931,42 +971,42 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="0">
+             <item row="11" column="0">
               <widget class="QLabel" name="label_37">
                <property name="text">
                 <string>Delimiter between coordinate pairs</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="1">
+             <item row="11" column="1">
               <widget class="QLineEdit" name="converterDelimiterLineEdit">
                <property name="text">
                 <string>,</string>
                </property>
               </widget>
              </item>
-             <item row="9" column="0">
+             <item row="12" column="0">
               <widget class="QLabel" name="label_38">
                <property name="text">
                 <string>DDMMSS delimiter</string>
                </property>
               </widget>
              </item>
-             <item row="9" column="1">
+             <item row="12" column="1">
               <widget class="QLineEdit" name="converterDdmmssDelimiterLineEdit">
                <property name="text">
                 <string>,</string>
                </property>
               </widget>
              </item>
-             <item row="6" column="0">
+             <item row="9" column="0">
               <widget class="QLabel" name="label_40">
                <property name="text">
                 <string>Geohash precision</string>
                </property>
               </widget>
              </item>
-             <item row="6" column="1">
+             <item row="9" column="1">
               <widget class="QSpinBox" name="converterGeohashSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -996,14 +1036,14 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
                </property>
               </widget>
              </item>
-             <item row="7" column="0">
+             <item row="10" column="0">
               <widget class="QLabel" name="label_46">
                <property name="text">
                 <string>Maidenhead grid precsion</string>
                </property>
               </widget>
              </item>
-             <item row="7" column="1">
+             <item row="10" column="1">
               <widget class="QSpinBox" name="converterMaidenheadPrecisionSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -1013,6 +1053,40 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
                </property>
                <property name="value">
                 <number>3</number>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_51">
+               <property name="text">
+                <string>UTM format</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QComboBox" name="converterUtmFormatComboBox"/>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_53">
+               <property name="text">
+                <string>UPS format</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QComboBox" name="converterUpsFormatComboBox"/>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_54">
+               <property name="text">
+                <string>UPS precision</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QSpinBox" name="converterUpsPrecisionSpinBox">
+               <property name="maximum">
+                <number>8</number>
                </property>
               </widget>
              </item>

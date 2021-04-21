@@ -7,6 +7,7 @@ from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 from .settings import settings, CoordOrder
 from .util import epsg4326, formatDmsString
 from .utm import latLon2Utm
+from .ups import latLon2Ups
 from . import mgrs
 from . import olc
 from . import geohash
@@ -120,7 +121,18 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:
                 transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
                 pt4326 = transform.transform(pt.x(), pt.y())
-            msg = latLon2Utm(pt4326.y(), pt4326.x(), settings.captureUtmPrecision)
+            msg = latLon2Utm(pt4326.y(), pt4326.x(), settings.captureUtmPrecision, settings.captureUtmFormat)
+            if msg == '':
+                msg = None
+        elif self.settings.captureProjIsUPS():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
+            if canvasCRS == epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
+                pt4326 = transform.transform(pt.x(), pt.y())
+            msg = latLon2Ups(pt4326.y(), pt4326.x(), settings.captureUpsPrecision, settings.captureUpsFormat)
             if msg == '':
                 msg = None
         elif self.settings.captureProjIsGeohash():
@@ -147,7 +159,10 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             except Exception:
                 msg = None
 
-        msg = '{}{}{}'.format(self.settings.capturePrefix, msg, self.settings.captureSuffix)
+        if msg is None:
+            return(None)
+        else:
+            msg = '{}{}{}'.format(self.settings.capturePrefix, msg, self.settings.captureSuffix)
         return msg
 
     def canvasMoveEvent(self, event):
@@ -158,7 +173,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             msg = self.formatCoord(pt, ', ')
             formatString = self.coordFormatString()
             if msg is None:
-                self.iface.statusBarIface().showMessage("")
+                self.iface.statusBarIface().showMessage("{} - Out of bounds".format(formatString), 4000)
             else:
                 self.iface.statusBarIface().showMessage("{} - {}".format(msg, formatString), 4000)
         except Exception:
@@ -207,6 +222,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             s = 'MGRS'
         elif self.settings.captureProjIsUTM():
             s = 'Standard UTM'
+        elif self.settings.captureProjIsUPS():
+            s = 'UPS'
         elif self.settings.captureProjIsPlusCodes():
             s = 'Plus Codes'
         elif self.settings.captureProjIsGeohash():
@@ -246,9 +263,9 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             if msg is not None:
                 clipboard = QApplication.clipboard()
                 clipboard.setText(msg)
-                self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=Qgis.Info, duration=4)
+                self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=Qgis.Info, duration=3)
         except Exception as e:
-            self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=Qgis.Warning, duration=3)
 
     def removeMarker(self):
         if self.marker is not None:
