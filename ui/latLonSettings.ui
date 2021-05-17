@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>750</height>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,11 +27,14 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>473</width>
-        <height>712</height>
+        <width>490</width>
+        <height>722</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
+       <property name="spacing">
+        <number>4</number>
+       </property>
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">

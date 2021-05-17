@@ -21,6 +21,8 @@ from . import olc
 from . import geohash
 from .utm import isUtm, utm2Point
 from .maidenhead import maidenGridCenter
+from .ups import ups2Point
+from . import georef
 # import traceback
 
 
@@ -57,7 +59,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     tr('Latitude (Y)'),
                     tr('Latitude (Y), Longitude (X)'),
                     tr('Longitude (X), Latitude (Y)'),
-                    tr('MGRS'), tr('Plus Codes'), tr('Geohash'), tr('Standard UTM'), tr('Maidenhead grid locator')],
+                    tr('MGRS'), tr('Plus Codes'), tr('Geohash'), tr('Standard UTM'), tr('Maidenhead grid locator'), tr('UPS'), tr('GEOREF')],
                 defaultValue=0,
                 optional=False)
         )
@@ -109,7 +111,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
 
         fieldsout = QgsFields(source.fields())
 
-        if field_type >= 3:  # For MGRS, Plus Codes, UTM, Geohash and Maidenhead force the CRS to be 4326
+        if field_type >= 3:  # For MGRS, Plus Codes, UTM, Geohash, UPS, GEOREF, and Maidenhead force the CRS to be 4326
             input_crs = epsg4326
 
         (sink, dest_id) = self.parameterAsSink(
@@ -168,6 +170,12 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     (lat, lon) = maidenGridCenter(attr1)
                     lat = float(lat)
                     lon = float(lon)
+                elif field_type == 8: # UPS
+                    pt = ups2Point(attr1, epsg4326)
+                    lat = pt.y()
+                    lon = pt.x()
+                elif field_type == 9: # GEOREF
+                    (lat, lon, prec) = georef.decode(attr1, False)
 
                 f = QgsFeature()
                 f.setAttributes(feature.attributes())

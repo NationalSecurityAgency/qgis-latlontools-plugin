@@ -77,7 +77,7 @@ def encode(lat, lon, prec):
                 c = c - 1
     return(''.join(georef1))
 
-def decode(georef, centerp):
+def decode(georef, centerp=False):
     if georef is None:
         raise GeorefException('Invalid Georef string: None')
     georef = georef.upper()

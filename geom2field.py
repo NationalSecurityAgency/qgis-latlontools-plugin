@@ -22,6 +22,8 @@ from .utm import latLon2Utm
 from . import olc
 from . import geohash
 from .maidenhead import toMaiden
+from .ups import latLon2Ups
+from . import georef
 
 def tr(string):
     return QCoreApplication.translate('Processing', string)
@@ -51,6 +53,8 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
     PrmDmsAddSpace = 'DmsAddSpace'
     PrmDmsPadWithSpace = 'DmsPadWithSpace'
     PrmMaidenheadPrecision = 'MaidenheadPrecision'
+    PrmUpsPrecision = 'UpsPrecision'
+    PrmGeorefPrecision = 'GeorefPrecision'
 
     def initAlgorithm(self, config):
         self.addParameter(
@@ -68,7 +72,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                     tr('Coordinates in 1 field'),
                     tr('GeoJSON'), tr('WKT'), tr('MGRS'),
                     tr('Plus Codes'), tr('Geohash'), tr('Standard UTM'),
-                    tr('Maidenhead grid locator')],
+                    tr('Maidenhead grid locator'), tr('UPS'), tr('GEOREF')],
                 defaultValue=0,
                 optional=False)
         )
@@ -187,6 +191,26 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                 maxValue=4)
         )
         self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmUpsPrecision,
+                tr('UPS precision'),
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=0,
+                optional=True,
+                minValue=0,
+                maxValue=8)
+        )
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.PrmGeorefPrecision,
+                tr('GEOREF precision'),
+                type=QgsProcessingParameterNumber.Integer,
+                defaultValue=5,
+                optional=True,
+                minValue=0,
+                maxValue=10)
+        )
+        self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
                 tr('Output layer'))
@@ -207,6 +231,8 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         plusCodesLength = self.parameterAsInt(parameters, self.PrmPlusCodesLength, context)
         geohashPrecision = self.parameterAsInt(parameters, self.PrmGeohashPrecision, context)
         maidenPrecision = self.parameterAsInt(parameters, self.PrmMaidenheadPrecision, context)
+        upsPrecision = self.parameterAsInt(parameters, self.PrmUpsPrecision, context)
+        georefPrecision = self.parameterAsInt(parameters, self.PrmGeorefPrecision, context)
         use_dms_space = self.parameterAsBool(parameters, self.PrmDmsAddSpace, context)
         dms_pad_with_space = self.parameterAsBool(parameters, self.PrmDmsPadWithSpace, context)
 
@@ -297,8 +323,12 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
                     msg = geohash.encode(pt.y(), pt.x(), geohashPrecision)
                 elif outputFormat == 7:  # WGS 84 UTM
                     msg = latLon2Utm(pt.y(), pt.x(), dmsPrecision)
-                else:  # Maidenhead grid
+                elif outputFormat == 8: # Maidenhead grid
                     msg = toMaiden(pt.y(), pt.x(), maidenPrecision)
+                elif outputFormat == 9: # UPS
+                    msg = latLon2Ups(pt.y(), pt.x(), upsPrecision, 0)
+                else:  # GEOREF
+                    msg = georef.encode(pt.y(), pt.x(), georefPrecision)
             except Exception:
                 msg = ''
                 msg2 = ''
