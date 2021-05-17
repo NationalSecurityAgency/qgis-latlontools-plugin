@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>490</width>
-        <height>701</height>
+        <width>473</width>
+        <height>712</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -171,24 +171,24 @@
                </property>
               </widget>
              </item>
-             <item row="11" column="0">
+             <item row="12" column="0">
               <widget class="QLabel" name="label_28">
                <property name="text">
                 <string>Coordinate prefix</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="0">
+             <item row="13" column="0">
               <widget class="QLabel" name="label_29">
                <property name="text">
                 <string>Coordinate suffix</string>
                </property>
               </widget>
              </item>
-             <item row="11" column="1">
+             <item row="12" column="1">
               <widget class="QLineEdit" name="capturePrefixLineEdit"/>
              </item>
-             <item row="12" column="1">
+             <item row="13" column="1">
               <widget class="QLineEdit" name="captureSuffixLineEdit"/>
              </item>
              <item row="9" column="0">
@@ -296,6 +296,23 @@
              <item row="7" column="1">
               <widget class="QComboBox" name="captureUpsFormatComboBox"/>
              </item>
+             <item row="11" column="0">
+              <widget class="QLabel" name="label_57">
+               <property name="text">
+                <string>GEOREF precision</string>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="1">
+              <widget class="QSpinBox" name="captureGeorefPrecisionSpinBox">
+               <property name="maximum">
+                <number>10</number>
+               </property>
+               <property name="value">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
@@ -396,7 +413,7 @@
              <property name="plainText">
               <string>Supported 'Zoom to' formats (See help for more details):
 
-WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS
+WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS, GEOREF
 
 Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 
@@ -971,28 +988,28 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
                </property>
               </widget>
              </item>
-             <item row="11" column="0">
+             <item row="12" column="0">
               <widget class="QLabel" name="label_37">
                <property name="text">
                 <string>Delimiter between coordinate pairs</string>
                </property>
               </widget>
              </item>
-             <item row="11" column="1">
+             <item row="12" column="1">
               <widget class="QLineEdit" name="converterDelimiterLineEdit">
                <property name="text">
                 <string>,</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="0">
+             <item row="13" column="0">
               <widget class="QLabel" name="label_38">
                <property name="text">
                 <string>DDMMSS delimiter</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="1">
+             <item row="13" column="1">
               <widget class="QLineEdit" name="converterDdmmssDelimiterLineEdit">
                <property name="text">
                 <string>,</string>
@@ -1087,6 +1104,23 @@ Maidenhead grid - Only accept maidenhead grid coordinates</string>
               <widget class="QSpinBox" name="converterUpsPrecisionSpinBox">
                <property name="maximum">
                 <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="0">
+              <widget class="QLabel" name="label_58">
+               <property name="text">
+                <string>GEOREF precision</string>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="1">
+              <widget class="QSpinBox" name="converterGeorefPrecisionSpinBox">
+               <property name="maximum">
+                <number>10</number>
+               </property>
+               <property name="value">
+                <number>5</number>
                </property>
               </widget>
              </item>

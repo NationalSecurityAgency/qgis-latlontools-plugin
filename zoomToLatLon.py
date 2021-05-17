@@ -17,6 +17,7 @@ from . import mgrs
 from . import olc
 from . import geohash
 from .maidenhead import maidenGridCenter
+from . import georef
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/zoomToLatLon.ui'))
@@ -154,6 +155,13 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if isUps(text):
                 pt = ups2Point(text)
                 return(pt.y(), pt.x(), epsg4326)
+
+            # Check to see if it is a Georef coordinate
+            try:
+                (lat, lon, prec) = georef.decode(text, False)
+                return(lat, lon, epsg4326)
+            except Exception:
+                pass
 
             # Check to see if it is an MGRS coordinate
             try:

@@ -54,6 +54,7 @@ class Settings():
         self.captureAddDmsSpace = int(qset.value('/LatLonTools/CaptureAddDmsSpace', Qt.Checked))
         self.capturePadZeroes = int(qset.value('/LatLonTools/CapturePadZeroes', Qt.Unchecked))
         self.captureMaidenheadPrecision = int(qset.value('/LatLonTools/CaptureMaidenheadPrecision', 3))
+        self.captureGeorefPrecision = int(qset.value('/LatLonTools/CaptureGeorefPrecision', 5))
 
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
@@ -90,6 +91,7 @@ class Settings():
         self.converterPlusCodeLength = int(qset.value('/LatLonTools/ConverterPlusCodeLength', 10))
         self.converterGeohashPrecision = int(qset.value('/LatLonTools/ConverterGeohashPrecision', 12))
         self.converterMaidenheadPrecision = int(qset.value('/LatLonTools/ConverterMaidenheadPrecision', 3))
+        self.converterGeorefPrecision = int(qset.value('/LatLonTools/ConverterGeorefPrecision', 5))
         self.converterDelimiter = qset.value('/LatLonTools/ConverterDelimiter', ', ')
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
         self.converterAddDmsSpace = int(qset.value('/LatLonTools/ConverterAddDmsSpace', Qt.Checked))
@@ -157,6 +159,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeGeohash = 6
     ProjectionTypeMaidenhead = 7
     ProjectionTypeUPS = 8
+    ProjectionTypeGEOREF = 9
 
     def __init__(self, lltools, iface, parent):
         super(SettingsWidget, self).__init__(parent)
@@ -168,7 +171,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS'])
+        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -252,6 +255,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureUpsFormatComboBox.setCurrentIndex(0)
         self.captureGeohashSpinBox.setValue(12)
         self.captureMaidenheadPrecisionSpinBox.setValue(3)
+        self.captureGeorefPrecisionSpinBox.setValue(5)
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.plusCodesSpinBox.setValue(10)
         self.digitsSpinBox.setValue(8)
@@ -305,6 +309,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterPlusCodePrecisionSpinBox.setValue(10)
         self.converterGeohashSpinBox.setValue(12)
         self.converterMaidenheadPrecisionSpinBox.setValue(3)
+        self.converterGeorefPrecisionSpinBox.setValue(5)
         self.converterDelimiterLineEdit.setText(',')
         self.converterDdmmssDelimiterLineEdit.setText(',')
         self.converterAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
@@ -386,6 +391,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/CaptureUpsFormat', int(self.captureUpsFormatComboBox.currentIndex()))
         qset.setValue('/LatLonTools/CaptureGeohashPrecision', self.captureGeohashSpinBox.value())
         qset.setValue('/LatLonTools/CaptureMaidenheadPrecision', self.captureMaidenheadPrecisionSpinBox.value())
+        qset.setValue('/LatLonTools/CaptureGeorefPrecision', self.captureGeorefPrecisionSpinBox.value())
         qset.setValue('/LatLonTools/PlusCodesLength', self.plusCodesSpinBox.value())
         qset.setValue('/LatLonTools/DecimalDigits', self.digitsSpinBox.value())
         qset.setValue('/LatLonTools/CapturePrefix', self.capturePrefixLineEdit.text())
@@ -451,6 +457,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterPlusCodeLength', int(self.converterPlusCodePrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterGeohashPrecision', int(self.converterGeohashSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterMaidenheadPrecision', int(self.converterMaidenheadPrecisionSpinBox.value()))
+        qset.setValue('/LatLonTools/ConverterGeorefPrecision', int(self.converterGeorefPrecisionSpinBox.value()))
         qset.setValue('/LatLonTools/ConverterDelimiter', self.converterDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterAddDmsSpace', self.converterAddDmsSpaceCheckBox.checkState())
@@ -572,6 +579,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureUpsFormatComboBox.setCurrentIndex(settings.captureUpsFormat)
         self.captureGeohashSpinBox.setValue(settings.captureGeohashPrecision)
         self.captureMaidenheadPrecisionSpinBox.setValue(settings.captureMaidenheadPrecision)
+        self.captureGeorefPrecisionSpinBox.setValue(settings.captureGeorefPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
         self.captureSuffixLineEdit.setText(self.captureSuffix)
         self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
@@ -641,6 +649,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterPlusCodePrecisionSpinBox.setValue(settings.converterPlusCodeLength)
         self.converterGeohashSpinBox.setValue(settings.converterGeohashPrecision)
         self.converterMaidenheadPrecisionSpinBox.setValue(settings.converterMaidenheadPrecision)
+        self.converterGeorefPrecisionSpinBox.setValue(settings.converterGeorefPrecision)
         self.converterDelimiterLineEdit.setText(settings.converterDelimiter)
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
         self.converterAddDmsSpaceCheckBox.setCheckState(settings.converterAddDmsSpace)
@@ -696,6 +705,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def captureProjIsMaidenhead(self):
         if self.captureProjection == self.ProjectionTypeMaidenhead:
+            return True
+        return False
+
+    def captureProjIsGEOREF(self):
+        if self.captureProjection == self.ProjectionTypeGEOREF:
             return True
         return False
 

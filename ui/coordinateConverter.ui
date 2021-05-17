@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>370</width>
-    <height>403</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,8 +25,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>333</width>
-         <height>374</height>
+         <width>350</width>
+         <height>405</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -467,6 +467,27 @@
             </item>
             <item>
              <widget class="QToolButton" name="upsCopyButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="14" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>GEOREF</string>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLineEdit" name="georefLineEdit"/>
+            </item>
+            <item>
+             <widget class="QToolButton" name="georefCopyButton">
               <property name="text">
                <string>...</string>
               </property>

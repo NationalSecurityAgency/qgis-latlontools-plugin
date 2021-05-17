@@ -12,6 +12,7 @@ from . import mgrs
 from . import olc
 from . import geohash
 from . import maidenhead
+from . import georef
 # import traceback
 
 class CopyLatLonTool(QgsMapToolEmitPoint):
@@ -158,6 +159,18 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 msg = maidenhead.toMaiden(pt4326.y(), pt4326.x(), precision=settings.captureMaidenheadPrecision)
             except Exception:
                 msg = None
+        elif self.settings.captureProjIsGEOREF():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
+            if canvasCRS == epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
+                pt4326 = transform.transform(pt.x(), pt.y())
+            try:
+                msg = georef.encode(pt4326.y(), pt4326.x(), settings.captureGeorefPrecision)
+            except Exception:
+                msg = None
 
         if msg is None:
             return(None)
@@ -230,6 +243,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             s = 'Geohash'
         elif self.settings.captureProjIsMaidenhead():
             s = 'Maidenhead Grid Locator'
+        elif self.settings.captureProjIsGEOREF():
+            s = 'GEOREF'
         elif self.settings.captureProjIsCustomCRS():
             if self.settings.otherNumberFormat == 0:  # Numerical
                 if self.settings.coordOrder == CoordOrder.OrderYX:
