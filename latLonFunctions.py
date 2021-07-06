@@ -4,6 +4,7 @@ from qgis.utils import qgsfunction
 # from qgis.gui import *
 from . import mgrs as mg
 from .utm import latLon2Utm, utm2Point, latLon2UtmZone, utmGetEpsg, latLon2UtmParameters
+from . import olc
 from .util import formatDmsString
 # import traceback
 
@@ -26,6 +27,8 @@ def InitLatLonFunctions():
     QgsExpression.registerFunction(mgrs_gzd)
     QgsExpression.registerFunction(mgrs_north)
     QgsExpression.registerFunction(mgrs_to_point)
+    QgsExpression.registerFunction(to_pluscode)
+    QgsExpression.registerFunction(from_pluscode)
     QgsExpression.registerFunction(utm)
     QgsExpression.registerFunction(utm_east)
     QgsExpression.registerFunction(utm_epsg)
@@ -44,6 +47,8 @@ def UnloadLatLonFunctions():
     QgsExpression.unregisterFunction('mgrs_gzd')
     QgsExpression.unregisterFunction('mgrs_north')
     QgsExpression.unregisterFunction('mgrs_to_point')
+    QgsExpression.unregisterFunction('to_pluscode')
+    QgsExpression.unregisterFunction('from_pluscode')
     QgsExpression.unregisterFunction('utm')
     QgsExpression.unregisterFunction('utm_east')
     QgsExpression.unregisterFunction('utm_epsg')
@@ -269,6 +274,68 @@ def mgrs_north(values, feature, parent):
         parent.setEvalErrorString("Error: invalid latitude/longitude parameters")
         return
     return north
+
+@qgsfunction(-1, group=group_name)
+def to_pluscode(values, feature, parent):
+    """
+    Calculate the Plus Code coordinate from latitude and longitude coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>to_pluscode</b>( <i>latitude, longitude[, precision=11]</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>latitude</i> &rarr; the latitude coordinate.</p>
+    <p><i>longitude</i> &rarr; the longitude coordinate.</p>
+    <p><i>precision</i> &rarr; optional coordinate precision. Default value is 11 and must be between 10 and 15.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>to_pluscode</b>(46.2, 6.1) &rarr; '8FR86422+222'</li>
+    </ul>
+    """
+    if len(values) < 2 or len(values) > 3:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        if len(values) == 3:
+            precision = int(values[2])
+        else:
+            precision = 11
+        if precision < 10 or precision > 15:
+            parent.setEvalErrorString("Error: precision must be between 10 and 15")
+            return
+        
+        lat = values[0]
+        lon = values[1]
+        msg = olc.encode(lat, lon, precision)
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude, longitude, or precision parameters")
+        return
+    return msg
+
+@qgsfunction(args='auto', group=group_name)
+def from_pluscode(pluscode, feature, parent):
+    """
+    Calculate the Plus Code coordinate from latitude and longitude coordinates.
+
+    <h4>Syntax</h4>
+    <p><b>from_pluscode</b>( <i>pluscode_string</i> )</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>from_pluscode</b>('8FR86422+222') &rarr; returns a point geometry</li>
+      <li><b>geom_to_wkt(from_pluscode</b>('8FR86422+222')) &rarr; 'Point(6.10001562 46.2000125)'</li>
+    </ul>
+    """
+    try:
+        coord = olc.decode(pluscode.strip())
+        lat = coord.latitudeCenter
+        lon = coord.longitudeCenter
+        pt = QgsPointXY(lon, lat)
+        return(QgsGeometry.fromPointXY(pt))
+    except Exception:
+        parent.setEvalErrorString("Error: invalid pluscode coordinate")
+        return
 
 @qgsfunction(args='auto', group=group_name)
 def utm_to_point(utm_str, feature, parent):
