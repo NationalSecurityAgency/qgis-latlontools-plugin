@@ -278,7 +278,7 @@ def mgrs_north(values, feature, parent):
 @qgsfunction(-1, group=group_name)
 def to_pluscode(values, feature, parent):
     """
-    Calculate the Plus Code coordinate from latitude and longitude coordinates.
+    Calculate the Plus Code coordinate from latitude and longitude (EPSG:4326) coordinates.
 
     <h4>Syntax</h4>
     <p><b>to_pluscode</b>( <i>latitude, longitude[, precision=11]</i> )</p>
@@ -316,7 +316,7 @@ def to_pluscode(values, feature, parent):
 @qgsfunction(args='auto', group=group_name)
 def from_pluscode(pluscode, feature, parent):
     """
-    Calculate the Plus Code coordinate from latitude and longitude coordinates.
+    Calculate an EPSG:4326 point geometry from a plus code coordinate string.
 
     <h4>Syntax</h4>
     <p><b>from_pluscode</b>( <i>pluscode_string</i> )</p>
