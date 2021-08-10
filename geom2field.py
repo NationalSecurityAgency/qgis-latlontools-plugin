@@ -272,10 +272,10 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         for cnt, feature in enumerate(iterator):
             if feedback.isCanceled():
                 break
-            pt = feature.geometry().asPoint()
-            if layerCRS != outCRS:
-                pt = transform.transform(pt)
             try:
+                pt = feature.geometry().asPoint()
+                if layerCRS != outCRS:
+                    pt = transform.transform(pt)
                 if outputFormat == 0:  # Two fields for coordinates
                     if outCRS == epsg4326:
                         if wgs84Format == 0:  # Decimal Degrees

@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, UPS, Geohash, Maidenhead grid, and Plus Codes formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
-version=3.5.6
+version=3.5.7
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -29,6 +29,7 @@ hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.5.7 - Fix bug with null geometry in geometry to field algorithm
     3.5.6 - Fix field calculator documentation.
     3.5.5 - Added to_pluscode and from_pluscode field calculator functions.
     3.5.4 - Added GEOREF to Coordinate Conversion dialog box, zoom to, and coordinate capture.
