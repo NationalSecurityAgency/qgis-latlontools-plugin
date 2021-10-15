@@ -214,7 +214,7 @@ The order in which the coordinates are captured is determined by ***Coordinate o
 
 The ***Zoom to Latitude, Longitude*** tool accepts the following input coordinates as specified by ***Zoom to Coordinate Type***:
 
-* **WGS 84 (Latitude & Longitude) / Auto Detect Format** - Input coordinates can be either in decimal degrees, DMS degrees, WKT, or GeoJSON. For decimal and DMS formats, the order of the coordinates are determined by ***Zoom to Coordinate Order***. It also auto detects MGRS, Plus Codes, Standard UTM, UPS, and GEOREF formats so it is generally unnecessary to specify them separately.
+* **WGS 84 (Latitude & Longitude) / Auto Detect Format** - Input coordinates can be either in decimal degrees, DMS degrees, WKT, or GeoJSON. For decimal and DMS formats, the order of the coordinates are determined by ***Zoom to Coordinate Order***. It also auto detects MGRS, Plus Codes, Standard UTM, UPS, GEOREF, and Geohash formats so it is generally unnecessary to specify them separately.
 * **Project CRS** - This accepts coordinates formatted in the CRS of the QGIS project. The numbers can be formatted in decimal or WKT notation.
 * **Custom CRS** - You can specify any CRS for the input coordinates and QGIS zooms to that coordinate regardless of the project CRS. The numbers can be formatted in decimal or WKT notation.
 * **MGRS** - This only accepts [MGRS](https://en.wikipedia.org/wiki/Military_grid_reference_system) coordinates as input.

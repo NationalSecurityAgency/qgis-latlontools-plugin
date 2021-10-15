@@ -416,7 +416,7 @@
              <property name="plainText">
               <string>Supported 'Zoom to' formats (See help for more details):
 
-WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS, GEOREF
+WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS, GEOREF, Geohash
 
 Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 

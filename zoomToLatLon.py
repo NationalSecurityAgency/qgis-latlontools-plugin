@@ -180,6 +180,13 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             except Exception:
                 pass
 
+            # Check to see if it is a geohash string
+            try:
+                (lat, lon, lat_err, lon_err) = geohash.decode_exactly(text)
+                return(lat, lon, epsg4326)
+            except Exception:
+                pass
+
             # Check to see if it is a WKT POINT format
             if re.search(r'POINT\(', text) is not None:
                 m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
