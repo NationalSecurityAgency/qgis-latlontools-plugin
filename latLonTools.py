@@ -79,6 +79,7 @@ class LatLonTools:
         self.multiZoomDialog.setFloating(True)
 
         menu = QMenu()
+        menu.setObjectName('latLonToolsCopyExtents')
         # Add Interface for copying the canvas extent
         icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.svg")
         self.copyCanvasAction = menu.addAction(icon, 'Copy Canvas Extent', self.copyCanvas)
@@ -110,6 +111,7 @@ class LatLonTools:
         self.copyExtentButton.setPopupMode(QToolButton.MenuButtonPopup)
         self.copyExtentButton.triggered.connect(self.copyExtentTriggered)
         self.copyExtentToolbar = self.toolbar.addWidget(self.copyExtentButton)
+        self.copyExtentToolbar.setObjectName('latLonToolsCopyExtent')
 
         # Create the coordinate converter menu
         icon = QIcon(':/images/themes/default/mIconProjectionEnabled.svg')
