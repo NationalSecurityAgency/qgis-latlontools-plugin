@@ -1,6 +1,6 @@
 # Lat Lon Tools Plugin
 
-***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, UPS, Geohash, GEOREF, and Plus Code (Open Location Code) coordinate support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
+***Lat Lon Tools*** makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, UPS, Geohash, GEOREF, Plus Code (Open Location Code), and ECEF coordinate support to QGIS. When working with **Google Earth**, **Google Maps** or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default ***Lat Lon Tools*** uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in ***Lat Lon Tools***.
 
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
@@ -139,8 +139,13 @@ A number of the conversions can be accessed as field calculator functions.
 
     <div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div>
 
+    * <img src="images/ecef.png" width="24" height="24" alt="ECEF"> ***ECEF to Lat, Lon, Altitude*** - Convert an ECEF (Earth-centered, Earth-fixed coordinate system) layer into a new point layer that includes the altitude as a part of the geometry and optionally as an attribute.
+
+    * <img src="images/ecef.png" width="24" height="24" alt="ECEF"> ***Lat, Lon, Altitude to ECEF*** - Convert a point vector layer that includes an altitude Z dimension as a part of the geometery or as a part of the attribute table into an ECEF (Earth-centered, Earth-fixed coordinate system) layer.
+
 * <img src="doc/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.svg" alt="Help"> ***Help*** - Displays this help page.
+
 
 ## Settings
 

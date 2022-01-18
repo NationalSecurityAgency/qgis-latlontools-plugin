@@ -140,6 +140,11 @@ class LatLonTools:
         icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.svg')
         action = menu.addAction(icon, "Point layer to MGRS", self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
+        icon = QIcon(os.path.dirname(__file__) + '/images/ecef.png')
+        action = menu.addAction(icon, "ECEF to Lat, Lon, Altitude", self.ecef2lla)
+        action.setObjectName('latLonToolsEcef2lla')
+        action = menu.addAction(icon, "Lat, Lon, Altitude to ECEF", self.lla2ecef)
+        action.setObjectName('latLonToolsLla2ecef')
         self.conversionsAction = QAction(icon, "Conversions", self.iface.mainWindow())
         self.conversionsAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
@@ -353,6 +358,12 @@ class LatLonTools:
 
     def PlusCodestoLayer(self):
         processing.execAlgorithmDialog('latlontools:pluscodes2point', {})
+
+    def lla2ecef(self):
+        processing.execAlgorithmDialog('latlontools:lla2ecef', {})
+
+    def ecef2lla(self):
+        processing.execAlgorithmDialog('latlontools:ecef2lla', {})
 
     def settings(self):
         '''Show the settings dialog box'''
