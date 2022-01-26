@@ -37,7 +37,7 @@ code {
 </head>
 <body>
 <h1>Lat Lon Tools Plugin</h1>
-<p><strong><em>Lat Lon Tools</em></strong> makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, UPS, Geohash, GEOREF, and Plus Code (Open Location Code) coordinate support to QGIS. When working with <strong>Google Earth</strong>, <strong>Google Maps</strong> or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default <strong><em>Lat Lon Tools</em></strong> uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in <strong><em>Lat Lon Tools</em></strong>.</p>
+<p><strong><em>Lat Lon Tools</em></strong> makes it easy to capture, zoom to coordinates, convert coordinates in text fields into new point layers, export point geometry into text fields, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, UPS, Geohash, GEOREF, Plus Code (Open Location Code), and ECEF coordinate support to QGIS. When working with <strong>Google Earth</strong>, <strong>Google Maps</strong> or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default <strong><em>Lat Lon Tools</em></strong> uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The following tools are available in <strong><em>Lat Lon Tools</em></strong>.</p>
 <div style="text-align:center"><img src="doc/menu.jpg" alt="Lat Lon Tools Plugin"></div>
 
 <p>Here are the expanded <strong><em>Copy Extents to Clipboard</em></strong> menu items.</p>
@@ -46,7 +46,7 @@ code {
 <p>Some of the functions can be accessed from the <strong><em>Lat Lon Tools</em></strong> toolbar. If for some reason the toolbar is missing, select the menu item <strong><em>View-&gt;Toolbars</em></strong> and make sure <strong><em>Lat Lon Tools Toolbar</em></strong> is enabled. The conversion algorithms can be run from the QGIS Processing Toolbox.</p>
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
-<p>A number of the conversions can be accessed as field calculator functions.</p>
+<p>A number of the conversions can be accessed as field calculator functions. When in the <strong><em>Field Calculator</em></strong> find and expand the <strong><em>Lat Lon Tools</em></strong> menu. Clicking on each entry will give a description of the funciton with sample usage.</p>
 <div style="text-align:center"><img src="doc/calculator.jpg" alt="field calculator"></div>
 
 <ul>
@@ -181,6 +181,14 @@ code {
 <li><img src="images/pluscodes.svg" alt="Plus Codes"> <strong><em>Point layer to Plus Codes</em></strong> - Convert a point vector layer into a new layer with an Plus Codes column, containing coordinates based on the vector layer's geometry.</li>
 </ul>
 <p><div style="text-align:center"><img src="doc/geom2pluscodes.jpg" alt="Point layer to Plus Codes"></div></p>
+<ul>
+<li>
+<p><img src="images/ecef.png" width="24" height="24" alt="ECEF"> <strong><em>ECEF to Lat, Lon, Altitude</em></strong> - Convert an ECEF (Earth-centered, Earth-fixed coordinate system) layer into a new point layer that includes the altitude as a part of the geometry and optionally as an attribute.</p>
+</li>
+<li>
+<p><img src="images/ecef.png" width="24" height="24" alt="ECEF"> <strong><em>Lat, Lon, Altitude to ECEF</em></strong> - Convert a point vector layer that includes an altitude Z dimension as a part of the geometery or as a part of the attribute table into an ECEF (Earth-centered, Earth-fixed coordinate system) layer.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><img src="doc/settings.png" alt="Settings"> <strong><em>Settings</em></strong> - Displays the settings dialog box (see below).</p>

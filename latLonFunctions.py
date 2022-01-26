@@ -21,6 +21,8 @@ def InitLatLonFunctions():
     QgsExpression.registerFunction(dm)
     QgsExpression.registerFunction(dms)
     QgsExpression.registerFunction(ddmmss)
+    QgsExpression.registerFunction(llt_dd)
+    QgsExpression.registerFunction(llt_yx)
     QgsExpression.registerFunction(mgrs)
     QgsExpression.registerFunction(mgrs_100km)
     QgsExpression.registerFunction(mgrs_east)
@@ -36,11 +38,14 @@ def InitLatLonFunctions():
     QgsExpression.registerFunction(utm_north)
     QgsExpression.registerFunction(utm_to_point)
     QgsExpression.registerFunction(utm_zone)
+    
 
 def UnloadLatLonFunctions():
     QgsExpression.unregisterFunction('dm')
     QgsExpression.unregisterFunction('dms')
     QgsExpression.unregisterFunction('ddmmss')
+    QgsExpression.unregisterFunction('llt_dd')
+    QgsExpression.unregisterFunction('llt_yx')
     QgsExpression.unregisterFunction('mgrs')
     QgsExpression.unregisterFunction('mgrs_100km')
     QgsExpression.unregisterFunction('mgrs_east')
@@ -729,3 +734,123 @@ def ddmmss(values, feature, parent):
         parent.setEvalErrorString("Error: invalid parameters")
         return
     return dms_str
+
+
+@qgsfunction(-1, group=group_name)
+def llt_dd(values, feature, parent):
+    """
+    Convert a coordinate pair to a decimal degree string. Trailing decimal zeros are removed. If the CRS of the input coordinate is not EPSG:4326, the CRS needs to be specified and will be converted to decimal degrees.
+
+    <h4>Syntax</h4>
+    <p><b>llt_dd</b>( <i>y, x, [order='yx', precision=8, delimiter=', ', crs='EPSG:4326']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>y (lat)</i> &rarr; the y or latitude coordinate either as a floating point number or a string.</p>
+    <p><i>x (lon)</i> &rarr; the x or longitude coordinate either as a floating point number or a string.</p>
+    <p><i>order</i> &rarr; specify either 'yx' or 'xy' for latitude, longitude or longitude, latitude. The default is 'yx'.
+    <p><i>precision</i> &rarr; specifies the number of decimal point digits.</p>
+    <p><i>delimiter</i> &rarr; specifies the delimiter between the latitude and longitude pairs. The default value is ', '.
+    <p><i>crs</i> &rarr; optional coordinate reference system of the y, x coordinates. Default value is 'EPSG:4326'.</p>
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>llt_dd</b>(28.41870950, -81.58118645) &rarr; '28.4187095, -81.58118645'</li>
+      <li><b>llt_dd</b>(28.41870950, -81.58118645, 'xy', 4) &rarr; '-81.5812, 28.4187'</li>
+      <li><b>llt_dd</b>(28.41870950, -81.58118645, 'yx', 0) &rarr; '28, -82'</li>
+      <li><b>llt_dd</b>(3301866.78, -9081576.13, 'yx', 5, ' : ', 'EPSG:3857') &rarr; '28.41871 : -81.58119'</li>
+    </ul>
+    """
+    num_args = len(values)
+    if num_args < 2 or num_args > 6:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        y = float(values[0])
+        x = float(values[1])
+        if num_args > 2:
+            order = 0 if values[2] == 'yx' else 1
+        else:
+            order = 0
+        
+        precision = int(values[3]) if num_args > 3 else 8
+        if precision < 0:
+            parent.setEvalErrorString("Error: You cannot use a negative precision")
+            return
+        delimiter = values[4] if num_args > 4 else ', '
+        if num_args == 6:
+            crs = values[5]
+            if crs and crs != 'EPSG:4326':
+                y, x = transform_coords(y, x, crs)
+        if precision == 0:
+            if order:  # xy order
+                dd_str = '{:.0f}{}{:.0f}'.format(x, delimiter, y)
+            else:
+                dd_str = '{:.0f}{}{:.0f}'.format(y, delimiter, x)
+        else:
+            x_str = '{:.{prec}f}'.format(x, prec=precision).rstrip('0').rstrip('.')
+            y_str = '{:.{prec}f}'.format(y, prec=precision).rstrip('0').rstrip('.')
+            if order:  # xy order
+                dd_str = x_str + delimiter + y_str
+            else:
+                dd_str = y_str + delimiter + x_str
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude, longitude, or parameters")
+        return
+    return dd_str
+
+@qgsfunction(-1, group=group_name)
+def llt_yx(values, feature, parent):
+    """
+    Convert a coordinate pair to an appropriate string. Trailing decmial zeros are removed. There is no coordinate trasformation made with this expression.
+
+    <h4>Syntax</h4>
+    <p><b>llt_yx</b>( <i>y, x, [order='yx', precision=8, delimiter=', ']</i> )</p>
+
+    <h4>Arguments</h4>
+    <p><i>y (lat)</i> &rarr; the y coordinate either as a floating point number or a string.</p>
+    <p><i>x (lon)</i> &rarr; the x coordinate either as a floating point number or a string.</p>
+    <p><i>order</i> &rarr; specify either 'yx' or 'xy' for the coodinate display order. The default is 'yx'.
+    <p><i>precision</i> &rarr; specifies the number of decimal point digits.</p>
+    <p><i>delimiter</i> &rarr; specifies the delimiter between the y and x pairs. The default value is ', '.
+
+    <h4>Example usage</h4>
+    <ul>
+      <li><b>llt_yx</b>(28.41870950, -81.58118645) &rarr; '28.4187095, -81.58118645'</li>
+      <li><b>llt_yx</b>(28.41870950, -81.58118645, 'xy', 4) &rarr; '-81.5812, 28.4187'</li>
+      <li><b>llt_yx</b>(28.41870950, -81.58118645, 'yx', 0) &rarr; '28, -82'</li>
+      <li><b>llt_yx</b>(3301866.787, -9081576.101, 'yx', 2, ' : ') &rarr; '3301866.79 : -9081576.1'</li>
+    </ul>
+    """
+    num_args = len(values)
+    if num_args < 2 or num_args > 5:
+        parent.setEvalErrorString("Error: invalid number of arguments")
+        return
+    try:
+        y = float(values[0])
+        x = float(values[1])
+        if num_args > 2:
+            order = 0 if values[2] == 'yx' else 1
+        else:
+            order = 0
+        
+        precision = int(values[3]) if num_args > 3 else 8
+        if precision < 0:
+            parent.setEvalErrorString("Error: You cannot use a negative precision")
+            return
+        delimiter = values[4] if num_args > 4 else ', '
+        if precision == 0:
+            if order:  # xy order
+                dd_str = '{:.0f}{}{:.0f}'.format(x, delimiter, y)
+            else:
+                dd_str = '{:.0f}{}{:.0f}'.format(y, delimiter, x)
+        else:
+            x_str = '{:.{prec}f}'.format(x, prec=precision).rstrip('0').rstrip('.')
+            y_str = '{:.{prec}f}'.format(y, prec=precision).rstrip('0').rstrip('.')
+            if order:  # xy order
+                dd_str = x_str + delimiter + y_str
+            else:
+                dd_str = y_str + delimiter + x_str
+    except Exception:
+        parent.setEvalErrorString("Error: invalid latitude, longitude, or parameters")
+        return
+    return dd_str

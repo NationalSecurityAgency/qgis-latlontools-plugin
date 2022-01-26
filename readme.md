@@ -12,7 +12,7 @@ Some of the functions can be accessed from the ***Lat Lon Tools*** toolbar. If f
 
 <div style="text-align:center"><img src="doc/toolbar.jpg" alt="Lat Lon Tools toolbar"></div>
 
-A number of the conversions can be accessed as field calculator functions.
+A number of the conversions can be accessed as field calculator functions. When in the ***Field Calculator*** find and expand the ***Lat Lon Tools*** menu. Clicking on each entry will give a description of the funciton with sample usage.
 
 <div style="text-align:center"><img src="doc/calculator.jpg" alt="field calculator"></div>
 
