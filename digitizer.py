@@ -162,14 +162,9 @@ class DigitizerWidget(QDialog, FORM_CLASS):
             # Transform the input coordinate projection to the layer CRS
             x, y = transform.transform(float(lon), float(lat))
             geom = QgsGeometry.fromPointXY(QgsPointXY(x, y))
-            feat = QgsVectorLayerUtils.createFeature(layer, geom, {}, layer.createExpressionContext() )
-            if layer.fields().count() == 0:
-                layer.addFeature(feat)
+            result = self.iface.vectorLayerTools().addFeature( layer, {}, geom)
+            if result[0]:
                 self.lltools.zoomTo(srcCrs, lat, lon)
-            else:
-                if self.iface.openFeatureForm(layer, feat):
-                    layer.addFeature(feat)
-                    self.lltools.zoomTo(srcCrs, lat, lon)
 
     def labelUpdate(self):
         if self.inputProjection == 1:  # MGRS projection
