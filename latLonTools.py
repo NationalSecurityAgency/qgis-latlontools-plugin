@@ -30,6 +30,7 @@ class LatLonTools:
         self.provider = LatLonToolsProvider()
         self.toolbar = self.iface.addToolBar('Lat Lon Tools Toolbar')
         self.toolbar.setObjectName('LatLonToolsToolbar')
+        self.toolbar.setToolTip('Lat Lon Tools Toolbar')
 
     def initGui(self):
         '''Initialize Lot Lon Tools GUI.'''
