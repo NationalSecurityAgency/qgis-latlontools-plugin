@@ -1,10 +1,21 @@
 import os
 import enum
+try:
+    import h3
+    v = h3.versions()
+    if v['python'][0] == '3':
+        H3_INSTALLED = True
+    else:
+        H3_INSTALLED = False
+except Exception:
+    H3_INSTALLED = False
 from . import mapProviders
 
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
 from qgis.PyQt.QtCore import QSettings, Qt
+from qgis.PyQt.QtGui import QColor
+
 from qgis.core import QgsCoordinateReferenceSystem
 from .util import epsg4326
 
@@ -55,6 +66,20 @@ class Settings():
         self.capturePadZeroes = int(qset.value('/LatLonTools/CapturePadZeroes', Qt.Unchecked))
         self.captureMaidenheadPrecision = int(qset.value('/LatLonTools/CaptureMaidenheadPrecision', 3))
         self.captureGeorefPrecision = int(qset.value('/LatLonTools/CaptureGeorefPrecision', 5))
+        if H3_INSTALLED:
+            self.captureH3Precision = int(qset.value('/LatLonTools/CaptureH3Precision', 8))
+        else:
+            self.captureH3Precision = 8
+
+        ### ZOOM TO SETTINGS ###
+        color = qset.value('/LatLonTools/MarkerColor', '#ff0000')
+        self.markerColor = QColor(color)
+        value = int(qset.value('/LatLonTools/MarkerColorOpacity', 255))
+        self.markerColor.setAlpha(value)
+        color = qset.value('/LatLonTools/GridColor', '#ff0000')
+        self.gridColor = QColor(color)
+        value = int(qset.value('/LatLonTools/GridColorOpacity', 255))
+        self.gridColor.setAlpha(value)
 
         ### EXTERNAL MAP ###
         self.showPlacemark = int(qset.value('/LatLonTools/ShowPlacemark', Qt.Checked))
@@ -160,6 +185,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
     ProjectionTypeMaidenhead = 7
     ProjectionTypeUPS = 8
     ProjectionTypeGEOREF = 9
+    ProjectionTypeH3 = 10
+    ZoomProjectionTypeH3 = 8
 
     def __init__(self, lltools, iface, parent):
         super(SettingsWidget, self).__init__(parent)
@@ -169,9 +196,18 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.canvas = iface.mapCanvas()
 
         self.buttonBox.button(QDialogButtonBox.RestoreDefaults).clicked.connect(self.restoreDefaults)
+        if H3_INSTALLED:
+            self.captureH3Label.setEnabled(True)
+            self.captureH3PrecisionSpinBox.setEnabled(True)
+        else:
+            self.captureH3Label.setEnabled(False)
+            self.captureH3PrecisionSpinBox.setEnabled(False)
 
         ### CAPTURE SETTINGS ###
-        self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
+        if H3_INSTALLED:
+            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF','H3'])
+        else:
+            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -182,7 +218,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureUpsFormatComboBox.addItems(['Z 2426773mE 1530125mN', 'Z2426773E1530125N'])
 
         ### ZOOM TO SETTINGS ###
-        self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
+        if H3_INSTALLED:
+            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid','H3'])
+        else:
+            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -264,12 +303,21 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureMarkerCheckBox.setCheckState(Qt.Unchecked)
         self.captureAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
         self.capturePadZeroesCheckBox.setCheckState(Qt.Unchecked)
+        if H3_INSTALLED:
+            self.captureH3PrecisionSpinBox.setValue(8)
 
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.ProjectionTypeWgs84)
         self.zoomToCoordOrderComboBox.setCurrentIndex(CoordOrder.OrderYX)
         self.persistentMarkerCheckBox.setCheckState(Qt.Checked)
+        self.showGridCheckBox.setCheckState(Qt.Checked)
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
+        markerColor = QColor('#ff0000')
+        markerColor.setAlpha(255)
+        gridColor = QColor('#ff0000')
+        gridColor.setAlpha(255)
+        self.markerColorButton.setColor(markerColor)
+        self.gridColorButton.setColor(gridColor)
 
         ### EXTERNAL MAP ###
         self.showPlacemarkCheckBox.setCheckState(Qt.Checked)
@@ -325,6 +373,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### CAPTURE SETTINGS ###
         self.captureProjection = int(qset.value('/LatLonTools/CaptureProjection', self.ProjectionTypeWgs84))
+        if not H3_INSTALLED and self.captureProjection == self.ProjectionTypeH3:
+            self.captureProjection = 0
         self.delimiter = qset.value('/LatLonTools/Delimiter', ', ')
         self.dmsPrecision = int(qset.value('/LatLonTools/DMSPrecision', 0))
         self.coordOrder = int(qset.value('/LatLonTools/CoordOrder', CoordOrder.OrderYX))
@@ -338,7 +388,10 @@ class SettingsWidget(QDialog, FORM_CLASS):
         ### ZOOM TO SETTINGS ###
         self.zoomToCoordOrder = int(qset.value('/LatLonTools/ZoomToCoordOrder', CoordOrder.OrderYX))
         self.zoomToProjection = int(qset.value('/LatLonTools/ZoomToCoordType', 0))
+        if not H3_INSTALLED and self.zoomToProjection == self.ZoomProjectionTypeH3:
+            self.zoomToProjection = 0
         self.persistentMarker = int(qset.value('/LatLonTools/PersistentMarker', Qt.Checked))
+        self.showGrid = int(qset.value('/LatLonTools/ShowGrid', Qt.Checked))
         self.zoomToCustomCrsAuthId = qset.value('/LatLonTools/ZoomToCustomCrsId', 'EPSG:4326')
         self.zoomToProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(self.zoomToCustomCrsAuthId))
 
@@ -399,12 +452,21 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/CaptureShowClickedLocation', self.captureMarkerCheckBox.checkState())
         qset.setValue('/LatLonTools/CaptureAddDmsSpace', self.captureAddDmsSpaceCheckBox.checkState())
         qset.setValue('/LatLonTools/CapturePadZeroes', self.capturePadZeroesCheckBox.checkState())
+        if H3_INSTALLED:
+            qset.setValue('/LatLonTools/CaptureH3Precision', self.captureH3PrecisionSpinBox.value())
 
         ### ZOOM TO SETTINGS ###
         qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
         qset.setValue('/LatLonTools/ZoomToCoordOrder', int(self.zoomToCoordOrderComboBox.currentIndex()))
         qset.setValue('/LatLonTools/PersistentMarker', self.persistentMarkerCheckBox.checkState())
+        qset.setValue('/LatLonTools/ShowGrid', self.showGridCheckBox.checkState())
         qset.setValue('/LatLonTools/ZoomToCustomCrsId', self.zoomToCustomCrsId())
+        settings.markerColor = self.markerColorButton.color()
+        settings.gridColor = self.gridColorButton.color()
+        qset.setValue('/LatLonTools/MarkerColor', settings.markerColor.name())
+        qset.setValue('/LatLonTools/MarkerColorOpacity', settings.markerColor.alpha())
+        qset.setValue('/LatLonTools/GridColor', settings.gridColor.name())
+        qset.setValue('/LatLonTools/GridColorOpacity', settings.gridColor.alpha())
 
         ### EXTERNAL MAP ###
         qset.setValue('/LatLonTools/ShowPlacemark', self.showPlacemarkCheckBox.checkState())
@@ -533,7 +595,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         zoomToProjection = int(self.zoomToProjectionComboBox.currentIndex())
         self.zoomToCoordOrderComboBox.setEnabled((zoomToProjection != self.ProjectionTypeMGRS) and
                 (zoomToProjection != self.ProjectionTypePlusCodes) and (zoomToProjection != self.ProjectionTypeUTM) and
-                (zoomToProjection != self.ProjectionTypeGeohash) and (zoomToProjection != self.ProjectionTypeMaidenhead))
+                (zoomToProjection != self.ProjectionTypeGeohash) and (zoomToProjection != self.ProjectionTypeMaidenhead) and
+                (zoomToProjection != self.ZoomProjectionTypeH3))
         self.zoomToProjectionSelectionWidget.setEnabled(zoomToProjection == self.ProjectionTypeCustomCRS)
 
         # MULTI Zoom
@@ -578,6 +641,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureUpsPrecisionSpinBox.setValue(settings.captureUpsPrecision)
         self.captureUpsFormatComboBox.setCurrentIndex(settings.captureUpsFormat)
         self.captureGeohashSpinBox.setValue(settings.captureGeohashPrecision)
+        self.captureH3PrecisionSpinBox.setValue(settings.captureH3Precision)
         self.captureMaidenheadPrecisionSpinBox.setValue(settings.captureMaidenheadPrecision)
         self.captureGeorefPrecisionSpinBox.setValue(settings.captureGeorefPrecision)
         self.capturePrefixLineEdit.setText(self.capturePrefix)
@@ -594,6 +658,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
             self.zoomToProjectionSelectionWidget.setCrs(QgsCoordinateReferenceSystem(self.zoomToCustomCrsAuthId))
         self.zoomToCoordOrderComboBox.setCurrentIndex(self.zoomToCoordOrder)
         self.persistentMarkerCheckBox.setCheckState(self.persistentMarker)
+        self.showGridCheckBox.setCheckState(self.showGrid)
+        self.markerColorButton.setColor(settings.markerColor)
+        self.gridColorButton.setColor(settings.gridColor)
 
         ### EXTERNAL MAP ###
         self.showPlacemarkCheckBox.setCheckState(settings.showPlacemark)
@@ -713,6 +780,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
             return True
         return False
 
+    def captureProjIsH3(self):
+        if self.captureProjection == self.ProjectionTypeH3:
+            return True
+        return False
+
     def zoomToProjIsWgs84(self):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
             return True
@@ -746,6 +818,11 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def zoomToProjIsGeohash(self):
         if self.zoomToProjection == self.ProjectionTypeGeohash:
+            return True
+        return False
+
+    def zoomToProjIsH3(self):
+        if self.zoomToProjection == self.ZoomProjectionTypeH3:
             return True
         return False
 

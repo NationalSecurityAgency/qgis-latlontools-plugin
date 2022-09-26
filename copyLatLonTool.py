@@ -4,7 +4,7 @@ from qgis.PyQt.QtWidgets import QApplication
 from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject, QgsSettings
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
-from .settings import settings, CoordOrder
+from .settings import settings, CoordOrder, H3_INSTALLED
 from .util import epsg4326, formatDmsString
 from .utm import latLon2Utm
 from .ups import latLon2Ups
@@ -13,6 +13,9 @@ from . import olc
 from . import geohash
 from . import maidenhead
 from . import georef
+if H3_INSTALLED:
+    import h3
+
 # import traceback
 
 class CopyLatLonTool(QgsMapToolEmitPoint):
@@ -147,6 +150,20 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             msg = geohash.encode(pt4326.y(), pt4326.x(), settings.captureGeohashPrecision)
             if msg == '':
                 msg = None
+        elif self.settings.captureProjIsH3():
+            # Make sure the coordinate is transformed to EPSG:4326
+            canvasCRS = self.canvas.mapSettings().destinationCrs()
+            if canvasCRS == epsg4326:
+                pt4326 = pt
+            else:
+                transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
+                pt4326 = transform.transform(pt.x(), pt.y())
+            if H3_INSTALLED:
+                msg = h3.geo_to_h3(pt4326.y(), pt4326.x(), settings.captureH3Precision)
+                if msg == 0:
+                    msg = None
+            else:
+                msg = None
         elif self.settings.captureProjIsMaidenhead():
             # Make sure the coordinate is transformed to EPSG:4326
             canvasCRS = self.canvas.mapSettings().destinationCrs()
@@ -241,6 +258,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             s = 'Plus Codes'
         elif self.settings.captureProjIsGeohash():
             s = 'Geohash'
+        elif self.settings.captureProjIsH3():
+            s = 'H3'
         elif self.settings.captureProjIsMaidenhead():
             s = 'Maidenhead Grid Locator'
         elif self.settings.captureProjIsGEOREF():
