@@ -107,3 +107,27 @@ def encode(latitude, longitude, precision=12):
             bit = 0
             ch = 0
     return ''.join(geohash)
+
+def decode_extent(geohash):
+    """
+    Decode the geohash to its bounding box.
+    Returns four float values: latitude 1, latitude 2, longitude 1,
+    longitude 2.
+    """
+    lat_interval, lon_interval = (-90.0, 90.0), (-180.0, 180.0)
+    is_even = True
+    for c in geohash:
+        cd = __decodemap[c]
+        for mask in [16, 8, 4, 2, 1]:
+            if is_even: # adds longitude info
+                if cd & mask:
+                    lon_interval = ((lon_interval[0]+lon_interval[1])/2, lon_interval[1])
+                else:
+                    lon_interval = (lon_interval[0], (lon_interval[0]+lon_interval[1])/2)
+            else:      # adds latitude info
+                if cd & mask:
+                    lat_interval = ((lat_interval[0]+lat_interval[1])/2, lat_interval[1])
+                else:
+                    lat_interval = (lat_interval[0], (lat_interval[0]+lat_interval[1])/2)
+            is_even = not is_even
+    return lat_interval[0], lat_interval[1], lon_interval[0], lon_interval[1]
