@@ -66,6 +66,8 @@ class Settings():
         self.capturePadZeroes = int(qset.value('/LatLonTools/CapturePadZeroes', Qt.Unchecked))
         self.captureMaidenheadPrecision = int(qset.value('/LatLonTools/CaptureMaidenheadPrecision', 3))
         self.captureGeorefPrecision = int(qset.value('/LatLonTools/CaptureGeorefPrecision', 5))
+        self.captureMgrsAddSpacesCheckBox = int(qset.value('/LatLonTools/CaptureMgrsAddSpaces', Qt.Unchecked))
+        self.captureMgrsPrec = int(qset.value('/LatLonTools/CaptureMgrsPrecision', 5))
         if H3_INSTALLED:
             self.captureH3Precision = int(qset.value('/LatLonTools/CaptureH3Precision', 8))
         else:
@@ -121,6 +123,8 @@ class Settings():
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
         self.converterAddDmsSpace = int(qset.value('/LatLonTools/ConverterAddDmsSpace', Qt.Checked))
         self.converterPadZeroes = int(qset.value('/LatLonTools/ConverterPadZeroes', Qt.Unchecked))
+        self.converterMgrsAddSpacesCheckBox = int(qset.value('/LatLonTools/ConverterMgrsAddSpaces', Qt.Unchecked))
+        self.converterMgrsPrec = int(qset.value('/LatLonTools/ConverterMgrsPrecision', 5))
 
     def mapProviderNames(self):
         plist = []
@@ -205,9 +209,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### CAPTURE SETTINGS ###
         if H3_INSTALLED:
-            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF','H3'])
+            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF','H3'])
         else:
-            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
+            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -219,9 +223,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### ZOOM TO SETTINGS ###
         if H3_INSTALLED:
-            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid','H3'])
+            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid','H3'])
         else:
-            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
+            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
@@ -303,6 +307,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureMarkerCheckBox.setCheckState(Qt.Unchecked)
         self.captureAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
         self.capturePadZeroesCheckBox.setCheckState(Qt.Unchecked)
+        self.captureMgrsAddSpacesCheckBox.setCheckState(Qt.Unchecked)
+        self.captureMgrsPrecisionSpinBox.setValue(5)
         if H3_INSTALLED:
             self.captureH3PrecisionSpinBox.setValue(8)
 
@@ -362,7 +368,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDdmmssDelimiterLineEdit.setText(',')
         self.converterAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
         self.converterPadZeroesCheckBox.setCheckState(Qt.Unchecked)
-
+        self.converterMgrsAddSpacesCheckBox.setCheckState(Qt.Unchecked)
+        self.converterMgrsPrecisionSpinBox.setValue(5)
 
 
     def readSettings(self):
@@ -452,6 +459,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/CaptureShowClickedLocation', self.captureMarkerCheckBox.checkState())
         qset.setValue('/LatLonTools/CaptureAddDmsSpace', self.captureAddDmsSpaceCheckBox.checkState())
         qset.setValue('/LatLonTools/CapturePadZeroes', self.capturePadZeroesCheckBox.checkState())
+        qset.setValue('/LatLonTools/CaptureMgrsAddSpaces', self.captureMgrsAddSpacesCheckBox.checkState())
+        qset.setValue('/LatLonTools/CaptureMgrsPrecision', int(self.captureMgrsPrecisionSpinBox.value()))
         if H3_INSTALLED:
             qset.setValue('/LatLonTools/CaptureH3Precision', self.captureH3PrecisionSpinBox.value())
 
@@ -524,6 +533,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterAddDmsSpace', self.converterAddDmsSpaceCheckBox.checkState())
         qset.setValue('/LatLonTools/ConverterPadZeroes', self.converterPadZeroesCheckBox.checkState())
+        qset.setValue('/LatLonTools/ConverterMgrsAddSpaces', self.converterMgrsAddSpacesCheckBox.checkState())
+        qset.setValue('/LatLonTools/ConverterMgrsPrecision', int(self.converterMgrsPrecisionSpinBox.value()))
 
         # The values have been read from the widgets and saved to the registry.
         # Now we will read them back to the variables.
@@ -649,6 +660,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.captureMarkerCheckBox.setCheckState(settings.captureShowLocation)
         self.captureAddDmsSpaceCheckBox.setCheckState(settings.captureAddDmsSpace)
         self.capturePadZeroesCheckBox.setCheckState(settings.capturePadZeroes)
+        self.captureMgrsAddSpacesCheckBox.setCheckState(settings.captureMgrsAddSpacesCheckBox)
+        self.captureMgrsPrecisionSpinBox.setValue(settings.captureMgrsPrec)
 
         ### ZOOM TO SETTINGS ###
         self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
@@ -721,6 +734,8 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
         self.converterAddDmsSpaceCheckBox.setCheckState(settings.converterAddDmsSpace)
         self.converterPadZeroesCheckBox.setCheckState(settings.converterPadZeroes)
+        self.converterMgrsAddSpacesCheckBox.setCheckState(settings.converterMgrsAddSpacesCheckBox)
+        self.converterMgrsPrecisionSpinBox.setValue(settings.converterMgrsPrec)
 
         self.setEnabled()
 

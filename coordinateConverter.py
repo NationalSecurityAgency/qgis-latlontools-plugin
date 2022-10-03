@@ -6,7 +6,7 @@ from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QApplication
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.uic import loadUiType
 from qgis.core import QgsCoordinateTransform, QgsPoint, QgsPointXY, QgsProject
-from .util import epsg4326, parseDMSString, formatDmsString
+from .util import epsg4326, parseDMSString, formatDmsString, formatMgrsString
 # import traceback
 
 from .captureCoordinate  import CaptureCoordinate
@@ -240,7 +240,8 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             self.utmLineEdit.setText(s)
         if id != 7:  # MGRS
             try:
-                s = mgrs.toMgrs(pt4326.y(), pt4326.x()).strip()
+                s = mgrs.toMgrs(pt4326.y(), pt4326.x(), settings.converterMgrsPrec)
+                s = formatMgrsString(s, settings.converterMgrsAddSpacesCheckBox)
             except Exception:
                 s = 'Invalid'
             self.mgrsLineEdit.setText(s)

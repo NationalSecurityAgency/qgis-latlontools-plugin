@@ -5,7 +5,7 @@ from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject, QgsS
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
 from .settings import settings, CoordOrder, H3_INSTALLED
-from .util import epsg4326, formatDmsString
+from .util import epsg4326, formatDmsString, formatMgrsString
 from .utm import latLon2Utm
 from .ups import latLon2Ups
 from . import mgrs
@@ -101,7 +101,8 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
                 transform = QgsCoordinateTransform(canvasCRS, epsg4326, QgsProject.instance())
                 pt4326 = transform.transform(pt.x(), pt.y())
             try:
-                msg = mgrs.toMgrs(pt4326.y(), pt4326.x())
+                msg = mgrs.toMgrs(pt4326.y(), pt4326.x(), settings.captureMgrsPrec)
+                msg = formatMgrsString(msg, settings.captureMgrsAddSpacesCheckBox)
             except Exception:
                 # traceback.print_exc()
                 msg = None
@@ -249,7 +250,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:  # WKT
                 s = 'WKT'
         elif self.settings.captureProjIsMGRS():
-            s = 'MGRS'
+            s = 'MGRS/USNG'
         elif self.settings.captureProjIsUTM():
             s = 'Standard UTM'
         elif self.settings.captureProjIsUPS():

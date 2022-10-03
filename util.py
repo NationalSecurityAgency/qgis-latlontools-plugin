@@ -4,6 +4,22 @@ from qgis.core import QgsCoordinateReferenceSystem
 
 epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
 
+def formatMgrsString(mgrs, add_spaces=False):
+    if add_spaces:
+        gzd = mgrs[0:3].strip()
+        gsid = mgrs[3:5]
+        ns = mgrs[5:].strip()
+        if len(mgrs) > 5:
+            l = int(len(ns) / 2)
+            easting = ns[0:l]
+            northing = ns[l:]
+            s = '{} {} {} {}'.format(gzd, gsid, easting, northing)
+        else:
+            s = '{} {}'.format(gzd, gsid)
+        return(s)
+    else:
+        return(mgrs.strip())
+
 def formatDmsString(lat, lon, dms_mode=0, prec=0, order=0, delimiter=', ', useDmsSpace=True, padZeros=False):
     '''Return a DMS formated string.'''
     if order == 0:  # Y, X or Lat, Lon

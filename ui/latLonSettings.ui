@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>771</height>
+    <height>802</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
         <x>0</x>
         <y>0</y>
         <width>473</width>
-        <height>736</height>
+        <height>781</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -137,14 +137,14 @@
                </property>
               </widget>
              </item>
-             <item row="8" column="0">
+             <item row="9" column="0">
               <widget class="QLabel" name="label_18">
                <property name="text">
                 <string>Plus codes length:</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="1">
+             <item row="9" column="1">
               <widget class="QSpinBox" name="plusCodesSpinBox">
                <property name="minimum">
                 <number>10</number>
@@ -174,34 +174,34 @@
                </property>
               </widget>
              </item>
-             <item row="13" column="0">
+             <item row="14" column="0">
               <widget class="QLabel" name="label_28">
                <property name="text">
                 <string>Coordinate prefix</string>
                </property>
               </widget>
              </item>
-             <item row="14" column="0">
+             <item row="15" column="0">
               <widget class="QLabel" name="label_29">
                <property name="text">
                 <string>Coordinate suffix</string>
                </property>
               </widget>
              </item>
-             <item row="13" column="1">
+             <item row="14" column="1">
               <widget class="QLineEdit" name="capturePrefixLineEdit"/>
              </item>
-             <item row="14" column="1">
+             <item row="15" column="1">
               <widget class="QLineEdit" name="captureSuffixLineEdit"/>
              </item>
-             <item row="9" column="0">
+             <item row="10" column="0">
               <widget class="QLabel" name="label_41">
                <property name="text">
                 <string>Geohash precision</string>
                </property>
               </widget>
              </item>
-             <item row="9" column="1">
+             <item row="10" column="1">
               <widget class="QSpinBox" name="captureGeohashSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -245,14 +245,14 @@
                </property>
               </widget>
              </item>
-             <item row="10" column="0">
+             <item row="11" column="0">
               <widget class="QLabel" name="label_45">
                <property name="text">
                 <string>Maidenhead grid precision</string>
                </property>
               </widget>
              </item>
-             <item row="10" column="1">
+             <item row="11" column="1">
               <widget class="QSpinBox" name="captureMaidenheadPrecisionSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -299,14 +299,14 @@
              <item row="7" column="1">
               <widget class="QComboBox" name="captureUpsFormatComboBox"/>
              </item>
-             <item row="11" column="0">
+             <item row="12" column="0">
               <widget class="QLabel" name="label_57">
                <property name="text">
                 <string>GEOREF precision</string>
                </property>
               </widget>
              </item>
-             <item row="11" column="1">
+             <item row="12" column="1">
               <widget class="QSpinBox" name="captureGeorefPrecisionSpinBox">
                <property name="maximum">
                 <number>10</number>
@@ -316,20 +316,37 @@
                </property>
               </widget>
              </item>
-             <item row="12" column="0">
+             <item row="13" column="0">
               <widget class="QLabel" name="captureH3Label">
                <property name="text">
                 <string>H3 resolution</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="1">
+             <item row="13" column="1">
               <widget class="QSpinBox" name="captureH3PrecisionSpinBox">
                <property name="maximum">
                 <number>15</number>
                </property>
                <property name="value">
                 <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_62">
+               <property name="text">
+                <string>MGRS/USNG precision</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1">
+              <widget class="QSpinBox" name="captureMgrsPrecisionSpinBox">
+               <property name="maximum">
+                <number>5</number>
+               </property>
+               <property name="value">
+                <number>5</number>
                </property>
               </widget>
              </item>
@@ -352,6 +369,13 @@
              </property>
              <property name="checked">
               <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="captureMgrsAddSpacesCheckBox">
+             <property name="text">
+              <string>Add spaces to MGRS/USNG coordinates</string>
              </property>
             </widget>
            </item>
@@ -503,7 +527,7 @@ WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Stan
 
 Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 
-MGRS - Only MGRS coordinates
+MGRS/USNG - Only MGRS coordinates or USNG coordinates within the United States
 
 Plus Codes - Only Plus Codes (Open Location Code) coordinates
 
@@ -1042,14 +1066,14 @@ H3 (if installed) - Only accept H3 geohash string</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="0">
+             <item row="9" column="0">
               <widget class="QLabel" name="label_33">
                <property name="text">
                 <string>Plus codes (Open Location Code) length</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="1">
+             <item row="9" column="1">
               <widget class="QSpinBox" name="converterPlusCodePrecisionSpinBox">
                <property name="minimum">
                 <number>10</number>
@@ -1079,42 +1103,42 @@ H3 (if installed) - Only accept H3 geohash string</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="0">
+             <item row="13" column="0">
               <widget class="QLabel" name="label_37">
                <property name="text">
                 <string>Delimiter between coordinate pairs</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="1">
+             <item row="13" column="1">
               <widget class="QLineEdit" name="converterDelimiterLineEdit">
                <property name="text">
                 <string>,</string>
                </property>
               </widget>
              </item>
-             <item row="13" column="0">
+             <item row="14" column="0">
               <widget class="QLabel" name="label_38">
                <property name="text">
                 <string>DDMMSS delimiter</string>
                </property>
               </widget>
              </item>
-             <item row="13" column="1">
+             <item row="14" column="1">
               <widget class="QLineEdit" name="converterDdmmssDelimiterLineEdit">
                <property name="text">
                 <string>,</string>
                </property>
               </widget>
              </item>
-             <item row="9" column="0">
+             <item row="10" column="0">
               <widget class="QLabel" name="label_40">
                <property name="text">
                 <string>Geohash precision</string>
                </property>
               </widget>
              </item>
-             <item row="9" column="1">
+             <item row="10" column="1">
               <widget class="QSpinBox" name="converterGeohashSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -1144,14 +1168,14 @@ H3 (if installed) - Only accept H3 geohash string</string>
                </property>
               </widget>
              </item>
-             <item row="10" column="0">
+             <item row="11" column="0">
               <widget class="QLabel" name="label_46">
                <property name="text">
                 <string>Maidenhead grid precsion</string>
                </property>
               </widget>
              </item>
-             <item row="10" column="1">
+             <item row="11" column="1">
               <widget class="QSpinBox" name="converterMaidenheadPrecisionSpinBox">
                <property name="minimum">
                 <number>1</number>
@@ -1198,17 +1222,34 @@ H3 (if installed) - Only accept H3 geohash string</string>
                </property>
               </widget>
              </item>
-             <item row="11" column="0">
+             <item row="12" column="0">
               <widget class="QLabel" name="label_58">
                <property name="text">
                 <string>GEOREF precision</string>
                </property>
               </widget>
              </item>
-             <item row="11" column="1">
+             <item row="12" column="1">
               <widget class="QSpinBox" name="converterGeorefPrecisionSpinBox">
                <property name="maximum">
                 <number>10</number>
+               </property>
+               <property name="value">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_61">
+               <property name="text">
+                <string>MGRS/USNG precision</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1">
+              <widget class="QSpinBox" name="converterMgrsPrecisionSpinBox">
+               <property name="maximum">
+                <number>5</number>
                </property>
                <property name="value">
                 <number>5</number>
@@ -1228,6 +1269,13 @@ H3 (if installed) - Only accept H3 geohash string</string>
             <widget class="QCheckBox" name="converterPadZeroesCheckBox">
              <property name="text">
               <string>Pad D°M'S&quot; and D° M.MM' output coordinates with leading zeroes</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="converterMgrsAddSpacesCheckBox">
+             <property name="text">
+              <string>Add spaces to MGRS/USNG coordinates</string>
              </property>
             </widget>
            </item>
