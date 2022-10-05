@@ -202,8 +202,9 @@ The order in which the coordinates are captured is determined by ***Coordinate o
     * '755631,4283168,15N'
     * '755631mE,4283168mN,15N'
     * '755631mE,4283168mN,15,N'
-* **UPS precision** - Used when formatting UPS coordinates and specifies the number of digits after the decimal.
-* **UPS format** - This specifies a UPS string format and is one of the following: 'Z 2426773mE 1530125mN' or 'Z2426773E1530125N'
+* ***UPS precision*** - Used when formatting UPS coordinates and specifies the number of digits after the decimal.
+* ***UPS format*** - This specifies a UPS string format and is one of the following: 'Z 2426773mE 1530125mN' or 'Z2426773E1530125N'
+* ***MGRS precision*** - This specifies the precision of MGRS coordinates ranging between 0 and 5 with precisions of 100km, 10km, 1km, 100m, 10m and 1m repectively.
 * ***Plus codes length*** - Used when formatting Plus Code coordinates. The minimum value is 10.
 * ***Geohash precision*** - Used when formatting Geohash coordinates.
 * ***Maidenhead grid precision*** - Used when formatting Amateur Radio Maidenhead grid coordinates.The value ranges from 1 to 4.
@@ -213,6 +214,7 @@ The order in which the coordinates are captured is determined by ***Coordinate o
 * ***Coordinate suffix*** - This text string is added to the end of the captured coordinate.
 * ***Add space between D&deg; M' S" and D&deg; M.MM' numbers*** - When checked a space will be added between each pair of numbers.
 * ***Pad DMS and DM.MM output coordinates with leading zeros*** - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.
+* ***Add spaces to MGRS coordinates*** - This will add spaces to an MGRS coordinate when checked. Unchecked it looks like "16TDL8016526461" and checked it looks like "16T DL 80165 26461".
 * ***Show marker on QGIS map*** - When checked, a persistent marker stays on the map at the clicked location until another location is clicked on or a new tools is selected.
 
 ### Zoom to Settings

@@ -22,13 +22,14 @@ about=
 tracker=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/issues
 repository=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin
 homepage=https://github.com/NationalSecurityAgency/qgis-latlontools-plugin/#readme
-tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,ups,dms,zoom,move to,crs,wkt,point,mgrs,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box,google earth,geohash,maidenhead grid,amateur radio grid,function,functions,expression,ecef,earth-centered,earth-fixed
+tags=coordinate,capture,latitude,longitude,epsg:4326,4326,wgs84,utm,ups,dms,zoom,move to,crs,wkt,point,mgrs,usng,osm,google,bing,mapillary,openstreetmap,digitizing,digitize,geojson,processing,conversion,plus codes,canvas,bounding box,google earth,geohash,maidenhead grid,amateur radio grid,function,functions,expression,ecef,earth-centered,earth-fixed
 category=Plugins
 icon=icon.png
 hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.6.6 - Added MGRS precision control and spacing.
     3.6.5 - Added H3 coordinates and zoom to grid cell display for some formats
     3.6.4 - Added Google Earth Web as external map provider.
     3.6.3 - Bug fix for point digitizer.
