@@ -256,8 +256,9 @@ code {
 <li>'755631mE,4283168mN,15,N'</li>
 </ul>
 </li>
-<li><strong>UPS precision</strong> - Used when formatting UPS coordinates and specifies the number of digits after the decimal.</li>
-<li><strong>UPS format</strong> - This specifies a UPS string format and is one of the following: 'Z 2426773mE 1530125mN' or 'Z2426773E1530125N'</li>
+<li><strong><em>UPS precision</em></strong> - Used when formatting UPS coordinates and specifies the number of digits after the decimal.</li>
+<li><strong><em>UPS format</em></strong> - This specifies a UPS string format and is one of the following: 'Z 2426773mE 1530125mN' or 'Z2426773E1530125N'</li>
+<li><strong><em>MGRS precision</em></strong> - This specifies the precision of MGRS coordinates ranging between 0 and 5 with precisions of 100km, 10km, 1km, 100m, 10m and 1m repectively.</li>
 <li><strong><em>Plus codes length</em></strong> - Used when formatting Plus Code coordinates. The minimum value is 10.</li>
 <li><strong><em>Geohash precision</em></strong> - Used when formatting Geohash coordinates.</li>
 <li><strong><em>Maidenhead grid precision</em></strong> - Used when formatting Amateur Radio Maidenhead grid coordinates.The value ranges from 1 to 4.</li>
@@ -267,6 +268,7 @@ code {
 <li><strong><em>Coordinate suffix</em></strong> - This text string is added to the end of the captured coordinate.</li>
 <li><strong><em>Add space between D&deg; M' S" and D&deg; M.MM' numbers</em></strong> - When checked a space will be added between each pair of numbers.</li>
 <li><strong><em>Pad DMS and DM.MM output coordinates with leading zeros</em></strong> - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.</li>
+<li><strong><em>Add spaces to MGRS coordinates</em></strong> - This will add spaces to an MGRS coordinate when checked. Unchecked it looks like "16TDL8016526461" and checked it looks like "16T DL 80165 26461".</li>
 <li><strong><em>Show marker on QGIS map</em></strong> - When checked, a persistent marker stays on the map at the clicked location until another location is clicked on or a new tools is selected.</li>
 </ul>
 <h3>Zoom to Settings</h3>
@@ -402,4 +404,5 @@ code {
 <li><strong><em>DDMMSS delimiter</em></strong> is the delimiter used between DDMMSS coordinate pairs. Leave this blank if no space is desired between coordinates. The default is ", ".</li>
 <li><strong><em>Add space between D&deg; M' S" and D&deg; M.MM' numbers</em></strong> - When checked a space will be added between each pair of numbers.</li>
 <li><strong><em>Pad DMS and DM.MM output coordinates with leading zeros</em></strong> - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.</li>
+<li><strong><em>Add spaces to MGRS coordinates</em></strong> - This will add spaces to an MGRS coordinate when checked. Unchecked it looks like "16TDL8016526461" and checked it looks like "16T DL 80165 26461".</li>
 </ul></body>
