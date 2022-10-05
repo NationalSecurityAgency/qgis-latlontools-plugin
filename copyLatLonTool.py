@@ -250,7 +250,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             else:  # WKT
                 s = 'WKT'
         elif self.settings.captureProjIsMGRS():
-            s = 'MGRS/USNG'
+            s = 'MGRS'
         elif self.settings.captureProjIsUTM():
             s = 'Standard UTM'
         elif self.settings.captureProjIsUPS():

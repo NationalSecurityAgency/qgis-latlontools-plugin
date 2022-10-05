@@ -209,9 +209,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### CAPTURE SETTINGS ###
         if H3_INSTALLED:
-            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF','H3'])
+            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF','H3'])
         else:
-            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
+            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
         self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
         self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
@@ -223,9 +223,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### ZOOM TO SETTINGS ###
         if H3_INSTALLED:
-            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid','H3'])
+            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid','H3'])
         else:
-            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS/USNG', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
+            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)

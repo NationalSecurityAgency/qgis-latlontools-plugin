@@ -336,7 +336,7 @@
              <item row="8" column="0">
               <widget class="QLabel" name="label_62">
                <property name="text">
-                <string>MGRS/USNG precision</string>
+                <string>MGRS precision</string>
                </property>
               </widget>
              </item>
@@ -375,7 +375,7 @@
            <item>
             <widget class="QCheckBox" name="captureMgrsAddSpacesCheckBox">
              <property name="text">
-              <string>Add spaces to MGRS/USNG coordinates</string>
+              <string>Add spaces to MGRS coordinates</string>
              </property>
             </widget>
            </item>
@@ -527,7 +527,7 @@ WGS 84 - Decimal, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Stan
 
 Project &amp; Custom CRS - Decimal &amp; WKT coordinates
 
-MGRS/USNG - Only MGRS coordinates or USNG coordinates within the United States
+MGRS - Only MGRS coordinates
 
 Plus Codes - Only Plus Codes (Open Location Code) coordinates
 
@@ -1242,7 +1242,7 @@ H3 (if installed) - Only accept H3 geohash string</string>
              <item row="8" column="0">
               <widget class="QLabel" name="label_61">
                <property name="text">
-                <string>MGRS/USNG precision</string>
+                <string>MGRS precision</string>
                </property>
               </widget>
              </item>
@@ -1275,7 +1275,7 @@ H3 (if installed) - Only accept H3 geohash string</string>
            <item>
             <widget class="QCheckBox" name="converterMgrsAddSpacesCheckBox">
              <property name="text">
-              <string>Add spaces to MGRS/USNG coordinates</string>
+              <string>Add spaces to MGRS coordinates</string>
              </property>
             </widget>
            </item>
