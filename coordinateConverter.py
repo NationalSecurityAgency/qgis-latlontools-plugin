@@ -267,7 +267,10 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             s = latLon2Ups(pt4326.y(), pt4326.x(),precision=settings.converterUpsPrec,format=settings.converterUpsFormat)
             self.upsLineEdit.setText(s)
         if id != 12: # Georef
-            s = georef.encode(pt4326.y(), pt4326.x(), settings.converterGeorefPrecision)
+            try:
+                s = georef.encode(pt4326.y(), pt4326.x(), settings.converterGeorefPrecision)
+            except Exception:
+                s = 'Invalid'
             self.georefLineEdit.setText(s)
 
     def commitWgs84(self):
