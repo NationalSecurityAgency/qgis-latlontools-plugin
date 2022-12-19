@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, UPS, Geohash, H3, Maidenhead grid, Plus Codes, and ECEF formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
-version=3.6.6
+version=3.6.7
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -29,6 +29,7 @@ hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.6.7 - Added the ability to set the size of the zoom to markers and lines.
     3.6.6 - Added MGRS precision control and spacing.
     3.6.5 - Added H3 coordinates and zoom to grid cell display for some formats
     3.6.4 - Added Google Earth Web as external map provider.
@@ -56,16 +57,3 @@ changelog=
     3.4.2 - Added UTM and additional DMS field calculator functions
     3.4.1 - Finished MGRS Field Calculator functions
     3.4.0 - Initial release of MGRS Field Calculator functions
-    3.3.22 - UTM bug fix
-    3.3.21 - Added scroll area to conversion dialogbox so it is dockable in smaller spaces
-    3.3.20 - Fix bug #46
-    3.3.19 - Allow users to input their own URLs for external maps.
-    3.3.18 - Updated external map URL parameters for MapQuest and Mapillary
-    3.3.17 - Fixed bug in coordinate coversion panel
-    3.3.16 - Added Maidenhead grid locator format and bug fixes for DMS coordinates
-    3.3.15 - Added zero padding option for DMS coordinates
-    3.3.14 - Updated mgrs.py to the latest version to fix QGIS 10 issues
-    3.3.13 - Fixed tool interactions
-    3.3.12 - Made coordinate conversion dialog box dockable & added zoom to button.
-    3.3.11 - Fix bug
-    3.3.10 - Added 'degree minute' capture and to coordinate conversion dialog box.
