@@ -407,6 +407,8 @@ class LatLonTools:
         vertLine = QgsGeometry.fromPolyline([topPt, bottomPt])
 
         self.crossRb.reset(QgsWkbTypes.LineGeometry)
+        self.crossRb.setWidth(settings.markerWidth)
+        self.crossRb.setColor(settings.markerColor)
         self.crossRb.addGeometry(horizLine, None)
         self.crossRb.addGeometry(vertLine, None)
 

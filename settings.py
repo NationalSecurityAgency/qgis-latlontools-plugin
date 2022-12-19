@@ -74,6 +74,9 @@ class Settings():
             self.captureH3Precision = 8
 
         ### ZOOM TO SETTINGS ###
+        self.markerSize = int(qset.value('/LatLonTools/MarkerSize', 18))
+        self.markerWidth = int(qset.value('/LatLonTools/MarkerWidth', 2))
+        self.gridWidth = int(qset.value('/LatLonTools/GridWidth', 2))
         color = qset.value('/LatLonTools/MarkerColor', '#ff0000')
         self.markerColor = QColor(color)
         value = int(qset.value('/LatLonTools/MarkerColorOpacity', 255))
@@ -318,6 +321,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.persistentMarkerCheckBox.setCheckState(Qt.Checked)
         self.showGridCheckBox.setCheckState(Qt.Checked)
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
+        self.markerSizeSpinBox.setValue(18)
+        self.markerWidthSpinBox.setValue(2)
+        self.gridWidthSpinBox.setValue(2)
         markerColor = QColor('#ff0000')
         markerColor.setAlpha(255)
         gridColor = QColor('#ff0000')
@@ -470,6 +476,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/PersistentMarker', self.persistentMarkerCheckBox.checkState())
         qset.setValue('/LatLonTools/ShowGrid', self.showGridCheckBox.checkState())
         qset.setValue('/LatLonTools/ZoomToCustomCrsId', self.zoomToCustomCrsId())
+        qset.setValue('/LatLonTools/MarkerSize', int(self.markerSizeSpinBox.value()))
+        qset.setValue('/LatLonTools/MarkerWidth', int(self.markerWidthSpinBox.value()))
+        qset.setValue('/LatLonTools/GridWidth', int(self.gridWidthSpinBox.value()))
         settings.markerColor = self.markerColorButton.color()
         settings.gridColor = self.gridColorButton.color()
         qset.setValue('/LatLonTools/MarkerColor', settings.markerColor.name())
@@ -672,6 +681,9 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.zoomToCoordOrderComboBox.setCurrentIndex(self.zoomToCoordOrder)
         self.persistentMarkerCheckBox.setCheckState(self.persistentMarker)
         self.showGridCheckBox.setCheckState(self.showGrid)
+        self.markerSizeSpinBox.setValue(settings.markerSize)
+        self.markerWidthSpinBox.setValue(settings.markerWidth)
+        self.gridWidthSpinBox.setValue(settings.gridWidth)
         self.markerColorButton.setColor(settings.markerColor)
         self.gridColorButton.setColor(settings.gridColor)
 

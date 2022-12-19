@@ -49,12 +49,12 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         self.marker = QgsRubberBand(self.canvas, QgsWkbTypes.PointGeometry)
         self.marker.setColor(settings.markerColor)
         self.marker.setStrokeColor(settings.markerColor)
-        self.marker.setWidth(2)
-        self.marker.setIconSize(18)
+        self.marker.setWidth(settings.markerWidth)
+        self.marker.setIconSize(settings.markerSize)
         self.marker.setIcon(QgsRubberBand.ICON_CROSS)
         
         self.line_marker = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
-        self.line_marker.setWidth(2)
+        self.line_marker.setWidth(settings.gridWidth)
         self.line_marker.setColor(settings.gridColor)
         self.configure()
 
@@ -269,10 +269,13 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             (lat, lon, bounds, srcCrs) = self.convertCoordinate(text)
             pt = self.lltools.zoomTo(srcCrs, lat, lon)
             self.marker.reset(QgsWkbTypes.PointGeometry)
+            self.marker.setWidth(settings.markerWidth)
+            self.marker.setIconSize(settings.markerSize)
             self.marker.setColor(settings.markerColor)
             if self.settings.persistentMarker:
                 self.marker.addPoint(pt)
             self.line_marker.reset(QgsWkbTypes.LineGeometry)
+            self.line_marker.setWidth(settings.gridWidth)
             self.line_marker.setColor(settings.gridColor)
             if bounds and self.settings.showGrid:
                 canvas_crs = self.canvas.mapSettings().destinationCrs()

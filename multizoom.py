@@ -13,7 +13,7 @@ from qgis.gui import QgsVertexMarker
 from .captureCoordinate  import CaptureCoordinate
 from .util import epsg4326, parseDMSStringSingle, parseDMSString
 from .utm import utm2Point
-from .settings import CoordOrder
+from .settings import CoordOrder, settings
 from . import mgrs
 from . import olc
 
@@ -186,10 +186,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 item = self.resultsTable.item(id, 0).data(Qt.UserRole)
                 if item.marker is None:
                     item.marker = QgsVertexMarker(self.canvas)
+                    item.marker.setColor(settings.markerColor)
                     pt = self.canvasPointXY(item.lat, item.lon)
                     item.marker.setCenter(pt)
-                    item.marker.setIconSize(18)
-                    item.marker.setPenWidth(2)
+                    item.marker.setIconSize(settings.markerSize)
+                    item.marker.setPenWidth(settings.markerWidth)
                     item.marker.setIconType(QgsVertexMarker.ICON_CROSS)
         else:  # Only selected rows will be displayed
             indices = [x.row() for x in self.resultsTable.selectionModel().selectedRows()]
@@ -198,10 +199,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 if id in indices:
                     if item.marker is None:
                         item.marker = QgsVertexMarker(self.canvas)
+                        item.marker.setColor(settings.markerColor)
                         pt = self.canvasPointXY(item.lat, item.lon)
                         item.marker.setCenter(pt)
-                        item.marker.setIconSize(18)
-                        item.marker.setPenWidth(2)
+                        item.marker.setIconSize(settings.markerSize)
+                        item.marker.setPenWidth(settings.markerWidth)
                         item.marker.setIconType(QgsVertexMarker.ICON_CROSS)
                 elif item.marker is not None:
                     self.canvas.scene().removeItem(item.marker)

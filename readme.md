@@ -242,7 +242,10 @@ The order in which the coordinates are parsed in the ***Zoom to Latitude, Longit
 
 **Show coordinate resolution area** - Some coordinate formats represent an area rather than a point depending on its resolution. These include Geohash, H3, Plus Codes, and Maindenhead. If this is checked, then when you zoom to a coordinate the area represented by the coordinate is displayed until you exit, zoom to another location, or click on the <img src="doc/cleartool.jpg" alt="Clear marker"> button.
 
-The colors of the marker and coordinate resolution area bounding box can be changed by setting the **Marker color** and **Grid color**.
+* **Marker icon size** - This is the size of the marker icon when zooming to a coordinate. It is also used by the multi-zoom dialog box.
+* **Marker width** - This the width of the lines for the marker icon and flashing of the coordinate location. 
+* **Marker color** - The color of the marker icon and color of the lines flashing the coordinate location.
+* **Grid color** - This is the color of the area displayed for Geohash, H3, Plus Codes, and Maindenhead corrdinates when the **Show corrdinate resolution area** is checked.
 
 ### External Map Settings
 
