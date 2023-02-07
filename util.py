@@ -165,13 +165,13 @@ def parseDMSStringSingle(str):
             # We should have a DMS coordinate
             if re.search(r'[NSEW]\s*\d+', str) is None:
                 # We assume that the cardinal directions occur after the digits
-                m = re.findall(r'(.+)\s*([NSEW])', str)
+                m = re.findall(r'([\d.]+)\s*([NSEW])', str)
                 if len(m) != 1 or len(m[0]) != 2:
                     raise ValueError('Invalid DMS Coordinate')
                 coord = parseDMS(m[0][0], m[0][1])
             else:
                 # The cardinal directions occur at the beginning of the digits
-                m = re.findall(r'([NSEW])\s*(.+)', str)
+                m = re.findall(r'([NSEW])\s*([\d.]+)', str)
                 if len(m) != 1 or len(m[0]) != 2:
                     raise ValueError('Invalid DMS Coordinate')
                 coord = parseDMS(m[0][1], m[0][0])

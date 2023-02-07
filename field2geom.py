@@ -1,7 +1,7 @@
 import os
 import re
 
-from qgis.PyQt.QtCore import QCoreApplication, QUrl
+from qgis.PyQt.QtCore import QCoreApplication, QUrl, QVariant
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsFields, QgsFeature, QgsWkbTypes, QgsGeometry, QgsPointXY
 
@@ -16,7 +16,7 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
-from .util import epsg4326, parseDMSString
+from .util import epsg4326, parseDMSStringSingle, parseDMSString
 from . import olc
 from . import geohash
 from .utm import isUtm, utm2Point
@@ -66,17 +66,17 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmField1,
-                tr('Select the first field containing both coordinates or the Y (latitude) coordinate'),
+                tr('Select a field containing both coordinates or the Y (latitude) coordinate'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.String,
+                type=QgsProcessingParameterField.Any,
                 optional=False)
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmField2,
-                tr('Select the field containing the X or longitude coordinate if applicable'),
+                tr('Select a field containing the X or longitude coordinate if applicable'),
                 parentLayerParameterName=self.PrmInputLayer,
-                type=QgsProcessingParameterField.String,
+                type=QgsProcessingParameterField.Any,
                 optional=True)
         )
         self.addParameter(
@@ -108,8 +108,26 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
             msg = tr('Select an attribute field containing an X or longitude coordinate')
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
+        
+        fields = source.fields()
+        field1_isnumeric = fields[field1_name].isNumeric()
+        
+        # All field_type != 0 are string attributes. Check for it.
+        if (not field1_isnumeric) and (fields[field1_name].type() != QVariant.String):
+            msg = tr('Attribute field containing Y or latitude must either be a numeric or string field.')
+            feedback.reportError(msg)
+            raise QgsProcessingException(msg)
+            
+        if field_type == 0 and field2_name:
+            field2_isnumeric = fields[field2_name].isNumeric()
+            if (not field2_isnumeric) and (fields[field2_name].type() != QVariant.String):
+                msg = tr('Attribute field containing X or longitude must either be a numeric or string field.')
+                feedback.reportError(msg)
+                raise QgsProcessingException(msg)
+        else:
+            field2_isnumeric = False
 
-        fieldsout = QgsFields(source.fields())
+        fieldsout = QgsFields(fields)
 
         if field_type >= 3:  # For MGRS, Plus Codes, UTM, Geohash, UPS, GEOREF, and Maidenhead force the CRS to be 4326
             input_crs = epsg4326
@@ -122,72 +140,118 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         failed = 0
 
         iterator = source.getFeatures()
-        for cnt, feature in enumerate(iterator):
-            if feedback.isCanceled():
-                break
-            try:
-                attr1 = feature[field1_name].strip()
-                if field_type == 0:  # Lat (y)
-                    attr_x = feature[field2_name].strip()
-                    if input_crs == epsg4326:
-                        text = '{} {}'.format(attr1, attr_x)
-                        lat, lon = parseDMSString(text, 0)
+        if field_type == 0 and field1_isnumeric and field2_isnumeric:
+            for cnt, feature in enumerate(iterator):
+                if feedback.isCanceled():
+                    break
+                try:
+                    lat = float(feature[field1_name])
+                    lon = float(feature[field2_name])
+
+                    f = QgsFeature()
+                    f.setAttributes(feature.attributes())
+                    f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
+                    sink.addFeature(f)
+                except Exception:
+                    '''s = traceback.format_exc()
+                    feedback.pushInfo(s)'''
+                    failed += 1
+
+                if cnt % 100 == 0:
+                    feedback.setProgress(int(cnt * total))
+        elif field_type == 0:
+            for cnt, feature in enumerate(iterator):
+                if feedback.isCanceled():
+                    break
+                try:
+                    # One or both attributes are not numeric
+                    if field1_isnumeric:
+                        attr1 = feature[field1_name]
                     else:
+                        attr1 = feature[field1_name].strip()
+                    if field2_isnumeric:
+                        attr_x = feature[field2_name]
+                    else:
+                        attr_x = feature[field2_name].strip()
+                    if field1_isnumeric or input_crs != epsg4326:
                         lat = float(attr1)
+                    else:
+                        # It is either a DMS string, decimal string, or invalid.
+                        lat = parseDMSStringSingle(attr1)
+                    if field2_isnumeric or input_crs != epsg4326:
                         lon = float(attr_x)
-                elif field_type == 1:  # Lat (y), Lon (x)
-                    if input_crs == epsg4326:
-                        lat, lon = parseDMSString(attr1, 0)
                     else:
-                        coords = re.split(r'[\s,;:]+', attr1, 1)
-                        if len(coords) < 2:
-                            raise ValueError('Invalid Coordinates')
-                        lat = float(coords[0])
-                        lon = float(coords[1])
-                elif field_type == 2:  # Lon (x), Lat (y)
-                    if input_crs == epsg4326:
-                        lat, lon = parseDMSString(attr1, 1)
-                    else:
-                        coords = re.split(r'[\s,;:]+', attr1, 1)
-                        if len(coords) < 2:
-                            raise ValueError('Invalid Coordinates')
-                        lon = float(coords[0])
-                        lat = float(coords[1])
-                elif field_type == 3:  # MGRS
-                    m = re.sub(r'\s+', '', str(attr1))  # Remove all white space
-                    lat, lon = mgrs.toWgs(m)
-                elif field_type == 4:  # Plus codes
-                    coord = olc.decode(attr1)
-                    lat = coord.latitudeCenter
-                    lon = coord.longitudeCenter
-                elif field_type == 5:  # Geohash
-                    (lat, lon, lat_err, lon_err) = geohash.decode_exactly(attr1)
-                elif field_type == 6:  # UTM
-                    pt = utm2Point(attr1)
-                    lat = pt.y()
-                    lon = pt.x()
-                elif field_type == 7:  # Maidenhead Grid Locator
-                    (lat, lon) = maidenGridCenter(attr1)
-                    lat = float(lat)
-                    lon = float(lon)
-                elif field_type == 8: # UPS
-                    pt = ups2Point(attr1, epsg4326)
-                    lat = pt.y()
-                    lon = pt.x()
-                elif field_type == 9: # GEOREF
-                    (lat, lon, prec) = georef.decode(attr1, False)
+                        # It is either a DMS string, decimal string, or invalid.
+                        lon = parseDMSStringSingle(attr_x)
 
-                f = QgsFeature()
-                f.setAttributes(feature.attributes())
-                f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
-                sink.addFeature(f)
-            except Exception:
-                '''s = traceback.format_exc()
-                feedback.pushInfo(s)'''
-                failed += 1
+                    f = QgsFeature()
+                    f.setAttributes(feature.attributes())
+                    f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
+                    sink.addFeature(f)
+                except Exception:
+                    failed += 1
 
-            if cnt % 100 == 0:
-                feedback.setProgress(int(cnt * total))
+                if cnt % 100 == 0:
+                    feedback.setProgress(int(cnt * total))
+        else:
+            for cnt, feature in enumerate(iterator):
+                if feedback.isCanceled():
+                    break
+                try:
+                    attr1 = feature[field1_name].strip()
+                    if field_type == 1:  # Lat (y), Lon (x)
+                        if input_crs == epsg4326:
+                            lat, lon = parseDMSString(attr1, 0)
+                        else:
+                            coords = re.split(r'[\s,;:]+', attr1, 1)
+                            if len(coords) < 2:
+                                raise ValueError('Invalid Coordinates')
+                            lat = float(coords[0])
+                            lon = float(coords[1])
+                    elif field_type == 2:  # Lon (x), Lat (y)
+                        if input_crs == epsg4326:
+                            lat, lon = parseDMSString(attr1, 1)
+                        else:
+                            coords = re.split(r'[\s,;:]+', attr1, 1)
+                            if len(coords) < 2:
+                                raise ValueError('Invalid Coordinates')
+                            lon = float(coords[0])
+                            lat = float(coords[1])
+                    elif field_type == 3:  # MGRS
+                        m = re.sub(r'\s+', '', str(attr1))  # Remove all white space
+                        lat, lon = mgrs.toWgs(m)
+                    elif field_type == 4:  # Plus codes
+                        coord = olc.decode(attr1)
+                        lat = coord.latitudeCenter
+                        lon = coord.longitudeCenter
+                    elif field_type == 5:  # Geohash
+                        (lat, lon, lat_err, lon_err) = geohash.decode_exactly(attr1)
+                    elif field_type == 6:  # UTM
+                        pt = utm2Point(attr1)
+                        lat = pt.y()
+                        lon = pt.x()
+                    elif field_type == 7:  # Maidenhead Grid Locator
+                        (lat, lon) = maidenGridCenter(attr1)
+                        lat = float(lat)
+                        lon = float(lon)
+                    elif field_type == 8: # UPS
+                        pt = ups2Point(attr1, epsg4326)
+                        lat = pt.y()
+                        lon = pt.x()
+                    elif field_type == 9: # GEOREF
+                        (lat, lon, prec) = georef.decode(attr1, False)
+
+                    f = QgsFeature()
+                    f.setAttributes(feature.attributes())
+                    f.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(lon, lat)))
+                    sink.addFeature(f)
+                except Exception:
+                    '''s = traceback.format_exc()
+                    feedback.pushInfo(s)'''
+                    failed += 1
+
+                if cnt % 100 == 0:
+                    feedback.setProgress(int(cnt * total))
 
         if failed > 0:
             msg = "{} out of {} features were invalid".format(failed, source.featureCount())
