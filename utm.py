@@ -1,7 +1,7 @@
 import re
 import math
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
-from .util import epsg4326
+from .util import epsg4326, tr
 
 class UtmException(Exception):
     pass
@@ -14,10 +14,10 @@ def utmParse(utm_str):
         if len(m) == 4:
             zone = int(m[0])
             if zone < 1 or zone > 60:
-                raise UtmException('Invalid UTM Coordinate')
+                raise UtmException(tr('Invalid UTM Coordinate'))
             hemisphere = m[1]
             if hemisphere != 'N' and hemisphere != 'S':
-                raise UtmException('Invalid UTM Coordinate')
+                raise UtmException(tr('Invalid UTM Coordinate'))
             easting = float(m[2])
             northing = float(m[3])
             return(zone, hemisphere, easting, northing)
@@ -31,10 +31,10 @@ def utmParse(utm_str):
         if len(m) == 4:
             zone = int(m[2])
             if zone < 1 or zone > 60:
-                raise UtmException('Invalid UTM Coordinate')
+                raise UtmException(tr('Invalid UTM Coordinate'))
             hemisphere = m[3]
             if hemisphere != 'N' and hemisphere != 'S':
-                raise UtmException('Invalid UTM Coordinate')
+                raise UtmException(tr('Invalid UTM Coordinate'))
             easting = float(m[0])
             northing = float(m[1])
             return(zone, hemisphere, easting, northing)
@@ -58,9 +58,9 @@ def isUtm(utm):
 
 def latLon2UtmZone(lat, lon):
     if lon < -180 or lon > 360:
-        raise UtmException('Invalid longitude')
+        raise UtmException(tr('Invalid longitude'))
     if lat > 84.5 or lat < -80.5:
-        raise UtmException('Invalid latitude')
+        raise UtmException(tr('Invalid latitude'))
     if lon < 180:
         zone = int(31 + (lon / 6.0))
     else:
