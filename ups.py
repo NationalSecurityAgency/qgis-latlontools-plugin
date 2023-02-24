@@ -1,7 +1,7 @@
 import re
 import math
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
-from .util import epsg4326
+from .util import epsg4326, tr
 
 epsg32661 = QgsCoordinateReferenceSystem("EPSG:32661")
 epsg32761 = QgsCoordinateReferenceSystem("EPSG:32761")
@@ -24,7 +24,7 @@ def upsParse(ups_str):
             northing = float(m[2])
             return(letter, easting, northing)
     
-    raise UpsException('Invalid UPS Coordinate')
+    raise UpsException(tr('Invalid UPS Coordinate'))
 
 def ups2Point(ups, crs=epsg4326):
     letter, easting, northing = upsParse(ups)

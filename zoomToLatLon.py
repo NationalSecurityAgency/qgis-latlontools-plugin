@@ -7,7 +7,7 @@ from qgis.PyQt.QtWidgets import QDockWidget, QApplication
 from qgis.PyQt.QtCore import QTextCodec
 from qgis.gui import QgsRubberBand
 from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes, QgsPointXY, QgsGeometry, QgsCoordinateTransform, QgsProject, QgsRectangle
-from .util import epsg4326, parseDMSString
+from .util import epsg4326, parseDMSString, tr
 from .settings import settings, CoordOrder, H3_INSTALLED
 from .utm import isUtm, utm2Point
 from .ups import isUps, ups2Point
@@ -82,34 +82,34 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
         if self.settings.zoomToProjIsMGRS():
             # This is an MGRS coordinate
-            self.label.setText("Enter MGRS Coordinate")
+            self.label.setText(tr("Enter MGRS Coordinate"))
         elif self.settings.zoomToProjIsPlusCodes():
-            self.label.setText("Enter Plus Codes")
+            self.label.setText(tr("Enter Plus Codes"))
         elif self.settings.zoomToProjIsGeohash():
-            self.label.setText("Enter Geohash")
+            self.label.setText(tr("Enter Geohash"))
         elif self.settings.zoomToProjIsH3():
-            self.label.setText("Enter H3 geohash")
+            self.label.setText(tr("Enter H3 geohash"))
         elif self.settings.zoomToProjIsStandardUtm():
-            self.label.setText("Enter Standard UTM")
+            self.label.setText(tr("Enter Standard UTM"))
         elif self.settings.zoomToProjIsMaidenhead():
-            self.label.setText("Enter Maidenhead Grid")
+            self.label.setText(tr("Enter Maidenhead Grid"))
         elif self.settings.zoomToProjIsWgs84():
             if self.settings.zoomToCoordOrder == 0:
-                self.label.setText("Enter 'Latitude, Longitude'")
+                self.label.setText(tr("Enter 'Latitude, Longitude'"))
             else:
-                self.label.setText("Enter 'Longitude, Latitude'")
+                self.label.setText(tr("Enter 'Longitude, Latitude'"))
         elif self.settings.zoomToProjIsProjectCRS():
             crsID = self.canvas.mapSettings().destinationCrs().authid()
             if self.settings.zoomToCoordOrder == 0:
-                self.label.setText("Enter {} Y,X".format(crsID))
+                self.label.setText("{} {} Y,X".format(tr('Enter'), crsID))
             else:
-                self.label.setText("Enter {} X,Y".format(crsID))
+                self.label.setText("{} {} X,Y".format(tr('Enter'), crsID))
         else:  # Default to custom CRS
             crsID = self.settings.zoomToCustomCrsId()
             if self.settings.zoomToCoordOrder == 0:
-                self.label.setText("Enter {} Y,X".format(crsID))
+                self.label.setText("{} {} Y,X".format(tr('Enter'), crsID))
             else:
-                self.label.setText("Enter {} X,Y".format(crsID))
+                self.label.setText("{} {} X,Y".format(tr('Enter'), crsID))
 
     def convertCoordinate(self, text):
         try:
@@ -149,7 +149,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if self.settings.zoomToProjIsH3():
                 # An H3 coordinate has been selected. 
                 if not h3.h3_is_valid(text):
-                    raise ValueError('Invalid H3 Coordinate')
+                    raise ValueError(tr('Invalid H3 Coordinate'))
                 (lat, lon) = h3.h3_to_geo(text)
                 coords = h3.h3_to_geo_boundary(text)
                 pts = []
@@ -174,11 +174,11 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 fields = QgsJsonUtils.stringToFields(text, codec)
                 fet = QgsJsonUtils.stringToFeatureList(text, fields, codec)
                 if (len(fet) == 0) or not fet[0].isValid():
-                    raise ValueError('Invalid Coordinates')
+                    raise ValueError(tr('Invalid Coordinates'))
 
                 geom = fet[0].geometry()
                 if geom.isEmpty() or (geom.wkbType() != QgsWkbTypes.Point):
-                    raise ValueError('Invalid GeoJSON Geometry')
+                    raise ValueError(tr('Invalid GeoJSON Geometry'))
                 pt = geom.asPoint()
                 return(pt.y(), pt.x(), None, epsg4326)
 
@@ -227,7 +227,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if re.search(r'POINT\(', text) is not None:
                 m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                 if len(m) != 1:
-                    raise ValueError('Invalid Coordinates')
+                    raise ValueError(tr('Invalid Coordinates'))
                 lon = float(m[0][0])
                 lat = float(m[0][1])
                 if self.settings.zoomToProjIsWgs84():
@@ -246,7 +246,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             # We are left with a non WGS 84 decimal projection
             coords = re.split(r'[\s,;:]+', text, 1)
             if len(coords) < 2:
-                raise ValueError('Invalid Coordinates')
+                raise ValueError(tr('Invalid Coordinates'))
             if self.settings.zoomToCoordOrder == CoordOrder.OrderYX:
                 lat = float(coords[0])
                 lon = float(coords[1])
@@ -261,7 +261,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
         except Exception:
             traceback.print_exc()
-            raise ValueError('Invalid Coordinates')
+            raise ValueError(tr('Invalid Coordinates'))
         
     def zoomToPressed(self):
         try:
@@ -285,7 +285,7 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 self.line_marker.addGeometry(bounds, None)
         except Exception:
             traceback.print_exc()
-            self.iface.messageBar().pushMessage("", "Invalid Coordinate", level=Qgis.Warning, duration=2)
+            self.iface.messageBar().pushMessage("", tr("Invalid Coordinate"), level=Qgis.Warning, duration=2)
             return
 
     def pasteCoordinate(self):
