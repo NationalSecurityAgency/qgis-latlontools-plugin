@@ -17,16 +17,13 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
-from .util import epsg4326, convertDD2DMS, formatDmsString
+from .util import epsg4326, convertDD2DMS, formatDmsString, tr
 from .utm import latLon2Utm
 from . import olc
 from . import geohash
 from .maidenhead import toMaiden
 from .ups import latLon2Ups
 from . import georef
-
-def tr(string):
-    return QCoreApplication.translate('Processing', string)
 
 
 class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
@@ -250,12 +247,12 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
 
         fieldsout = QgsFields(source.fields())
         if fieldsout.append(QgsField(field1Name, QVariant.String)) is False:
-            msg = "Field names must be unique. There is already a field named '{}'".format(field1Name)
+            msg = "{} '{}'".format(tr('Field names must be unique. There is already a field named'), field1Name)
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
         if outputFormat == 0:  # Two fields for coordinates
             if fieldsout.append(QgsField(field2Name, QVariant.String)) is False:
-                msg = "Field names must be unique. There is already a field named '{}'".format(field2Name)
+                msg = "{} '{}'".format(tr('Field names must be unique. There is already a field named'), field2Name)
                 feedback.reportError(msg)
                 raise QgsProcessingException(msg)
 
@@ -353,7 +350,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/geom2field.svg')
 
     def displayName(self):
-        return 'Point layer to fields'
+        return tr('Point layer to fields')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
