@@ -17,7 +17,7 @@ from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.PyQt.QtGui import QColor
 
 from qgis.core import QgsCoordinateReferenceSystem
-from .util import epsg4326
+from .util import epsg4326, tr
 
 
 FORM_CLASS, _ = loadUiType(os.path.join(
@@ -212,25 +212,25 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
         ### CAPTURE SETTINGS ###
         if H3_INSTALLED:
-            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF','H3'])
+            self.captureProjectionComboBox.addItems([tr('WGS 84 (Latitude & Longitude)'), tr('Project CRS'), tr('Custom CRS'), tr('MGRS'), tr('Plus Codes (Open Location Code)'), tr('Standard UTM'),tr('Geohash'),tr('Maidenhead Grid Locator'),tr('UPS'),tr('GEOREF'),'H3'])
         else:
-            self.captureProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid Locator','UPS','GEOREF'])
+            self.captureProjectionComboBox.addItems([tr('WGS 84 (Latitude & Longitude)'), tr('Project CRS'), tr('Custom CRS'), tr('MGRS'), tr('Plus Codes (Open Location Code)'), tr('Standard UTM'),tr('Geohash'),tr('Maidenhead Grid Locator'),tr('UPS'),tr('GEOREF')])
         self.captureProjectionSelectionWidget.setCrs(epsg4326)
-        self.wgs84NumberFormatComboBox.addItems(['Decimal Degrees', 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
-        self.otherNumberFormatComboBox.addItems(['Normal Coordinate', 'WKT POINT'])
-        self.coordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
-        self.delimComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
+        self.wgs84NumberFormatComboBox.addItems(['tr(Decimal Degrees'), 'D°M\'S"', 'DDMMSS', 'D°M.MM\'', 'WKT POINT', 'GeoJSON'])
+        self.otherNumberFormatComboBox.addItems([tr('Normal Coordinate'), 'WKT POINT'])
+        self.coordOrderComboBox.addItems([tr('Lat, Lon (Y,X) - Google Map Order'), tr('Lon, Lat (X,Y) Order')])
+        self.delimComboBox.addItems([tr('Comma'), tr('Comma Space'), tr('Space'), tr('Tab'), tr('Other')])
         self.captureProjectionComboBox.activated.connect(self.setEnabled)
         self.captureUtmFormatComboBox.addItems(['15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', '755631mE,4283168mN,15,N'])
         self.captureUpsFormatComboBox.addItems(['Z 2426773mE 1530125mN', 'Z2426773E1530125N'])
 
         ### ZOOM TO SETTINGS ###
         if H3_INSTALLED:
-            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid','H3'])
+            self.zoomToProjectionComboBox.addItems([tr('WGS 84 (Latitude & Longitude) / Auto Detect Format'), tr('Project CRS'), tr('Custom CRS'), tr('MGRS'), tr('Plus Codes (Open Location Code)'), tr('Standard UTM'),tr('Geohash'),tr('Maidenhead Grid'),'H3'])
         else:
-            self.zoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude) / Auto Detect Format', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM','Geohash','Maidenhead Grid'])
+            self.zoomToProjectionComboBox.addItems([tr('WGS 84 (Latitude & Longitude) / Auto Detect Format'), tr('Project CRS'), tr('Custom CRS'), tr('MGRS'), tr('Plus Codes (Open Location Code)'), tr('Standard UTM'),tr('Geohash'),tr('Maidenhead Grid')])
         self.zoomToProjectionSelectionWidget.setCrs(epsg4326)
-        self.zoomToCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
+        self.zoomToCoordOrderComboBox.addItems([tr('Lat, Lon (Y,X) - Google Map Order'), tr('Lon, Lat (X,Y) Order')])
         self.zoomToProjectionComboBox.activated.connect(self.setEnabled)
 
         ### EXTERNAL MAP ###
@@ -238,29 +238,29 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.deleteProviderButton.clicked.connect(self.deleteUserProvider)
 
         ### MULTI-ZOOM ###
-        self.multiZoomToProjectionComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS', 'Custom CRS', 'MGRS', 'Plus Codes (Open Location Code)', 'Standard UTM'])
+        self.multiZoomToProjectionComboBox.addItems([tr('WGS 84 (Latitude & Longitude)'), tr('Project CRS'), tr('Custom CRS'), tr('MGRS'), tr('Plus Codes (Open Location Code)'), tr('Standard UTM')])
         self.multiZoomToProjectionComboBox.activated.connect(self.setEnabled)
         self.multiZoomToProjectionSelectionWidget.setCrs(epsg4326)
         self.qmlBrowseButton.clicked.connect(self.qmlOpenDialog)
-        self.markerStyleComboBox.addItems(['Default', 'Labeled', 'Custom'])
-        self.multiCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
+        self.markerStyleComboBox.addItems([tr('Default'), tr('Labeled'), tr('Custom')])
+        self.multiCoordOrderComboBox.addItems([tr('Lat, Lon (Y,X) - Google Map Order'), tr('Lon, Lat (X,Y) Order')])
         self.qmlStyle = ''
 
         ### BBOX CAPTURE SETTINGS ###
-        self.bBoxCrsComboBox.addItems(['WGS 84 (Latitude & Longitude)', 'Project CRS'])
+        self.bBoxCrsComboBox.addItems([tr('WGS 84 (Latitude & Longitude)'), tr('Project CRS')])
         self.bBoxFormatComboBox.addItems([
-            '"minX,minY,maxX,maxY (W,S,E,N)" - Using the selected delimiter',
-            '"minX,maxX,minY,maxY (W,E,S,N)" - Using the selected delimiter',
-            '"minY,minX,maxY,maxX (S,W,N,E)" - Using the selected delimiter',
-            '"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Polygon format',
-            '"x1,y1 x2,y2 x3,y3 x4,y4 x1,y1" - Alternate polgyon format',
-            'WKT Polygon',
-            '"bbox: [minX, minY, maxX, maxY]" - MapProxy',
-            '"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS'])
-        self.bBoxDelimiterComboBox.addItems(['Comma', 'Comma Space', 'Space', 'Tab', 'Other'])
+            tr('"minX,minY,maxX,maxY (W,S,E,N)" - Using the selected delimiter'),
+            tr('"minX,maxX,minY,maxY (W,E,S,N)" - Using the selected delimiter'),
+            tr('"minY,minX,maxY,maxX (S,W,N,E)" - Using the selected delimiter'),
+            tr('"x1 y1,x2 y2,x3 y3,x4 y4,x1 y1" - Polygon format'),
+            tr('"x1,y1 x2,y2 x3,y3 x4,y4 x1,y1" - Alternate polgyon format'),
+            tr('WKT Polygon'),
+            tr('"bbox: [minX, minY, maxX, maxY]" - MapProxy'),
+            tr('"bbox=minX,minY,maxX,maxY" - GeoServer WFS, WMS')])
+        self.bBoxDelimiterComboBox.addItems([tr('Comma'), tr('Comma Space'), tr('Space'), tr('Tab'), tr('Other')])
 
         ### COORDINATE CONVERSION SETTINGS ###
-        self.converterCoordOrderComboBox.addItems(['Lat, Lon (Y,X) - Google Map Order', 'Lon, Lat (X,Y) Order'])
+        self.converterCoordOrderComboBox.addItems([tr('Lat, Lon (Y,X) - Google Map Order'), tr('Lon, Lat (X,Y) Order')])
         self.converterUtmFormatComboBox.addItems(['15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', '755631mE,4283168mN,15,N'])
         self.converterUpsFormatComboBox.addItems(['Z 2426773mE 1530125mN', 'Z2426773E1530125N'])
         self.converterProjectionSelectionWidget.setCrs(epsg4326)
@@ -597,7 +597,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def qmlOpenDialog(self):
         filename = QFileDialog.getOpenFileName(
-            None, "Input QML Style File",
+            None, tr("Input QML Style File"),
             self.qmlLineEdit.text(), "QGIS Layer Style File (*.qml)")[0]
         if filename:
             self.qmlStyle = filename
