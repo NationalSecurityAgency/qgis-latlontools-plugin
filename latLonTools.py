@@ -1,4 +1,4 @@
-from qgis.PyQt.QtCore import Qt, QTimer, QUrl
+from qgis.PyQt.QtCore import Qt, QTimer, QUrl, QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu, QApplication, QToolButton
 from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
@@ -25,6 +25,23 @@ class LatLonTools:
     def __init__(self, iface):
         self.iface = iface
         self.canvas = iface.mapCanvas()
+        # Initialize the plugin path directory
+        self.plugin_dir = os.path.dirname(__file__)
+
+        # initialize locale
+        try:
+            locale = QSettings().value("locale/userLocale", "en", type=str)[0:2]
+        except Exception:
+            locale = "en"
+        locale_path = os.path.join(
+            self.plugin_dir,
+            'i18n',
+            'latlonTools_{}.qm'.format(locale))
+        if os.path.exists(locale_path):
+            self.translator = QTranslator()
+            self.translator.load(locale_path)
+            QCoreApplication.installTranslator(self.translator)
+
         self.crossRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
         self.crossRb.setColor(Qt.red)
         self.provider = LatLonToolsProvider()
@@ -38,7 +55,7 @@ class LatLonTools:
         self.settingsDialog = SettingsWidget(self, self.iface, self.iface.mainWindow())
 
         # Add Interface for Coordinate Capturing
-        icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.svg")
+        icon = QIcon(self.plugin_dir + "/images/copyicon.svg")
         self.copyAction = QAction(icon, tr("Copy/Display Coordinate"), self.iface.mainWindow())
         self.copyAction.setObjectName('latLonToolsCopy')
         self.copyAction.triggered.connect(self.startCapture)
@@ -47,7 +64,7 @@ class LatLonTools:
         self.iface.addPluginToMenu("Lat Lon Tools", self.copyAction)
 
         # Add Interface for External Map
-        icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
+        icon = QIcon(self.plugin_dir + "/images/mapicon.png")
         self.externMapAction = QAction(icon, tr("Show in External Map"), self.iface.mainWindow())
         self.externMapAction.setObjectName('latLonToolsExternalMap')
         self.externMapAction.triggered.connect(self.setShowMapTool)
@@ -56,7 +73,7 @@ class LatLonTools:
         self.iface.addPluginToMenu("Lat Lon Tools", self.externMapAction)
 
         # Add Interface for Zoom to Coordinate
-        icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.svg")
+        icon = QIcon(self.plugin_dir + "/images/zoomicon.svg")
         self.zoomToAction = QAction(icon, tr("Zoom To Coordinate"), self.iface.mainWindow())
         self.zoomToAction.setObjectName('latLonToolsZoom')
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
@@ -68,7 +85,7 @@ class LatLonTools:
         self.zoomToDialog.hide()
 
         # Add Interface for Multi point zoom
-        icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.svg')
+        icon = QIcon(self.plugin_dir + '/images/multizoom.svg')
         self.multiZoomToAction = QAction(icon, tr("Multi-location Zoom"), self.iface.mainWindow())
         self.multiZoomToAction.setObjectName('latLonToolsMultiZoom')
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
@@ -82,25 +99,25 @@ class LatLonTools:
         menu = QMenu()
         menu.setObjectName('latLonToolsCopyExtents')
         # Add Interface for copying the canvas extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.svg")
+        icon = QIcon(self.plugin_dir + "/images/copycanvas.svg")
         self.copyCanvasAction = menu.addAction(icon, tr('Copy Canvas Extent'), self.copyCanvas)
         self.copyCanvasAction.setObjectName('latLonToolsCopyCanvasExtent')
         # Add Interface for copying an interactive extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copyextent.svg")
+        icon = QIcon(self.plugin_dir + "/images/copyextent.svg")
         self.copyExtentAction = menu.addAction(icon, tr('Copy Selected Area Extent'), self.copyExtent)
         self.copyExtentAction.setCheckable(True)
         self.copyExtentAction.setObjectName('latLonToolsCopySelectedAreaExtent')
         # Add Interface for copying a layer extent
-        icon = QIcon(os.path.dirname(__file__) + "/images/copylayerextent.svg")
+        icon = QIcon(self.plugin_dir + "/images/copylayerextent.svg")
         self.copyLayerExtentAction = menu.addAction(icon, tr('Copy Layer Extent'), self.copyLayerExtent)
         self.copyLayerExtentAction.setObjectName('latLonToolsCopyLayerExtent')
         # Add Interface for copying the extent of selected features
-        icon = QIcon(os.path.dirname(__file__) + "/images/copyselectedlayerextent.svg")
+        icon = QIcon(self.plugin_dir + "/images/copyselectedlayerextent.svg")
         self.copySelectedFeaturesExtentAction = menu.addAction(icon, tr('Copy Selected Features Extent'), self.copySelectedFeaturesExtent)
         self.copySelectedFeaturesExtentAction.setObjectName('latLonToolsCopySelectedFeaturesExtent')
         
         # Add the copy extent tools to the menu
-        icon = QIcon(os.path.dirname(__file__) + '/images/copylayerextent.svg')
+        icon = QIcon(self.plugin_dir + '/images/copylayerextent.svg')
         self.copyExtentsAction = QAction(icon, tr('Copy Extents to Clipboard'), self.iface.mainWindow())
         self.copyExtentsAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.copyExtentsAction)
@@ -124,24 +141,24 @@ class LatLonTools:
 
         # Create the conversions menu
         menu = QMenu()
-        icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.svg')
+        icon = QIcon(self.plugin_dir + '/images/field2geom.svg')
         action = menu.addAction(icon, tr("Fields to point layer"), self.field2geom)
         action.setObjectName('latLonToolsField2Geom')
-        icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.svg')
+        icon = QIcon(self.plugin_dir + '/images/geom2field.svg')
         action = menu.addAction(icon, tr("Point layer to fields"), self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
-        icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
+        icon = QIcon(self.plugin_dir + '/images/pluscodes.svg')
         action = menu.addAction(icon, tr("Plus Codes to point layer"), self.PlusCodestoLayer)
         action.setObjectName('latLonToolsPlusCodes2Geom')
         action = menu.addAction(icon, tr("Point layer to Plus Codes"), self.toPlusCodes)
         action.setObjectName('latLonToolsGeom2PlusCodes')
-        icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.svg')
+        icon = QIcon(self.plugin_dir + '/images/mgrs2point.svg')
         action = menu.addAction(icon, tr("MGRS to point layer"), self.MGRStoLayer)
         action.setObjectName('latLonToolsMGRS2Geom')
-        icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.svg')
+        icon = QIcon(self.plugin_dir + '/images/point2mgrs.svg')
         action = menu.addAction(icon, tr("Point layer to MGRS"), self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
-        icon = QIcon(os.path.dirname(__file__) + '/images/ecef.png')
+        icon = QIcon(self.plugin_dir + '/images/ecef.png')
         action = menu.addAction(icon, tr("ECEF to Lat, Lon, Altitude"), self.ecef2lla)
         action.setObjectName('latLonToolsEcef2lla')
         action = menu.addAction(icon, tr("Lat, Lon, Altitude to ECEF"), self.lla2ecef)
@@ -151,7 +168,7 @@ class LatLonTools:
         self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
 
         # Add to Digitize Toolbar
-        icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.svg')
+        icon = QIcon(self.plugin_dir + '/images/latLonDigitize.svg')
         self.digitizeAction = QAction(icon, tr("Lat Lon Digitize"), self.iface.mainWindow())
         self.digitizeAction.setObjectName('latLonToolsDigitize')
         self.digitizeAction.triggered.connect(self.digitizeClicked)
@@ -169,7 +186,7 @@ class LatLonTools:
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
 
         # Help
-        icon = QIcon(os.path.dirname(__file__) + '/images/help.svg')
+        icon = QIcon(self.plugin_dir + '/images/help.svg')
         self.helpAction = QAction(icon, tr("Help"), self.iface.mainWindow())
         self.helpAction.setObjectName('latLonToolsHelp')
         self.helpAction.triggered.connect(self.help)
@@ -373,7 +390,7 @@ class LatLonTools:
     def help(self):
         '''Display a help page'''
         import webbrowser
-        url = QUrl.fromLocalFile(os.path.dirname(__file__) + "/index.html").toString()
+        url = QUrl.fromLocalFile(self.plugin_dir + "/index.html").toString()
         webbrowser.open(url, new=2)
 
     def settingsChanged(self):
