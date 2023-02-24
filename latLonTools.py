@@ -10,7 +10,7 @@ from .zoomToLatLon import ZoomToLatLon
 from .multizoom import MultiZoomWidget
 from .settings import SettingsWidget, settings
 from .provider import LatLonToolsProvider
-from .util import epsg4326
+from .util import epsg4326, tr
 from .captureExtent import getExtentString
 import os
 
@@ -28,9 +28,9 @@ class LatLonTools:
         self.crossRb = QgsRubberBand(self.canvas, QgsWkbTypes.LineGeometry)
         self.crossRb.setColor(Qt.red)
         self.provider = LatLonToolsProvider()
-        self.toolbar = self.iface.addToolBar('Lat Lon Tools Toolbar')
+        self.toolbar = self.iface.addToolBar(tr('Lat Lon Tools Toolbar'))
         self.toolbar.setObjectName('LatLonToolsToolbar')
-        self.toolbar.setToolTip('Lat Lon Tools Toolbar')
+        self.toolbar.setToolTip(tr('Lat Lon Tools Toolbar'))
 
     def initGui(self):
         '''Initialize Lot Lon Tools GUI.'''
@@ -39,7 +39,7 @@ class LatLonTools:
 
         # Add Interface for Coordinate Capturing
         icon = QIcon(os.path.dirname(__file__) + "/images/copyicon.svg")
-        self.copyAction = QAction(icon, "Copy/Display Coordinate", self.iface.mainWindow())
+        self.copyAction = QAction(icon, tr("Copy/Display Coordinate"), self.iface.mainWindow())
         self.copyAction.setObjectName('latLonToolsCopy')
         self.copyAction.triggered.connect(self.startCapture)
         self.copyAction.setCheckable(True)
@@ -48,7 +48,7 @@ class LatLonTools:
 
         # Add Interface for External Map
         icon = QIcon(os.path.dirname(__file__) + "/images/mapicon.png")
-        self.externMapAction = QAction(icon, "Show in External Map", self.iface.mainWindow())
+        self.externMapAction = QAction(icon, tr("Show in External Map"), self.iface.mainWindow())
         self.externMapAction.setObjectName('latLonToolsExternalMap')
         self.externMapAction.triggered.connect(self.setShowMapTool)
         self.externMapAction.setCheckable(True)
@@ -57,7 +57,7 @@ class LatLonTools:
 
         # Add Interface for Zoom to Coordinate
         icon = QIcon(os.path.dirname(__file__) + "/images/zoomicon.svg")
-        self.zoomToAction = QAction(icon, "Zoom To Coordinate", self.iface.mainWindow())
+        self.zoomToAction = QAction(icon, tr("Zoom To Coordinate"), self.iface.mainWindow())
         self.zoomToAction.setObjectName('latLonToolsZoom')
         self.zoomToAction.triggered.connect(self.showZoomToDialog)
         self.toolbar.addAction(self.zoomToAction)
@@ -69,7 +69,7 @@ class LatLonTools:
 
         # Add Interface for Multi point zoom
         icon = QIcon(os.path.dirname(__file__) + '/images/multizoom.svg')
-        self.multiZoomToAction = QAction(icon, "Multi-location Zoom", self.iface.mainWindow())
+        self.multiZoomToAction = QAction(icon, tr("Multi-location Zoom"), self.iface.mainWindow())
         self.multiZoomToAction.setObjectName('latLonToolsMultiZoom')
         self.multiZoomToAction.triggered.connect(self.multiZoomTo)
         self.toolbar.addAction(self.multiZoomToAction)
@@ -83,25 +83,25 @@ class LatLonTools:
         menu.setObjectName('latLonToolsCopyExtents')
         # Add Interface for copying the canvas extent
         icon = QIcon(os.path.dirname(__file__) + "/images/copycanvas.svg")
-        self.copyCanvasAction = menu.addAction(icon, 'Copy Canvas Extent', self.copyCanvas)
+        self.copyCanvasAction = menu.addAction(icon, tr('Copy Canvas Extent'), self.copyCanvas)
         self.copyCanvasAction.setObjectName('latLonToolsCopyCanvasExtent')
         # Add Interface for copying an interactive extent
         icon = QIcon(os.path.dirname(__file__) + "/images/copyextent.svg")
-        self.copyExtentAction = menu.addAction(icon, 'Copy Selected Area Extent', self.copyExtent)
+        self.copyExtentAction = menu.addAction(icon, tr('Copy Selected Area Extent'), self.copyExtent)
         self.copyExtentAction.setCheckable(True)
         self.copyExtentAction.setObjectName('latLonToolsCopySelectedAreaExtent')
         # Add Interface for copying a layer extent
         icon = QIcon(os.path.dirname(__file__) + "/images/copylayerextent.svg")
-        self.copyLayerExtentAction = menu.addAction(icon, 'Copy Layer Extent', self.copyLayerExtent)
+        self.copyLayerExtentAction = menu.addAction(icon, tr('Copy Layer Extent'), self.copyLayerExtent)
         self.copyLayerExtentAction.setObjectName('latLonToolsCopyLayerExtent')
         # Add Interface for copying the extent of selected features
         icon = QIcon(os.path.dirname(__file__) + "/images/copyselectedlayerextent.svg")
-        self.copySelectedFeaturesExtentAction = menu.addAction(icon, 'Copy Selected Features Extent', self.copySelectedFeaturesExtent)
+        self.copySelectedFeaturesExtentAction = menu.addAction(icon, tr('Copy Selected Features Extent'), self.copySelectedFeaturesExtent)
         self.copySelectedFeaturesExtentAction.setObjectName('latLonToolsCopySelectedFeaturesExtent')
         
         # Add the copy extent tools to the menu
         icon = QIcon(os.path.dirname(__file__) + '/images/copylayerextent.svg')
-        self.copyExtentsAction = QAction(icon, 'Copy Extents to Clipboard', self.iface.mainWindow())
+        self.copyExtentsAction = QAction(icon, tr('Copy Extents to Clipboard'), self.iface.mainWindow())
         self.copyExtentsAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.copyExtentsAction)
 
@@ -116,7 +116,7 @@ class LatLonTools:
 
         # Create the coordinate converter menu
         icon = QIcon(':/images/themes/default/mIconProjectionEnabled.svg')
-        self.convertCoordinatesAction = QAction(icon, "Coordinate Conversion", self.iface.mainWindow())
+        self.convertCoordinatesAction = QAction(icon, tr("Coordinate Conversion"), self.iface.mainWindow())
         self.convertCoordinatesAction.setObjectName('latLonToolsCoordinateConversion')
         self.convertCoordinatesAction.triggered.connect(self.convertCoordinatesTool)
         self.toolbar.addAction(self.convertCoordinatesAction)
@@ -125,34 +125,34 @@ class LatLonTools:
         # Create the conversions menu
         menu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/field2geom.svg')
-        action = menu.addAction(icon, "Fields to point layer", self.field2geom)
+        action = menu.addAction(icon, tr("Fields to point layer"), self.field2geom)
         action.setObjectName('latLonToolsField2Geom')
         icon = QIcon(os.path.dirname(__file__) + '/images/geom2field.svg')
-        action = menu.addAction(icon, "Point layer to fields", self.geom2Field)
+        action = menu.addAction(icon, tr("Point layer to fields"), self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
-        action = menu.addAction(icon, "Plus Codes to point layer", self.PlusCodestoLayer)
+        action = menu.addAction(icon, tr("Plus Codes to point layer"), self.PlusCodestoLayer)
         action.setObjectName('latLonToolsPlusCodes2Geom')
-        action = menu.addAction(icon, "Point layer to Plus Codes", self.toPlusCodes)
+        action = menu.addAction(icon, tr("Point layer to Plus Codes"), self.toPlusCodes)
         action.setObjectName('latLonToolsGeom2PlusCodes')
         icon = QIcon(os.path.dirname(__file__) + '/images/mgrs2point.svg')
-        action = menu.addAction(icon, "MGRS to point layer", self.MGRStoLayer)
+        action = menu.addAction(icon, tr("MGRS to point layer"), self.MGRStoLayer)
         action.setObjectName('latLonToolsMGRS2Geom')
         icon = QIcon(os.path.dirname(__file__) + '/images/point2mgrs.svg')
-        action = menu.addAction(icon, "Point layer to MGRS", self.toMGRS)
+        action = menu.addAction(icon, tr("Point layer to MGRS"), self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
         icon = QIcon(os.path.dirname(__file__) + '/images/ecef.png')
-        action = menu.addAction(icon, "ECEF to Lat, Lon, Altitude", self.ecef2lla)
+        action = menu.addAction(icon, tr("ECEF to Lat, Lon, Altitude"), self.ecef2lla)
         action.setObjectName('latLonToolsEcef2lla')
-        action = menu.addAction(icon, "Lat, Lon, Altitude to ECEF", self.lla2ecef)
+        action = menu.addAction(icon, tr("Lat, Lon, Altitude to ECEF"), self.lla2ecef)
         action.setObjectName('latLonToolsLla2ecef')
-        self.conversionsAction = QAction(icon, "Conversions", self.iface.mainWindow())
+        self.conversionsAction = QAction(icon, tr("Conversions"), self.iface.mainWindow())
         self.conversionsAction.setMenu(menu)
         self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
 
         # Add to Digitize Toolbar
         icon = QIcon(os.path.dirname(__file__) + '/images/latLonDigitize.svg')
-        self.digitizeAction = QAction(icon, "Lat Lon Digitize", self.iface.mainWindow())
+        self.digitizeAction = QAction(icon, tr("Lat Lon Digitize"), self.iface.mainWindow())
         self.digitizeAction.setObjectName('latLonToolsDigitize')
         self.digitizeAction.triggered.connect(self.digitizeClicked)
         self.digitizeAction.setEnabled(False)
@@ -161,16 +161,16 @@ class LatLonTools:
 
         # Initialize the Settings Dialog Box
         settingsicon = QIcon(':/images/themes/default/mActionOptions.svg')
-        self.settingsAction = QAction(settingsicon, "Settings", self.iface.mainWindow())
+        self.settingsAction = QAction(settingsicon, tr("Settings"), self.iface.mainWindow())
         self.settingsAction.setObjectName('latLonToolsSettings')
-        self.settingsAction.setToolTip('Lat Lon Tools Settings')
+        self.settingsAction.setToolTip(tr('Lat Lon Tools Settings'))
         self.settingsAction.triggered.connect(self.settings)
         self.toolbar.addAction(self.settingsAction)
         self.iface.addPluginToMenu('Lat Lon Tools', self.settingsAction)
 
         # Help
         icon = QIcon(os.path.dirname(__file__) + '/images/help.svg')
-        self.helpAction = QAction(icon, "Help", self.iface.mainWindow())
+        self.helpAction = QAction(icon, tr("Help"), self.iface.mainWindow())
         self.helpAction.setObjectName('latLonToolsHelp')
         self.helpAction.triggered.connect(self.help)
         self.iface.addPluginToMenu('Lat Lon Tools', self.helpAction)
@@ -262,7 +262,7 @@ class LatLonTools:
         if not layer or not layer.isValid():
             return
         if isinstance(layer, QgsVectorLayer) and (layer.featureCount() == 0):
-            self.iface.messageBar().pushMessage("", "This layer has no features - A bounding box cannot be calculated.", level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("This layer has no features - A bounding box cannot be calculated."), level=Qgis.Warning, duration=4)
             return
         src_crs = layer.crs()
         extent = layer.extent()
@@ -274,19 +274,19 @@ class LatLonTools:
         outStr = getExtentString(extent, src_crs, dst_crs)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
-        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+        self.iface.messageBar().pushMessage("", "'{}' {}".format(outStr, tr('copied to the clipboard')), level=Qgis.Info, duration=4)
 
     def copySelectedFeaturesExtent(self):
         layer = self.iface.activeLayer()
         if not layer or not layer.isValid():
             return
         if isinstance(layer, QgsVectorLayer) and (layer.featureCount() == 0):
-            self.iface.messageBar().pushMessage("", "This layer has no features - A bounding box cannot be calculated.", level=Qgis.Warning, duration=4)
+            self.iface.messageBar().pushMessage("", tr("This layer has no features - A bounding box cannot be calculated."), level=Qgis.Warning, duration=4)
             return
         if isinstance(layer, QgsVectorLayer):
             extent = layer.boundingBoxOfSelected()
             if extent.isNull():
-                self.iface.messageBar().pushMessage("", "No features were selected.", level=Qgis.Warning, duration=4)
+                self.iface.messageBar().pushMessage("", tr("No features were selected."), level=Qgis.Warning, duration=4)
                 return
         else:
             extent = layer.extent()
@@ -299,7 +299,7 @@ class LatLonTools:
         outStr = getExtentString(extent, src_crs, dst_crs)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
-        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+        self.iface.messageBar().pushMessage("", "'{}' {}".format(outStr, tr('copied to the clipboard')), level=Qgis.Info, duration=4)
 
     def copyCanvas(self):
         extent = self.iface.mapCanvas().extent()
@@ -312,7 +312,7 @@ class LatLonTools:
         outStr = getExtentString(extent, canvas_crs, dst_crs)
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
-        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+        self.iface.messageBar().pushMessage("", "'{}' {}".format(outStr, tr('copied to the clipboard')), level=Qgis.Info, duration=4)
 
     def setShowMapTool(self):
         '''Set the focus of the external map tool.'''
