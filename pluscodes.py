@@ -19,6 +19,7 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink)
 
 from . import olc
+from .util import tr
 
 
 class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
@@ -37,19 +38,19 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
-                'Input point vector layer',
+                tr('Input point vector layer'),
                 [QgsProcessing.TypeVectorPoint])
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmPlusCodesFieldName,
-                'Plus Codes field name',
+                tr('Plus Codes field name'),
                 defaultValue='pluscodes')
         )
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmPlusCodesLength,
-                'Plus Codes length',
+                tr('Plus Codes length'),
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=11,
                 optional=False,
@@ -59,7 +60,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output layer')
+                tr('Output layer'))
         )
 
     def processAlgorithm(self, parameters, context, feedback):
@@ -70,7 +71,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         fieldsout = QgsFields(source.fields())
 
         if fieldsout.append(QgsField(field_name, QVariant.String)) is False:
-            msg = "Plus Codes Field Name must be unique. There is already a field named '{}'".format(field_name)
+            msg = "{} '{}'".format(tr('Plus Codes Field Name must be unique. There is already a field named'), field_name)
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
 
@@ -115,7 +116,7 @@ class ToPlusCodesAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
 
     def displayName(self):
-        return 'Point layer to Plus Codes'
+        return tr('Point layer to Plus Codes')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
@@ -150,13 +151,13 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
-                'Input vector layer or table',
+                tr('Input vector layer or table'),
                 [QgsProcessing.TypeVector])
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmPlusCodesField,
-                'Field containing Plus Code coordinate',
+                tr('Field containing Plus Code coordinate'),
                 defaultValue='pluscodes',
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.String)
@@ -164,14 +165,14 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output layer')
+                tr('Output layer'))
         )
 
     def processAlgorithm(self, parameters, context, feedback):
         source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
         pluscodesfieldname = self.parameterAsString(parameters, self.PrmPlusCodesField, context)
         if not pluscodesfieldname:
-            msg = 'Select a Plus Codes field to process'
+            msg = tr('Select a Plus Codes field to process')
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
         epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -205,7 +206,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
                 feedback.setProgress(int(cnt * total))
 
         if badFeatures > 0:
-            msg = "{} out of {} features contained Plus Codes coordinates".format(featureCount - badFeatures, featureCount)
+            msg = "{} {} {} {}".format(featureCount - badFeatures, tr('out of'), featureCount, tr('features contained Plus Codes coordinates'))
             feedback.pushInfo(msg)
 
         return {self.PrmOutputLayer: dest_id}
@@ -217,7 +218,7 @@ class PlusCodes2Layerlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
 
     def displayName(self):
-        return 'Plus Codes to point layer'
+        return tr('Plus Codes to point layer')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
