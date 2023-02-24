@@ -1,8 +1,12 @@
 import math
 import re
 from qgis.core import QgsCoordinateReferenceSystem
+from qgis.PyQt.QtCore import QCoreApplication
 
 epsg4326 = QgsCoordinateReferenceSystem('EPSG:4326')
+
+def tr(string):
+    return QCoreApplication.translate('@default', string)
 
 def formatMgrsString(mgrs, add_spaces=False):
     if add_spaces:
