@@ -11,7 +11,7 @@ from qgis.core import (
     QgsPalLayerSettings, QgsVectorLayerSimpleLabeling, QgsProject, Qgis)
 from qgis.gui import QgsVertexMarker
 from .captureCoordinate  import CaptureCoordinate
-from .util import epsg4326, parseDMSStringSingle, parseDMSString
+from .util import epsg4326, parseDMSStringSingle, parseDMSString, tr
 from .utm import utm2Point
 from .settings import CoordOrder, settings
 from . import mgrs
@@ -85,20 +85,20 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     def initLabel(self):
         if self.settings.multiZoomToProjIsWgs84():
             if self.settings.multiCoordOrder == CoordOrder.OrderYX:
-                self.label.setText("Enter coordinate ('lat,lon,...)")
+                self.label.setText(tr("Enter coordinate ('lat,lon,...)"))
             else:
-                self.label.setText("Enter coordinate ('lon,lat,...)")
+                self.label.setText(tr("Enter coordinate ('lon,lat,...)"))
         elif self.settings.multiZoomToProjIsMGRS():
-            self.label.setText("Enter coordinate ('mgrs,...)")
+            self.label.setText(tr("Enter coordinate ('mgrs,...)"))
         elif self.settings.multiZoomToProjIsPlusCodes():
-            self.label.setText("Enter coordinate ('Plus code,...)")
+            self.label.setText(tr("Enter coordinate ('Plus code,...)"))
         elif self.settings.multiZoomToProjIsUtm():
-            self.label.setText("Enter coordinate ('Standard UTM,...)")
+            self.label.setText(tr("Enter coordinate ('Standard UTM,...)"))
         else:
             if self.settings.multiCoordOrder == CoordOrder.OrderYX:
-                self.label.setText("Enter coordinate ({} Y,X,...)".format(self.settings.multiZoomToCRS().authid()))
+                self.label.setText("{} ({} Y,X,...)".format(tr('Enter coordinate'), self.settings.multiZoomToCRS().authid()))
             else:
-                self.label.setText("Enter coordinate ({} X,Y,...)".format(self.settings.multiZoomToCRS().authid()))
+                self.label.setText("{} ({} X,Y,...)".format(tr('Enter coordinate'), self.settings.multiZoomToCRS().authid()))
 
     def settingsChanged(self):
         self.initLabel()
@@ -166,7 +166,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
     def clearAll(self):
         reply = QMessageBox.question(
             self, 'Message',
-            'Are your sure you want to delete all locations?',
+            tr('Are your sure you want to delete all locations?'),
             QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
@@ -282,7 +282,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
         # don't change.
         reply = QMessageBox.question(
             self, 'Message',
-            'Are your sure you want to delete the selected locations?',
+            tr('Are your sure you want to delete the selected locations?'),
             QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
@@ -339,7 +339,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 else:
                     parts = re.split(r'[\s;:]+', parts[0], 1)
                     if len(parts) < 2:
-                        self.iface.messageBar().pushMessage("", "Invalid Coordinate.", level=Qgis.Warning, duration=3)
+                        self.iface.messageBar().pushMessage("", tr("Invalid Coordinate."), level=Qgis.Warning, duration=3)
                         return
                     srcCrs = self.settings.multiZoomToCRS()
                     transform = QgsCoordinateTransform(srcCrs, epsg4326, QgsProject.instance())
@@ -365,11 +365,11 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
                 if numFields >= 4:
                     data = parts[3:]
             else:
-                self.iface.messageBar().pushMessage("", "Invalid Coordinate.", level=Qgis.Warning, duration=3)
+                self.iface.messageBar().pushMessage("", tr("Invalid Coordinate."), level=Qgis.Warning, duration=3)
                 return
         except Exception:
             if self.addLineEdit.text():
-                self.iface.messageBar().pushMessage("", "Invalid Coordinate. Perhaps comma separators between fields were not used.", level=Qgis.Warning, duration=3)
+                self.iface.messageBar().pushMessage("", tr("Invalid Coordinate. Perhaps comma separators between fields were not used."), level=Qgis.Warning, duration=3)
             return
         newrow = self.addCoord(lat, lon, label, data)
         self.addLineEdit.clear()
