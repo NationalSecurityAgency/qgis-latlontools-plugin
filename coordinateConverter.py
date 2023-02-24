@@ -6,7 +6,7 @@ from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QApplication
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.uic import loadUiType
 from qgis.core import QgsCoordinateTransform, QgsPoint, QgsPointXY, QgsProject
-from .util import epsg4326, parseDMSString, formatDmsString, formatMgrsString
+from .util import epsg4326, parseDMSString, formatDmsString, formatMgrsString, tr
 # import traceback
 
 from .captureCoordinate  import CaptureCoordinate
@@ -21,6 +21,9 @@ from . import georef
 
 FORM_CLASS, _ = loadUiType(os.path.join(
     os.path.dirname(__file__), 'ui/coordinateConverter.ui'))
+
+s_invalid = tr('Invalid')
+s_copied = tr('copied to the clipboard')
 
 class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     inputProjection = 0
@@ -45,10 +48,10 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
 
         self.xymenu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/yx.svg')
-        a = self.xymenu.addAction(icon, "Y, X (Lat, Lon) Order")
+        a = self.xymenu.addAction(icon, tr("Y, X (Lat, Lon) Order"))
         a.setData(0)
         icon = QIcon(os.path.dirname(__file__) + '/images/xy.svg')
-        a = self.xymenu.addAction(icon, "X, Y (Lon, Lat) Order")
+        a = self.xymenu.addAction(icon, tr("X, Y (Lon, Lat) Order"))
         a.setData(1)
         self.xyButton.setIconSize(QSize(16, 16))
         self.xyButton.setIcon(icon)
@@ -130,31 +133,31 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     def showInvalid(self, id):
         self.origPt = None
         if id != 0:
-            self.wgs84LineEdit.setText('Invalid')
+            self.wgs84LineEdit.setText(s_invalid)
         if id != 1:
-            self.projLineEdit.setText('Invalid')
+            self.projLineEdit.setText(s_invalid)
         if id != 2:
-            self.customLineEdit.setText('Invalid')
+            self.customLineEdit.setText(s_invalid)
         if id != 3:
-            self.dmsLineEdit.setText('Invalid')
+            self.dmsLineEdit.setText(s_invalid)
         if id != 4:
-            self.dmLineEdit.setText('Invalid')
+            self.dmLineEdit.setText(s_invalid)
         if id != 5:
-            self.ddmmssLineEdit.setText('Invalid')
+            self.ddmmssLineEdit.setText(s_invalid)
         if id != 6:
-            self.utmLineEdit.setText('Invalid')
+            self.utmLineEdit.setText(s_invalid)
         if id != 7:
-            self.mgrsLineEdit.setText('Invalid')
+            self.mgrsLineEdit.setText(s_invalid)
         if id != 8:
-            self.plusLineEdit.setText('Invalid')
+            self.plusLineEdit.setText(s_invalid)
         if id != 9:
-            self.geohashLineEdit.setText('Invalid')
+            self.geohashLineEdit.setText(s_invalid)
         if id != 10:
-            self.maidenheadLineEdit.setText('Invalid')
+            self.maidenheadLineEdit.setText(s_invalid)
         if id != 11:
-            self.upsLineEdit.setText('Invalid')
+            self.upsLineEdit.setText(s_invalid)
         if id != 12:
-            self.georefLineEdit.setText('Invalid')
+            self.georefLineEdit.setText(s_invalid)
 
     def clearForm(self):
         self.origPt = None
@@ -204,7 +207,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
                 else:
                     s = '{:.{prec}f}{}{:.{prec}f}'.format(newpt.x(), settings.converterDelimiter, newpt.y(), prec=precision)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.projLineEdit.setText(s)
         if id != 2:  # Custom CRS
             try:
@@ -222,7 +225,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
                 else:
                     s = '{:.{prec}f}{}{:.{prec}f}'.format(newpt.x(), settings.converterDelimiter, newpt.y(), prec=precision)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.customLineEdit.setText(s)
         if id != 3:  # D M' S"
             s = formatDmsString(pt4326.y(), pt4326.x(), 0, settings.converterDmsPrec, self.inputXYOrder,
@@ -243,25 +246,25 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
                 s = mgrs.toMgrs(pt4326.y(), pt4326.x(), settings.converterMgrsPrec)
                 s = formatMgrsString(s, settings.converterMgrsAddSpacesCheckBox)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.mgrsLineEdit.setText(s)
         if id != 8:  # Plus Codes
             try:
                 s = olc.encode(pt4326.y(), pt4326.x(), settings.converterPlusCodeLength)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.plusLineEdit.setText(s)
         if id != 9: # GEOHASH
             try:
                 s = geohash.encode(pt4326.y(), pt4326.x(), settings.converterGeohashPrecision)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.geohashLineEdit.setText(s)
         if id != 10: # Maidenhead
             try:
                 s = maidenhead.toMaiden(pt4326.y(), pt4326.x(), precision=settings.converterMaidenheadPrecision)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.maidenheadLineEdit.setText(s)
         if id != 11: # UPS
             s = latLon2Ups(pt4326.y(), pt4326.x(),precision=settings.converterUpsPrec,format=settings.converterUpsFormat)
@@ -270,7 +273,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             try:
                 s = georef.encode(pt4326.y(), pt4326.x(), settings.converterGeorefPrecision)
             except Exception:
-                s = 'Invalid'
+                s = s_invalid
             self.georefLineEdit.setText(s)
 
     def commitWgs84(self):
@@ -462,69 +465,69 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
     def copyWgs84(self):
         s = self.wgs84LineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyProject(self):
         s = self.projLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyCustom(self):
         s = self.customLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyDms(self):
         s = self.dmsLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
         self.clipboard.setText(self.dmsLineEdit.text())
 
     def copyDm(self):
         s = self.dmLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
         self.clipboard.setText(self.dmLineEdit.text())
 
     def copyDdmmss(self):
         s = self.ddmmssLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyUtm(self):
         s = self.utmLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyUps(self):
         s = self.upsLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyMgrs(self):
         s = self.mgrsLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyPlus(self):
         s = self.plusLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyGeohash(self):
         s = self.geohashLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyMaidenhead(self):
         s = self.maidenheadLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def copyGeoref(self):
         s = self.georefLineEdit.text()
         self.clipboard.setText(s)
-        self.iface.statusBarIface().showMessage("'{}' copied to the clipboard".format(s), 3000)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 
     def customCrsChanged(self):
         if self.origPt is not None:
