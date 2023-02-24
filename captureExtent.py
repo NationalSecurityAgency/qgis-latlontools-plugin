@@ -3,7 +3,7 @@ from qgis.PyQt.QtWidgets import QApplication
 from qgis.core import Qgis, QgsCoordinateTransform, QgsCoordinateReferenceSystem, QgsProject
 from qgis.gui import QgsMapToolExtent
 # import traceback
-from .util import epsg4326
+from .util import epsg4326, tr
 from .settings import settings, CopyExtent
 
 def getExtentString(bbox, src_crs, dst_crs):
@@ -75,4 +75,4 @@ class CaptureExtentTool(QgsMapToolExtent):
 
         clipboard = QApplication.clipboard()
         clipboard.setText(outStr)
-        self.iface.messageBar().pushMessage("", "'{}' copied to the clipboard".format(outStr), level=Qgis.Info, duration=4)
+        self.iface.messageBar().pushMessage("", "'{}'".format(outStr) + tr("copied to the clipboard"), level=Qgis.Info, duration=4)
