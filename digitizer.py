@@ -7,7 +7,7 @@ from qgis.PyQt.QtWidgets import QDialog, QMenu
 from qgis.PyQt.uic import loadUiType
 from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject, QgsVectorLayerUtils
 from qgis.gui import QgsProjectionSelectionDialog
-from .util import epsg4326, parseDMSString
+from .util import epsg4326, parseDMSString, tr
 # import traceback
 
 from . import mgrs
@@ -30,10 +30,10 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.canvas = iface.mapCanvas()
         self.xymenu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/yx.svg')
-        a = self.xymenu.addAction(icon, "Y, X (Lat, Lon) Order")
+        a = self.xymenu.addAction(icon, tr("Y, X (Lat, Lon) Order"))
         a.setData(0)
         icon = QIcon(os.path.dirname(__file__) + '/images/xy.svg')
-        a = self.xymenu.addAction(icon, "X, Y (Lon, Lat) Order")
+        a = self.xymenu.addAction(icon, tr("X, Y (Lon, Lat) Order"))
         a.setData(1)
         self.xyButton.setIconSize(QSize(24, 24))
         self.xyButton.setIcon(icon)
@@ -42,22 +42,22 @@ class DigitizerWidget(QDialog, FORM_CLASS):
 
         self.crsmenu = QMenu()
         icon = QIcon(os.path.dirname(__file__) + '/images/wgs84Projection.svg')
-        a = self.crsmenu.addAction(icon, "WGS 84 (latitude & longitude)")
+        a = self.crsmenu.addAction(icon, tr("WGS 84 (latitude & longitude)"))
         a.setData(0)
         icon = QIcon(os.path.dirname(__file__) + '/images/mgrsProjection.svg')
-        a = self.crsmenu.addAction(icon, "MGRS")
+        a = self.crsmenu.addAction(icon, tr("MGRS"))
         a.setData(1)
         icon = QIcon(os.path.dirname(__file__) + '/images/projProjection.svg')
-        a = self.crsmenu.addAction(icon, "Project CRS")
+        a = self.crsmenu.addAction(icon, tr("Project CRS"))
         a.setData(2)
         icon = QIcon(os.path.dirname(__file__) + '/images/customProjection.svg')
-        a = self.crsmenu.addAction(icon, "Specify CRS")
+        a = self.crsmenu.addAction(icon, tr("Specify CRS"))
         a.setData(3)
         icon = QIcon(os.path.dirname(__file__) + '/images/pluscodes.svg')
-        a = self.crsmenu.addAction(icon, "Plus Codes")
+        a = self.crsmenu.addAction(icon, tr("Plus Codes"))
         a.setData(4)
         icon = QIcon(os.path.dirname(__file__) + '/images/utm.svg')
-        a = self.crsmenu.addAction(icon, "UTM")
+        a = self.crsmenu.addAction(icon, tr("UTM"))
         a.setData(5)
         self.crsButton.setIconSize(QSize(24, 24))
         self.crsButton.setIcon(icon)
@@ -95,18 +95,18 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                     fields = QgsJsonUtils.stringToFields(text, codec)
                     fet = QgsJsonUtils.stringToFeatureList(text, fields, codec)
                     if (len(fet) == 0) or not fet[0].isValid():
-                        raise ValueError('Invalid Coordinates')
+                        raise ValueError(tr('Invalid Coordinates'))
 
                     geom = fet[0].geometry()
                     if geom.isEmpty() or (geom.wkbType() != QgsWkbTypes.Point):
-                        raise ValueError('Invalid GeoJSON Geometry')
+                        raise ValueError(tr('Invalid GeoJSON Geometry'))
                     pt = geom.asPoint()
                     lat = pt.y()
                     lon = pt.x()
                 elif re.search(r'POINT\(', text) is not None:
                     m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
-                        raise ValueError('Invalid Coordinates')
+                        raise ValueError(tr('Invalid Coordinates'))
                     lon = float(m[0][0])
                     lat = float(m[0][1])
                 else:
@@ -143,7 +143,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                 else:
                     m = re.findall(r'POINT\(\s*([+-]?\d*\.?\d*)\s+([+-]?\d*\.?\d*)', text)
                     if len(m) != 1:
-                        raise ValueError('Invalid Coordinates')
+                        raise ValueError(tr('Invalid Coordinates'))
                     lon = float(m[0][0])
                     lat = float(m[0][1])
                 if self.inputProjection == 2:  # Project CRS
@@ -152,7 +152,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
                     srcCrs = QgsCoordinateReferenceSystem(self.inputCustomCRS)
         except Exception:
             # traceback.print_exc()
-            self.iface.messageBar().pushMessage("", "Invalid Coordinate", level=Qgis.Warning, duration=2)
+            self.iface.messageBar().pushMessage("", tr("Invalid Coordinate"), level=Qgis.Warning, duration=2)
             return
         self.lineEdit.clear()
         caps = layer.dataProvider().capabilities()
@@ -168,30 +168,30 @@ class DigitizerWidget(QDialog, FORM_CLASS):
 
     def labelUpdate(self):
         if self.inputProjection == 1:  # MGRS projection
-            self.infoLabel.setText('Input Coordinate: MGRS')
+            self.infoLabel.setText(tr('Input Coordinate: MGRS'))
             return
         if self.inputProjection == 4:  # Plus Codes projection
-            self.infoLabel.setText('Input Coordinate: Plus Codes')
+            self.infoLabel.setText(tr('Input Coordinate: Plus Codes'))
             return
         if self.inputProjection == 5:  # UTM
-            self.infoLabel.setText('Input Coordinate: UTM')
+            self.infoLabel.setText(tr('Input Coordinate: UTM'))
             return
         if self.isWgs84():
             if self.inputXYOrder == 0:
-                o = "Lat, Lon"
+                o = tr("Lat, Lon")
             else:
-                o = "Lon, Lat"
+                o = tr("Lon, Lat")
             proj = "Wgs84"
         else:
             if self.inputXYOrder == 0:
-                o = "Y, X"
+                o = tr("Y, X")
             else:
-                o = "X, Y"
+                o = tr("X, Y")
             if self.inputProjection == 2:  # Project Projection
                 proj = self.canvas.mapSettings().destinationCrs().authid()
             else:
                 proj = self.inputCustomCRS
-        s = "Input Projection: {} - Coordinate Order: {}".format(proj, o)
+        s = "Input Projection: {} - {}: {}".format(proj, tr('Coordinate Order'), o)
         self.infoLabel.setText(s)
 
     def configButtons(self):
