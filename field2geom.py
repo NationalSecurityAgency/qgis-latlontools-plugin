@@ -1,7 +1,7 @@
 import os
 import re
 
-from qgis.PyQt.QtCore import QCoreApplication, QUrl, QVariant
+from qgis.PyQt.QtCore import QUrl, QVariant
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsFields, QgsFeature, QgsWkbTypes, QgsGeometry, QgsPointXY
 
@@ -16,7 +16,7 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
-from .util import epsg4326, parseDMSStringSingle, parseDMSString
+from .util import epsg4326, parseDMSStringSingle, parseDMSString, tr
 from . import olc
 from . import geohash
 from .utm import isUtm, utm2Point
@@ -24,10 +24,6 @@ from .maidenhead import maidenGridCenter
 from .ups import ups2Point
 from . import georef
 # import traceback
-
-
-def tr(string):
-    return QCoreApplication.translate('Processing', string)
 
 
 class Field2GeomAlgorithm(QgsProcessingAlgorithm):
@@ -205,7 +201,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                         else:
                             coords = re.split(r'[\s,;:]+', attr1, 1)
                             if len(coords) < 2:
-                                raise ValueError('Invalid Coordinates')
+                                raise ValueError(tr('Invalid Coordinates'))
                             lat = float(coords[0])
                             lon = float(coords[1])
                     elif field_type == 2:  # Lon (x), Lat (y)
@@ -214,7 +210,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                         else:
                             coords = re.split(r'[\s,;:]+', attr1, 1)
                             if len(coords) < 2:
-                                raise ValueError('Invalid Coordinates')
+                                raise ValueError(tr('Invalid Coordinates'))
                             lon = float(coords[0])
                             lat = float(coords[1])
                     elif field_type == 3:  # MGRS
@@ -254,7 +250,9 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
                     feedback.setProgress(int(cnt * total))
 
         if failed > 0:
-            msg = "{} out of {} features were invalid".format(failed, source.featureCount())
+            s1 = tr('out of')
+            s2 = tr('features were invalid')
+            msg = "{} {} {} {}".format(failed, s1, source.featureCount(), s2)
             feedback.pushInfo(msg)
 
         return {self.PrmOutputLayer: dest_id}
@@ -266,7 +264,7 @@ class Field2GeomAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/field2geom.svg')
 
     def displayName(self):
-        return 'Fields to point layer'
+        return tr('Fields to point layer')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
