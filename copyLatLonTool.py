@@ -5,7 +5,7 @@ from qgis.core import Qgis, QgsCoordinateTransform, QgsPointXY, QgsProject, QgsS
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
 
 from .settings import settings, CoordOrder, H3_INSTALLED
-from .util import epsg4326, formatDmsString, formatMgrsString
+from .util import epsg4326, formatDmsString, formatMgrsString, tr
 from .utm import latLon2Utm
 from .ups import latLon2Ups
 from . import mgrs
@@ -204,7 +204,7 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             msg = self.formatCoord(pt, ', ')
             formatString = self.coordFormatString()
             if msg is None:
-                self.iface.statusBarIface().showMessage("{} - Out of bounds".format(formatString), 4000)
+                self.iface.statusBarIface().showMessage("{} - {}".format(formatString, tr('Out of bounds')), 4000)
             else:
                 self.iface.statusBarIface().showMessage("{} - {}".format(msg, formatString), 4000)
         except Exception:
@@ -298,9 +298,9 @@ class CopyLatLonTool(QgsMapToolEmitPoint):
             if msg is not None:
                 clipboard = QApplication.clipboard()
                 clipboard.setText(msg)
-                self.iface.messageBar().pushMessage("", "{} coordinate {} copied to the clipboard".format(formatString, msg), level=Qgis.Info, duration=3)
+                self.iface.messageBar().pushMessage("", "{} {} {} {}".format(formatString, tr('coordinate'), msg, tr('copied to the clipboard')), level=Qgis.Info, duration=3)
         except Exception as e:
-            self.iface.messageBar().pushMessage("", "Invalid coordinate: {}".format(e), level=Qgis.Warning, duration=3)
+            self.iface.messageBar().pushMessage("", "{} {}".format(tr('Invalid coordinate:'), e), level=Qgis.Warning, duration=3)
 
     def removeMarker(self):
         if self.marker is not None:
