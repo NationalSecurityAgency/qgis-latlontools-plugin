@@ -15,6 +15,7 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
+from .util import tr
 
 
 class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
@@ -32,13 +33,13 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
-                'Input vector layer or table',
+                tr('Input vector layer or table'),
                 [QgsProcessing.TypeVector])
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmMgrsField,
-                'Field containing MGRS coordinate',
+                tr('Field containing MGRS coordinate'),
                 defaultValue='mgrs',
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.String)
@@ -46,14 +47,14 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output layer')
+                tr('Output layer'))
         )
 
     def processAlgorithm(self, parameters, context, feedback):
         source = self.parameterAsSource(parameters, self.PrmInputLayer, context)
         mgrsfieldname = self.parameterAsString(parameters, self.PrmMgrsField, context)
         if not mgrsfieldname:
-            msg = 'Select an MGRS field to process'
+            msg = tr('Select an MGRS field to process')
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
         epsg4326 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -85,7 +86,7 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
                 feedback.setProgress(int(cnt * total))
 
         if badFeatures > 0:
-            msg = "{} out of {} features contained MGRS coordinates".format(featureCount - badFeatures, featureCount)
+            msg = "{} {} {} {}".format(featureCount - badFeatures, tr('out of'), featureCount, tr('features contained MGRS coordinates'))
             feedback.pushInfo(msg)
 
         return {self.PrmOutputLayer: dest_id}
@@ -97,7 +98,7 @@ class MGRStoLayerlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/mgrs2point.svg')
 
     def displayName(self):
-        return 'MGRS to point layer'
+        return tr('MGRS to point layer')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
