@@ -14,6 +14,7 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink)
 
 from . import mgrs
+from .util import tr
 
 
 class ToMGRSAlgorithm(QgsProcessingAlgorithm):
@@ -32,19 +33,19 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
-                'Input point vector layer',
+                tr('Input point vector layer'),
                 [QgsProcessing.TypeVectorPoint])
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmMgrsFieldName,
-                'Output MGRS field name',
+                tr('Output MGRS field name'),
                 defaultValue='mgrs')
         )
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmMgrsPrecision,
-                'MGRS Precision',
+                tr('MGRS Precision'),
                 type=QgsProcessingParameterNumber.Integer,
                 defaultValue=5,
                 optional=False,
@@ -54,7 +55,7 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output layer')
+                tr('Output layer'))
         )
 
     def processAlgorithm(self, parameters, context, feedback):
@@ -65,7 +66,7 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         fieldsout = QgsFields(source.fields())
 
         if fieldsout.append(QgsField(mgrs_name, QVariant.String)) is False:
-            msg = "MGRS Field Name must be unique. There is already a field named '{}'".format(mgrs_name)
+            msg = "{} '{}'".format(tr('MGRS Field Name must be unique. There is already a field named'), mgrs_name)
             feedback.reportError(msg)
             raise QgsProcessingException(msg)
 
@@ -109,7 +110,7 @@ class ToMGRSAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/point2mgrs.svg')
 
     def displayName(self):
-        return 'Point layer to MGRS'
+        return tr('Point layer to MGRS')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
