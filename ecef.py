@@ -17,6 +17,8 @@ from qgis.core import (
     QgsProcessingParameterFeatureSource,
     QgsProcessingParameterFeatureSink)
 
+from .util import tr
+
 class LatLonToEcefAlgorithm(QgsProcessingAlgorithm):
     """
     Algorithm to convert a point layer with altitude to an ECEF table.
@@ -37,20 +39,20 @@ class LatLonToEcefAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
-                'Input point vector layer',
+                tr('Input point vector layer'),
                 [QgsProcessing.TypeVectorPoint])
         )
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmExtractFromZ,
-                'Extract altitude from Z geometry (must be meters) if available',
+                tr('Extract altitude from Z geometry (must be meters) if available'),
                 False,
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmAltitudeField,
-                'Altitude attribute',
+                tr('Altitude attribute'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.Numeric,
                 optional=True)
@@ -58,7 +60,7 @@ class LatLonToEcefAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterNumber(
                 self.PrmDefaultAltitude,
-                'Default altitude in meters when not otherwise specified',
+                tr('Default altitude in meters when not otherwise specified'),
                 QgsProcessingParameterNumber.Double,
                 defaultValue=0,
                 optional=True)
@@ -66,25 +68,25 @@ class LatLonToEcefAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmXFieldName,
-                'Output X attribute name',
+                tr('Output X attribute name'),
                 defaultValue='X')
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmYFieldName,
-                'Output Y attribute name',
+                tr('Output Y attribute name'),
                 defaultValue='Y')
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmZFieldName,
-                'Output Z attribute name',
+                tr('Output Z attribute name'),
                 defaultValue='Z')
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output layer')
+                tr('Output layer'))
         )
 
     def processAlgorithm(self, parameters, context, feedback):
@@ -152,7 +154,7 @@ class LatLonToEcefAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/ecef.png')
 
     def displayName(self):
-        return 'Lat, Lon, Altitude to ECEF'
+        return tr('Lat, Lon, Altitude to ECEF')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
@@ -190,13 +192,13 @@ class EcefLatLonToAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.PrmInputLayer,
-                'Input layer',
+                tr('Input layer'),
                 [QgsProcessing.TypeVector])
         )
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmXField,
-                'ECEF X attribute (meters)',
+                tr('ECEF X attribute (meters)'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.Numeric,
                 optional=False)
@@ -204,7 +206,7 @@ class EcefLatLonToAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmYField,
-                'ECEF Y attribute (meters)',
+                tr('ECEF Y attribute (meters)'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.Numeric,
                 optional=False)
@@ -212,7 +214,7 @@ class EcefLatLonToAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterField(
                 self.PrmZField,
-                'ECEF Z attribute (meters)',
+                tr('ECEF Z attribute (meters)'),
                 parentLayerParameterName=self.PrmInputLayer,
                 type=QgsProcessingParameterField.Numeric,
                 optional=False)
@@ -220,21 +222,21 @@ class EcefLatLonToAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmAddZToAttributes,
-                'Add altitude to the output attribute table',
+                tr('Add altitude to the output attribute table'),
                 False,
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterString(
                 self.PrmAltitudeFieldName,
-                'Output altitude attribute name',
+                tr('Output altitude attribute name'),
                 defaultValue='altitude',
                 optional=True)
         )
         self.addParameter(
             QgsProcessingParameterFeatureSink(
                 self.PrmOutputLayer,
-                'Output pointZ layer')
+                tr('Output pointZ layer'))
         )
 
     def processAlgorithm(self, parameters, context, feedback):
@@ -249,7 +251,7 @@ class EcefLatLonToAlgorithm(QgsProcessingAlgorithm):
         fieldsout = QgsFields(source.fields())
         if add_z:
             if fieldsout.append(QgsField(z_name, QVariant.Double)) is False:
-                raise QgsProcessingException("Altitude attribute name must be unique")
+                raise QgsProcessingException(tr("Altitude attribute name must be unique"))
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.PrmOutputLayer, context, fieldsout,
@@ -288,7 +290,7 @@ class EcefLatLonToAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/ecef.png')
 
     def displayName(self):
-        return 'ECEF to Lat, Lon, Altitude'
+        return tr('ECEF to Lat, Lon, Altitude')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
