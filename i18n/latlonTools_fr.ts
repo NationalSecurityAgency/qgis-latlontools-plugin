@@ -5,507 +5,507 @@
     <message>
         <location filename="../latLonTools.py" line="50"/>
         <source>Lat Lon Tools Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barre d'outils Lat Lon Tools</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="59"/>
         <source>Copy/Display Coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copier/Afficher les coordonnées</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="68"/>
         <source>Show in External Map</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Afficher sur la carte externe</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="77"/>
         <source>Zoom To Coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aller à des coordonnées</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="89"/>
         <source>Multi-location Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zoom multi-emplacements</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="103"/>
         <source>Copy Canvas Extent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copier l'emprise du canevas</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="107"/>
         <source>Copy Selected Area Extent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copier l'emprise d'une zone sélectionnée</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="112"/>
         <source>Copy Layer Extent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copier l'emprise de la couche</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="116"/>
         <source>Copy Selected Features Extent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copier l'emprise des entités sélectionnées</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="121"/>
         <source>Copy Extents to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copier des emprises dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="136"/>
         <source>Coordinate Conversion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Conversion de coordonnées</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="267"/>
         <source>Fields to point layer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Champs vers couche de ponctuels</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="353"/>
         <source>Point layer to fields</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Couche de ponctuels vers champs</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="221"/>
         <source>Plus Codes to point layer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plus Codes vers couche de ponctuels</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="119"/>
         <source>Point layer to Plus Codes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Couche de ponctuels vers Plus Codes</translation>
     </message>
     <message>
         <location filename="../mgrstogeom.py" line="101"/>
         <source>MGRS to point layer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MGRS vers couche de ponctuels</translation>
     </message>
     <message>
         <location filename="../tomgrs.py" line="113"/>
         <source>Point layer to MGRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Couche de ponctuels vers MGRS</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="293"/>
         <source>ECEF to Lat, Lon, Altitude</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ECEF vers Lat, Lon, Altitude</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="157"/>
         <source>Lat, Lon, Altitude to ECEF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lat, Lon, Altitude vers ECEF</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="166"/>
         <source>Conversions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Conversions</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="172"/>
         <source>Lat Lon Digitize</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ajouter un ponctuel à des coordonnées</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="181"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paramètres</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="183"/>
         <source>Lat Lon Tools Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paramètres Lat Lon Tools</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="190"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aide</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="301"/>
         <source>This layer has no features - A bounding box cannot be calculated.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cette couche n'a pas d'entités - Aucune boîte englobante ne peut être calculée.</translation>
     </message>
     <message>
         <location filename="../captureExtent.py" line="78"/>
         <source>copied to the clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">copié dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="306"/>
         <source>No features were selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aucune entité n'a été sélectionnée.</translation>
     </message>
     <message>
         <location filename="../copyLatLonTool.py" line="207"/>
         <source>Out of bounds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En dehors des limites</translation>
     </message>
     <message>
         <location filename="../copyLatLonTool.py" line="301"/>
         <source>coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">coordonnée</translation>
     </message>
     <message>
         <location filename="../copyLatLonTool.py" line="303"/>
         <source>Invalid coordinate:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnée incorrecte : </translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="85"/>
         <source>Enter MGRS Coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée MGRS</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="87"/>
         <source>Enter Plus Codes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer un Plus Codes</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="89"/>
         <source>Enter Geohash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer un Geohash</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="91"/>
         <source>Enter H3 geohash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer un geohash H3</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="93"/>
         <source>Enter Standard UTM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer des coordonnées UTM standard</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="95"/>
         <source>Enter Maidenhead Grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer des coordonnées de grille Maidenhead</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="98"/>
         <source>Enter &apos;Latitude, Longitude&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer &apos;Latitude, Longitude&apos;</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="100"/>
         <source>Enter &apos;Longitude, Latitude&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer &apos;Longitude, Latitude&apos;</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="112"/>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer</translation>
     </message>
     <message>
         <location filename="../zoomToLatLon.py" line="152"/>
         <source>Invalid H3 Coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnée H3 incorrecte</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="213"/>
         <source>Invalid Coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnées incorrectes</translation>
     </message>
     <message>
         <location filename="../digitizer.py" line="102"/>
         <source>Invalid GeoJSON Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Géométrie GeoJSON incorrecte</translation>
     </message>
     <message>
         <location filename="../digitizer.py" line="155"/>
         <source>Invalid Coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnée incorrecte</translation>
     </message>
     <message>
         <location filename="../settings.py" line="250"/>
         <source>WGS 84 (Latitude &amp; Longitude)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WGS 84 (Latitude &amp; Longitude)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="105"/>
         <source>Project CRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SCR du projet</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="105"/>
         <source>Custom CRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SCR personnalisé</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="50"/>
         <source>MGRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MGRS</translation>
     </message>
     <message>
         <location filename="../settings.py" line="241"/>
         <source>Plus Codes (Open Location Code)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plus Codes (Open Location Code)</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="50"/>
         <source>Standard UTM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">UTM standard</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="50"/>
         <source>Geohash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geohash</translation>
     </message>
     <message>
         <location filename="../settings.py" line="217"/>
         <source>Maidenhead Grid Locator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Grille Maidenhead</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="50"/>
         <source>UPS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">UPS</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="50"/>
         <source>GEOREF</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GEOREF</translation>
     </message>
     <message>
         <location filename="../settings.py" line="219"/>
         <source>Decimal Degrees</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Degrés décimaux</translation>
     </message>
     <message>
         <location filename="../settings.py" line="220"/>
         <source>Normal Coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnée standard</translation>
     </message>
     <message>
         <location filename="../settings.py" line="263"/>
         <source>Lat, Lon (Y,X) - Google Map Order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lat, Lon (Y,X) - Ordre Google Maps</translation>
     </message>
     <message>
         <location filename="../settings.py" line="263"/>
         <source>Lon, Lat (X,Y) Order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lon, Lat (X,Y)</translation>
     </message>
     <message>
         <location filename="../settings.py" line="260"/>
         <source>Comma</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Virgule</translation>
     </message>
     <message>
         <location filename="../settings.py" line="260"/>
         <source>Comma Space</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Virgule espace</translation>
     </message>
     <message>
         <location filename="../settings.py" line="260"/>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Espace</translation>
     </message>
     <message>
         <location filename="../settings.py" line="260"/>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tabulation</translation>
     </message>
     <message>
         <location filename="../settings.py" line="260"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Autre</translation>
     </message>
     <message>
         <location filename="../settings.py" line="231"/>
         <source>WGS 84 (Latitude &amp; Longitude) / Auto Detect Format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WGS 84 (Latitude &amp; Longitude) / Détection automatique du format</translation>
     </message>
     <message>
         <location filename="../settings.py" line="231"/>
         <source>Maidenhead Grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Grille Maidenhead</translation>
     </message>
     <message>
         <location filename="../settings.py" line="245"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Défaut</translation>
     </message>
     <message>
         <location filename="../settings.py" line="245"/>
         <source>Labeled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Étiqueté</translation>
     </message>
     <message>
         <location filename="../settings.py" line="245"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Personnalisé</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;minX,minY,maxX,maxY (W,S,E,N)&quot; - Using the selected delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;minX,minY,maxX,maxY (O,S,E,N)&quot; - Utilise le délimiteur sélectionné</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;minX,maxX,minY,maxY (W,E,S,N)&quot; - Using the selected delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;minX,maxX,minY,maxY (O,E,S,N)&quot; - Utilise le délimiteur sélectionné</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;minY,minX,maxY,maxX (S,W,N,E)&quot; - Using the selected delimiter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;minY,minX,maxY,maxX (S,O,N,E)&quot; - Utilise le délimiteur sélectionné</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;x1 y1,x2 y2,x3 y3,x4 y4,x1 y1&quot; - Polygon format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;x1 y1,x2 y2,x3 y3,x4 y4,x1 y1&quot; - Polygone</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;x1,y1 x2,y2 x3,y3 x4,y4 x1,y1&quot; - Alternate polgyon format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;x1,y1 x2,y2 x3,y3 x4,y4 x1,y1&quot; - Polgyone autre format</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>WKT Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Polygone WKT</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;bbox: [minX, minY, maxX, maxY]&quot; - MapProxy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;bbox: [minX, minY, maxX, maxY]&quot; - MapProxy</translation>
     </message>
     <message>
         <location filename="../settings.py" line="251"/>
         <source>&quot;bbox=minX,minY,maxX,maxY&quot; - GeoServer WFS, WMS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;bbox=minX,minY,maxX,maxY&quot; - GeoServer WFS, WMS</translation>
     </message>
     <message>
         <location filename="../settings.py" line="599"/>
         <source>Input QML Style File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fichier de style QML</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="88"/>
         <source>Enter coordinate (&apos;lat,lon,...)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée (lat,lon,...)</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="90"/>
         <source>Enter coordinate (&apos;lon,lat,...)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée (lon,lat,...)</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="92"/>
         <source>Enter coordinate (&apos;mgrs,...)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée (MGRS,...)</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="94"/>
         <source>Enter coordinate (&apos;Plus code,...)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée (Plus Code,...)</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="96"/>
         <source>Enter coordinate (&apos;Standard UTM,...)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée (UTM standard,...)</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="101"/>
         <source>Enter coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entrer une coordonnée</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="167"/>
         <source>Are your sure you want to delete all locations?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Êtes-vous sûr de vouloir supprimer toutes les coordonnées ?</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="283"/>
         <source>Are your sure you want to delete the selected locations?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Êtes-vous sûr de vouloir supprimer les coordonnées sélectionnées ?</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="368"/>
         <source>Invalid Coordinate.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnée incorrecte.</translation>
     </message>
     <message>
         <location filename="../multizoom.py" line="372"/>
         <source>Invalid Coordinate. Perhaps comma separators between fields were not used.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coordonnée incorrecte. Les séparateurs virgule n'ont peut-être pas été utilisés.</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="39"/>
         <source>Input point vector layer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Couche vecteur ponctuelle en entrée</translation>
     </message>
     <message>
         <location filename="../tomgrs.py" line="39"/>
         <source>Output MGRS field name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nom du champ MGRS en sortie</translation>
     </message>
     <message>
         <location filename="../tomgrs.py" line="45"/>
         <source>MGRS Precision</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Précision MGRS</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="86"/>
         <source>Output layer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Couche de sortie</translation>
     </message>
     <message>
         <location filename="../tomgrs.py" line="69"/>
         <source>MGRS Field Name must be unique. There is already a field named</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Le nom du champ MGRS doit être unique. Il y a déjà un champ nommé</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="151"/>
         <source>Input vector layer or table</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Couche vecteur ou table en entrée</translation>
     </message>
     <message>
         <location filename="../mgrstogeom.py" line="39"/>
         <source>Field containing MGRS coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Champ contenant la coordonnée MGRS</translation>
     </message>
     <message>
         <location filename="../mgrstogeom.py" line="57"/>
         <source>Select an MGRS field to process</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sélectionner un champ MGRS à traiter</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="209"/>
         <source>out of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">sur</translation>
     </message>
     <message>
         <location filename="../mgrstogeom.py" line="89"/>
         <source>features contained MGRS coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">entités contenaient des coordonnées MGRS</translation>
     </message>
     <message>
         <location filename="../coordinateConverter.py" line="51"/>
         <source>Y, X (Lat, Lon) Order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Y, X (Lat, Lon)</translation>
     </message>
     <message>
         <location filename="../coordinateConverter.py" line="54"/>
         <source>X, Y (Lon, Lat) Order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">X, Y (Lon, Lat)</translation>
     </message>
     <message>
         <location filename="../digitizer.py" line="45"/>
         <source>WGS 84 (latitude &amp; longitude)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WGS 84 (latitude &amp; longitude)</translation>
     </message>
     <message>
         <location filename="../digitizer.py" line="54"/>
         <source>Specify CRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spécifier le SCR</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="50"/>
         <source>Plus Codes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Plus Codes</translation>
     </message>
     <message>
         <location filename="../digitizer.py" line="60"/>
