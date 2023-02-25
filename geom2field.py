@@ -120,7 +120,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterEnum(
                 self.PrmWgs84NumberFormat,
-                tr('Select Decimal or DMS degress for WGS 84 numbers'),
+                tr('Select Decimal or DMS degrees for WGS 84 numbers'),
                 options=[tr('Decimal degrees'), tr('D°M\'S"'), tr('D°M.MM\''), tr('DDMMSS')],
                 defaultValue=0,
                 optional=True)
