@@ -1087,7 +1087,7 @@ H3 (if installed) - Only accept H3 geohash string</string>
              <item row="0" column="0">
               <widget class="QLabel" name="label_30">
                <property name="text">
-                <string>EPGS:4326 decimal degree precision</string>
+                <string>EPSG:4326 decimal degree precision</string>
                </property>
               </widget>
              </item>
