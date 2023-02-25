@@ -135,7 +135,7 @@ class Geom2FieldAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterBoolean(
                 self.PrmDmsPadWithSpace,
-                tr('Pad D°M\'S" and D°M.MM\' ccoordinates with leading zeros'),
+                tr('Pad D°M\'S" and D°M.MM\' coordinates with leading zeros'),
                 False,
                 optional=True)
         )
