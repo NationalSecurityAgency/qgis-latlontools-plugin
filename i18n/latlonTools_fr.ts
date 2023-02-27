@@ -131,7 +131,7 @@
     <message>
         <location filename="../captureExtent.py" line="78"/>
         <source>copied to the clipboard</source>
-        <translation>copié dans le presse-papier</translation>
+        <translation>copiée dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="306"/>
@@ -431,7 +431,7 @@
     <message>
         <location filename="../multizoom.py" line="372"/>
         <source>Invalid Coordinate. Perhaps comma separators between fields were not used.</source>
-        <translation>Coordonnées incorrected. Les séparateurs virgule n&apos;ont peut-être pas été utilisés.</translation>
+        <translation>Coordonnées incorrectes. Les séparateurs virgule n&apos;ont peut-être pas été utilisés.</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="39"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../geom2field.py" line="76"/>
         <source>Name for the field containing both coordinates, or the Y (latitude) coordinate</source>
-        <translation>Nom del&apos;attribut contenant les coordonnées or seulement la coordonnée Y (latitude)</translation>
+        <translation>Nom de l&apos;attribut contenant les coordonnées ou seulement la coordonnée Y (latitude)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="83"/>
@@ -601,12 +601,12 @@
     <message>
         <location filename="../geom2field.py" line="90"/>
         <source>Lat,Lon (Y,X) - Google map order</source>
-        <translation>Lat,Lon (Y,X) - Google map</translation>
+        <translation>Lat, Lon (Y,X) - Google map</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="90"/>
         <source>Lon,Lat (X,Y) order</source>
-        <translation>Lon,Lat (X,Y)</translation>
+        <translation>Lon, Lat (X,Y)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="98"/>
@@ -646,12 +646,12 @@
     <message>
         <location filename="../geom2field.py" line="120"/>
         <source>DÂ°M&apos;S&quot;</source>
-        <translation>DÂ°M&apos;S&quot;</translation>
+        <translation>D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
         <source>DÂ°M.MM&apos;</source>
-        <translation>DÂ°M.MM&apos;</translation>
+        <translation>D°M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
@@ -661,7 +661,7 @@
     <message>
         <location filename="../geom2field.py" line="128"/>
         <source>Add space between DÂ° M&apos; S&quot; and DÂ° M.MM&apos; numbers</source>
-        <translation>Ajouter une espace entre les valeurs DÂ° M&apos; S&quot; et DÂ° M.MM&apos;</translation>
+        <translation>Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
