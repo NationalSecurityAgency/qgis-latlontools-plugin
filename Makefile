@@ -5,6 +5,8 @@ EXTRAS = metadata.txt icon.png
 
 deploy:
 	mkdir -p $(PLUGINS)
+	mkdir -p $(PLUGINS)/i18n
+	cp -vf i18n/latlonTools_fr.qm $(PLUGINS)/i18n
 	cp -vf $(PY_FILES) $(PLUGINS)
 	cp -vf $(EXTRAS) $(PLUGINS)
 	cp -vfr images $(PLUGINS)
