@@ -5,7 +5,7 @@
     <message>
         <location filename="../latLonTools.py" line="50"/>
         <source>Lat Lon Tools Toolbar</source>
-        <translation>Barre d'outils Lat Lon Tools</translation>
+        <translation>Barre d&apos;outils Lat Lon Tools</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="59"/>
@@ -30,22 +30,22 @@
     <message>
         <location filename="../latLonTools.py" line="103"/>
         <source>Copy Canvas Extent</source>
-        <translation>Copier l'emprise du canevas</translation>
+        <translation>Copier l&apos;emprise du canevas</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="107"/>
         <source>Copy Selected Area Extent</source>
-        <translation>Copier l'emprise d'une zone sélectionnée</translation>
+        <translation>Copier l&apos;emprise d&apos;une zone sélectionnée</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="112"/>
         <source>Copy Layer Extent</source>
-        <translation>Copier l'emprise de la couche</translation>
+        <translation>Copier l&apos;emprise de la couche</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="116"/>
         <source>Copy Selected Features Extent</source>
-        <translation>Copier l'emprise des entités sélectionnées</translation>
+        <translation>Copier l&apos;emprise des entités sélectionnées</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="121"/>
@@ -125,7 +125,7 @@
     <message>
         <location filename="../latLonTools.py" line="301"/>
         <source>This layer has no features - A bounding box cannot be calculated.</source>
-        <translation>Cette couche n'a pas d'entités - Aucune boîte englobante ne peut être calculée.</translation>
+        <translation>Cette couche n&apos;a pas d&apos;entités - Aucune boîte englobante ne peut être calculée.</translation>
     </message>
     <message>
         <location filename="../captureExtent.py" line="78"/>
@@ -135,7 +135,7 @@
     <message>
         <location filename="../latLonTools.py" line="306"/>
         <source>No features were selected.</source>
-        <translation>Aucune entité n'a été sélectionnée.</translation>
+        <translation>Aucune entité n&apos;a été sélectionnée.</translation>
     </message>
     <message>
         <location filename="../copyLatLonTool.py" line="207"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../multizoom.py" line="372"/>
         <source>Invalid Coordinate. Perhaps comma separators between fields were not used.</source>
-        <translation>Coordonnées incorrected. Les séparateurs virgule n'ont peut-être pas été utilisés.</translation>
+        <translation>Coordonnées incorrected. Les séparateurs virgule n&apos;ont peut-être pas été utilisés.</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="39"/>
@@ -440,7 +440,7 @@
     <message>
         <location filename="../tomgrs.py" line="39"/>
         <source>Output MGRS field name</source>
-        <translation>Nom de l'attribut MGRS en sortie</translation>
+        <translation>Nom de l&apos;attribut MGRS en sortie</translation>
     </message>
     <message>
         <location filename="../tomgrs.py" line="45"/>
@@ -455,7 +455,7 @@
     <message>
         <location filename="../tomgrs.py" line="69"/>
         <source>MGRS Field Name must be unique. There is already a field named</source>
-        <translation>Le nom de l'attribut MGRS doit être unique. Il existe déjà un attribut nommé</translation>
+        <translation>Le nom de l&apos;attribut MGRS doit être unique. Il existe déjà un attribut nommé</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="151"/>
@@ -585,17 +585,17 @@
     <message>
         <location filename="../geom2field.py" line="76"/>
         <source>Name for the field containing both coordinates, or the Y (latitude) coordinate</source>
-        <translation>Nom del'attribut contenant les coordonnées or seulement la coordonnée Y (latitude)</translation>
+        <translation>Nom del&apos;attribut contenant les coordonnées or seulement la coordonnée Y (latitude)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="83"/>
         <source>Name of the field containing the X (longitude) portion of the coordinate</source>
-        <translation>Nom de l'attribut contenant la coordonnée X (longitude)</translation>
+        <translation>Nom de l&apos;attribut contenant la coordonnée X (longitude)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="90"/>
         <source>Coordinate order when using 1 field</source>
-        <translation>Ordre des coordonnées si utilisation d'un seul attribut</translation>
+        <translation>Ordre des coordonnées si utilisation d&apos;un seul attribut</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="90"/>
@@ -610,7 +610,7 @@
     <message>
         <location filename="../geom2field.py" line="98"/>
         <source>Delimiter between coordinates when using 1 field</source>
-        <translation>Séparateur des coordonnées si utilisation d'un seul attribut</translation>
+        <translation>Séparateur des coordonnées si utilisation d&apos;un seul attribut</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="105"/>
@@ -645,12 +645,12 @@
     <message>
         <location filename="../geom2field.py" line="120"/>
         <source>D&#xc2;&#xb0;M&apos;S&quot;</source>
-        <translation>D&#xc2;&#xb0;M&apos;S&quot;</translation>
+        <translation>DÂ°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
         <source>D&#xc2;&#xb0;M.MM&apos;</source>
-        <translation>D&#xc2;&#xb0;M.MM&apos;</translation>
+        <translation>DÂ°M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
@@ -660,12 +660,12 @@
     <message>
         <location filename="../geom2field.py" line="128"/>
         <source>Add space between D&#xc2;&#xb0; M&apos; S&quot; and D&#xc2;&#xb0; M.MM&apos; numbers</source>
-        <translation>Ajouter une espace entre les valeurs D&#xc2;&#xb0; M&apos; S&quot; et D&#xc2;&#xb0; M.MM&apos;</translation>
+        <translation>Ajouter une espace entre les valeurs DÂ° M&apos; S&quot; et DÂ° M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
         <source>Pad D&#xc2;&#xb0;M&apos;S&quot; and D&#xc2;&#xb0;M.MM&apos; coordinates with leading zeros</source>
-        <translation>Compléter les coordonnées D&#xc2;&#xb0;M&apos;S&quot; et D&#xc2;&#xb0;M.MM&apos; avec des zéros non significatif en début de valeur</translation>
+        <translation>Compléter les coordonnées DÂ°M&apos;S&quot; et DÂ°M.MM&apos; avec des zéros non significatif en début de valeur</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="142"/>
@@ -705,7 +705,7 @@
     <message>
         <location filename="../geom2field.py" line="255"/>
         <source>Field names must be unique. There is already a field named</source>
-        <translation>Les noms d'attributs doivent être uniques. Il existe déjà un attribut nommé</translation>
+        <translation>Les noms d&apos;attributs doivent être uniques. Il existe déjà un attribut nommé</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="44"/>
@@ -760,12 +760,12 @@
     <message>
         <location filename="../field2geom.py" line="113"/>
         <source>Attribute field containing Y or latitude must either be a numeric or string field.</source>
-        <translation>L'attribut contenant la coordonnée Y (latitude) doit être de type numérique ou texte</translation>
+        <translation>L&apos;attribut contenant la coordonnée Y (latitude) doit être de type numérique ou texte</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="120"/>
         <source>Attribute field containing X or longitude must either be a numeric or string field.</source>
-        <translation>L'attribut contenant la coordonnée X (longitude) doit être de type numérique ou texte</translation>
+        <translation>L&apos;attribut contenant la coordonnée X (longitude) doit être de type numérique ou texte</translation>
     </message>
     <message>
         <location filename="../field2geom.py" line="254"/>
@@ -775,12 +775,12 @@
     <message>
         <location filename="../pluscodes.py" line="44"/>
         <source>Plus Codes field name</source>
-        <translation>Nom de l'attribut Plus Codes</translation>
+        <translation>Nom de l&apos;attribut Plus Codes</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="74"/>
         <source>Plus Codes Field Name must be unique. There is already a field named</source>
-        <translation>Le nom de l'attribut Plus Codes doit être unique. Il existe déjà un attribut nommé</translation>
+        <translation>Le nom de l&apos;attribut Plus Codes doit être unique. Il existe déjà un attribut nommé</translation>
     </message>
     <message>
         <location filename="../pluscodes.py" line="157"/>
@@ -825,12 +825,12 @@
     <message>
         <location filename="../ecef.py" line="45"/>
         <source>Extract altitude from Z geometry (must be meters) if available</source>
-        <translation>Extraire l'altitude de la géométrie Z (obligatoirement en mètres), si disponible</translation>
+        <translation>Extraire l&apos;altitude de la géométrie Z (obligatoirement en mètres), si disponible</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="52"/>
         <source>Altitude attribute</source>
-        <translation>Attribut pour l'altitude</translation>
+        <translation>Attribut pour l&apos;altitude</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="60"/>
@@ -840,17 +840,17 @@
     <message>
         <location filename="../ecef.py" line="68"/>
         <source>Output X attribute name</source>
-        <translation>Nom de l'attribut en sortie pour X</translation>
+        <translation>Nom de l&apos;attribut en sortie pour X</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="74"/>
         <source>Output Y attribute name</source>
-        <translation>Nom de l'attribut en sortie pour Y</translation>
+        <translation>Nom de l&apos;attribut en sortie pour Y</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="80"/>
         <source>Output Z attribute name</source>
-        <translation>Nom de l'attribut en sortie pour Z</translation>
+        <translation>Nom de l&apos;attribut en sortie pour Z</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="192"/>
@@ -875,12 +875,12 @@
     <message>
         <location filename="../ecef.py" line="222"/>
         <source>Add altitude to the output attribute table</source>
-        <translation>Ajouter un attribut pour l'altitude dans la couche de sortie</translation>
+        <translation>Ajouter un attribut pour l&apos;altitude dans la couche de sortie</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="229"/>
         <source>Output altitude attribute name</source>
-        <translation>Nom de l'attribut pour l'altitude</translation>
+        <translation>Nom de l&apos;attribut pour l&apos;altitude</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="236"/>
@@ -890,7 +890,7 @@
     <message>
         <location filename="../ecef.py" line="254"/>
         <source>Altitude attribute name must be unique</source>
-        <translation>Le nom de l'attribut pour l'altitude doit être unique</translation>
+        <translation>Le nom de l&apos;attribut pour l&apos;altitude doit être unique</translation>
     </message>
 </context>
 <context>
@@ -1137,7 +1137,7 @@
     <message>
         <location filename="../ui/zoomToLatLon.ui" line="65"/>
         <source>Set Zoom to Settings</source>
-        <translation>Paramètres de l'outil Aller à des coordonnées</translation>
+        <translation>Paramètres de l&apos;outil Aller à des coordonnées</translation>
     </message>
     <message>
         <location filename="../ui/zoomToLatLon.ui" line="75"/>
@@ -1300,7 +1300,7 @@
     <message>
         <location filename="../ui/latLonSettings.ui" line="432"/>
         <source>Zoom to coordinate order</source>
-        <translation>Ordre pour l'outil Aller à</translation>
+        <translation>Ordre pour l&apos;outil Aller à</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="444"/>
@@ -1315,7 +1315,7 @@
     <message>
         <location filename="../ui/latLonSettings.ui" line="468"/>
         <source>Marker icon size</source>
-        <translation>Taille de l'icône du repère</translation>
+        <translation>Taille de l&apos;icône du repère</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="491"/>
@@ -1356,7 +1356,7 @@ Geohash - Only accept geohash coordinates
 Maidenhead grid - Only accept maidenhead grid coordinates
 
 H3 (if installed) - Only accept H3 geohash string</source>
-        <translation>Format supportés pour l'outil &quot;Aller à&quot; (Voir l'aide pour plus de détails):
+        <translation>Format supportés pour l&apos;outil &quot;Aller à&quot; (Voir l&apos;aide pour plus de détails):
 
 WGS 84 - Degrés décimaux, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS, GEOREF, Geohash
 
@@ -1472,7 +1472,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="880"/>
         <source>Input .qml point vector style for Multi-zoom create layer</source>
-        <translation>Fichier de style .qml de vecteur ponctuel pour la création d'une couche Multi-zoom</translation>
+        <translation>Fichier de style .qml de vecteur ponctuel pour la création d&apos;une couche Multi-zoom</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="892"/>
@@ -1492,7 +1492,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="930"/>
         <source>Number of extra data fields </source>
-        <translation>Nombre d'attributs supplémentaires</translation>
+        <translation>Nombre d&apos;attributs supplémentaires</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="961"/>
