@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0">
+<!DOCTYPE TS>
+<TS version="2.1" language="fr">
 <context>
     <name>@default</name>
     <message>
@@ -130,7 +131,7 @@
     <message>
         <location filename="../captureExtent.py" line="78"/>
         <source>copied to the clipboard</source>
-        <translation>copié dans le presse-papier</translation>
+        <translation>copiée dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="306"/>
@@ -430,7 +431,7 @@
     <message>
         <location filename="../multizoom.py" line="372"/>
         <source>Invalid Coordinate. Perhaps comma separators between fields were not used.</source>
-        <translation>Coordonnées incorrected. Les séparateurs virgule n&apos;ont peut-être pas été utilisés.</translation>
+        <translation>Coordonnées incorrectes. Les séparateurs virgule n&apos;ont peut-être pas été utilisés.</translation>
     </message>
     <message>
         <location filename="../ecef.py" line="39"/>
@@ -585,7 +586,7 @@
     <message>
         <location filename="../geom2field.py" line="76"/>
         <source>Name for the field containing both coordinates, or the Y (latitude) coordinate</source>
-        <translation>Nom del&apos;attribut contenant les coordonnées or seulement la coordonnée Y (latitude)</translation>
+        <translation>Nom de l&apos;attribut contenant les coordonnées ou seulement la coordonnée Y (latitude)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="83"/>
@@ -600,12 +601,12 @@
     <message>
         <location filename="../geom2field.py" line="90"/>
         <source>Lat,Lon (Y,X) - Google map order</source>
-        <translation>Lat,Lon (Y,X) - Google map</translation>
+        <translation>Lat, Lon (Y,X) - Google map</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="90"/>
         <source>Lon,Lat (X,Y) order</source>
-        <translation>Lon,Lat (X,Y)</translation>
+        <translation>Lon, Lat (X,Y)</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="98"/>
@@ -644,13 +645,13 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>D&#xc2;&#xb0;M&apos;S&quot;</source>
-        <translation>DÂ°M&apos;S&quot;</translation>
+        <source>DÂ°M&apos;S&quot;</source>
+        <translation>D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>D&#xc2;&#xb0;M.MM&apos;</source>
-        <translation>DÂ°M.MM&apos;</translation>
+        <source>DÂ°M.MM&apos;</source>
+        <translation>D°M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
@@ -659,12 +660,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="128"/>
-        <source>Add space between D&#xc2;&#xb0; M&apos; S&quot; and D&#xc2;&#xb0; M.MM&apos; numbers</source>
-        <translation>Ajouter une espace entre les valeurs DÂ° M&apos; S&quot; et DÂ° M.MM&apos;</translation>
+        <source>Add space between DÂ° M&apos; S&quot; and DÂ° M.MM&apos; numbers</source>
+        <translation>Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
-        <source>Pad D&#xc2;&#xb0;M&apos;S&quot; and D&#xc2;&#xb0;M.MM&apos; coordinates with leading zeros</source>
+        <source>Pad DÂ°M&apos;S&quot; and DÂ°M.MM&apos; coordinates with leading zeros</source>
         <translation>Compléter les coordonnées DÂ°M&apos;S&quot; et DÂ°M.MM&apos; avec des zéros non significatif en début de valeur</translation>
     </message>
     <message>
@@ -956,34 +957,34 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="112"/>
         <source>Capture coordinates by clicking on map</source>
-        <translation></translation>
+        <translation>Capturer les coordonnées en cliquant dans la carte</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="135"/>
         <source>Dec Deg (lat,lon)</source>
-        <translation></translation>
+        <translation>Degrés décimaux</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="366"/>
         <source>Copy to clipboard</source>
-        <translation></translation>
+        <translation>Copier dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="162"/>
         <source>      (lat,lon)</source>
-        <translation></translation>
+        <translation>      (lat,lon)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="189"/>
         <source>Custom CRS</source>
-        <translation></translation>
+        <translation>SCR personnalisé</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="239"/>
         <source>D° M&apos; S&quot;</source>
         <translation></translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="246"/>
         <source>D° M.MM&apos;</source>
         <translation></translation>
@@ -996,52 +997,52 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="297"/>
         <source>Standard UTM</source>
-        <translation></translation>
+        <translation>UTM standard</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="324"/>
         <source>MGRS</source>
-        <translation></translation>
+        <translation>MGRS</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="351"/>
         <source>Plus Code</source>
-        <translation></translation>
+        <translation>Plus Codes</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="378"/>
         <source>Geohash</source>
-        <translation></translation>
+        <translation>Geohash</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="402"/>
         <source>Maidenhead Grid</source>
-        <translation></translation>
+        <translation>Grille Maidenhead</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="435"/>
         <source>       (lat,lon)</source>
-        <translation></translation>
+        <translation>       (lat,lon)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="445"/>
         <source>Project CRS</source>
-        <translation></translation>
+        <translation>SCR du projet</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="452"/>
         <source>EPSG:4326</source>
-        <translation></translation>
+        <translation>EPSG:4326</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="459"/>
         <source>UPS</source>
-        <translation></translation>
+        <translation>UPS</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="483"/>
         <source>GEOREF</source>
-        <translation></translation>
+        <translation>GEOREF</translation>
     </message>
 </context>
 <context>
@@ -1049,62 +1050,62 @@
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="14"/>
         <source>Multi-Location Zoom</source>
-        <translation></translation>
+        <translation>Zoom multi-emplacements</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="23"/>
         <source>Open Location List</source>
-        <translation></translation>
+        <translation>Ouvrir une liste d&apos;emplacements</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="161"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="39"/>
         <source>Save Location List</source>
-        <translation></translation>
+        <translation>Enregistrer la liste d&apos;emplacements</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="65"/>
         <source>Delete Selected Location</source>
-        <translation></translation>
+        <translation>Supprimer l&apos;emplacement sélectionné</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="75"/>
         <source>Clear All Locations</source>
-        <translation></translation>
+        <translation>Supprimer tous les emplacements</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="101"/>
         <source>Create Vector Layer From Location List</source>
-        <translation></translation>
+        <translation>Créer une couche vecteur à partir de la liste d&apos;emplacements</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="111"/>
         <source>Show Style Settings</source>
-        <translation></translation>
+        <translation>Afficher les paramètres de style</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="136"/>
         <source>Enter coordinate (&apos;lat,lon,...)</source>
-        <translation></translation>
+        <translation>Entrer les coordonnées (lat,lon)</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="148"/>
         <source>Add Location</source>
-        <translation></translation>
+        <translation>Ajouter un emplacement</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="158"/>
         <source>Capture coordinates by clicking on map</source>
-        <translation></translation>
+        <translation>Capturer les coordonnées en cliquant dans la carte</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="176"/>
         <source>Show all markers</source>
-        <translation></translation>
+        <translation>Afficher tous les repères</translation>
     </message>
 </context>
 <context>
@@ -1170,7 +1171,7 @@
     <message>
         <location filename="../ui/latLonSettings.ui" line="74"/>
         <source>WGS 84 (Latitude &amp; Longitude) number format</source>
-        <translation>Format des coordonnées WGS 84 (Latitude &amp; Longitude)</translation>
+        <translation>Format des coordonnées WGS 84 (latitude &amp; longitude)</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="84"/>
@@ -1192,7 +1193,7 @@
         <source>Other delimiter: </source>
         <translation>Autre séparateur</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="129"/>
         <source>D°M&apos;S&quot; second precision: </source>
         <translation>Précision des secondes D°M&apos;S&quot;</translation>
@@ -1222,7 +1223,7 @@
         <source>Geohash precision</source>
         <translation>Précision Geohash</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1220"/>
         <source>D° M.MM&apos; precision</source>
         <translation>Précision D° M.MM&apos;</translation>
@@ -1267,15 +1268,15 @@
         <source>MGRS precision</source>
         <translation>Précision MGRS</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1327"/>
         <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
         <translation>Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1334"/>
         <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
-        <translation>Compléter les coordonnées D°M&apos;S&quot; et D° M.MM&apos; avec des zéros non significatif en début de valeur</translation>
+        <translation>Compléter les coordonnées D°M&apos;S&quot; et D° M.MM&apos; avec des zéros non significatifs en début de valeur</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1341"/>
@@ -1356,7 +1357,7 @@ Geohash - Only accept geohash coordinates
 Maidenhead grid - Only accept maidenhead grid coordinates
 
 H3 (if installed) - Only accept H3 geohash string</source>
-        <translation>Format supportés pour l&apos;outil &quot;Aller à&quot; (Voir l&apos;aide pour plus de détails):
+        <translation>Format supportés pour l&apos;outil &quot;Aller à&quot; (voir l&apos;aide pour plus de détails):
 
 WGS 84 - Degrés décimaux, DMS, WKT, GeoJSON, MGRS, Plus Codes (Open Location Code), Standard UTM, UPS, GEOREF, Geohash
 
@@ -1412,7 +1413,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="723"/>
         <source>Use {lat},  {lon}, &amp; {zoom} to specify latitude, longitude, &amp; zoom.</source>
-        <translation>Utiliser {lat}, {lon} &amp; {zoom} pour préciser les latitude, longitude &amp; zoom</translation>
+        <translation>Utiliser {lat}, {lon} &amp; {zoom} pour préciser les latitude, longitude &amp; zoom.</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="732"/>
@@ -1457,7 +1458,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="819"/>
         <source>CRS/Projection of input coordinates</source>
-        <translation>SCR/projection des coordonnées</translation>
+        <translation>SCR/projection des coordonnées en entrée</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="862"/>
@@ -1502,7 +1503,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="967"/>
         <source>CRS/Projection of captured bounding box coordinates</source>
-        <translation>SCR/projection les coordonnées capturées pour la boîte englobante</translation>
+        <translation>SCR/projection des coordonnées capturées pour la boîte englobante</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="977"/>
@@ -1554,7 +1555,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
         <source>EPSG:4326 decimal degree precision</source>
         <translation>Précision degrés décimaux EPSG:4326</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1107"/>
         <source>D°M&apos;S&quot; seconds precision</source>
         <translation>Précision secondes D°M&apos;S&quot;</translation>
@@ -1567,7 +1568,7 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1155"/>
         <source>Other decimal degree precision</source>
-        <translation>Précision autre degrés décimaux</translation>
+        <translation>Précision autres degrés décimaux</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1172"/>
