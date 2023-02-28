@@ -2,7 +2,7 @@ from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtGui import QColor
 from qgis.core import Qgis, QgsCoordinateTransform, QgsProject, QgsSettings
 from qgis.gui import QgsMapToolEmitPoint, QgsVertexMarker
-from .util import epsg4326
+from .util import epsg4326, tr
 from .settings import settings
 import os
 import webbrowser
@@ -72,12 +72,12 @@ class ShowOnMapTool(QgsMapToolEmitPoint):
                 os.startfile(f.name)
             else:
                 webbrowser.open(f.name)
-            self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in Google Earth" % (lat, lon), level=Qgis.Info, duration=3)
+            self.iface.messageBar().pushMessage("", "{} {:.8f},{:.8f} {}".format(tr("Viewing Coordinate"), lat, lon, tr("in Google Earth")), level=Qgis.Info, duration=3)
         else:
             mapprovider = settings.getMapProviderString(lat, lon, button)
             url = QUrl(mapprovider).toString()
             webbrowser.open(url, new=2)
-            self.iface.messageBar().pushMessage("", "Viewing Coordinate %f,%f in external map" % (lat, lon), level=Qgis.Info, duration=3)
+            self.iface.messageBar().pushMessage("", "{} {:.8f},{:.8f} {}".format(tr("Viewing Coordinate"), lat, lon, tr("in external map")), level=Qgis.Info, duration=3)
 
     def canvasMoveEvent(self, event):
         '''Show when the user mouses over a vector vertex in snapping mode.'''
