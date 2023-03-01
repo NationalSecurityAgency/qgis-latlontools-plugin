@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="fr">
 <context>
     <name>@default</name>
     <message>
@@ -644,13 +645,15 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>D&#xc2;&#xb0;M&apos;S&quot;</source>
-        <translation type="unfinished">D°M&apos;S&quot;</translation>
+        <source>DÂ°M&apos;S&quot;</source>
+        <translatorcomment>D°M&apos;S&quot;</translatorcomment>
+        <translation>D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>D&#xc2;&#xb0;M.MM&apos;</source>
-        <translation type="unfinished">D°M.MM&apos;</translation>
+        <source>DÂ°M.MM&apos;</source>
+        <translatorcomment>D°M.MM&apos;</translatorcomment>
+        <translation>D°M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
@@ -659,13 +662,13 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="128"/>
-        <source>Add space between D&#xc2;&#xb0; M&apos; S&quot; and D&#xc2;&#xb0; M.MM&apos; numbers</source>
-        <translation type="unfinished">Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
+        <source>Add space between DÂ° M&apos; S&quot; and DÂ° M.MM&apos; numbers</source>
+        <translation>Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
-        <source>Pad D&#xc2;&#xb0;M&apos;S&quot; and D&#xc2;&#xb0;M.MM&apos; coordinates with leading zeros</source>
-        <translation type="unfinished">Compléter les coordonnées DÂ°M&apos;S&quot; et DÂ°M.MM&apos; avec des zéros non significatif en début de valeur</translation>
+        <source>Pad DÂ°M&apos;S&quot; and DÂ°M.MM&apos; coordinates with leading zeros</source>
+        <translation>Compléter les coordonnées DÂ°M&apos;S&quot; et DÂ°M.MM&apos; avec des zéros non significatif en début de valeur</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="142"/>
@@ -1108,15 +1111,15 @@
         <source>GEOREF</source>
         <translation>GEOREF</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="239"/>
         <source>D° M&apos; S&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>D°M&apos;S&quot;</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="246"/>
         <source>D° M.MM&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>D°M.MM&apos;</translation>
     </message>
 </context>
 <context>
@@ -1639,30 +1642,30 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
         <source>Maidenhead grid precsion</source>
         <translation>Précision grille Maidenhead</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="129"/>
         <source>D°M&apos;S&quot; second precision: </source>
-        <translation type="unfinished"></translation>
+        <translation>Précision des secondes D°M&apos;S&quot;</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1220"/>
         <source>D° M.MM&apos; precision</source>
-        <translation type="unfinished"></translation>
+        <translation>Précision D° M.MM&apos;</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1327"/>
         <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
-        <translation type="unfinished">Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
+        <translation>Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1334"/>
         <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
-        <translation type="unfinished"></translation>
+        <translation>Compléter les coordonnées D°M&apos;S&quot; et D° M.MM&apos; avec des zéros non significatifs en début de valeur</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/latLonSettings.ui" line="1107"/>
         <source>D°M&apos;S&quot; seconds precision</source>
-        <translation type="unfinished"></translation>
+        <translation>Précision des secondes D°M&apos;S&quot;</translation>
     </message>
 </context>
 </TS>
