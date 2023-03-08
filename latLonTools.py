@@ -1,7 +1,7 @@
-from qgis.PyQt.QtCore import Qt, QTimer, QUrl, QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import Qt, QTimer, QUrl, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMenu, QApplication, QToolButton
-from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication
+from qgis.core import Qgis, QgsCoordinateTransform, QgsVectorLayer, QgsRectangle, QgsPoint, QgsPointXY, QgsGeometry, QgsWkbTypes, QgsProject, QgsApplication, QgsSettings
 from qgis.gui import QgsRubberBand
 import processing
 
@@ -30,7 +30,7 @@ class LatLonTools:
 
         # initialize locale
         try:
-            locale = QSettings().value("locale/userLocale", "en", type=str)[0:2]
+            locale = QgsSettings().value("locale/userLocale", "en", type=str)[0:2]
         except Exception:
             locale = "en"
         locale_path = os.path.join(
