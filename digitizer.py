@@ -1,11 +1,11 @@
 import os
 import re
 
-from qgis.PyQt.QtCore import QSize, QSettings, QTextCodec
+from qgis.PyQt.QtCore import QSize, QTextCodec
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QDialog, QMenu
 from qgis.PyQt.uic import loadUiType
-from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject, QgsVectorLayerUtils
+from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsVectorDataProvider, QgsGeometry, QgsPointXY, QgsJsonUtils, QgsWkbTypes, QgsProject, QgsVectorLayerUtils, QgsSettings
 from qgis.gui import QgsProjectionSelectionDialog
 from .util import epsg4326, parseDMSString, tr
 # import traceback
@@ -199,7 +199,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.crsButton.setDefaultAction(self.crsmenu.actions()[self.inputProjection])
 
     def readSettings(self):
-        settings = QSettings()
+        settings = QgsSettings()
         self.inputProjection = int(settings.value('/LatLonTools/DigitizerProjection', 0))
         self.inputXYOrder = int(settings.value('/LatLonTools/DigitizerXYOrder', 0))
         self.inputCustomCRS = settings.value('/LatLonTools/DigitizerCustomCRS', 'EPSG:4326')
@@ -210,7 +210,7 @@ class DigitizerWidget(QDialog, FORM_CLASS):
         self.labelUpdate()
 
     def saveSettings(self):
-        settings = QSettings()
+        settings = QgsSettings()
         settings.setValue('/LatLonTools/DigitizerProjection', self.inputProjection)
         settings.setValue('/LatLonTools/DigitizerXYOrder', self.inputXYOrder)
         settings.setValue('/LatLonTools/DigitizerCustomCRS', self.inputCustomCRS)

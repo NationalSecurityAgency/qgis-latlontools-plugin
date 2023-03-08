@@ -13,10 +13,10 @@ from . import mapProviders
 
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
-from qgis.PyQt.QtCore import QSettings, Qt
+from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QColor
 
-from qgis.core import QgsCoordinateReferenceSystem
+from qgis.core import QgsCoordinateReferenceSystem, QgsSettings
 from .util import epsg4326, tr
 
 
@@ -51,7 +51,7 @@ class Settings():
         '''Load the user selected settings. The settings are retained even when
         the user quits QGIS. This just loads the saved information into variables,
         but does not update the widgets. The widgets are updated with showEvent.'''
-        qset = QSettings()
+        qset = QgsSettings()
 
         ### CAPTURE SETTINGS ###
         self.captureShowLocation = int(qset.value('/LatLonTools/CaptureShowClickedLocation', Qt.Unchecked))
@@ -382,7 +382,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         '''Load the user selected settings. The settings are retained even when
         the user quits QGIS. This just loads the saved information into varialbles,
         but does not update the widgets. The widgets are updated with showEvent.'''
-        qset = QSettings()
+        qset = QgsSettings()
 
         ### CAPTURE SETTINGS ###
         self.captureProjection = int(qset.value('/LatLonTools/CaptureProjection', self.ProjectionTypeWgs84))
@@ -428,7 +428,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def accept(self):
         '''Accept the settings and save them for next time.'''
-        qset = QSettings()
+        qset = QgsSettings()
 
         ### CAPTURE SETTINGS ###
         qset.setValue('/LatLonTools/CaptureCustomCrsId', self.captureProjectionSelectionWidget.crs().authid())
