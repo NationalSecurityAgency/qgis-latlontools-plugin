@@ -1,3 +1,3 @@
 @echo on
-pylupdate5 -noobsolete latlonTools.pro
+pylupdate5 latlonTools.pro
 rem lrelease latlonTools_fr.ts
