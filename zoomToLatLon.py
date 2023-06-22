@@ -280,8 +280,8 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
             if bounds and self.settings.showGrid:
                 canvas_crs = self.canvas.mapSettings().destinationCrs()
                 if srcCrs != canvas_crs:
-                    tr = QgsCoordinateTransform(srcCrs, canvas_crs, QgsProject.instance())
-                    bounds.transform(tr)
+                    trans = QgsCoordinateTransform(srcCrs, canvas_crs, QgsProject.instance())
+                    bounds.transform(trans)
                 self.line_marker.addGeometry(bounds, None)
         except Exception:
             traceback.print_exc()
