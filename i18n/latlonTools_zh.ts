@@ -6,7 +6,7 @@
     <message>
         <location filename="../latLonTools.py" line="50"/>
         <source>Lat Lon Tools Toolbar</source>
-        <translation type="unfinished">Lat Lon Tools 工具栏</translation>
+        <translation>Lat Lon Tools 工具栏</translation>
     </message>
     <message>
         <location filename="../latLonTools.py" line="59"/>
