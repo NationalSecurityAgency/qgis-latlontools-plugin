@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<!DOCTYPE TS><TS version="2.0" language="zh_CN" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -61,7 +60,6 @@
     <message>
         <location filename="../field2geom.py" line="267"/>
         <source>Fields to point layer</source>
-        <translatorcomment>算法名称</translatorcomment>
         <translation>由字段创建点图层</translation>
     </message>
     <message>
@@ -322,7 +320,6 @@
     <message>
         <location filename="../settings.py" line="231"/>
         <source>Maidenhead Grid</source>
-        <translatorcomment>梅登黑德网格</translatorcomment>
         <translation>Maidenhead Grid</translation>
     </message>
     <message>
@@ -722,12 +719,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>DÂ°M&apos;S&quot;</source>
+        <source>D&#xc2;&#xb0;M&apos;S&quot;</source>
         <translation>D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>DÂ°M.MM&apos;</source>
+        <source>D&#xc2;&#xb0;M.MM&apos;</source>
         <translation>D°M.MM&apos;</translation>
     </message>
     <message>
@@ -737,13 +734,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="128"/>
-        <source>Add space between DÂ° M&apos; S&quot; and DÂ° M.MM&apos; numbers</source>
-        <translatorcomment>这个翻译无效，反斜杠的问题?</translatorcomment>
+        <source>Add space between D&#xc2;&#xb0; M&apos; S&quot; and D&#xc2;&#xb0; M.MM&apos; numbers</source>
         <translation>在度分秒数字间添加空格</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
-        <source>Pad DÂ°M&apos;S&quot; and DÂ°M.MM&apos; coordinates with leading zeros</source>
+        <source>Pad D&#xc2;&#xb0;M&apos;S&quot; and D&#xc2;&#xb0;M.MM&apos; coordinates with leading zeros</source>
         <translation>度分秒坐标添加前导零</translation>
     </message>
     <message>
@@ -1059,13 +1055,13 @@
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="239"/>
-        <source>D° M&apos; S&quot;</source>
-        <translation>D° M&apos; S&quot;</translation>
+        <source>D&#xb0; M&apos; S&quot;</source>
+        <translation type="obsolete">D° M&apos; S&quot;</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="246"/>
-        <source>D° M.MM&apos;</source>
-        <translation>D° M.MM&apos;</translation>
+        <source>D&#xb0; M.MM&apos;</source>
+        <translation type="obsolete">D° M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="270"/>
@@ -1121,6 +1117,16 @@
         <location filename="../ui/coordinateConverter.ui" line="483"/>
         <source>GEOREF</source>
         <translation></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="239"/>
+        <source>D° M&apos; S&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="246"/>
+        <source>D° M.MM&apos;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1273,8 +1279,8 @@
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="129"/>
-        <source>D°M&apos;S&quot; second precision: </source>
-        <translation>D°M&apos;S&quot; 精度: </translation>
+        <source>D&#xb0;M&apos;S&quot; second precision: </source>
+        <translation type="obsolete">D°M&apos;S&quot; 精度: </translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="143"/>
@@ -1303,8 +1309,8 @@
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1220"/>
-        <source>D° M.MM&apos; precision</source>
-        <translation>D° M.MM&apos; 精度</translation>
+        <source>D&#xb0; M.MM&apos; precision</source>
+        <translation type="obsolete">D° M.MM&apos; 精度</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1121"/>
@@ -1348,13 +1354,13 @@
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1327"/>
-        <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
-        <translation>在D° M&apos; S&quot;和D° M.MM&apos;之间添加空格</translation>
+        <source>Add space between D&#xb0; M&apos; S&quot; and D&#xb0; M.MM&apos; numbers</source>
+        <translation type="obsolete">在D° M&apos; S&quot;和D° M.MM&apos;之间添加空格</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1334"/>
-        <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
-        <translation>在输出的D°M&apos;S&quot;和D° M.MM&apos;坐标前面填充零</translation>
+        <source>Pad D&#xb0;M&apos;S&quot; and D&#xb0; M.MM&apos; output coordinates with leading zeroes</source>
+        <translation type="obsolete">在输出的D°M&apos;S&quot;和D° M.MM&apos;坐标前面填充零</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1341"/>
@@ -1389,7 +1395,6 @@
     <message>
         <location filename="../ui/latLonSettings.ui" line="454"/>
         <source>Show coordinate resolution area</source>
-        <translatorcomment>直译</translatorcomment>
         <translation>显示坐标分辨率区域</translation>
     </message>
     <message>
@@ -1636,8 +1641,8 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1107"/>
-        <source>D°M&apos;S&quot; seconds precision</source>
-        <translation>D°M&apos;S&quot; 秒精度</translation>
+        <source>D&#xb0;M&apos;S&quot; seconds precision</source>
+        <translation type="obsolete">D°M&apos;S&quot; 秒精度</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1135"/>
@@ -1668,6 +1673,31 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
         <location filename="../ui/latLonSettings.ui" line="1237"/>
         <source>Maidenhead grid precsion</source>
         <translation>Maidenhead grid精度</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/latLonSettings.ui" line="129"/>
+        <source>D°M&apos;S&quot; second precision: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/latLonSettings.ui" line="1220"/>
+        <source>D° M.MM&apos; precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/latLonSettings.ui" line="1327"/>
+        <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
+        <translation type="unfinished">在度分秒数字间添加空格</translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/latLonSettings.ui" line="1334"/>
+        <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/latLonSettings.ui" line="1107"/>
+        <source>D°M&apos;S&quot; seconds precision</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
