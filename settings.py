@@ -126,6 +126,7 @@ class Settings():
         self.converterDdmmssDelimiter = qset.value('/LatLonTools/ConverterDdmmssDelimiter', ', ')
         self.converterAddDmsSpace = int(qset.value('/LatLonTools/ConverterAddDmsSpace', Qt.Checked))
         self.converterPadZeroes = int(qset.value('/LatLonTools/ConverterPadZeroes', Qt.Unchecked))
+        self.converterNsewBeginning = int(qset.value('/LatLonTools/ConverterNsewBeginning', Qt.Unchecked))
         self.converterMgrsAddSpacesCheckBox = int(qset.value('/LatLonTools/ConverterMgrsAddSpaces', Qt.Unchecked))
         self.converterMgrsPrec = int(qset.value('/LatLonTools/ConverterMgrsPrecision', 5))
 
@@ -374,6 +375,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDdmmssDelimiterLineEdit.setText(',')
         self.converterAddDmsSpaceCheckBox.setCheckState(Qt.Checked)
         self.converterPadZeroesCheckBox.setCheckState(Qt.Unchecked)
+        self.converterNsewBeginningCheckBox.setCheckState(Qt.Unchecked)
         self.converterMgrsAddSpacesCheckBox.setCheckState(Qt.Unchecked)
         self.converterMgrsPrecisionSpinBox.setValue(5)
 
@@ -542,6 +544,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         qset.setValue('/LatLonTools/ConverterDdmmssDelimiter', self.converterDdmmssDelimiterLineEdit.text())
         qset.setValue('/LatLonTools/ConverterAddDmsSpace', self.converterAddDmsSpaceCheckBox.checkState())
         qset.setValue('/LatLonTools/ConverterPadZeroes', self.converterPadZeroesCheckBox.checkState())
+        qset.setValue('/LatLonTools/ConverterNsewBeginning', self.converterNsewBeginningCheckBox.checkState())
         qset.setValue('/LatLonTools/ConverterMgrsAddSpaces', self.converterMgrsAddSpacesCheckBox.checkState())
         qset.setValue('/LatLonTools/ConverterMgrsPrecision', int(self.converterMgrsPrecisionSpinBox.value()))
 
@@ -746,6 +749,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
         self.converterDdmmssDelimiterLineEdit.setText(settings.converterDdmmssDelimiter)
         self.converterAddDmsSpaceCheckBox.setCheckState(settings.converterAddDmsSpace)
         self.converterPadZeroesCheckBox.setCheckState(settings.converterPadZeroes)
+        self.converterNsewBeginningCheckBox.setCheckState(settings.converterNsewBeginning)
         self.converterMgrsAddSpacesCheckBox.setCheckState(settings.converterMgrsAddSpacesCheckBox)
         self.converterMgrsPrecisionSpinBox.setValue(settings.converterMgrsPrec)
 

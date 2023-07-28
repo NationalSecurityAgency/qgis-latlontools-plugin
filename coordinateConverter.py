@@ -68,11 +68,12 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.optionsButton.clicked.connect(self.showSettings)
 
         self.wgs84LineEdit.returnPressed.connect(self.commitWgs84)
-        self.projLineEdit.returnPressed.connect(self.commitProject)
-        self.customLineEdit.returnPressed.connect(self.commitCustom)
         self.dmsLineEdit.returnPressed.connect(self.commitDms)
         self.dmLineEdit.returnPressed.connect(self.commitDm)
         self.ddmmssLineEdit.returnPressed.connect(self.commitDdmmss)
+        self.projLineEdit.returnPressed.connect(self.commitProject)
+        self.customLineEdit.returnPressed.connect(self.commitCustom)
+        self.customDdmmssLineEdit.returnPressed.connect(self.commitCustomDdmmss)
         self.utmLineEdit.returnPressed.connect(self.commitUtm)
         self.upsLineEdit.returnPressed.connect(self.commitUps)
         self.mgrsLineEdit.returnPressed.connect(self.commitMgrs)
@@ -83,11 +84,12 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
 
         icon = QIcon(':/images/themes/default/mActionEditCopy.svg')
         self.wgs84CopyButton.setIcon(icon)
-        self.projCopyButton.setIcon(icon)
-        self.customCopyButton.setIcon(icon)
         self.dmsCopyButton.setIcon(icon)
         self.dmCopyButton.setIcon(icon)
         self.ddmmssCopyButton.setIcon(icon)
+        self.projCopyButton.setIcon(icon)
+        self.customCopyButton.setIcon(icon)
+        self.customDdmmssCopyButton.setIcon(icon)
         self.utmCopyButton.setIcon(icon)
         self.upsCopyButton.setIcon(icon)
         self.mgrsCopyButton.setIcon(icon)
@@ -97,11 +99,12 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.georefCopyButton.setIcon(icon)
 
         self.wgs84CopyButton.clicked.connect(self.copyWgs84)
-        self.projCopyButton.clicked.connect(self.copyProject)
-        self.customCopyButton.clicked.connect(self.copyCustom)
         self.dmsCopyButton.clicked.connect(self.copyDms)
         self.dmCopyButton.clicked.connect(self.copyDm)
         self.ddmmssCopyButton.clicked.connect(self.copyDdmmss)
+        self.projCopyButton.clicked.connect(self.copyProject)
+        self.customCopyButton.clicked.connect(self.copyCustom)
+        self.customDdmmssCopyButton.clicked.connect(self.copyCustomDdmmss)
         self.utmCopyButton.clicked.connect(self.copyUtm)
         self.upsCopyButton.clicked.connect(self.copyUps)
         self.mgrsCopyButton.clicked.connect(self.copyMgrs)
@@ -158,6 +161,8 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             self.upsLineEdit.setText(s_invalid)
         if id != 12:
             self.georefLineEdit.setText(s_invalid)
+        if id != 13:
+            self.customDdmmssLineEdit.setText(s_invalid)
 
     def clearForm(self):
         self.origPt = None
@@ -174,12 +179,14 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         self.maidenheadLineEdit.setText('')
         self.upsLineEdit.setText('')
         self.georefLineEdit.setText('')
+        self.customDdmmssLineEdit.setText('')
 
     def updateCoordinates(self, id, pt, crs):
         self.origPt = pt
         self.origCrs = crs
         projCRS = self.canvas.mapSettings().destinationCrs()
         customCRS = self.customProjectionSelectionWidget.crs()
+        customIsGeographic = customCRS.isGeographic()
         if crs == epsg4326:
             pt4326 = pt
         else:
@@ -216,7 +223,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
                 else:
                     trans = QgsCoordinateTransform(crs, customCRS, QgsProject.instance())
                     newpt = trans.transform(pt.x(), pt.y())
-                if customCRS == epsg4326:
+                if customIsGeographic:
                     precision = settings.converter4326DDPrec
                 else:
                     precision = settings.converterDDPrec
@@ -229,14 +236,14 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             self.customLineEdit.setText(s)
         if id != 3:  # D M' S"
             s = formatDmsString(pt4326.y(), pt4326.x(), 0, settings.converterDmsPrec, self.inputXYOrder,
-                    settings.converterDelimiter, settings.converterAddDmsSpace, settings.converterPadZeroes)
+                    settings.converterDelimiter, settings.converterAddDmsSpace, settings.converterPadZeroes, settings.converterNsewBeginning)
             self.dmsLineEdit.setText(s)
         if id != 4:  # D M.MM'
             s = formatDmsString(pt4326.y(), pt4326.x(), 2, settings.converterDmmPrec, self.inputXYOrder,
-                    settings.converterDelimiter, settings.converterAddDmsSpace, settings.converterPadZeroes)
+                    settings.converterDelimiter, settings.converterAddDmsSpace, settings.converterPadZeroes, settings.converterNsewBeginning)
             self.dmLineEdit.setText(s)
         if id != 5:  # DDMMSS
-            s = formatDmsString(pt4326.y(), pt4326.x(), 1, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter)
+            s = formatDmsString(pt4326.y(), pt4326.x(), 1, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter, nsewInFront=settings.converterNsewBeginning)
             self.ddmmssLineEdit.setText(s)
         if id != 6:  # UTM
             s = latLon2Utm(pt4326.y(), pt4326.x(), settings.converterUtmPrec, settings.converterUtmFormat)
@@ -275,6 +282,18 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
             except Exception:
                 s = s_invalid
             self.georefLineEdit.setText(s)
+        if id != 13: # Custom DDMMSS
+            if customIsGeographic:
+                if crs == customCRS:
+                    newpt = pt
+                else:
+                    trans = QgsCoordinateTransform(crs, customCRS, QgsProject.instance())
+                    newpt = trans.transform(pt.x(), pt.y())
+                s = formatDmsString(newpt.y(), newpt.x(), 1, settings.converterDmsPrec, self.inputXYOrder, settings.converterDdmmssDelimiter, nsewInFront=settings.converterNsewBeginning)
+                self.customDdmmssLineEdit.setText(s)
+            else:
+                self.customDdmmssLineEdit.setText('')
+                
 
     def commitWgs84(self):
         text = self.wgs84LineEdit.text().strip()
@@ -361,6 +380,19 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         except Exception:
             self.showInvalid(5)
 
+    def commitCustomDdmmss(self):
+        customCRS = self.customProjectionSelectionWidget.crs()
+        customIsGeographic = customCRS.isGeographic()
+        if not customIsGeographic:
+            return
+        text = self.customDdmmssLineEdit.text().strip()
+        try:
+            lat, lon = parseDMSString(text, self.inputXYOrder)
+            pt = QgsPoint(lon, lat)
+            self.updateCoordinates(13, pt, customCRS)
+        except Exception:
+            self.showInvalid(13)
+
     def commitUtm(self):
         text = self.utmLineEdit.text().strip()
         if isUtm(text):
@@ -437,29 +469,38 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
 
         crs = self.canvas.mapSettings().destinationCrs()
         self.projectCRSLabel.setText('{}'.format(crs.authid()))
-        if crs == epsg4326:
-            label = '      {}'.format(latlon)
+        if crs.isGeographic():
+            label = '→ {}'.format(latlon)
         else:
-            label = '      {}'.format(xy)
+            label = '→ {}'.format(xy)
         self.projectLabel.setText(label)
 
-        label = 'Dec Deg {}'.format(latlon)
+        label = 'WGS 84 {}'.format(latlon)
         self.wgs84Label.setText(label)
 
         crs = self.customProjectionSelectionWidget.crs()
-        if crs == epsg4326:
-            label = '      {}'.format(latlon)
+        if crs.isGeographic():
+            label = '→ {}'.format(latlon)
+            self.customDdmmssLabel.setEnabled(True)
+            self.customDdmmssLineEdit.setEnabled(True)
+            self.customDdmmssCopyButton.setEnabled(True)
         else:
-            label = '      {}'.format(xy)
+            label = '→ {}'.format(xy)
+            self.customDdmmssLabel.setEnabled(False)
+            self.customDdmmssLineEdit.setEnabled(False)
+            self.customDdmmssLineEdit.setText('')
+            self.customDdmmssCopyButton.setEnabled(False)
         self.customLabel.setText(label)
+        label = '→ DDMMSS {}'.format(latlon)
+        self.customDdmmssLabel.setText(label)
 
-        label = 'D° M\' S" {}'.format(latlon)
+        label = '→ D M S.ss {}'.format(latlon)
         self.dmsLabel.setText(label)
 
-        label = 'D° M.MM\' {}'.format(latlon)
+        label = '→ D M.mm {}'.format(latlon)
         self.dmLabel.setText(label)
 
-        label = 'DDMMSS {}'.format(latlon)
+        label = '→ DDMMSS {}'.format(latlon)
         self.ddmmssLabel.setText(label)
 
     def copyWgs84(self):
@@ -491,6 +532,11 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
 
     def copyDdmmss(self):
         s = self.ddmmssLineEdit.text()
+        self.clipboard.setText(s)
+        self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
+
+    def copyCustomDdmmss(self):
+        s = self.customDdmmssLineEdit.text()
         self.clipboard.setText(s)
         self.iface.statusBarIface().showMessage("'{}' {}".format(s, s_copied), 3000)
 

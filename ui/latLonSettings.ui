@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>473</width>
-        <height>781</height>
+        <width>490</width>
+        <height>753</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -46,7 +46,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <property name="spacing">
-            <number>4</number>
+            <number>2</number>
            </property>
            <item>
             <widget class="QLabel" name="label">
@@ -111,7 +111,7 @@
            <item>
             <layout class="QFormLayout" name="formLayout_2">
              <property name="verticalSpacing">
-              <number>4</number>
+              <number>2</number>
              </property>
              <item row="0" column="0">
               <widget class="QLabel" name="label_3">
@@ -126,7 +126,7 @@
              <item row="2" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
-                <string>D°M'S&quot; second precision: </string>
+                <string>DMS.ss second precision: </string>
                </property>
               </widget>
              </item>
@@ -217,7 +217,7 @@
              <item row="3" column="0">
               <widget class="QLabel" name="label_43">
                <property name="text">
-                <string>D° M.MM' precision</string>
+                <string>DM.mm precision</string>
                </property>
               </widget>
              </item>
@@ -355,7 +355,7 @@
            <item>
             <widget class="QCheckBox" name="captureAddDmsSpaceCheckBox">
              <property name="text">
-              <string>Add space between D° M' S&quot; and D° M.MM' numbers</string>
+              <string>Add space between DMS.ss and DM.mm numbers</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -365,7 +365,7 @@
            <item>
             <widget class="QCheckBox" name="capturePadZeroesCheckBox">
              <property name="text">
-              <string>Pad D°M'S&quot; and D° M.MM' output coordinates with leading zeroes</string>
+              <string>Pad DMS.ss and DM.mm output coordinates with leading zeroes</string>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -1084,6 +1084,9 @@ H3 (if installed) - Only accept H3 geohash string</string>
            </item>
            <item>
             <layout class="QFormLayout" name="formLayout_4">
+             <property name="verticalSpacing">
+              <number>4</number>
+             </property>
              <item row="0" column="0">
               <widget class="QLabel" name="label_30">
                <property name="text">
@@ -1104,7 +1107,7 @@ H3 (if installed) - Only accept H3 geohash string</string>
              <item row="2" column="0">
               <widget class="QLabel" name="label_31">
                <property name="text">
-                <string>D°M'S&quot; seconds precision</string>
+                <string>DMS.ss seconds precision</string>
                </property>
               </widget>
              </item>
@@ -1217,7 +1220,7 @@ H3 (if installed) - Only accept H3 geohash string</string>
              <item row="3" column="0">
               <widget class="QLabel" name="label_42">
                <property name="text">
-                <string>D° M.MM' precision</string>
+                <string>DM.mm precision</string>
                </property>
               </widget>
              </item>
@@ -1324,14 +1327,21 @@ H3 (if installed) - Only accept H3 geohash string</string>
            <item>
             <widget class="QCheckBox" name="converterAddDmsSpaceCheckBox">
              <property name="text">
-              <string>Add space between D° M' S&quot; and D° M.MM' numbers</string>
+              <string>Add space between DMS.ss and DM.mm numbers</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="converterPadZeroesCheckBox">
              <property name="text">
-              <string>Pad D°M'S&quot; and D° M.MM' output coordinates with leading zeroes</string>
+              <string>Pad DMS.ss and DM.mm output coordinates with leading zeroes</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="converterNsewBeginningCheckBox">
+             <property name="text">
+              <string>Format DMS coordinates with NSEW at the beginning</string>
              </property>
             </widget>
            </item>

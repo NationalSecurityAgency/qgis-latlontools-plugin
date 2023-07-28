@@ -24,14 +24,14 @@ def formatMgrsString(mgrs, add_spaces=False):
     else:
         return(mgrs.strip())
 
-def formatDmsString(lat, lon, dms_mode=0, prec=0, order=0, delimiter=', ', useDmsSpace=True, padZeros=False):
+def formatDmsString(lat, lon, dms_mode=0, prec=0, order=0, delimiter=', ', useDmsSpace=True, padZeros=False, nsewInFront=False):
     '''Return a DMS formated string.'''
     if order == 0:  # Y, X or Lat, Lon
-        return convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace, padZeros) + str(delimiter) + convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace, padZeros)
+        return convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace, padZeros, nsewInFront) + str(delimiter) + convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace, padZeros, nsewInFront)
     else:  # X, Y or Lon, Lat
-        return convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace, padZeros) + str(delimiter) + convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace, padZeros)
+        return convertDD2DMS(lon, False, dms_mode, prec, useDmsSpace, padZeros, nsewInFront) + str(delimiter) + convertDD2DMS(lat, True, dms_mode, prec, useDmsSpace, padZeros, nsewInFront)
 
-def convertDD2DMS(coord, islat, dms_mode, prec, useDmsSpace=True, padZeros=False):
+def convertDD2DMS(coord, islat, dms_mode, prec, useDmsSpace=True, padZeros=False, nsewInFront=False):
     '''Convert decimal degrees to DMS'''
     if islat:
         if coord < 0:
@@ -66,10 +66,13 @@ def convertDD2DMS(coord, islat, dms_mode, prec, useDmsSpace=True, padZeros=False
                 deg += 1
                 min = 0
         if islat:
-            s = "{:0{}.0f}\xB0{}{:0{}.0f}\'{}{:0{}.{prec}f}\"{}{}".format(deg, zeros*2, dmsSpace, min, zeros*2, dmsSpace, sec, prec+zeros*2+dextra, dmsSpace, unit, prec=prec)
+            s = "{:0{}.0f}\xB0{}{:0{}.0f}\'{}{:0{}.{prec}f}\"".format(deg, zeros*2, dmsSpace, min, zeros*2, dmsSpace, sec, prec+zeros*2+dextra, prec=prec)
         else:
-            s = "{:0{}.0f}\xB0{}{:0{}.0f}\'{}{:0{}.{prec}f}\"{}{}".format(deg, zeros*3, dmsSpace, min, zeros*2, dmsSpace, sec, prec+zeros*2+dextra, dmsSpace, unit, prec=prec)
-
+            s = "{:0{}.0f}\xB0{}{:0{}.0f}\'{}{:0{}.{prec}f}\"".format(deg, zeros*3, dmsSpace, min, zeros*2, dmsSpace, sec, prec+zeros*2+dextra, prec=prec)
+        if nsewInFront:
+            s = "{}{}{}".format(unit, dmsSpace, s)
+        else:
+            s = "{}{}{}".format(s, dmsSpace, unit)
     elif dms_mode==1: # DDMMS
         # Properly handle rounding based on the digit precision
         d = "{:.{prec}f}".format(sec, prec=prec)
@@ -80,18 +83,26 @@ def convertDD2DMS(coord, islat, dms_mode, prec, useDmsSpace=True, padZeros=False
                 deg += 1
                 min = 0
         if islat:
-            s = "{:02.0f}{:02.0f}{:0{dprec}.{prec}f}{}".format(deg, min, sec, unit, dprec=dprec, prec=prec)
+            s = "{:02.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
         else:
-            s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}{}".format(deg, min, sec, unit, dprec=dprec, prec=prec)
+            s = "{:03.0f}{:02.0f}{:0{dprec}.{prec}f}".format(deg, min, sec, dprec=dprec, prec=prec)
+        if nsewInFront:
+            s = "{}{}".format(unit, s)
+        else:
+            s = "{}{}".format(s, unit)
     elif dms_mode==2: # DM.MM
         d = "{:.{prec}f}".format(dmin, prec=prec)
         if float(d) == 60:
             deg += 1
             dmin = 0
         if islat:
-            s = "{:0{}.0f}\xB0{}{:0{}.0{prec}f}\'{}{}".format(deg, zeros*2, dmsSpace, dmin, prec+zeros*2+dextra, dmsSpace, unit, prec=prec)
+            s = "{:0{}.0f}\xB0{}{:0{}.0{prec}f}\'".format(deg, zeros*2, dmsSpace, dmin, prec+zeros*2+dextra, prec=prec)
         else:
-            s = "{:0{}.0f}\xB0{}{:0{}.0{prec}f}\'{}{}".format(deg, zeros*3, dmsSpace, dmin, prec+zeros*2+dextra, dmsSpace, unit, prec=prec)
+            s = "{:0{}.0f}\xB0{}{:0{}.0{prec}f}\'".format(deg, zeros*3, dmsSpace, dmin, prec+zeros*2+dextra, prec=prec)
+        if nsewInFront:
+            s = "{}{}{}".format(unit, dmsSpace, s)
+        else:
+            s = "{}{}{}".format(s, dmsSpace, unit)
     return(s)
 
 def parseDMSString(str, order=0):
