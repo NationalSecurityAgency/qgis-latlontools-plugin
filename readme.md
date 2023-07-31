@@ -360,8 +360,8 @@ These are the default settings for the ***Coordinate Conversion*** dialog box.
 * ***Coordinate order for decimal and DMS notations*** determines whether the coordinates will be formatted in an ***Lat, Lon (Y, X)*** or ***Lon, Lat (X, Y)*** order.
 * ***EPSG:4326 decimal degree precision*** determines the number of digits after the decimal point for a WGS 84 latitude and longitude coordinate.
 * ***Other Decimal degree precision*** is the number of digits after the decimal point for all other coordinate formats.
-* ***DMS seconds precision*** is the number of decimal digits for the second in a DMS formatted coordinate.
-* ***D&deg;MM' precision*** is the number of decimal digits for the minute in a D&deg;MM' formatted coordinate.
+* ***DMS.ss seconds precision*** is the number of decimal digits for the second in a DMS formatted coordinate.
+* ***DM.mm' precision*** is the number of decimal digits for the minute in a DM.mm' formatted coordinate.
 * ***UTM precision*** specifies the number of decimal digits for a UTM formatted coordinate.
 * ***UTM format*** specifies one of these formats to be displayed: '15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', or '755631mE,4283168mN,15,N'.
 * ***UPS precision*** specifies the number of decimal digits for a UPS formatted coordinate.
@@ -372,6 +372,7 @@ These are the default settings for the ***Coordinate Conversion*** dialog box.
 * ***GEOREF precision*** determins the number of digits in a GEOREF coordinate.
 * ***Delimiter between coordinate pairs*** is the delimiter used between coordinate pairs for those representations that require a delimiter.
 * ***DDMMSS delimiter*** is the delimiter used between DDMMSS coordinate pairs. Leave this blank if no space is desired between coordinates. The default is ", ".
-* ***Add space between D&deg; M' S" and D&deg; M.MM' numbers*** - When checked a space will be added between each pair of numbers.
-* ***Pad DMS and DM.MM output coordinates with leading zeros*** - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.
+* ***Add space between DMS.ss and DM.mm' numbers*** - When checked a space will be added between each pair of numbers and will look like 1° 5' 15" N, 10° 19' 50" W vs. 1°5'15"N, 10°19'50"W when unchecked.
+* ***Pad DMS and DM.mm output coordinates with leading zeros*** - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.
+* ***Format DMS coordinates with NSEW at the beginning*** - This causes the N,S,E,W direction abbreviations to be placed at the beginning of a DMS coordinate such as "N400210.53, W1050824.96".
 * ***Add spaces to MGRS coordinates*** - This will add spaces to an MGRS coordinate when checked. Unchecked it looks like "16TDL8016526461" and checked it looks like "16T DL 80165 26461".
