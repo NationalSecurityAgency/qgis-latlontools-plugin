@@ -218,7 +218,7 @@
         <translation>Coordonnées incorrectes</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="250"/>
+        <location filename="../settings.py" line="251"/>
         <source>WGS 84 (Latitude &amp; Longitude)</source>
         <translation>WGS 84 (Latitude &amp; Longitude)</translation>
     </message>
@@ -238,7 +238,7 @@
         <translation>MGRS</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="241"/>
+        <location filename="../settings.py" line="242"/>
         <source>Plus Codes (Open Location Code)</source>
         <translation>Plus Codes (Open Location Code)</translation>
     </message>
@@ -253,7 +253,7 @@
         <translation>Geohash</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="217"/>
+        <location filename="../settings.py" line="218"/>
         <source>Maidenhead Grid Locator</source>
         <translation>Grille Maidenhead</translation>
     </message>
@@ -268,117 +268,117 @@
         <translation>GEOREF</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="219"/>
+        <location filename="../settings.py" line="220"/>
         <source>Decimal Degrees</source>
         <translation>Degrés décimaux</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="220"/>
+        <location filename="../settings.py" line="221"/>
         <source>Normal Coordinate</source>
         <translation>Coordonnées standard</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="263"/>
+        <location filename="../settings.py" line="264"/>
         <source>Lat, Lon (Y,X) - Google Map Order</source>
         <translation>Lat, Lon (Y,X) - Ordre Google Maps</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="263"/>
+        <location filename="../settings.py" line="264"/>
         <source>Lon, Lat (X,Y) Order</source>
         <translation>Lon, Lat (X,Y)</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Comma</source>
         <translation>Virgule</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Comma Space</source>
         <translation>Virgule espace</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Space</source>
         <translation>Espace</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Tab</source>
         <translation>Tabulation</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="231"/>
+        <location filename="../settings.py" line="232"/>
         <source>WGS 84 (Latitude &amp; Longitude) / Auto Detect Format</source>
         <translation>WGS 84 (Latitude &amp; Longitude) / Détection automatique du format</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="231"/>
+        <location filename="../settings.py" line="232"/>
         <source>Maidenhead Grid</source>
         <translation>Grille Maidenhead</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="245"/>
+        <location filename="../settings.py" line="246"/>
         <source>Default</source>
         <translation>Défaut</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="245"/>
+        <location filename="../settings.py" line="246"/>
         <source>Labeled</source>
         <translation>Étiqueté</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="245"/>
+        <location filename="../settings.py" line="246"/>
         <source>Custom</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;minX,minY,maxX,maxY (W,S,E,N)&quot; - Using the selected delimiter</source>
         <translation>&quot;minX,minY,maxX,maxY (O,S,E,N)&quot; - Utilise le séparateur sélectionné</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;minX,maxX,minY,maxY (W,E,S,N)&quot; - Using the selected delimiter</source>
         <translation>&quot;minX,maxX,minY,maxY (O,E,S,N)&quot; - Utilise le séparateur sélectionné</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;minY,minX,maxY,maxX (S,W,N,E)&quot; - Using the selected delimiter</source>
         <translation>&quot;minY,minX,maxY,maxX (S,O,N,E)&quot; - Utilise le séparateur sélectionné</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;x1 y1,x2 y2,x3 y3,x4 y4,x1 y1&quot; - Polygon format</source>
         <translation>&quot;x1 y1,x2 y2,x3 y3,x4 y4,x1 y1&quot; - Polygone</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;x1,y1 x2,y2 x3,y3 x4,y4 x1,y1&quot; - Alternate polgyon format</source>
         <translation>&quot;x1,y1 x2,y2 x3,y3 x4,y4 x1,y1&quot; - Polgyone autre format</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>WKT Polygon</source>
         <translation>Polygone WKT</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;bbox: [minX, minY, maxX, maxY]&quot; - MapProxy</source>
         <translation>&quot;bbox: [minX, minY, maxX, maxY]&quot; - MapProxy</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;bbox=minX,minY,maxX,maxY&quot; - GeoServer WFS, WMS</source>
         <translation>&quot;bbox=minX,minY,maxX,maxY&quot; - GeoServer WFS, WMS</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="599"/>
+        <location filename="../settings.py" line="602"/>
         <source>Input QML Style File</source>
         <translation>Fichier de style QML</translation>
     </message>
@@ -1009,7 +1009,7 @@
         <translation>Conversion de coordonnées</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="498"/>
+        <location filename="../ui/coordinateConverter.ui" line="522"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -1036,17 +1036,17 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="135"/>
         <source>Dec Deg (lat,lon)</source>
-        <translation>Degrés décimaux</translation>
+        <translation type="obsolete">Degrés décimaux</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="366"/>
+        <location filename="../ui/coordinateConverter.ui" line="447"/>
         <source>Copy to clipboard</source>
         <translation>Copier dans le presse-papier</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="162"/>
         <source>      (lat,lon)</source>
-        <translation>      (lat,lon)</translation>
+        <translation type="obsolete">      (lat,lon)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="189"/>
@@ -1054,57 +1054,52 @@
         <translation>SCR personnalisé</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="270"/>
-        <source>DDMMSS</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="297"/>
+        <location filename="../ui/coordinateConverter.ui" line="350"/>
         <source>Standard UTM</source>
         <translation>UTM standard</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="324"/>
+        <location filename="../ui/coordinateConverter.ui" line="405"/>
         <source>MGRS</source>
         <translation>MGRS</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="351"/>
+        <location filename="../ui/coordinateConverter.ui" line="432"/>
         <source>Plus Code</source>
         <translation>Plus Codes</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="378"/>
+        <location filename="../ui/coordinateConverter.ui" line="459"/>
         <source>Geohash</source>
         <translation>Geohash</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="402"/>
+        <location filename="../ui/coordinateConverter.ui" line="483"/>
         <source>Maidenhead Grid</source>
         <translation>Grille Maidenhead</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="435"/>
         <source>       (lat,lon)</source>
-        <translation>       (lat,lon)</translation>
+        <translation type="obsolete">       (lat,lon)</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="445"/>
+        <location filename="../ui/coordinateConverter.ui" line="238"/>
         <source>Project CRS</source>
         <translation>SCR du projet</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="452"/>
+        <location filename="../ui/coordinateConverter.ui" line="245"/>
         <source>EPSG:4326</source>
         <translation>EPSG:4326</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="459"/>
+        <location filename="../ui/coordinateConverter.ui" line="381"/>
         <source>UPS</source>
         <translation>UPS</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="483"/>
+        <location filename="../ui/coordinateConverter.ui" line="507"/>
         <source>GEOREF</source>
         <translation>GEOREF</translation>
     </message>
@@ -1118,14 +1113,29 @@
         <source>D&#xb0; M.MM&apos;</source>
         <translation type="obsolete">D°M.MM&apos;</translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/coordinateConverter.ui" line="239"/>
-        <source>D° M&apos; S&quot;</source>
+    <message>
+        <location filename="../ui/coordinateConverter.ui" line="135"/>
+        <source>WGS 84 (lat,lon)</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../ui/coordinateConverter.ui" line="246"/>
-        <source>D° M.MM&apos;</source>
+        <location filename="../ui/coordinateConverter.ui" line="228"/>
+        <source>→ (lat,lon)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="252"/>
+        <source>→ D M S.ss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="279"/>
+        <source>→ D M.mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="357"/>
+        <source>→ DDMMSS</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1298,12 +1308,12 @@
         <translation>Suffixe de coordonnées</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1200"/>
+        <location filename="../ui/latLonSettings.ui" line="1203"/>
         <source>Geohash precision</source>
         <translation>Précision Geohash</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1121"/>
+        <location filename="../ui/latLonSettings.ui" line="1124"/>
         <source>UTM precision</source>
         <translation>Précision UTM</translation>
     </message>
@@ -1313,22 +1323,22 @@
         <translation>Précision grille Maidenhead</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1257"/>
+        <location filename="../ui/latLonSettings.ui" line="1260"/>
         <source>UTM format</source>
         <translation>Format UTM</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1277"/>
+        <location filename="../ui/latLonSettings.ui" line="1280"/>
         <source>UPS precision</source>
         <translation>Précision UTM</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1267"/>
+        <location filename="../ui/latLonSettings.ui" line="1270"/>
         <source>UPS format</source>
         <translation>Format UPS</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1291"/>
+        <location filename="../ui/latLonSettings.ui" line="1294"/>
         <source>GEOREF precision</source>
         <translation>Précision GEOFREF</translation>
     </message>
@@ -1338,12 +1348,12 @@
         <translation>Résolution H3</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1308"/>
+        <location filename="../ui/latLonSettings.ui" line="1311"/>
         <source>MGRS precision</source>
         <translation>Précision MGRS</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1341"/>
+        <location filename="../ui/latLonSettings.ui" line="1351"/>
         <source>Add spaces to MGRS coordinates</source>
         <translation>Ajouter des espaces aux coordonnées MGRS</translation>
     </message>
@@ -1615,37 +1625,37 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
         <translation>Ordre des coordonnées pour les formats DMS et degrés décimaux</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1090"/>
+        <location filename="../ui/latLonSettings.ui" line="1093"/>
         <source>EPSG:4326 decimal degree precision</source>
         <translation>Précision degrés décimaux EPSG:4326</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1135"/>
+        <location filename="../ui/latLonSettings.ui" line="1138"/>
         <source>Plus codes (Open Location Code) length</source>
         <translation>Longueur Plus codes (Open Location Code)</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1155"/>
+        <location filename="../ui/latLonSettings.ui" line="1158"/>
         <source>Other decimal degree precision</source>
         <translation>Précision autres degrés décimaux</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1172"/>
+        <location filename="../ui/latLonSettings.ui" line="1175"/>
         <source>Delimiter between coordinate pairs</source>
         <translation>Séparateur entre les paires de coordonnées</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1193"/>
+        <location filename="../ui/latLonSettings.ui" line="1196"/>
         <source>,</source>
         <translation>,</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1186"/>
+        <location filename="../ui/latLonSettings.ui" line="1189"/>
         <source>DDMMSS delimiter</source>
         <translation>Séparateur DDMMSS</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1237"/>
+        <location filename="../ui/latLonSettings.ui" line="1240"/>
         <source>Maidenhead grid precsion</source>
         <translation>Précision grille Maidenhead</translation>
     </message>
@@ -1675,28 +1685,38 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
         <translation type="obsolete">Précision des secondes D°M&apos;S&quot;</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="129"/>
-        <source>D°M&apos;S&quot; second precision: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1220"/>
-        <source>D° M.MM&apos; precision</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
         <location filename="../ui/latLonSettings.ui" line="1327"/>
         <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
-        <translation type="unfinished">Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
+        <translation type="obsolete">Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1334"/>
-        <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="129"/>
+        <source>DMS.ss second precision: </source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1107"/>
-        <source>D°M&apos;S&quot; seconds precision</source>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1223"/>
+        <source>DM.mm precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1330"/>
+        <source>Add space between DMS.ss and DM.mm numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1337"/>
+        <source>Pad DMS.ss and DM.mm output coordinates with leading zeroes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1110"/>
+        <source>DMS.ss seconds precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1344"/>
+        <source>Format DMS coordinates with NSEW at the beginning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

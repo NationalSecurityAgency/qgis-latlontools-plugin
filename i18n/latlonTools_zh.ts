@@ -218,7 +218,7 @@
         <translation>无效的坐标</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="250"/>
+        <location filename="../settings.py" line="251"/>
         <source>WGS 84 (Latitude &amp; Longitude)</source>
         <translation>WGS 84 (纬度 &amp; 经度)</translation>
     </message>
@@ -238,7 +238,7 @@
         <translation>MGRS</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="241"/>
+        <location filename="../settings.py" line="242"/>
         <source>Plus Codes (Open Location Code)</source>
         <translation>Plus Codes (开放位置代码)</translation>
     </message>
@@ -253,7 +253,7 @@
         <translation>Geohash</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="217"/>
+        <location filename="../settings.py" line="218"/>
         <source>Maidenhead Grid Locator</source>
         <translation>Maidenhead Grid Locator</translation>
     </message>
@@ -268,117 +268,117 @@
         <translation>GEOREF</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="219"/>
+        <location filename="../settings.py" line="220"/>
         <source>Decimal Degrees</source>
         <translation>十进制度</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="220"/>
+        <location filename="../settings.py" line="221"/>
         <source>Normal Coordinate</source>
         <translation>常规坐标</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="263"/>
+        <location filename="../settings.py" line="264"/>
         <source>Lat, Lon (Y,X) - Google Map Order</source>
         <translation>纬度,经度(Y,X)-谷歌地图顺序</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="263"/>
+        <location filename="../settings.py" line="264"/>
         <source>Lon, Lat (X,Y) Order</source>
         <translation>经度,纬度(X,Y)顺序</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Comma</source>
         <translation>逗号</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Comma Space</source>
         <translation>逗号加空格</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Space</source>
         <translation>空格</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Tab</source>
         <translation>制表符</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="260"/>
+        <location filename="../settings.py" line="261"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="231"/>
+        <location filename="../settings.py" line="232"/>
         <source>WGS 84 (Latitude &amp; Longitude) / Auto Detect Format</source>
         <translation>WGS 84 (纬度 &amp; 经度) / 自动识别坐标格式</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="231"/>
+        <location filename="../settings.py" line="232"/>
         <source>Maidenhead Grid</source>
         <translation>Maidenhead Grid</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="245"/>
+        <location filename="../settings.py" line="246"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="245"/>
+        <location filename="../settings.py" line="246"/>
         <source>Labeled</source>
         <translation>显示标注</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="245"/>
+        <location filename="../settings.py" line="246"/>
         <source>Custom</source>
         <translation>自定义样式</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;minX,minY,maxX,maxY (W,S,E,N)&quot; - Using the selected delimiter</source>
         <translation>&quot;minX,minY,maxX,maxY (W,S,E,N)&quot; - 使用自定义分隔符</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;minX,maxX,minY,maxY (W,E,S,N)&quot; - Using the selected delimiter</source>
         <translation>&quot;minX,maxX,minY,maxY (W,E,S,N)&quot; - 使用自定义分隔符</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;minY,minX,maxY,maxX (S,W,N,E)&quot; - Using the selected delimiter</source>
         <translation>&quot;minY,minX,maxY,maxX (S,W,N,E)&quot; - 使用自定义分隔符</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;x1 y1,x2 y2,x3 y3,x4 y4,x1 y1&quot; - Polygon format</source>
         <translation>&quot;x1 y1,x2 y2,x3 y3,x4 y4,x1 y1&quot; - 多边形坐标</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;x1,y1 x2,y2 x3,y3 x4,y4 x1,y1&quot; - Alternate polgyon format</source>
         <translation>&quot;x1,y1 x2,y2 x3,y3 x4,y4 x1,y1&quot; - 多边形坐标</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>WKT Polygon</source>
         <translation>WKT 多边形</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;bbox: [minX, minY, maxX, maxY]&quot; - MapProxy</source>
         <translation>&quot;bbox: [minX, minY, maxX, maxY]&quot; - MapProxy</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="251"/>
+        <location filename="../settings.py" line="252"/>
         <source>&quot;bbox=minX,minY,maxX,maxY&quot; - GeoServer WFS, WMS</source>
         <translation>&quot;bbox=minX,minY,maxX,maxY&quot; - GeoServer WFS, WMS</translation>
     </message>
     <message>
-        <location filename="../settings.py" line="599"/>
+        <location filename="../settings.py" line="602"/>
         <source>Input QML Style File</source>
         <translation>选择QML样式文件</translation>
     </message>
@@ -1009,7 +1009,7 @@
         <translation>坐标转换</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="498"/>
+        <location filename="../ui/coordinateConverter.ui" line="522"/>
         <source>...</source>
         <translation></translation>
     </message>
@@ -1036,17 +1036,17 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="135"/>
         <source>Dec Deg (lat,lon)</source>
-        <translation>十进制 度(纬度,经度)</translation>
+        <translation type="obsolete">十进制 度(纬度,经度)</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="366"/>
+        <location filename="../ui/coordinateConverter.ui" line="447"/>
         <source>Copy to clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="162"/>
         <source>      (lat,lon)</source>
-        <translation>      (纬度,经度)</translation>
+        <translation type="obsolete">      (纬度,经度)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="189"/>
@@ -1066,66 +1066,81 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="270"/>
         <source>DDMMSS</source>
-        <translation>DDMMSS</translation>
+        <translation type="obsolete">DDMMSS</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="297"/>
+        <location filename="../ui/coordinateConverter.ui" line="350"/>
         <source>Standard UTM</source>
         <translation>标准UTM</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="324"/>
+        <location filename="../ui/coordinateConverter.ui" line="405"/>
         <source>MGRS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="351"/>
+        <location filename="../ui/coordinateConverter.ui" line="432"/>
         <source>Plus Code</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="378"/>
+        <location filename="../ui/coordinateConverter.ui" line="459"/>
         <source>Geohash</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="402"/>
+        <location filename="../ui/coordinateConverter.ui" line="483"/>
         <source>Maidenhead Grid</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="435"/>
         <source>       (lat,lon)</source>
-        <translation>       (纬度,经度)</translation>
+        <translation type="obsolete">       (纬度,经度)</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="445"/>
+        <location filename="../ui/coordinateConverter.ui" line="238"/>
         <source>Project CRS</source>
         <translation>工程坐标参照系</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="452"/>
+        <location filename="../ui/coordinateConverter.ui" line="245"/>
         <source>EPSG:4326</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="459"/>
+        <location filename="../ui/coordinateConverter.ui" line="381"/>
         <source>UPS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="483"/>
+        <location filename="../ui/coordinateConverter.ui" line="507"/>
         <source>GEOREF</source>
         <translation></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/coordinateConverter.ui" line="239"/>
-        <source>D° M&apos; S&quot;</source>
+    <message>
+        <location filename="../ui/coordinateConverter.ui" line="135"/>
+        <source>WGS 84 (lat,lon)</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../ui/coordinateConverter.ui" line="246"/>
-        <source>D° M.MM&apos;</source>
+        <location filename="../ui/coordinateConverter.ui" line="228"/>
+        <source>→ (lat,lon)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="252"/>
+        <source>→ D M S.ss</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="279"/>
+        <source>→ D M.mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message encoding="UTF-8">
+        <location filename="../ui/coordinateConverter.ui" line="357"/>
+        <source>→ DDMMSS</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1303,7 +1318,7 @@
         <translation>坐标后缀</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1200"/>
+        <location filename="../ui/latLonSettings.ui" line="1203"/>
         <source>Geohash precision</source>
         <translation>Geohash精度</translation>
     </message>
@@ -1313,7 +1328,7 @@
         <translation type="obsolete">D° M.MM&apos; 精度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1121"/>
+        <location filename="../ui/latLonSettings.ui" line="1124"/>
         <source>UTM precision</source>
         <translation>UTM精度</translation>
     </message>
@@ -1323,22 +1338,22 @@
         <translation>Maidenhead grid精度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1257"/>
+        <location filename="../ui/latLonSettings.ui" line="1260"/>
         <source>UTM format</source>
         <translation>UTM格式</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1277"/>
+        <location filename="../ui/latLonSettings.ui" line="1280"/>
         <source>UPS precision</source>
         <translation>UPS精度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1267"/>
+        <location filename="../ui/latLonSettings.ui" line="1270"/>
         <source>UPS format</source>
         <translation>UPS格式</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1291"/>
+        <location filename="../ui/latLonSettings.ui" line="1294"/>
         <source>GEOREF precision</source>
         <translation>GEOREF精度</translation>
     </message>
@@ -1348,7 +1363,7 @@
         <translation>H3分辨率</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1308"/>
+        <location filename="../ui/latLonSettings.ui" line="1311"/>
         <source>MGRS precision</source>
         <translation>MGRS精度</translation>
     </message>
@@ -1363,7 +1378,7 @@
         <translation type="obsolete">在输出的D°M&apos;S&quot;和D° M.MM&apos;坐标前面填充零</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1341"/>
+        <location filename="../ui/latLonSettings.ui" line="1351"/>
         <source>Add spaces to MGRS coordinates</source>
         <translation>在MGRS坐标中添加空格</translation>
     </message>
@@ -1635,7 +1650,7 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
         <translation>坐标顺序</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1090"/>
+        <location filename="../ui/latLonSettings.ui" line="1093"/>
         <source>EPSG:4326 decimal degree precision</source>
         <translation>EPSG:4326 十进制度精度</translation>
     </message>
@@ -1645,58 +1660,68 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
         <translation type="obsolete">D°M&apos;S&quot; 秒精度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1135"/>
+        <location filename="../ui/latLonSettings.ui" line="1138"/>
         <source>Plus codes (Open Location Code) length</source>
         <translation>Plus Codes 长度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1155"/>
+        <location filename="../ui/latLonSettings.ui" line="1158"/>
         <source>Other decimal degree precision</source>
         <translation>其他十进制的精度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1172"/>
+        <location filename="../ui/latLonSettings.ui" line="1175"/>
         <source>Delimiter between coordinate pairs</source>
         <translation>两对坐标之间的分隔符</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1193"/>
+        <location filename="../ui/latLonSettings.ui" line="1196"/>
         <source>,</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1186"/>
+        <location filename="../ui/latLonSettings.ui" line="1189"/>
         <source>DDMMSS delimiter</source>
         <translation>DDMMSS分隔符</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1237"/>
+        <location filename="../ui/latLonSettings.ui" line="1240"/>
         <source>Maidenhead grid precsion</source>
         <translation>Maidenhead grid精度</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="129"/>
-        <source>D°M&apos;S&quot; second precision: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1220"/>
-        <source>D° M.MM&apos; precision</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message encoding="UTF-8">
         <location filename="../ui/latLonSettings.ui" line="1327"/>
         <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
-        <translation type="unfinished">在度分秒数字间添加空格</translation>
+        <translation type="obsolete">在度分秒数字间添加空格</translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1334"/>
-        <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="129"/>
+        <source>DMS.ss second precision: </source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1107"/>
-        <source>D°M&apos;S&quot; seconds precision</source>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1223"/>
+        <source>DM.mm precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1330"/>
+        <source>Add space between DMS.ss and DM.mm numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1337"/>
+        <source>Pad DMS.ss and DM.mm output coordinates with leading zeroes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1110"/>
+        <source>DMS.ss seconds precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/latLonSettings.ui" line="1344"/>
+        <source>Format DMS coordinates with NSEW at the beginning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
