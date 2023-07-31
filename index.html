@@ -395,8 +395,8 @@ code {
 <li><strong><em>Coordinate order for decimal and DMS notations</em></strong> determines whether the coordinates will be formatted in an <strong><em>Lat, Lon (Y, X)</em></strong> or <strong><em>Lon, Lat (X, Y)</em></strong> order.</li>
 <li><strong><em>EPSG:4326 decimal degree precision</em></strong> determines the number of digits after the decimal point for a WGS 84 latitude and longitude coordinate.</li>
 <li><strong><em>Other Decimal degree precision</em></strong> is the number of digits after the decimal point for all other coordinate formats.</li>
-<li><strong><em>DMS seconds precision</em></strong> is the number of decimal digits for the second in a DMS formatted coordinate.</li>
-<li><strong><em>D&deg;MM' precision</em></strong> is the number of decimal digits for the minute in a D&deg;MM' formatted coordinate.</li>
+<li><strong><em>DMS.ss seconds precision</em></strong> is the number of decimal digits for the second in a DMS formatted coordinate.</li>
+<li><strong><em>DM.mm' precision</em></strong> is the number of decimal digits for the minute in a DM.mm' formatted coordinate.</li>
 <li><strong><em>UTM precision</em></strong> specifies the number of decimal digits for a UTM formatted coordinate.</li>
 <li><strong><em>UTM format</em></strong> specifies one of these formats to be displayed: '15N 755631 4283168', '755631,4283168,15N','755631mE,4283168mN,15N', or '755631mE,4283168mN,15,N'.</li>
 <li><strong><em>UPS precision</em></strong> specifies the number of decimal digits for a UPS formatted coordinate.</li>
@@ -407,7 +407,8 @@ code {
 <li><strong><em>GEOREF precision</em></strong> determins the number of digits in a GEOREF coordinate.</li>
 <li><strong><em>Delimiter between coordinate pairs</em></strong> is the delimiter used between coordinate pairs for those representations that require a delimiter.</li>
 <li><strong><em>DDMMSS delimiter</em></strong> is the delimiter used between DDMMSS coordinate pairs. Leave this blank if no space is desired between coordinates. The default is ", ".</li>
-<li><strong><em>Add space between D&deg; M' S" and D&deg; M.MM' numbers</em></strong> - When checked a space will be added between each pair of numbers.</li>
-<li><strong><em>Pad DMS and DM.MM output coordinates with leading zeros</em></strong> - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.</li>
+<li><strong><em>Add space between DMS.ss and DM.mm' numbers</em></strong> - When checked a space will be added between each pair of numbers and will look like 1° 5' 15" N, 10° 19' 50" W vs. 1°5'15"N, 10°19'50"W when unchecked.</li>
+<li><strong><em>Pad DMS and DM.mm output coordinates with leading zeros</em></strong> - When checked individual DMS coordinates will be padded with leading zero. A coordinate that normally looks like 1° 5' 15"N, 10° 19' 50"W would become 01° 05' 15"N, 010° 19' 50"W.</li>
+<li><strong><em>Format DMS coordinates with NSEW at the beginning</em></strong> - This causes the N,S,E,W direction abbreviations to be placed at the beginning of a DMS coordinate such as "N400210.53, W1050824.96".</li>
 <li><strong><em>Add spaces to MGRS coordinates</em></strong> - This will add spaces to an MGRS coordinate when checked. Unchecked it looks like "16TDL8016526461" and checked it looks like "16T DL 80165 26461".</li>
 </ul></body>
