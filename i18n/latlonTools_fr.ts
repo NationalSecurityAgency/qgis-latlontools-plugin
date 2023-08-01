@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -645,12 +644,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>DÂ°M&apos;S&quot;</source>
+        <source>D&#xc2;&#xb0;M&apos;S&quot;</source>
         <translation>D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>DÂ°M.MM&apos;</source>
+        <source>D&#xc2;&#xb0;M.MM&apos;</source>
         <translation>D°M.MM&apos;</translation>
     </message>
     <message>
@@ -660,12 +659,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="128"/>
-        <source>Add space between DÂ° M&apos; S&quot; and DÂ° M.MM&apos; numbers</source>
+        <source>Add space between D&#xc2;&#xb0; M&apos; S&quot; and D&#xc2;&#xb0; M.MM&apos; numbers</source>
         <translation>Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
-        <source>Pad DÂ°M&apos;S&quot; and DÂ°M.MM&apos; coordinates with leading zeros</source>
+        <source>Pad D&#xc2;&#xb0;M&apos;S&quot; and D&#xc2;&#xb0;M.MM&apos; coordinates with leading zeros</source>
         <translation>Compléter les coordonnées DÂ°M&apos;S&quot; et DÂ°M.MM&apos; avec des zéros non significatif en début de valeur</translation>
     </message>
     <message>
@@ -1035,19 +1034,9 @@
         <translation>Capturer les coordonnées en cliquant dans la carte</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="135"/>
-        <source>Dec Deg (lat,lon)</source>
-        <translation type="obsolete">Degrés décimaux</translation>
-    </message>
-    <message>
         <location filename="../ui/coordinateConverter.ui" line="447"/>
         <source>Copy to clipboard</source>
         <translation>Copier dans le presse-papier</translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="162"/>
-        <source>      (lat,lon)</source>
-        <translation type="obsolete">      (lat,lon)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="189"/>
@@ -1080,11 +1069,6 @@
         <translation>Grille Maidenhead</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="435"/>
-        <source>       (lat,lon)</source>
-        <translation type="obsolete">       (lat,lon)</translation>
-    </message>
-    <message>
         <location filename="../ui/coordinateConverter.ui" line="238"/>
         <source>Project CRS</source>
         <translation>SCR du projet</translation>
@@ -1105,39 +1089,29 @@
         <translation>GEOREF</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="239"/>
-        <source>D° M&apos; S&quot;</source>
-        <translation type="obsolete">D°M&apos;S&quot;</translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="246"/>
-        <source>D° M.MM&apos;</source>
-        <translation type="obsolete">D°M.MM&apos;</translation>
-    </message>
-    <message>
         <location filename="../ui/coordinateConverter.ui" line="135"/>
         <source>WGS 84 (lat,lon)</source>
         <translation>WGS 84 (lat, lon))</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="228"/>
-        <source>→ (lat,lon)</source>
-        <translation>→ (lat, lon)</translation>
+        <source>- (lat,lon)</source>
+        <translation>- (lat,lon)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="252"/>
-        <source>→ D M S.ss</source>
-        <translation>→ D M S.ss</translation>
+        <source>- D M S.ss</source>
+        <translation>- D M S.ss</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="279"/>
-        <source>→ D M.mm</source>
-        <translation>→ D M.mm</translation>
+        <source>- D M.mm</source>
+        <translation>- D M.mm</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="357"/>
-        <source>→ DDMMSS</source>
-        <translation>→ DDMMSS</translation>
+        <source>- DDMMSS</source>
+        <translation>- DDMMSS</translation>
     </message>
 </context>
 <context>
@@ -1659,31 +1633,6 @@ H3 (si installé) - Seulement les coordonnées H3 geohash</translation>
         <location filename="../ui/latLonSettings.ui" line="1240"/>
         <source>Maidenhead grid precsion</source>
         <translation>Précision grille Maidenhead</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="129"/>
-        <source>D°M&apos;S&quot; second precision: </source>
-        <translation type="obsolete">Précision des secondes D°M&apos;S&quot;</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1220"/>
-        <source>D° M.MM&apos; precision</source>
-        <translation type="obsolete">Précision D° M.MM&apos;</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1327"/>
-        <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
-        <translation type="obsolete">Ajouter une espace entre les valeurs D° M&apos; S&quot; et D° M.MM&apos;</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1334"/>
-        <source>Pad D°M&apos;S&quot; and D° M.MM&apos; output coordinates with leading zeroes</source>
-        <translation type="obsolete">Compléter les coordonnées D°M&apos;S&quot; et D° M.MM&apos; avec des zéros non significatifs en début de valeur</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1107"/>
-        <source>D°M&apos;S&quot; seconds precision</source>
-        <translation type="obsolete">Précision des secondes D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="129"/>

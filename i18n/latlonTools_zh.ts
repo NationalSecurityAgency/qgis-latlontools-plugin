@@ -1123,24 +1123,24 @@
         <source>WGS 84 (lat,lon)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="228"/>
-        <source>→ (lat,lon)</source>
+        <source>- (lat,lon)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="252"/>
-        <source>→ D M S.ss</source>
+        <source>- D M S.ss</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="279"/>
-        <source>→ D M.mm</source>
+        <source>- D M.mm</source>
         <translation type="unfinished"></translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui/coordinateConverter.ui" line="357"/>
-        <source>→ DDMMSS</source>
+        <source>- DDMMSS</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
