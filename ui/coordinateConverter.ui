@@ -159,7 +159,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="projectLabel">
             <property name="text">
-             <string>→ (lat,lon)</string>
+             <string>- (lat,lon)</string>
             </property>
            </widget>
           </item>
@@ -225,7 +225,7 @@
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="text">
-             <string>→ (lat,lon)</string>
+             <string>- (lat,lon)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -249,7 +249,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="dmsLabel">
             <property name="text">
-             <string>→ D M S.ss</string>
+             <string>- D M S.ss</string>
             </property>
            </widget>
           </item>
@@ -276,7 +276,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="dmLabel">
             <property name="text">
-             <string>→ D M.mm</string>
+             <string>- D M.mm</string>
             </property>
            </widget>
           </item>
@@ -300,7 +300,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="ddmmssLabel">
             <property name="text">
-             <string>→ DDMMSS</string>
+             <string>- DDMMSS</string>
             </property>
            </widget>
           </item>
@@ -354,7 +354,7 @@
           <item row="8" column="0">
            <widget class="QLabel" name="customDdmmssLabel">
             <property name="text">
-             <string>→ DDMMSS</string>
+             <string>- DDMMSS</string>
             </property>
            </widget>
           </item>
