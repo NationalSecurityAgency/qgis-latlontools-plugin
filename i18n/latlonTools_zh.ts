@@ -1034,39 +1034,14 @@
         <translation>地图取点</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="135"/>
-        <source>Dec Deg (lat,lon)</source>
-        <translation type="obsolete">十进制 度(纬度,经度)</translation>
-    </message>
-    <message>
         <location filename="../ui/coordinateConverter.ui" line="447"/>
         <source>Copy to clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../ui/coordinateConverter.ui" line="162"/>
-        <source>      (lat,lon)</source>
-        <translation type="obsolete">      (纬度,经度)</translation>
-    </message>
-    <message>
         <location filename="../ui/coordinateConverter.ui" line="189"/>
         <source>Custom CRS</source>
         <translation>自定义参照系</translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="239"/>
-        <source>D&#xb0; M&apos; S&quot;</source>
-        <translation type="obsolete">D° M&apos; S&quot;</translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="246"/>
-        <source>D&#xb0; M.MM&apos;</source>
-        <translation type="obsolete">D° M.MM&apos;</translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="270"/>
-        <source>DDMMSS</source>
-        <translation type="obsolete">DDMMSS</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="350"/>
@@ -1092,11 +1067,6 @@
         <location filename="../ui/coordinateConverter.ui" line="483"/>
         <source>Maidenhead Grid</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/coordinateConverter.ui" line="435"/>
-        <source>       (lat,lon)</source>
-        <translation type="obsolete">       (纬度,经度)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="238"/>
@@ -1293,11 +1263,6 @@
         <translation>其他分隔符: </translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="129"/>
-        <source>D&#xb0;M&apos;S&quot; second precision: </source>
-        <translation type="obsolete">D°M&apos;S&quot; 精度: </translation>
-    </message>
-    <message>
         <location filename="../ui/latLonSettings.ui" line="143"/>
         <source>Plus codes length:</source>
         <translation>Plus Codes 长度:</translation>
@@ -1321,11 +1286,6 @@
         <location filename="../ui/latLonSettings.ui" line="1203"/>
         <source>Geohash precision</source>
         <translation>Geohash精度</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1220"/>
-        <source>D&#xb0; M.MM&apos; precision</source>
-        <translation type="obsolete">D° M.MM&apos; 精度</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1124"/>
@@ -1366,16 +1326,6 @@
         <location filename="../ui/latLonSettings.ui" line="1311"/>
         <source>MGRS precision</source>
         <translation>MGRS精度</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1327"/>
-        <source>Add space between D&#xb0; M&apos; S&quot; and D&#xb0; M.MM&apos; numbers</source>
-        <translation type="obsolete">在D° M&apos; S&quot;和D° M.MM&apos;之间添加空格</translation>
-    </message>
-    <message>
-        <location filename="../ui/latLonSettings.ui" line="1334"/>
-        <source>Pad D&#xb0;M&apos;S&quot; and D&#xb0; M.MM&apos; output coordinates with leading zeroes</source>
-        <translation type="obsolete">在输出的D°M&apos;S&quot;和D° M.MM&apos;坐标前面填充零</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1351"/>
@@ -1655,11 +1605,6 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
         <translation>EPSG:4326 十进制度精度</translation>
     </message>
     <message>
-        <location filename="../ui/latLonSettings.ui" line="1107"/>
-        <source>D&#xb0;M&apos;S&quot; seconds precision</source>
-        <translation type="obsolete">D°M&apos;S&quot; 秒精度</translation>
-    </message>
-    <message>
         <location filename="../ui/latLonSettings.ui" line="1138"/>
         <source>Plus codes (Open Location Code) length</source>
         <translation>Plus Codes 长度</translation>
@@ -1688,11 +1633,6 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
         <location filename="../ui/latLonSettings.ui" line="1240"/>
         <source>Maidenhead grid precsion</source>
         <translation>Maidenhead grid精度</translation>
-    </message>
-    <message encoding="UTF-8">
-        <location filename="../ui/latLonSettings.ui" line="1327"/>
-        <source>Add space between D° M&apos; S&quot; and D° M.MM&apos; numbers</source>
-        <translation type="obsolete">在度分秒数字间添加空格</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="129"/>
