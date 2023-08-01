@@ -988,7 +988,7 @@
     <message>
         <location filename="../ui/digitizer.ui" line="51"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../ui/digitizer.ui" line="48"/>
@@ -1011,7 +1011,7 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="522"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="82"/>
@@ -1051,22 +1051,22 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="405"/>
         <source>MGRS</source>
-        <translation></translation>
+        <translation>MGRS</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="432"/>
         <source>Plus Code</source>
-        <translation></translation>
+        <translation>Plus Code</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="459"/>
         <source>Geohash</source>
-        <translation></translation>
+        <translation>Geohash</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="483"/>
         <source>Maidenhead Grid</source>
-        <translation></translation>
+        <translation>Maidenhead Grid</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="238"/>
@@ -1076,17 +1076,17 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="245"/>
         <source>EPSG:4326</source>
-        <translation></translation>
+        <translation>EPSG:4326</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="381"/>
         <source>UPS</source>
-        <translation></translation>
+        <translation>UPS</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="507"/>
         <source>GEOREF</source>
-        <translation></translation>
+        <translation>GEOREF</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="135"/>
@@ -1129,7 +1129,7 @@
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="161"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../ui/multiZoomDialog.ui" line="39"/>
@@ -1472,7 +1472,7 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="739"/>
         <source>Open Street Map</source>
-        <translation></translation>
+        <translation>Open Street Map</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="746"/>
@@ -1482,7 +1482,7 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="753"/>
         <source>http://www.openstreetmap.org/#map={zoom}/{lat}/{lon}</source>
-        <translation></translation>
+        <translation>http://www.openstreetmap.org/#map={zoom}/{lat}/{lon}</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="764"/>
@@ -1622,7 +1622,7 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1196"/>
         <source>,</source>
-        <translation></translation>
+        <translation>,</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1189"/>
