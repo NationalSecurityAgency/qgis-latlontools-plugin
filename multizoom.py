@@ -239,17 +239,7 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
             with open(fname) as f:
                 for line in f:
                     try:
-                        parts = [x.strip() for x in line.split(',')]
-                        if len(parts) >= 2:
-                            lat = parseDMSStringSingle(parts[0])
-                            lon = parseDMSStringSingle(parts[1])
-                            label = ''
-                            data = []
-                            if len(parts) >= 3:
-                                label = parts[2]
-                            if len(parts) >= 4:
-                                data = parts[3:]
-                            self.addCoord(lat, lon, label, data)
+                        self.addSingleCoordLine(line)
                     except Exception:
                         pass
         except Exception:
@@ -300,10 +290,13 @@ class MultiZoomWidget(QDockWidget, FORM_CLASS):
 
             self.resultsTable.blockSignals(False)
             self.resultsTable.clearSelection()
-
+            
     def addSingleCoord(self):
+        self.addSingleCoordLine(self.addLineEdit.text())
+
+    def addSingleCoordLine(self, lineText):
         '''Add a coordinate from the coordinate text box.'''
-        parts = [x.strip() for x in self.addLineEdit.text().split(',')]
+        parts = [x.strip() for x in lineText.split(',')]
         label = ''
         data = []
         numFields = len(parts)
