@@ -153,52 +153,52 @@
         <translation>Coordonnées incorrectes : </translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="85"/>
+        <location filename="../zoomToLatLon.py" line="112"/>
         <source>Enter MGRS Coordinate</source>
         <translation>Entrer des coordonnées MGRS</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="87"/>
+        <location filename="../zoomToLatLon.py" line="114"/>
         <source>Enter Plus Codes</source>
         <translation>Entrer un Plus Codes</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="89"/>
+        <location filename="../zoomToLatLon.py" line="116"/>
         <source>Enter Geohash</source>
         <translation>Entrer un Geohash</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="91"/>
+        <location filename="../zoomToLatLon.py" line="118"/>
         <source>Enter H3 geohash</source>
         <translation>Entrer un geohash H3</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="93"/>
+        <location filename="../zoomToLatLon.py" line="120"/>
         <source>Enter Standard UTM</source>
         <translation>Entrer des coordonnées UTM standard</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="95"/>
+        <location filename="../zoomToLatLon.py" line="122"/>
         <source>Enter Maidenhead Grid</source>
         <translation>Entrer des coordonnées de grille Maidenhead</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="98"/>
+        <location filename="../zoomToLatLon.py" line="125"/>
         <source>Enter &apos;Latitude, Longitude&apos;</source>
         <translation>Entrer &apos;Latitude, Longitude&apos;</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="100"/>
+        <location filename="../zoomToLatLon.py" line="127"/>
         <source>Enter &apos;Longitude, Latitude&apos;</source>
         <translation>Entrer &apos;Longitude, Latitude&apos;</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="112"/>
+        <location filename="../zoomToLatLon.py" line="139"/>
         <source>Enter</source>
         <translation>Entrer</translation>
     </message>
     <message>
-        <location filename="../zoomToLatLon.py" line="152"/>
+        <location filename="../zoomToLatLon.py" line="183"/>
         <source>Invalid H3 Coordinate</source>
         <translation>Coordonnées H3 incorrectes</translation>
     </message>
@@ -967,6 +967,11 @@
         <source>Google Earth Web</source>
         <translation>Google Earth Web</translation>
     </message>
+    <message>
+        <location filename="../zoomToLatLon.py" line="66"/>
+        <source>H3</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddFeatureDialog</name>
@@ -1180,39 +1185,49 @@
 <context>
     <name>ZoomToLatLonDockWidgetBase</name>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="20"/>
+        <location filename="../ui/zoomToLatLon.ui" line="23"/>
         <source>Zoom to Coordinate</source>
         <translation>Aller à des coordonnées</translation>
     </message>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="38"/>
+        <location filename="../ui/zoomToLatLon.ui" line="125"/>
         <source>Enter Latitude, Longitude</source>
         <translation>Entrer Latitude, Longitude</translation>
     </message>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="45"/>
+        <location filename="../ui/zoomToLatLon.ui" line="41"/>
         <source>Zoom To Coordinate</source>
         <translation>Aller à des coordonnées</translation>
     </message>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="78"/>
+        <location filename="../ui/zoomToLatLon.ui" line="103"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="55"/>
+        <location filename="../ui/zoomToLatLon.ui" line="51"/>
         <source>Paste Coordinate from Clipboard</source>
         <translation>Coller les coordonnées depuis le presse-papier</translation>
     </message>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="65"/>
+        <location filename="../ui/zoomToLatLon.ui" line="100"/>
         <source>Set Zoom to Settings</source>
         <translation>Paramètres de l&apos;outil Aller à des coordonnées</translation>
     </message>
     <message>
-        <location filename="../ui/zoomToLatLon.ui" line="75"/>
+        <location filename="../ui/zoomToLatLon.ui" line="61"/>
         <source>Clear Marker</source>
         <translation>Effacer le repère</translation>
+    </message>
+    <message>
+        <location filename="../ui/zoomToLatLon.ui" line="20"/>
+        <source>Toggle Coordinate Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/zoomToLatLon.ui" line="78"/>
+        <source>Select CRS Mode</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
