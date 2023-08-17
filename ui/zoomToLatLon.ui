@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>312</width>
-    <height>87</height>
+    <width>222</width>
+    <height>107</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,9 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="toolTip">
+   <string>Toggle Coordinate Order</string>
   </property>
   <property name="windowTitle">
    <string>Zoom to Coordinate</string>
@@ -32,13 +35,6 @@
       <property name="spacing">
        <number>2</number>
       </property>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Enter Latitude, Longitude</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QToolButton" name="zoomToolButton">
         <property name="toolTip">
@@ -60,6 +56,45 @@
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="clearToolButton">
+        <property name="toolTip">
+         <string>Clear Marker</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="xyButton">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="crsButton">
+        <property name="toolTip">
+         <string>Select CRS Mode</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonIconOnly</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="optionsButton">
         <property name="toolTip">
          <string>Set Zoom to Settings</string>
@@ -70,16 +105,26 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="clearToolButton">
-        <property name="toolTip">
-         <string>Clear Marker</string>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="text">
-         <string>...</string>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Enter Latitude, Longitude</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLineEdit" name="coordTxt"/>

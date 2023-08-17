@@ -3,10 +3,10 @@ import re
 
 from qgis.PyQt.uic import loadUiType
 from qgis.PyQt.QtGui import QIcon, QColor
-from qgis.PyQt.QtWidgets import QDockWidget, QApplication
+from qgis.PyQt.QtWidgets import QDockWidget, QApplication, QMenu
 from qgis.PyQt.QtCore import QTextCodec
-from qgis.gui import QgsRubberBand
-from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes, QgsPointXY, QgsGeometry, QgsCoordinateTransform, QgsProject, QgsRectangle
+from qgis.gui import QgsRubberBand, QgsProjectionSelectionDialog
+from qgis.core import Qgis, QgsJsonUtils, QgsWkbTypes, QgsPointXY, QgsGeometry, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, QgsRectangle
 from .util import epsg4326, parseDMSString, tr
 from .settings import settings, CoordOrder, H3_INSTALLED
 from .utm import isUtm, utm2Point
@@ -40,6 +40,33 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
         self.pasteButton.clicked.connect(self.pasteCoordinate)
         self.optionsButton.setIcon(QIcon(':/images/themes/default/mActionOptions.svg'))
         self.optionsButton.clicked.connect(self.showSettings)
+        self.xyIcon = QIcon(os.path.dirname(__file__) + '/images/xy.svg')
+        self.yxIcon = QIcon(os.path.dirname(__file__) + '/images/yx.svg')
+        self.xyButton.setIcon(self.yxIcon)
+        self.xyButton.clicked.connect(self.xyButtonClicked)
+        self.crsButton.setIcon(QIcon(':/images/themes/default/mIconProjectionEnabled.svg'))
+        self.crsmenu = QMenu()
+        a = self.crsmenu.addAction(tr("WGS 84"))
+        a.setData('wgs84')
+        a = self.crsmenu.addAction(tr("Project CRS"))
+        a.setData('project')
+        a = self.crsmenu.addAction(tr("Custom CRS"))
+        a.setData('custom')
+        a = self.crsmenu.addAction(tr("MGRS"))
+        a.setData('mgrs')
+        a = self.crsmenu.addAction(tr("Plus Codes"))
+        a.setData('pluscode')
+        a = self.crsmenu.addAction(tr("Standard UTM"))
+        a.setData('utm')
+        a = self.crsmenu.addAction(tr("Geohash"))
+        a.setData('geohash')
+        a = self.crsmenu.addAction(tr("Maidenhead Grid"))
+        a.setData('ham')
+        if H3_INSTALLED:
+            a = self.crsmenu.addAction(tr("H3"))
+            a.setData('h3')
+        self.crsButton.setMenu(self.crsmenu)
+        self.crsButton.triggered.connect(self.crsTriggered)
         self.lltools = lltools
         self.settings = lltools.settingsDialog
         self.iface = iface
@@ -110,6 +137,10 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
                 self.label.setText("{} {} Y,X".format(tr('Enter'), crsID))
             else:
                 self.label.setText("{} {} X,Y".format(tr('Enter'), crsID))
+        if self.settings.zoomToCoordOrder == 0:
+            self.xyButton.setIcon(self.yxIcon)
+        else:
+            self.xyButton.setIcon(self.xyIcon)
 
     def convertCoordinate(self, text):
         try:
@@ -300,3 +331,22 @@ class ZoomToLatLon(QDockWidget, FORM_CLASS):
 
     def showSettings(self):
         self.settings.showTab(1)
+
+    def xyButtonClicked(self):
+        if self.settings.zoomToCoordOrder == 0:
+            self.settings.setZoomToCoordOrder(1)
+        else:
+            self.settings.setZoomToCoordOrder(0)
+        self.configure()
+
+    def crsTriggered(self, action):
+        selection_id = action.data()
+        crs = None
+        if selection_id == 'custom':
+            selector = QgsProjectionSelectionDialog()
+            selector.setCrs(QgsCoordinateReferenceSystem(self.settings.zoomToCustomCRS()))
+            if selector.exec():
+                crs = selector.crs()
+        self.settings.setZoomToMode(selection_id, crs)
+        self.configure()
+

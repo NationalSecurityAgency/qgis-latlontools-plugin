@@ -816,6 +816,43 @@ class SettingsWidget(QDialog, FORM_CLASS):
             return True
         return False
 
+    def setZoomToCoordOrder(self, order):
+        if order:
+            self.zoomToCoordOrder = CoordOrder.OrderXY
+        else:
+            self.zoomToCoordOrder = CoordOrder.OrderYX
+        self.zoomToCoordOrderComboBox.setCurrentIndex(self.zoomToCoordOrder)
+        qset = QgsSettings()
+        qset.setValue('/LatLonTools/ZoomToCoordOrder', self.zoomToCoordOrder)
+
+    def setZoomToMode(self, mode, crs=None):
+        qset = QgsSettings()
+        if mode == 'wgs84':
+            self.zoomToProjection = self.ProjectionTypeWgs84
+        elif mode == 'project':
+            self.zoomToProjection = self.ProjectionTypeProjectCRS
+        elif mode == 'custom':
+            self.zoomToProjection = self.ProjectionTypeCustomCRS
+            if not crs:
+                crs = epsg4326
+            self.zoomToCustomCrsAuthId = crs.authid()
+            qset.setValue('/LatLonTools/ZoomToCustomCrsId', self.zoomToCustomCrsAuthId)
+            self.zoomToProjectionSelectionWidget.setCrs(crs)
+        elif mode == 'mgrs':
+            self.zoomToProjection = self.ProjectionTypeMGRS
+        elif mode == 'pluscode':
+            self.zoomToProjection = self.ProjectionTypePlusCodes
+        elif mode == 'utm':
+            self.zoomToProjection = self.ProjectionTypeUTM
+        elif mode == 'geohash':
+            self.zoomToProjection = self.ProjectionTypeGeohash
+        elif mode == 'ham':
+            self.zoomToProjection = self.ProjectionTypeMaidenhead
+        elif mode == 'h3':
+            self.zoomToProjection = self.ZoomProjectionTypeH3
+        self.zoomToProjectionComboBox.setCurrentIndex(self.zoomToProjection)
+        qset.setValue('/LatLonTools/ZoomToCoordType', int(self.zoomToProjectionComboBox.currentIndex()))
+
     def zoomToProjIsWgs84(self):
         if self.zoomToProjection == self.ProjectionTypeWgs84:
             return True
@@ -890,7 +927,7 @@ class SettingsWidget(QDialog, FORM_CLASS):
 
     def multiZoomToCRS(self):
         if self.multiZoomToProjection == 0:  # Wgs84
-            return self.epse4326
+            return self.epsg4326
         if self.multiZoomToProjection == 1:  # Project CRS
             return self.canvas.mapSettings().destinationCrs()
         if self.multiZoomToProjection == 2:  # Custom CRS
