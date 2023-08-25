@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_CN" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>@default</name>
     <message>
@@ -719,12 +720,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>D&#xc2;&#xb0;M&apos;S&quot;</source>
+        <source>DÂ°M&apos;S&quot;</source>
         <translation>D°M&apos;S&quot;</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="120"/>
-        <source>D&#xc2;&#xb0;M.MM&apos;</source>
+        <source>DÂ°M.MM&apos;</source>
         <translation>D°M.MM&apos;</translation>
     </message>
     <message>
@@ -734,12 +735,12 @@
     </message>
     <message>
         <location filename="../geom2field.py" line="128"/>
-        <source>Add space between D&#xc2;&#xb0; M&apos; S&quot; and D&#xc2;&#xb0; M.MM&apos; numbers</source>
+        <source>Add space between DÂ° M&apos; S&quot; and DÂ° M.MM&apos; numbers</source>
         <translation>在度分秒数字间添加空格</translation>
     </message>
     <message>
         <location filename="../geom2field.py" line="135"/>
-        <source>Pad D&#xc2;&#xb0;M&apos;S&quot; and D&#xc2;&#xb0;M.MM&apos; coordinates with leading zeros</source>
+        <source>Pad DÂ°M&apos;S&quot; and DÂ°M.MM&apos; coordinates with leading zeros</source>
         <translation>度分秒坐标添加前导零</translation>
     </message>
     <message>
@@ -970,7 +971,7 @@
     <message>
         <location filename="../zoomToLatLon.py" line="66"/>
         <source>H3</source>
-        <translation type="unfinished"></translation>
+        <translation>H3</translation>
     </message>
 </context>
 <context>
@@ -1096,27 +1097,27 @@
     <message>
         <location filename="../ui/coordinateConverter.ui" line="135"/>
         <source>WGS 84 (lat,lon)</source>
-        <translation type="unfinished"></translation>
+        <translation>WGS 84 (纬度,经度)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="228"/>
         <source>- (lat,lon)</source>
-        <translation type="unfinished"></translation>
+        <translation>- (纬度,经度)</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="252"/>
         <source>- D M S.ss</source>
-        <translation type="unfinished"></translation>
+        <translation>- D M S.ss</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="279"/>
         <source>- D M.mm</source>
-        <translation type="unfinished"></translation>
+        <translation>- D M.mm</translation>
     </message>
     <message>
         <location filename="../ui/coordinateConverter.ui" line="357"/>
         <source>- DDMMSS</source>
-        <translation type="unfinished"></translation>
+        <translation>- DDMMSS</translation>
     </message>
 </context>
 <context>
@@ -1222,12 +1223,12 @@
     <message>
         <location filename="../ui/zoomToLatLon.ui" line="20"/>
         <source>Toggle Coordinate Order</source>
-        <translation type="unfinished"></translation>
+        <translation>交换XY坐标</translation>
     </message>
     <message>
         <location filename="../ui/zoomToLatLon.ui" line="78"/>
         <source>Select CRS Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>选择坐标格式</translation>
     </message>
 </context>
 <context>
@@ -1652,32 +1653,32 @@ H3（如果已安装）- 仅支持H3 Geohash字符串</translation>
     <message>
         <location filename="../ui/latLonSettings.ui" line="129"/>
         <source>DMS.ss second precision: </source>
-        <translation type="unfinished"></translation>
+        <translation>DMS.ss 秒数值精度: </translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1223"/>
         <source>DM.mm precision</source>
-        <translation type="unfinished"></translation>
+        <translation>DM.mm 分数值精度</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1330"/>
         <source>Add space between DMS.ss and DM.mm numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>在度分秒数字间添加空格</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1337"/>
         <source>Pad DMS.ss and DM.mm output coordinates with leading zeroes</source>
-        <translation type="unfinished"></translation>
+        <translation>为度分秒数字添加前导零</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1110"/>
         <source>DMS.ss seconds precision</source>
-        <translation type="unfinished"></translation>
+        <translation>DMS.ss 秒数值精度</translation>
     </message>
     <message>
         <location filename="../ui/latLonSettings.ui" line="1344"/>
         <source>Format DMS coordinates with NSEW at the beginning</source>
-        <translation type="unfinished"></translation>
+        <translation>在度分秒坐标前添加&quot;NSEW&quot;</translation>
     </message>
 </context>
 </TS>
