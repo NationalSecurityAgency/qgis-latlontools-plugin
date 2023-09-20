@@ -125,6 +125,7 @@ class CoordinateConverterWidget(QDockWidget, FORM_CLASS):
         if self.savedMapTool:
             self.canvas.setMapTool(self.savedMapTool)
             self.savedMapTool = None
+        QDockWidget.closeEvent(self, e)       
 
     def xyTriggered(self, action):
         self.xyButton.setDefaultAction(action)
