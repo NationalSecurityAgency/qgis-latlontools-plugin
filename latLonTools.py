@@ -157,6 +157,9 @@ class LatLonTools:
         icon = QIcon(self.plugin_dir + '/images/geom2field.svg')
         action = menu.addAction(icon, tr("Point layer to fields"), self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
+        icon = QIcon(self.plugin_dir + '/images/geom2wkt.svg')
+        action = menu.addAction(icon, tr("Geometry to WKT/JSON"), self.geom2wkt)
+        action.setObjectName('latLonToolsGeom2Wkt')
         icon = QIcon(self.plugin_dir + '/images/pluscodes.svg')
         action = menu.addAction(icon, tr("Plus Codes to point layer"), self.PlusCodestoLayer)
         action.setObjectName('latLonToolsPlusCodes2Geom')
@@ -372,6 +375,10 @@ class LatLonTools:
     def geom2Field(self):
         '''Convert layer geometry to a text string'''
         processing.execAlgorithmDialog('latlontools:geom2field', {})
+
+    def geom2wkt(self):
+        '''Convert layer geometry to a text WKT/JSON string'''
+        processing.execAlgorithmDialog('latlontools:geom2wkt', {})
 
     def toMGRS(self):
         '''Display the to MGRS  dialog box'''

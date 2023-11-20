@@ -1,0 +1,1 @@
+This is a convenience algorithm that converts a layer's geometry to WKT, EWKT, or JSON and adds it as a new attribute. This conversion can also be done using the field calculator.
