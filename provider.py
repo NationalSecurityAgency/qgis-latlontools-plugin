@@ -17,6 +17,7 @@ from .pluscodes import ToPlusCodesAlgorithm, PlusCodes2Layerlgorithm
 from .geom2field import Geom2FieldAlgorithm
 from .field2geom import Field2GeomAlgorithm
 from .geom2wkt import Geom2WktAlgorithm
+from .wkt2layers import Wkt2LayersAlgorithm
 from .ecef import LatLonToEcefAlgorithm, EcefLatLonToAlgorithm
 
 
@@ -33,6 +34,7 @@ class LatLonToolsProvider(QgsProcessingProvider):
         self.addAlgorithm(Geom2FieldAlgorithm())
         self.addAlgorithm(Field2GeomAlgorithm())
         self.addAlgorithm(Geom2WktAlgorithm())
+        self.addAlgorithm(Wkt2LayersAlgorithm())
         self.addAlgorithm(LatLonToEcefAlgorithm())
         self.addAlgorithm(EcefLatLonToAlgorithm())
 
