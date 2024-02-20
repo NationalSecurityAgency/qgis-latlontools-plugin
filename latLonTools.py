@@ -161,7 +161,7 @@ class LatLonTools:
         action = menu.addAction(icon, tr("Geometry to WKT/JSON"), self.geom2wkt)
         action.setObjectName('latLonToolsGeom2Wkt')
         icon = QIcon(self.plugin_dir + '/images/wkt2layers.svg')
-        action = menu.addAction(icon, tr("WKT Attribute to Layers"), self.wkt2layers)
+        action = menu.addAction(icon, tr("WKT attribute to layers"), self.wkt2layers)
         action.setObjectName('latLonToolsWkt2Layers')
         icon = QIcon(self.plugin_dir + '/images/pluscodes.svg')
         action = menu.addAction(icon, tr("Plus Codes to point layer"), self.PlusCodestoLayer)

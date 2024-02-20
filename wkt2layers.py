@@ -194,7 +194,7 @@ class Wkt2LayersAlgorithm(QgsProcessingAlgorithm):
         return QIcon(os.path.dirname(__file__) + '/images/wkt2layers.svg')
 
     def displayName(self):
-        return tr('WKT Attribute to Layers')
+        return tr('WKT attribute to layers')
 
     def helpUrl(self):
         file = os.path.dirname(__file__) + '/index.html'
