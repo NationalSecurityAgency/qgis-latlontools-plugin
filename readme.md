@@ -154,6 +154,8 @@ A number of the conversions can be accessed as field calculator functions. When 
 
     * <img src="images/geom2wkt.svg" width="24" height="24" alt="WKT"> ***Geometry to WKT/JSON*** - Add a WKT, EWKT or JSON attribute to a vector layer and converts each feature's geometery to that format. This supports points, lines, and polygons.
 
+    * <img src="images/wkt2layers.svg" width="24" height="24" alt="WKT"> ***WKT attribute to layers*** - This creates new layers from a vector or table layer that has an attribute field containing WKT notation coordinates. WKT can specify points, lines, and polygons with either single geometries or multi-geometries. This algorithm supports all of these and can potentially output three different layers. The attribute containing the WKT geometries is chosen by ***Select a WKT coordinate field***. Note that this only supports point, line, and polygon WKT objects and it does not support GeometryCollection objects.
+
 * <img src="doc/settings.png" alt="Settings"> ***Settings*** - Displays the settings dialog box (see below).
 * <img src="images/help.svg" alt="Help"> ***Help*** - Displays this help page.
 
