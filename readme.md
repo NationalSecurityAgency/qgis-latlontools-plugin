@@ -277,6 +277,7 @@ You can ***Select an External Map Provider for Left Mouse***. The options are:
 * **iD Editor ESRI World Imagery**
 * **iD Editor OpenTopoMap**
 * **Google Earth** - (This only works if it is installed on your system)
+* **Panoramax**
 * **User Added Map Services...**
 
 ***Select an External Map Provider for Right Mouse*** has the same set of options. These correspond to the left and right mouse buttons.
