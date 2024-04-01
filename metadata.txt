@@ -2,7 +2,7 @@
 name=Lat Lon Tools
 qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, UPS, Geohash, H3, Maidenhead grid, Plus Codes, and ECEF formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
-version=3.6.19
+version=3.6.20
 author=C Hamilton
 email=adenaculture@gmail.com
 about=
@@ -30,6 +30,7 @@ hasProcessingProvider=yes
 experimental=False
 deprecated=False
 changelog=
+    3.6.20 - Merged pull request #92
     3.6.19 - Add algorithm to convert WKT attribute coordinates into associated geometry layers.
     3.6.18 - Add license to output plugin
     3.6.17 - Add algorithm to export geometry into a WKT, EWKT, or JSON formatted attribute field.
