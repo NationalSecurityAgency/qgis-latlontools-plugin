@@ -968,6 +968,11 @@
         <translation>Google Earth Web</translation>
     </message>
     <message>
+        <location filename="../mapProviders.py" line="26"/>
+        <source>Panoramax</source>
+        <translation>Panoramax</translation>
+    </message>
+    <message>
         <location filename="../zoomToLatLon.py" line="76"/>
         <source>H3</source>
         <translation type="unfinished"></translation>

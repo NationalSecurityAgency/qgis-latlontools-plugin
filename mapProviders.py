@@ -22,5 +22,6 @@ MAP_PROVIDERS = [
     [tr('Mapillary Aerial'), 'https://www.mapillary.com/app/?lat={lat}&lng={lon}&z={zoom}&mapStyle=Mapillary+satellite', 'https://www.mapillary.com/app/?lat={lat}&lng={lon}&z={zoom}&mapStyle=Mapillary+satellite'],
     [tr('iD Editor ESRI World Imagery'), 'https://preview.ideditor.com/master/#background=EsriWorldImagery&disable_features=boundaries&map={zoom}/{lat}/{lon}&overlays=BANO&photo_overlay=mapillary-map-features', 'https://preview.ideditor.com/master/#background=EsriWorldImagery&disable_features=boundaries&map={zoom}/{lat}/{lon}&overlays=BANO&photo_overlay=mapillary-map-features'],
     [tr('iD Editor OpenTopoMap'), 'https://preview.ideditor.com/master/#background=OpenTopoMap&disable_features=boundaries&map={zoom}/{lat}/{lon}&overlays=BANO&photo_overlay=mapillary-map-features','https://preview.ideditor.com/master/#background=OpenTopoMap&disable_features=boundaries&map={zoom}/{lat}/{lon}&overlays=BANO&photo_overlay=mapillary-map-features'],
-    [tr('Google Earth Web'), 'https://earth.google.com/web/search/{lat},{lon}/', 'https://earth.google.com/web/search/{lat},{lon}/']
+    [tr('Google Earth Web'), 'https://earth.google.com/web/search/{lat},{lon}/', 'https://earth.google.com/web/search/{lat},{lon}/'],
+    [tr('Panoramax'), 'https://api.panoramax.xyz/#focus=map&map={zoom}/{lat}/{lon}', 'https://api.panoramax.xyz/#focus=map&map={zoom}/{lat}/{lon}']
 ]
