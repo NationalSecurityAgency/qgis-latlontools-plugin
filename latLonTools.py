@@ -108,19 +108,23 @@ class LatLonTools:
 
         menu = QMenu()
         menu.setObjectName('latLonToolsCopyExtents')
+
         # Add Interface for copying the canvas extent
         icon = QIcon(self.plugin_dir + "/images/copycanvas.svg")
         self.copyCanvasAction = menu.addAction(icon, tr('Copy Canvas Extent'), self.copyCanvas)
         self.copyCanvasAction.setObjectName('latLonToolsCopyCanvasExtent')
+
         # Add Interface for copying an interactive extent
         icon = QIcon(self.plugin_dir + "/images/copyextent.svg")
         self.copyExtentAction = menu.addAction(icon, tr('Copy Selected Area Extent'), self.copyExtent)
         self.copyExtentAction.setCheckable(True)
         self.copyExtentAction.setObjectName('latLonToolsCopySelectedAreaExtent')
+
         # Add Interface for copying a layer extent
         icon = QIcon(self.plugin_dir + "/images/copylayerextent.svg")
         self.copyLayerExtentAction = menu.addAction(icon, tr('Copy Layer Extent'), self.copyLayerExtent)
         self.copyLayerExtentAction.setObjectName('latLonToolsCopyLayerExtent')
+
         # Add Interface for copying the extent of selected features
         icon = QIcon(self.plugin_dir + "/images/copyselectedlayerextent.svg")
         self.copySelectedFeaturesExtentAction = menu.addAction(icon, tr('Copy Selected Features Extent'), self.copySelectedFeaturesExtent)
@@ -151,36 +155,48 @@ class LatLonTools:
 
         # Create the conversions menu
         menu = QMenu()
+
         icon = QIcon(self.plugin_dir + '/images/field2geom.svg')
         action = menu.addAction(icon, tr("Fields to point layer"), self.field2geom)
         action.setObjectName('latLonToolsField2Geom')
+
         icon = QIcon(self.plugin_dir + '/images/geom2field.svg')
         action = menu.addAction(icon, tr("Point layer to fields"), self.geom2Field)
         action.setObjectName('latLonToolsGeom2Field')
+
         icon = QIcon(self.plugin_dir + '/images/geom2wkt.svg')
         action = menu.addAction(icon, tr("Geometry to WKT/JSON"), self.geom2wkt)
         action.setObjectName('latLonToolsGeom2Wkt')
+
         icon = QIcon(self.plugin_dir + '/images/wkt2layers.svg')
         action = menu.addAction(icon, tr("WKT attribute to layers"), self.wkt2layers)
         action.setObjectName('latLonToolsWkt2Layers')
+
         icon = QIcon(self.plugin_dir + '/images/pluscodes.svg')
         action = menu.addAction(icon, tr("Plus Codes to point layer"), self.PlusCodestoLayer)
         action.setObjectName('latLonToolsPlusCodes2Geom')
+
         action = menu.addAction(icon, tr("Point layer to Plus Codes"), self.toPlusCodes)
         action.setObjectName('latLonToolsGeom2PlusCodes')
+
         icon = QIcon(self.plugin_dir + '/images/mgrs2point.svg')
         action = menu.addAction(icon, tr("MGRS to point layer"), self.MGRStoLayer)
         action.setObjectName('latLonToolsMGRS2Geom')
+
         icon = QIcon(self.plugin_dir + '/images/point2mgrs.svg')
         action = menu.addAction(icon, tr("Point layer to MGRS"), self.toMGRS)
         action.setObjectName('latLonToolsGeom2MGRS')
+
         icon = QIcon(self.plugin_dir + '/images/ecef.png')
         action = menu.addAction(icon, tr("ECEF to Lat, Lon, Altitude"), self.ecef2lla)
         action.setObjectName('latLonToolsEcef2lla')
+
         action = menu.addAction(icon, tr("Lat, Lon, Altitude to ECEF"), self.lla2ecef)
         action.setObjectName('latLonToolsLla2ecef')
+
         self.conversionsAction = QAction(icon, tr("Conversions"), self.iface.mainWindow())
         self.conversionsAction.setMenu(menu)
+
         self.iface.addPluginToMenu('Lat Lon Tools', self.conversionsAction)
 
         # Add to Digitize Toolbar
@@ -250,6 +266,7 @@ class LatLonTools:
         self.iface.removePluginMenu('Lat Lon Tools', self.digitizeAction)
         self.iface.removeDockWidget(self.zoomToDialog)
         self.iface.removeDockWidget(self.multiZoomDialog)
+
         # Remove Toolbar Icons
         self.iface.removeToolBarIcon(self.copyAction)
         self.iface.removeToolBarIcon(self.copyExtentToolbar)
@@ -270,6 +287,7 @@ class LatLonTools:
         self.showMapTool = None
         self.mapTool = None
         self.digitizerDialog = None
+
         QgsApplication.processingRegistry().removeProvider(self.provider)
         UnloadLatLonFunctions()
 
