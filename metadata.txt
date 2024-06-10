@@ -4,7 +4,7 @@ qgisMinimumVersion=3.4
 description=Tools to capture and zoom to coordinates using decimal, DMS, WKT, GeoJSON, MGRS, UTM, UPS, Geohash, H3, Maidenhead grid, Plus Codes, and ECEF formats. Provides external map support, point digitizing tools, coordinate conversion tools, and conversion functions.
 version=3.6.20
 author=C Hamilton
-email=adenaculture@gmail.com
+email=TBD
 about=
     Lat Lon Tools makes it easy to capture, zoom to coordinates, and interact with other on-line mapping tools. It adds MGRS, Standard UTM, and Plus Codes support to QGIS. When working with Google Earth, Google Maps or other on-line mapping tools, coordinates are specified in the order of 'Latitude, Longitude'. By default Lat Lon Tools uses the standard Google Map format, but is very flexible and can use virtually any projection and coordinate format for input and output. The plugin has the following tools.
     1) Capture/Display coordinates to the clipboard (in any projection) when the user clicks on the map. This includes DMS, UTM, UPS, Geohash, MGRS, H3, Maidenhead grid, and Plus Codes.
